@@ -28,6 +28,7 @@ site-test: site
 	node tests/test_program_link.mjs
 	node tests/test_register_mov.mjs
 	node tests/test_memory_mov.mjs
+	node tests/test_bit_diff.mjs
 	node tests/test_builder.mjs
 	node tests/test_cpu_lab.mjs
 	node tests/test_challenges.mjs

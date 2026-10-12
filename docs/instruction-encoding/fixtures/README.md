@@ -37,12 +37,16 @@ wider/overridden addressing is rejected. [memory-mov-program.bits](memory-mov-pr
 is the complete sixth CPU Lab exercise, copied without assembling its comments
 and independently compared with native QEMU using identical literal bytes.
 
+The bit-diff pairs also use canonical [mov-register-reverse.bits](mov-register-reverse.bits),
+[mov-memory-positive.bits](mov-memory-positive.bits) and [mov32-next.bits](mov32-next.bits).
+They differ from their counterparts by one literal bit, not by assembly input.
+
 References: Intel SDM [instruction formats and INC/DEC](https://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-vol-2a-manual.pdf),
 [MOV encodings](https://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-vol-2b-manual.pdf).
 Decoding context does not grant execution support: browser simulation remains
 the documented 16-bit subset.
 
-The twenty-one context goldens were compared with installed NDISASM 3.02 using
+The twenty-eight context goldens were compared with installed NDISASM 3.02 using
 `ndisasm -b CONTEXT -` on literal parsed fixture bytes; the disassembler only
 read them. [Recorded results](https://github.com/OthmaneBlial/bitborn/blob/main/tests/fixtures/encoding-golden.json)
 are checked without adding a runtime disassembler dependency. These are

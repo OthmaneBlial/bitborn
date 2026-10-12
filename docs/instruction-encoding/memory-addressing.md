@@ -54,7 +54,7 @@ python3 -m unittest tests.test_memory_parity -v
 5,888 cases cover all memory ModR/M/register/opcode combinations, signed
 displacement extrema, absolute offsets, operand-size prefixes, exact byte/bit
 fields and truncation. Three new literal fixtures have independent NDISASM 3.02
-goldens, bringing the complete encoding fixture set to 21 cases. These are
+goldens within the complete encoding fixture set of 28 cases. These are
 read-only disassembly checks, not native execution.
 
 The expanded [70-byte native probe](https://github.com/OthmaneBlial/bitborn/blob/main/tests/fixtures/memory-segment.bits)

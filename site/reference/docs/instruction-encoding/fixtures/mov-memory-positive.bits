@@ -1,0 +1,2 @@
+# Literal positive counterpart to the BP-2 displacement fixture.
+10001011 01000110 01111110 # instruction | MOV AX,[BP+126] | Clearing only displacement bit7 changes FE (-2) to 7E (+126); BP still selects SS.

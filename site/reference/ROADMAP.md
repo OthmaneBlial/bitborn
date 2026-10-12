@@ -120,6 +120,11 @@ The v0.2 milestone is published and verified. The following research remains ope
 
 ## Evolution session
 
+- [x] Compare exact program bytes and instruction-field roles in explicit modes.
+  Distinguish flipped bits, added/removed bytes and reinterpretation of unchanged
+  bytes; stop linear classification at the first scope error. 500 seeded bit-string
+  oracle cases and browser keyboard/conversion/preservation/boundary checks pass.
+
 - [x] Execute unprefixed byte/word ModR/M memory MOV with one shared address
   decoder. 2,304 cases cover load-base aliases, byte halves, flags and journals;
   segment-limit errors are atomic and A20/self-modification rewind is checked.

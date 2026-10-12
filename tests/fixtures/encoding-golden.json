@@ -23,6 +23,13 @@
     {"source":"movByteRex","mode":64,"size":3,"disassembly":"mov al,spl"},
     {"source":"movMemoryBP","mode":16,"size":3,"disassembly":"mov ax,[bp-0x2]"},
     {"source":"movMemoryAbsolute","mode":16,"size":4,"disassembly":"mov dx,[0x20]"},
-    {"source":"movMemoryPair","mode":16,"size":2,"disassembly":"mov cx,[bx+si]"}
+    {"source":"movMemoryPair","mode":16,"size":2,"disassembly":"mov cx,[bx+si]"},
+    {"source":"movRegisterReverse","mode":16,"size":2,"disassembly":"mov bx,ax"},
+    {"source":"movRegisterReverse","mode":32,"size":2,"disassembly":"mov ebx,eax"},
+    {"source":"movRegisterReverse","mode":64,"size":2,"disassembly":"mov ebx,eax"},
+    {"source":"movMemoryPositive","mode":16,"size":3,"disassembly":"mov ax,[bp+0x7e]"},
+    {"source":"mov32Next","mode":16,"size":3,"disassembly":"mov ax,0x2b"},
+    {"source":"mov32Next","mode":32,"size":5,"disassembly":"mov eax,0x2b"},
+    {"source":"mov32Next","mode":64,"size":5,"disassembly":"mov eax,0x2b"}
   ]
 }

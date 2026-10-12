@@ -138,6 +138,10 @@
       "progress": "\u2705 2,304 independent load/store cases, exact journals, boundaries and rewind; one canonical 71-byte exercise matches native registers/RAM/defined flags in QEMU"
     },
     {
+      "milestone": "Mode-aware bit diff",
+      "progress": "\u2705 Exact offsets/bit flips, added/removed bytes and unchanged bytes with changed field roles; stops classification at scope errors; 500 seeded oracle comparisons; read-only"
+    },
+    {
       "milestone": "CPU Lab program downloads and imports",
       "progress": "\u2705 Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks"
     },

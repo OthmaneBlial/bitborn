@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Add a read-only bit-diff workbench with exact positional changes, per-bit roles,
+  explicit decoding modes and unchanged bytes whose instruction boundaries/roles
+  changed. Separate additions/removals from bit flips, retain invalid-draft state,
+  and stop classification at unsupported/truncated encodings without resynchronizing.
+
 - Execute unprefixed 16-bit-addressed memory MOV byte/word loads and stores with
   one decoder shared by inspection and execution. Preserve byte aliases/flags,
   journal RAM writes, reject word segment-limit crossings atomically, and restore

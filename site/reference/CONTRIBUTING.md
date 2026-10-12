@@ -38,6 +38,7 @@ macOS cannot natively run the Linux ELF examples; CI runs their native checks.
 | Mode/bit/address inspection | `site/encoding.mjs`, `docs/instruction-encoding/fixtures/` | `node tests/test_encoding.mjs` and `node tests/test_memory_encoding.mjs` |
 | Shared memory addressing/execution | `site/address16.mjs`, `site/simulator.mjs` | `node tests/test_memory_mov.mjs` and `python3 -m unittest tests.test_memory_parity` |
 | Loaded-program links | `site/program-link.mjs`, `site/cpu-lab/lab.mjs` | `node tests/test_program_link.mjs` and `node tests/browser_cpu_lab.mjs` |
+| Mode-aware program differences | `site/bit-diff.mjs`, `site/bit-diff/` | `node tests/test_bit_diff.mjs` and `node tests/browser_bit_diff.mjs` |
 | ELF anatomy | `site/elf.mjs`, `site/elf/` | `node tests/test_elf.mjs` and `node tests/browser_elf.mjs` |
 | Parser syntax and diagnostics | `tools/bitborn.py`, `site/binary.mjs` | `python3 -m unittest tests.test_parser_properties` |
 | Builder and CPU Lab | `site/boot-builder/`, `site/cpu-lab/` | `node tests/browser_builder.mjs` or `node tests/browser_cpu_lab.mjs` |

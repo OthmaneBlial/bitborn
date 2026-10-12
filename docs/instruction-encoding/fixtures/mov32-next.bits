@@ -1,0 +1,2 @@
+# Literal immediate differs from mov32.bits by one bit in its low byte.
+10111000 00101011 00000000 00000000 00000000 # instruction | MOV EAX,43 | B8 followed by little-endian 0000002B in 32-bit default operand context.

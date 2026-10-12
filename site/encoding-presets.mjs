@@ -86,5 +86,33 @@ export const encodingExamples = {
       8
     ],
     "sha256": "7f9512bb270838a37ba1a6f3d2abbc601fcab1a1efd5eaee660c3baf995ed7c4"
+  },
+  "movRegisterReverse": {
+    "source": "docs/instruction-encoding/fixtures/mov-register-reverse.bits",
+    "bytes": [
+      139,
+      216
+    ],
+    "sha256": "746b256e87194e1b9ea106a2c8a809f8132c510c9c892e42e2e81f85a19ae1ae"
+  },
+  "movMemoryPositive": {
+    "source": "docs/instruction-encoding/fixtures/mov-memory-positive.bits",
+    "bytes": [
+      139,
+      70,
+      126
+    ],
+    "sha256": "6b49f4f6d0e0b0abc024958806969030b31361d070fd0e3e3da9f005a8323f0d"
+  },
+  "mov32Next": {
+    "source": "docs/instruction-encoding/fixtures/mov32-next.bits",
+    "bytes": [
+      184,
+      43,
+      0,
+      0,
+      0
+    ],
+    "sha256": "73b9d484a61687649aec837c7dfd938c02424f8d96de778f3e293dbd232e0cd5"
   }
 };

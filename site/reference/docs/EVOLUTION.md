@@ -126,7 +126,19 @@ Local full validation passes 58 Python tests (one expected macOS native-Linux
 skip) and all model/site checks. Chromium, Firefox 157 and WebKit 27.2 verify the
 sixth preset, actual model RAM stores/loads, unchanged displayed flags and exact
 memory rewind/replay. The CPU demo now has 29 actual frames with current source,
-frame and GIF hashes. This execution milestone is not yet published/CI-verified.
+frame and GIF hashes. Memory execution commit `212ce77` passed CI `38316581716`
+and deployment `38316847011`; its address decoder, simulator, canonical-preset
+module and public README match exact committed bytes.
+The new bit-diff workbench compares positional raw changes and mode-dependent
+candidate instruction roles. Unchanged ModR/M bytes can be reinterpreted after
+one direction-bit flip; additions/removals are not invented zero-byte flips.
+Classification stops at the first scope error. 500 seeded bit-string oracle
+cases and actual browser keyboard/notation/preservation/boundary checks pass.
+Chromium, Firefox 157 and WebKit 27.2 all pass; 512-byte and 320px layouts are
+verified. The new read-only diff demo has six actual frames. All six browser GIFs
+have current source/frame/GIF hashes; full Python/site checks pass locally.
+The encoding fixture corpus now includes 28 independent NDISASM goldens.
+Publication of the bit-diff milestone is pending verification.
 Current local validation: 55 Python tests, one expected native-Linux skip on
 macOS, plus all site/module checks. Protected-fault commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -179,7 +191,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 25 | 2 | Progressive interactive byte-order lesson: one byte, one word, one branch | H | H | Existing playground | Low | Open |
 | 26 | 2 | Guided stack/calling-convention lesson with return-address inspection | H | H | 02,10 | Low | Open |
 | 27 | 2 | Flags lesson separating signed overflow, carry, parity and undefined AF | H | H | 04 | Medium | Open |
-| 28 | 2 | Meaningful bit-diff explanations tied to instruction boundaries and execution mode | H | M | 05,07 | Medium | Open |
+| 28 | 2 | Meaningful bit-diff explanations tied to instruction boundaries and execution mode | H | M | 05,07 | Medium | Complete: positional changes and linear field roles; no execution/control-flow/alignment claim |
 | 29 | 2 | New optimization challenges with alternate valid solutions and actual size measurements | H | M | Challenge evaluator | Medium | Open |
 | 30 | 2 | Curated broken-program debugging walkthrough with recorded repair and native proof | H | H | 02 | Low | Open |
 | 31 | 2 | Stable English introduction as the maintained translation source | H | H | Existing README | Low | Complete |

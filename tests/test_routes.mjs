@@ -4,7 +4,7 @@ import {dirname,resolve,join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)),'..');
-const routes = ['playground','examples','learn','architecture','roadmap','elf'];
+const routes = ['playground','examples','learn','architecture','roadmap','elf','bit-diff'];
 const descriptions = [], titles = [];
 for (const route of routes) {
   const page = resolve(root,'site',route,'index.html'), html = readFileSync(page,'utf8');

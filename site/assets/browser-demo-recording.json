@@ -8,7 +8,7 @@
   "presentationFps": 1,
   "alterations": "960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.",
   "sourceSha256": {
-    "tools/record_browser.mjs": "86b91ef1281492b782b3bdaf00ba86754113dc2e7aef5d2b2dadc8c14da5e884",
+    "tools/record_browser.mjs": "f2e262c615934e500bcd644de34a923eaaf13458552894d01d8fb4c9bbc3b3a7",
     "boot/boot.bits": "230bbafbfa02abd62dc964efbad02db0431f0efa263216bba02146cd164262b8",
     "site/elf.mjs": "552aabb816be8add70c470c951f0110697d491d0a0e926c3bd9e6001e623832b",
     "site/elf/index.html": "767e441bc2b8d9e29a626d264b2d437bce24c296196a5b37c33d09cf6f58f29b",
@@ -20,9 +20,13 @@
     "site/styles.css": "f255737251dfa8c6c0d133b70367b09578a5f0ebaa01a6d044c3902c555f6a38",
     "site/learn/routes.css": "f77ddb1b9b7187f92c69e594a8002543deed69c74d7954dfa670ef4bb85052d1",
     "site/app.js": "5ee86e439e83cdb24a8b80935904917b12f3eb7da304950fbb677ba5ee8e30f3",
+    "site/bit-diff.mjs": "4ba0be7d157650d7cb338925ac0f9496992242f93b6f52b9e54775c17c2ce940",
+    "site/bit-diff/index.html": "85d4abc7b728401799fe1c5f62169ee2ec225cebc9b4f27b83e731263bea044f",
+    "site/bit-diff/app.mjs": "ad1fa74bb5deb8e22d79acf02c4ffec8f0f25a8fdc90eb4cc0df4bcdeddf2688",
+    "site/bit-diff/diff.css": "aa0c4f672af2b9499586ffdce045e48d0cbb563af58971090d9903ddce990dca",
     "site/encoding.mjs": "d609909a5fd41ac29d31d3000848fc7b7f0c680d4f9b9c0774f5944c9af12611",
-    "site/encoding-presets.mjs": "2751e4f62a9c61672b5fbb45d93439d05366b5859fab361abe59cbf4362f9ec1",
-    "site/playground/index.html": "4282e4f7b953a2bdaa37e3bb0eba89fc2ea6a52fd26a1de43186a04e11cc9623",
+    "site/encoding-presets.mjs": "0d6aecb39d7d124acfca40cfdbbb496a46b0a4f6bd0be718f8af38767d4e213a",
+    "site/playground/index.html": "0f91b767d7090bed97877ca83ce324ab671b548f0f8dd64a4ecb0929eb13326d",
     "docs/instruction-encoding/fixtures/mov32.bits": "52504d7b850f70f6ac262d1d07308878d686c80f485b347490c62f854b86c2cd",
     "docs/instruction-encoding/fixtures/mov64.bits": "01bbd5025d57433cdaf764232ade240dad18fcf879a227f29e0e3b94ea3c3e6e",
     "docs/instruction-encoding/fixtures/mov-register.bits": "2162ffc63db3351e411a3d3dba923457f10ab5cfb6d7aebc27c6aafccf1a2938",
@@ -32,6 +36,9 @@
     "docs/instruction-encoding/fixtures/mov-memory-bp.bits": "9b19ed6440db9978082044a2f56d5ca3c68cc21d85d6144c0420e2f65bf8f57a",
     "docs/instruction-encoding/fixtures/mov-memory-absolute.bits": "5fe0ed6c40b68a3352e0d2c3752df56c2f1796e54c83aeddbb9ab05bd0fe36cf",
     "docs/instruction-encoding/fixtures/mov-memory-pair.bits": "49b69c993003d1f73de1426bad8e6ed73ea76b1b1b1e03e2366d3294ced3002d",
+    "docs/instruction-encoding/fixtures/mov-register-reverse.bits": "971ff170b840a780c530060b280033797f4309264b1209121f17698b380d4429",
+    "docs/instruction-encoding/fixtures/mov-memory-positive.bits": "7d598be8c8bf024e8301fe40c688078139b9c8b61e5a8ceb23fb34b2722db31b",
+    "docs/instruction-encoding/fixtures/mov32-next.bits": "246005943e5c9914c9b4f820829fa6dc851b173ffb6a59d702593c46d95b421a",
     "site/address16.mjs": "dd980d19e332cb5a30af20f60a0efb23bbfe527f784bc9699593d0607b0ef263",
     "site/simulator.mjs": "0a03658351104eb798b1fa7224d71b01fd8e41aafa5f02126067b4e7421fe778",
     "site/binary.mjs": "afddfeb96e78242eb1b4a3f42236276605e3656ef7fc08362791520d79006ea9",
@@ -71,6 +78,29 @@
         "ba95487c46d4cbc6d6978a8677f6d3887b645aca7ed7a019db28696f249f6573",
         "8759baeb12df3704b3ada841c38bf5ef037d007f8703fdaa598d1d5523d197ad",
         "dd99396b781c7b5341eb90f04483860a3ba3efffde58380bf8a077824eb93258"
+      ]
+    },
+    {
+      "file": "assets/bit-diff-demo.gif",
+      "sha256": "09d985f4c6ef875889a7989a9d5f520875f48462f5fa1c90392c93775c5ded3b",
+      "capturedFrames": 6,
+      "encodedFrames": 6,
+      "durationSeconds": 6,
+      "actions": [
+        "A one-bit MOV direction change modifies the opcode and reinterprets an unchanged ModR/M byte; counts keep those categories separate.",
+        "Selected unchanged D8: its six source/destination selector-bit roles reverse although the raw byte does not change.",
+        "Compared FE (-2) and7E (+126): only the displacement sign bit changes; default SS remains the same.",
+        "Explicit32-bit context classifies a five-byte MOV immediate on both sides; comparison executes neither program.",
+        "Switching to16-bit context consumes three bytes, then classification stops at the unsupported remaining byte without resynchronizing.",
+        "An added zero byte is missing on the before side; it counts as one addition and zero flipped shared bits."
+      ],
+      "sourceFrameSha256": [
+        "2cff10ccc05f896a5cea4819e982df75f53508922d1aeee6f7d8b2f59f96e048",
+        "141c9b988eec4398f0656afd30e3cf56ae8ebd95e5a1008ebd741f74d18119fa",
+        "55c3e093de77f5ab3ebc12ab839d10d7ef76980dac579ba3815bd5a5171f2314",
+        "16dbfd8195fd108e1c9d7596abfd1e03cf7275c78c23033d1b551ad20deb1153",
+        "cbff0fabf8c3b659f429c0769927e6dea5f5ea859a1262c5f3c7172e4f2aab53",
+        "452cbfde562422f1e5ee211f7d5c2800ba87ddf331fb73e172e3853455ef0682"
       ]
     },
     {
@@ -141,7 +171,7 @@
     },
     {
       "file": "assets/cpu-lab-demo.gif",
-      "sha256": "295a78dbf1b4cc68610efd876ba30d62f3101911b17f3c787b7887e9a4868262",
+      "sha256": "0f2a5e4c12131bd6f5ae3a6b2b6c9aca4c3f440b3b021ca514ecc98655dfb6a3",
       "capturedFrames": 29,
       "encodedFrames": 29,
       "durationSeconds": 29,
@@ -191,10 +221,10 @@
         "2efb5ff6eaec7f08bf8c1134b1f5a85495f80e51e84baa11222a6cd3cc56b28b",
         "c7609004a23037114f90025038531d159a9b66b3fdec60174846933c873a936c",
         "447dbe335752388a3a9958e69f5b4cbb86558d70b8427e7e050c5be642f0ccfd",
-        "d2aac073e5e4ab5683ecae12d044790777c9de6ba80cd0191a0ea04ae1e2ae66",
+        "ae1c09be458a03b489fe9ee31a0cf698ab5a434590a70e632023b74b14a50483",
         "186fd98d70f0f05126b16d669e5c7e082a2f515c493ad620173729ef4756150d",
         "9c21a03c93c1e08e66e17454d4d700fff2189752ae86c1b5dc4bd5d15c1eff7c",
-        "147cdcdf0cc5f1adce435a2d0e54fce5bb7cb0f409cd3021b2aa6f45150dda44",
+        "5a56f799906b3eb50ef983edd9759bb1491018cbc1ec2e5fc8f4481e864c2881",
         "0bdbffd65ade2c80e9a60c04f019f0e3e9f2b67dd4ef8af9f43a5e96faada4b8",
         "29bc675ec35454d462bcc252d04bef23bf289273e83253d9a364dadd3c3ea617",
         "a1cb307a9c7193fdd9be0462ab4601889dcc7248e8d71fbf4f6bd0e6520061f0",

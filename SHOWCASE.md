@@ -1,5 +1,17 @@
 # Make one bit count
 
+## Compare a flip with the field it changes
+
+![Actual browser capture of the read-only bit diff](assets/bit-diff-demo.gif)
+
+Open the [bit-diff workbench](https://othmaneblial.github.io/bitborn/bit-diff/).
+`89 D8` versus `8B D8` changes one opcode bit while reversing six selector-bit
+roles in the unchanged D8 byte. Select each row to inspect its exact binary
+patterns and role descriptions. The sign-bit pair compares BP-2 with BP+126;
+the mode selector exposes instruction boundaries and explicit scope stops.
+Added bytes are counted separately from flipped shared bits. This tool performs
+no execution, insertion alignment, control-flow analysis or code/data discovery.
+
 ## Inspect the container around eight instruction bytes
 
 ![Actual browser ELF field and entry-byte inspection; no target execution](assets/elf-demo.gif)

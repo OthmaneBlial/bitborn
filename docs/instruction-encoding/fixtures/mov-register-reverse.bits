@@ -1,0 +1,2 @@
+# Literal reverse direction for the same register selector byte D8.
+10001011 11011000 # instruction | MOV BX,AX | Direction bit1 is one; reg field011 is destination BX and r/m field000 is source AX.
