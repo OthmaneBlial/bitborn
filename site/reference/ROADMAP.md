@@ -31,9 +31,13 @@ an idea below is not an advertised feature.
 - [x] Interactive browser bit editor and annotated 512-byte visual explorer.
 - [x] Local Chrome interactions, copy controls, reduced-motion setting, 1440/390/320px
   layouts and keyboard navigation. Live validation remains a publication gate.
-- [ ] Live website interaction and deployed assets verified over HTTPS.
-- [ ] Official `https://othmaneblial.github.io/bitborn/` site and repository homepage.
-- [ ] Website/documentation CI and clean-checkout reproduction proof.
+- [x] Live website interactions repeated successfully in Chrome; deployed boot,
+  monitor, disk-read, annotations, GIF and social image match local bytes exactly.
+- [x] Official [website](https://othmaneblial.github.io/bitborn/) and repository
+  homepage; all fifteen requested topics and a custom repository social preview.
+- [x] Website/documentation/browser CI and clean-checkout reproduction proof:
+  [ede398e verification](https://github.com/OthmaneBlial/bitborn/actions/runs/38212231354)
+  and [successful deployment](https://github.com/OthmaneBlial/bitborn/actions/runs/38212311862).
 - [ ] Public v0.1.0 release with images, source and SHA-256 checksums.
 
 ## Future experiments

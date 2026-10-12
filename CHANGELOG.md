@@ -9,5 +9,9 @@
 - BIOS keyboard and VGA demonstrations; checked two-sector disk loader.
 - Interactive monitor with exact commands, bounded editable input and real
   boot-memory inspection.
-- Annotated sources, architecture and reproduction tutorials; real QEMU boot
-  capture. Website and release publication gates are tracked in ROADMAP.md.
+- Ten per-byte guides, architecture and reproduction tutorials; real QEMU boot
+  capture with provenance.
+- Published interactive website with editable instruction fields, all 512
+  annotated boot bytes, bounded boot simulation and responsive keyboard controls.
+- Verified CI, automatic Pages deployment, repository topics and social preview.
+  The release publication gate remains tracked in ROADMAP.md.

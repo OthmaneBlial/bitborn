@@ -7,7 +7,12 @@
 **No C. No Rust. No Assembly. No compiler. Just 0s and 1s.**
 
 [![Verify raw bits](https://github.com/OthmaneBlial/bitborn/actions/workflows/test.yml/badge.svg)](https://github.com/OthmaneBlial/bitborn/actions/workflows/test.yml)
+[![Deploy website](https://github.com/OthmaneBlial/bitborn/actions/workflows/pages.yml/badge.svg)](https://github.com/OthmaneBlial/bitborn/actions/workflows/pages.yml)
 [![MIT license](https://img.shields.io/badge/license-MIT-71ff8b)](LICENSE)
+
+**[Explore the live website →](https://othmaneblial.github.io/bitborn/)** ·
+[Documentation](https://othmaneblial.github.io/bitborn/docs.html) ·
+[Download the 512-byte image](https://othmaneblial.github.io/bitborn/downloads/boot.img)
 
 What if you could build a real bootable computer program without writing a
 single instruction in a programming language?
@@ -55,7 +60,7 @@ for exact evidence and remaining gates.
 | Multi-sector loader and interactive monitor | ✅ QEMU-tested: help, clear, about, reboot, peek |
 | Ten example guides and complete byte tables | ✅ Documented, with actual execution checks |
 | Real boot screenshot/GIF and architecture tutorial | ✅ Captured from QEMU and reproducible |
-| Interactive website and mobile browser checks | ✅ Local Chrome checks passed; publication in progress |
+| Interactive `.io` website and mobile browser checks | ✅ Live; HTTPS assets and Chrome interactions verified |
 | Public v0.1.0 images, source and checksums | Release gate in progress |
 | Protected mode, interrupts and executable loading | Future research; no working claim |
 
