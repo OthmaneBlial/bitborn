@@ -1,6 +1,6 @@
 # Roadmap and evidence
 
-Last updated: **2026-10-12**. Every published implementation milestone updates
+Last updated: **2026-10-13**. Every published implementation milestone updates
 this file and the README progress table. Checkmarks mean implemented and tested;
 an idea below is not an advertised feature.
 

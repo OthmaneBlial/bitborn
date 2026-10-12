@@ -57,7 +57,7 @@ Ubuntu CI executes all six.
 
 ## Roadmap — visible progress
 
-Updated **2026-10-12** after each verified milestone. See [ROADMAP.md](ROADMAP.md)
+Updated **2026-10-13** after each verified milestone. See [ROADMAP.md](ROADMAP.md)
 for exact evidence and remaining gates.
 
 | Milestone | Progress |

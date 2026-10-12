@@ -60,8 +60,8 @@ A separate 200-byte protected-mode UD2 fixture now proves vector-six fault entry
 original/adjusted saved EIP, IRETD, stack restoration and CPU-managed descriptor
 accessed bits (`85ccc5d`, 53 Python tests, one expected macOS skip). A separate
 256-byte selector #GP fixture verifies the CPU-pushed error code, unchanged DS,
-four-doubleword frame and error-code removal before IRETD. Next: bounded general
-dispatch; skipping two specific known instructions is not general recovery.
+four-doubleword frame and error-code removal before IRETD. Bounded general
+dispatch remains open; skipping two specific known instructions is not general recovery.
 Source directories and FIFOs are now rejected before opening data, preventing
 named-pipe stalls in build preflight.
 CPU Lab links now encode 1–512 original loaded bytes in strict versioned fragments
@@ -103,8 +103,17 @@ addressing remain outside scope; existing memory instructions are unchanged.
 All three browsers verify displacement sign-bit edits, DS/SS explanations,
 read-only state and narrow layouts. The full suite has 57 Python tests (one
 expected macOS native-Linux skip); all site/module checks pass. The encoding
-capture has 17 actual frames with current input/GIF hashes. Publication of this
-memory-address milestone is pending verification.
+capture has 17 actual frames with current input/GIF hashes. Memory inspection
+commit `b9c6bfc` passed CI `38313258408` and deployment `38313976017`; seven public
+files match exact source bytes, including encoding/presets, playground, progress,
+README, roadmap and the address guide. Its Pages mirror `d31f179` changes only
+23 `bitborn/` paths; concurrent unrelated project commits were preserved.
+The 13 October checkpoint records four shipped engineering milestones:
+program links (`8bbacf0`), register inspection (`3c10777`), register execution
+(`2214a4e`) and memory inspection (`b9c6bfc`). All exact-commit CI runs and live
+site checks pass. Next: unprefixed 16-bit memory MOV execution, sharing one
+address decoder and retaining journal/rewind/source identity guarantees; wider
+addressing and general protected-mode fault dispatch remain separate work.
 Current local validation: 55 Python tests, one expected native-Linux skip on
 macOS, plus all site/module checks. Protected-fault commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -191,6 +200,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 59 | 0 | QEMU runner resource/error-path checks and bounded process cleanup | H | H | Existing Guest harness | Medium | Open |
 | 60 | 2 | Accurate release/community draft showing actual new capabilities; no automatic posting | M | H | Verified release | Low | Complete: release published; community draft remains unposted |
 | 61 | 0 | Cancel delayed file imports/errors after a newer source choice or editor draft | H | H | CPU Lab import | Medium | Complete: race reproduced and checked in three browsers |
+| 62 | 1 | Execute unprefixed 16-bit ModR/M memory MOV using one shared address decoder and native/journal/boundary proof | H | M | 18,01,02 | High | Open |
 
 Large tasks are divided into useful verified milestones. Native experiments only
 become capabilities after literal source review and real QEMU checks; hardware
