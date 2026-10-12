@@ -33,6 +33,21 @@ class ToolTests(unittest.TestCase):
             self.assertIn(b":1: expected eight binary digits", result.stderr)
             self.assertEqual(output.read_bytes(), b"\xaa")
 
+    def test_packing_cannot_destroy_source_through_aliases(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            source = Path(temporary) / 'source.bits'
+            original = '10111000 00101010 00000000\n'
+            source.write_text(original)
+            hardlink, symlink = Path(temporary) / 'hardlink.bin', Path(temporary) / 'symlink.bin'
+            hardlink.hardlink_to(source)
+            symlink.symlink_to(source)
+            for output in (source, hardlink, symlink):
+                result = subprocess.run([str(ROOT / 'tools/bitpack'), str(source), str(output)], capture_output=True)
+                self.assertEqual(result.returncode, 1)
+                self.assertIn(b'cannot overwrite the literal input source', result.stderr)
+                self.assertEqual(source.read_text(), original)
+                self.assertEqual(output.read_text(), original)
+
     def test_target_annotations_are_verified_separately(self):
         data, _ = read_bits(ROOT / "boot/boot.bits")
         with tempfile.TemporaryDirectory() as tmp:

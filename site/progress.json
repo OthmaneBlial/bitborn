@@ -55,18 +55,30 @@
     },
     {
       "milestone": "Eight dedicated `.io` routes and a size-comparison lab",
-      "progress": "\u2705 Locally verified; CI and live publication checks underway"
+      "progress": "\u2705 Public; expanded Linux CI and live builder checks passed"
     },
     {
       "milestone": "Original 12-byte exit versus 8-byte alternative",
-      "progress": "\u2705 Independent sizes/encodings checked; native Linux CI required"
+      "progress": "\u2705 Both return 42 in Linux CI; 132\u2192128-byte ELF sizes, no speed claim"
     },
     {
       "milestone": "New browser GIFs, showcase and contributor issue forms",
       "progress": "\u2705 Genuine captured states with provenance; contributor files checked"
     },
     {
-      "milestone": "Protected mode, interrupts and executable loading",
+      "milestone": "Native shell and separately authored disk app",
+      "progress": "\u2705 Nine commands, real RAM/register snapshots, checked disk load and repeated return in QEMU"
+    },
+    {
+      "milestone": "32-bit protected mode and software interrupt",
+      "progress": "\u2705 GDT, flat memory, IDT gate and IRETD verified in QEMU; native captures recorded"
+    },
+    {
+      "milestone": "Packaging and boundary correctness",
+      "progress": "\u2705 Source aliases/collisions/corrupt derived files rejected; 16-bit IP wrap tested"
+    },
+    {
+      "milestone": "Paging, exception/hardware interrupt handling and physical hardware",
       "progress": "Future research; no working claim"
     }
   ]

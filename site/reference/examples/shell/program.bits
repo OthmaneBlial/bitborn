@@ -1,0 +1,259 @@
+# Hand-authored real-mode shell at 0000:7E00. Constants and relative offsets are reviewed below.
+10001000 00010110 00100000 00000101 # instruction | MOV [0520],DL | Save the loader's BIOS boot-drive number before UART setup changes DX.
+10111101 00000000 00000000 # instruction | MOV BP,0 | Establish a deterministic base pointer for the sampled register display.
+10111111 00000000 00000110 # instruction | MOV DI,0600 | Select the fixed sixteen-byte RAM experiment window.
+00110001 11000000 # instruction | XOR AX,AX | Clear AX for the initialization stores.
+10111001 00001000 00000000 # instruction | MOV CX,8 | Eight word stores initialize sixteen experiment bytes.
+11110011 10101011 # instruction | REP STOSW | F3 repeats AB through ES:DI; the shared loader established ES=0 and DF=0.
+10111000 00000011 00000000 # instruction | MOV AX,0003 | Select BIOS text mode three.
+11001101 00010000 # instruction | INT 10 | Clear the VGA screen through the BIOS.
+10111010 11111001 00000011 # instruction | MOV DX,03F9 | Select the COM1 interrupt-enable register.
+10110000 00000000 # instruction | MOV AL,00 | Disable UART interrupts.
+11101110 # instruction | OUT DX,AL | Write the UART control byte.
+10111010 11111011 00000011 # instruction | MOV DX,03FB | Select the line-control register.
+10110000 10000000 # instruction | MOV AL,80 | Enable divisor-latch access.
+11101110 # instruction | OUT DX,AL | Select the baud divisor registers.
+10111010 11111000 00000011 # instruction | MOV DX,03F8 | Select the divisor low-byte register.
+10110000 00000001 # instruction | MOV AL,01 | Select divisor one for 115200 baud.
+11101110 # instruction | OUT DX,AL | Write the divisor low byte.
+01000010 # instruction | INC DX | Move to the divisor high-byte register.
+10110000 00000000 # instruction | MOV AL,00 | Clear the divisor high byte.
+11101110 # instruction | OUT DX,AL | Write the divisor high byte.
+10111010 11111011 00000011 # instruction | MOV DX,03FB | Select UART line control again.
+10110000 00000011 # instruction | MOV AL,03 | Select eight bits, no parity, one stop bit and clear DLAB.
+11101110 # instruction | OUT DX,AL | Complete COM1 initialization.
+10111110 00101010 10000000 # instruction | MOV SI,802A | Banner starts at stage offset 554, physical 802A.
+11101000 10100000 00000001 # instruction | CALL puts | Next offset 56 plus 416 reaches puts at 472.
+10111110 00111010 10000000 # instruction | MOV SI,803A | Prompt at offset 570 is greater-than and space.
+11101000 10011010 00000001 # instruction | CALL puts | Next offset 62 plus 410 reaches puts at 472.
+10111111 00000000 10000010 # instruction | MOV DI,8200 | Input buffer is above the two loaded shell sectors.
+00110001 11001001 # instruction | XOR CX,CX | CX counts accepted printable characters.
+00110001 11000000 # instruction | XOR AX,AX | Select BIOS blocking keyboard-read service zero.
+11001101 00010110 # instruction | INT 16 | Read a real BIOS keyboard event into AX.
+00111100 00001101 # instruction | CMP AL,0D | Test Enter before printable filtering.
+01110100 00101111 # instruction | JE dispatch | Next offset 75 plus 47 reaches dispatch at 122.
+00111100 00001000 # instruction | CMP AL,08 | Test Backspace.
+01110100 00010100 # instruction | JE backspace | Next offset 79 plus 20 reaches backspace at 99.
+00111100 00100000 # instruction | CMP AL,20 | Reject control bytes below ASCII space.
+01110010 11110000 # instruction | JB read | Next offset 83 minus 16 returns to keyboard read at 67.
+00111100 01111110 # instruction | CMP AL,7E | Reject bytes above printable ASCII tilde.
+01110111 11101100 # instruction | JA read | Next offset 87 minus 20 returns to keyboard read at 67.
+10000011 11111001 00001111 # instruction | CMP CX,15 | Bound the line to fifteen characters plus a NUL byte.
+01110011 11100111 # instruction | JAE read | Next offset 92 minus 25 ignores a sixteenth printable byte.
+10101010 # instruction | STOSB | Append the accepted character through ES:DI.
+01000001 # instruction | INC CX | Count the accepted byte.
+11101000 10000010 00000001 # instruction | CALL putc | Next offset 97 plus 386 reaches putc at 483.
+11101011 11100000 # instruction | JMP read | Next offset 99 minus 32 reaches keyboard read at 67.
+10000101 11001001 # instruction | TEST CX,CX | Empty Backspace must not move DI before the buffer.
+01110100 11011100 # instruction | JZ read | Next offset 103 minus 36 ignores Backspace on an empty line.
+01001111 # instruction | DEC DI | Remove the last buffered character.
+01001001 # instruction | DEC CX | Decrease the accepted length.
+10110000 00001000 # instruction | MOV AL,08 | Move the display cursor left.
+11101000 01110101 00000001 # instruction | CALL putc | Next offset 110 plus 373 reaches putc at 483.
+10110000 00100000 # instruction | MOV AL,20 | Erase the old displayed character with a space.
+11101000 01110000 00000001 # instruction | CALL putc | Next offset 115 plus 368 reaches putc at 483.
+10110000 00001000 # instruction | MOV AL,08 | Restore the cursor after the erasing space.
+11101000 01101011 00000001 # instruction | CALL putc | Next offset 120 plus 363 reaches putc at 483.
+11101011 11001001 # instruction | JMP read | Next offset 122 minus 55 returns to keyboard read at 67.
+00110000 11000000 # instruction | XOR AL,AL | Produce the input line terminator.
+10101010 # instruction | STOSB | NUL-terminate the bounded input buffer.
+10111110 00111101 10000000 # instruction | MOV SI,803D | Select the shared CR LF NUL string.
+11101000 01010101 00000001 # instruction | CALL puts | Next offset 131 plus 341 reaches puts at 472.
+10111110 01000000 10000000 # instruction | MOV SI,8040 | Select exact command help at offset 576.
+11101000 00111001 00000001 # instruction | CALL equal | Next offset 137 plus 313 reaches comparison at 450.
+10000100 11000000 # instruction | TEST AL,AL | AL is one only for exact NUL-terminated equality.
+01110100 00001001 # instruction | JZ try_about | Next offset 141 plus nine reaches the next comparison at 150.
+10111110 01110001 10000000 # instruction | MOV SI,8071 | Select the nine-command help text at offset 625.
+11101000 01000101 00000001 # instruction | CALL puts | Next offset 147 plus 325 reaches puts at 472.
+11101001 10100010 11111111 # instruction | JMP prompt | Next offset 150 minus 94 reaches prompt at 56.
+10111110 01000101 10000000 # instruction | MOV SI,8045 | Select exact command about at offset 581.
+11101000 00100110 00000001 # instruction | CALL equal | Next offset 156 plus 294 reaches comparison at 450.
+10000100 11000000 # instruction | TEST AL,AL | Test the exact-match result.
+01110100 00001001 # instruction | JZ try_clear | Next offset 160 plus nine reaches clear comparison at 169.
+10111110 10100100 10000000 # instruction | MOV SI,80A4 | About text starts at offset 676.
+11101000 00110010 00000001 # instruction | CALL puts | Next offset 166 plus 306 reaches puts at 472.
+11101001 10001111 11111111 # instruction | JMP prompt | Next offset 169 minus 113 reaches prompt at 56.
+10111110 01001011 10000000 # instruction | MOV SI,804B | Select exact command clear at offset 587.
+11101000 00010011 00000001 # instruction | CALL equal | Next offset 175 plus 275 reaches comparison at 450.
+10000100 11000000 # instruction | TEST AL,AL | Test the exact-match result.
+01110100 00001000 # instruction | JZ try_reboot | Next offset 179 plus eight reaches reboot comparison at 187.
+10111000 00000011 00000000 # instruction | MOV AX,0003 | Select text mode to clear VGA only, retaining serial history.
+11001101 00010000 # instruction | INT 10 | Clear the actual VGA display.
+11101001 01111101 11111111 # instruction | JMP prompt | Next offset 187 minus 131 reaches prompt at 56.
+10111110 01010001 10000000 # instruction | MOV SI,8051 | Select exact command reboot at offset 593.
+11101000 00000001 00000001 # instruction | CALL equal | Next offset 193 plus 257 reaches comparison at 450.
+10000100 11000000 # instruction | TEST AL,AL | Test the exact-match result.
+01110100 00000101 # instruction | JZ try_read | Next offset 197 plus five reaches read comparison at 202.
+11001101 00011001 # instruction | INT 19 | Invoke BIOS bootstrap, not a power cycle.
+11101001 01101110 11111111 # instruction | JMP prompt | If INT 19 returns, next offset 202 minus 146 reaches prompt.
+10111110 01011000 10000000 # instruction | MOV SI,8058 | Select exact command read at offset 600.
+11101000 11110010 00000000 # instruction | CALL equal | Next offset 208 plus 242 reaches comparison at 450.
+10000100 11000000 # instruction | TEST AL,AL | Test the exact-match result.
+01110100 00010101 # instruction | JZ try_write | Next offset 212 plus 21 reaches write comparison at 233.
+10111110 11001001 10000000 # instruction | MOV SI,80C9 | Select the physical-address prefix at offset 713.
+11101000 11111110 00000000 # instruction | CALL puts | Next offset 218 plus 254 reaches puts at 472.
+10100000 00000000 00000110 # instruction | MOV AL,[0600] | Read the actual experiment byte through segment-zero DS.
+11101000 00100111 00000001 # instruction | CALL hex | Next offset 224 plus 295 reaches the byte-to-hex procedure at 519.
+10111110 00111101 10000000 # instruction | MOV SI,803D | Select CR LF NUL.
+11101000 11110010 00000000 # instruction | CALL puts | Next offset 230 plus 242 reaches puts at 472.
+11101001 01001111 11111111 # instruction | JMP prompt | Next offset 233 minus 177 reaches prompt at 56.
+10111110 01011101 10000000 # instruction | MOV SI,805D | Select exact command write at offset 605.
+11101000 11010011 00000000 # instruction | CALL equal | Next offset 239 plus 211 reaches comparison at 450.
+10000100 11000000 # instruction | TEST AL,AL | Test the exact-match result.
+01110100 00001110 # instruction | JZ try_dump | Next offset 243 plus fourteen reaches dump comparison at 257.
+11000110 00000110 00000000 00000110 00101010 # instruction | MOV byte [0600],2A | C6 /0 with direct address 0600 stores one fixed byte; no general writes are exposed.
+10111110 11010000 10000000 # instruction | MOV SI,80D0 | Select the write confirmation at offset 720.
+11101000 11011010 00000000 # instruction | CALL puts | Next offset 254 plus 218 reaches puts at 472.
+11101001 00110111 11111111 # instruction | JMP prompt | Next offset 257 minus 201 reaches prompt at 56.
+10111110 01100011 10000000 # instruction | MOV SI,8063 | Select exact command dump at offset 611.
+11101000 10111011 00000000 # instruction | CALL equal | Next offset 263 plus 187 reaches comparison at 450.
+10000100 11000000 # instruction | TEST AL,AL | Test the exact-match result.
+01110100 00100000 # instruction | JZ try_regs | Next offset 267 plus 32 reaches register comparison at 299.
+10111110 11001001 10000000 # instruction | MOV SI,80C9 | Select the physical-address prefix at offset 713.
+11101000 11000111 00000000 # instruction | CALL puts | Next offset 273 plus 199 reaches puts at 472.
+10111110 00000000 00000110 # instruction | MOV SI,0600 | Select the actual sixteen-byte RAM window.
+10111001 00010000 00000000 # instruction | MOV CX,16 | Print exactly sixteen bytes.
+10101100 # instruction | LODSB | Read the current RAM byte and advance SI.
+11101000 11101100 00000000 # instruction | CALL hex | Next offset 283 plus 236 reaches hex at 519.
+10110000 00100000 # instruction | MOV AL,20 | Separate the displayed hexadecimal bytes.
+11101000 11000011 00000000 # instruction | CALL putc | Next offset 288 plus 195 reaches putc at 483.
+11100010 11110101 # instruction | LOOP dump_byte | Next offset 290 minus eleven reaches LODSB at 279.
+10111110 00111101 10000000 # instruction | MOV SI,803D | Select CR LF NUL.
+11101000 10110000 00000000 # instruction | CALL puts | Next offset 296 plus 176 reaches puts at 472.
+11101001 00001101 11111111 # instruction | JMP prompt | Next offset 299 minus 243 reaches prompt at 56.
+10111110 01101000 10000000 # instruction | MOV SI,8068 | Select exact command regs at offset 616.
+11101000 10010001 00000000 # instruction | CALL equal | Next offset 305 plus 145 reaches comparison at 450.
+10000100 11000000 # instruction | TEST AL,AL | Flags are sampled after this exact-match test and branch.
+01110100 01010100 # instruction | JZ try_run | Next offset 309 plus 84 reaches run comparison at 393.
+10100011 00000000 00000101 # instruction | MOV [0500],AX | Snapshot sampling starts here, offset 309; stores do not change flags.
+10001001 00011110 00000010 00000101 # instruction | MOV [0502],BX | Save actual BX at handler entry.
+10001001 00001110 00000100 00000101 # instruction | MOV [0504],CX | Save actual CX; it is four after reading regs.
+10001001 00010110 00000110 00000101 # instruction | MOV [0506],DX | Save actual DX before any reporting calls.
+10001001 00100110 00001000 00000101 # instruction | MOV [0508],SP | Save SP before PUSHF or reporting calls alter the stack.
+10001001 00101110 00001010 00000101 # instruction | MOV [050A],BP | Save actual BP.
+10001001 00110110 00001100 00000101 # instruction | MOV [050C],SI | Save SI after the successful command comparison.
+10001001 00111110 00001110 00000101 # instruction | MOV [050E],DI | Save DI after the NUL input terminator.
+10001100 00001110 00010000 00000101 # instruction | MOV [0510],CS | 8C /r stores the actual code segment.
+10001100 00011110 00010010 00000101 # instruction | MOV [0512],DS | Save the actual data segment.
+10001100 00000110 00010100 00000101 # instruction | MOV [0514],ES | Save the actual extra segment.
+10001100 00010110 00010110 00000101 # instruction | MOV [0516],SS | Save the actual stack segment.
+10011100 # instruction | PUSHF | Push the actual FLAGS word; preceding snapshot stores preserved flags.
+01011000 # instruction | POP AX | Transfer the sampled FLAGS word into AX without changing flags.
+10100011 00011000 00000101 # instruction | MOV [0518],AX | Complete the thirteen-word snapshot at 0500 through 0519.
+10111110 11011111 10000000 # instruction | MOV SI,80DF | Select the column header at offset 735.
+11101000 01101001 00000000 # instruction | CALL puts | Next offset 367 plus 105 reaches puts at 472.
+10111110 00000000 00000101 # instruction | MOV SI,0500 | Read the real captured register words.
+10111001 00001101 00000000 # instruction | MOV CX,13 | Display eight GPRs, four segments and FLAGS.
+10101101 # instruction | LODSW | Read the next actual snapshot word into AX.
+11101000 10100110 00000000 # instruction | CALL wordhex | Next offset 377 plus 166 reaches wordhex at 543.
+10110000 00100000 # instruction | MOV AL,20 | Separate the displayed words.
+11101000 01100101 00000000 # instruction | CALL putc | Next offset 382 plus 101 reaches putc at 483.
+11100010 11110101 # instruction | LOOP register_word | Next offset 384 minus eleven reaches LODSW at 373.
+10111110 00111101 10000000 # instruction | MOV SI,803D | Select CR LF NUL.
+11101000 01010010 00000000 # instruction | CALL puts | Next offset 390 plus 82 reaches puts at 472.
+11101001 10101111 11111110 # instruction | JMP prompt | Next offset 393 minus 337 reaches prompt at 56.
+10111110 01101101 10000000 # instruction | MOV SI,806D | Select exact command run at offset 621.
+11101000 00110011 00000000 # instruction | CALL equal | Next offset 399 plus 51 reaches comparison at 450.
+10000100 11000000 # instruction | TEST AL,AL | Test the exact-match result.
+01110100 00100110 # instruction | JZ unknown | Next offset 403 plus 38 skips both disk paths to unknown at 441.
+00110001 11000000 # instruction | XOR AX,AX | Prepare segment zero for the disk buffer.
+10001110 11000000 # instruction | MOV ES,AX | Use ES=0 for the physical 9000 load address.
+10111011 00000000 10010000 # instruction | MOV BX,9000 | Select a separate two-sector app buffer away from shell, input and stack.
+10111000 00000010 00000010 # instruction | MOV AX,0202 | AH=02 reads disk sectors; AL=02 requests two sectors.
+10111001 00000100 00000000 # instruction | MOV CX,0004 | Select cylinder zero, CHS sector four, immediately after the shell sectors.
+10001010 00010110 00100000 00000101 # instruction | MOV DL,[0520] | Restore the real BIOS boot-drive number saved before UART initialization.
+00110000 11110110 # instruction | XOR DH,DH | Select disk head zero.
+11001101 00010011 # instruction | INT 13 | BIOS reads disk sectors four and five into 0000:9000.
+01110010 00000110 # instruction | JC disk_error | Next offset 426 plus six reaches the error handler at 432; failed reads are never called.
+11101000 01010011 00010000 # instruction | CALL 9000 | Next logical IP 7FAD plus displacement 1053 calls the separately loaded app at 9000.
+11101001 10001000 11111110 # instruction | JMP prompt | After the app RET, next offset 432 minus 376 returns to the shell prompt.
+10111110 00001000 10000001 # instruction | MOV SI,8108 | Disk failure message begins at offset 776.
+11101000 00100010 00000000 # instruction | CALL puts | Next offset 438 plus 34 reaches puts at 472.
+11101001 01111111 11111110 # instruction | JMP prompt | Next offset 441 minus 385 returns to prompt without executing the failed buffer.
+10111110 00011011 10000001 # instruction | MOV SI,811B | Unknown-command text begins at offset 795.
+11101000 00011001 00000000 # instruction | CALL puts | Next offset 447 plus 25 reaches puts at 472.
+11101001 01110110 11111110 # instruction | JMP prompt | Next offset 450 minus 394 reaches prompt at 56.
+01010111 # instruction | PUSH DI | Preserve the input cursor during exact command matching.
+10111111 00000000 10000010 # instruction | MOV DI,8200 | Compare against the beginning of the input buffer.
+10101100 # instruction | LODSB | Read a command-table byte and advance SI.
+00111010 00000101 # instruction | CMP AL,[DI] | Compare with the actual buffered input byte.
+01110101 00001001 # instruction | JNE unequal | Next offset 459 plus nine reaches unequal at 468.
+01000111 # instruction | INC DI | Advance to the next input byte.
+10000100 11000000 # instruction | TEST AL,AL | NUL matches only if both whole strings ended.
+01110101 11110110 # instruction | JNZ compare_next | Next offset 464 minus ten returns to LODSB at 454.
+01011111 # instruction | POP DI | Restore the input cursor.
+10110000 00000001 # instruction | MOV AL,01 | Return exact-match success.
+11000011 # instruction | RET | Return to the command dispatcher.
+01011111 # instruction | POP DI | Restore the cursor on mismatch too.
+00110000 11000000 # instruction | XOR AL,AL | Return mismatch as AL=0.
+11000011 # instruction | RET | Return to the command dispatcher.
+10101100 # instruction | LODSB | Fetch the next NUL-terminated output byte.
+10000100 11000000 # instruction | TEST AL,AL | Test the string terminator.
+01110100 00000101 # instruction | JZ puts_done | Next offset 477 plus five reaches RET at 482.
+11101000 00000011 00000000 # instruction | CALL putc | Next offset 480 plus three reaches output at 483.
+11101011 11110110 # instruction | JMP puts | Next offset 482 minus ten fetches the next byte at 472.
+11000011 # instruction | RET | Finish the string procedure.
+01010000 # instruction | PUSH AX | Preserve all general registers used by input, snapshots and output loops.
+01010011 # instruction | PUSH BX | Preserve BX across BIOS output.
+01010001 # instruction | PUSH CX | Preserve loop and input counts.
+01010010 # instruction | PUSH DX | Preserve caller port or disk state.
+01010110 # instruction | PUSH SI | Preserve string and memory pointers.
+01010111 # instruction | PUSH DI | Preserve the input cursor.
+01010000 # instruction | PUSH AX | Preserve the original character for serial output.
+10110100 00001110 # instruction | MOV AH,0E | Select BIOS teletype output.
+10111011 00000111 00000000 # instruction | MOV BX,0007 | Select display page zero and text attribute seven.
+11001101 00010000 # instruction | INT 10 | Print the actual character on VGA.
+01011000 # instruction | POP AX | Recover the original character.
+01010000 # instruction | PUSH AX | Preserve it while polling COM1 readiness.
+10111010 11111101 00000011 # instruction | MOV DX,03FD | Select UART line-status register.
+11101100 # instruction | IN AL,DX | Read actual COM1 status.
+10101000 00100000 # instruction | TEST AL,20 | Test transmitter-holding-register empty bit five.
+01110100 11111011 # instruction | JZ serial_poll | Next offset 507 minus five repeats IN at 502 until ready.
+01011000 # instruction | POP AX | Recover the output character after polling.
+10111010 11111000 00000011 # instruction | MOV DX,03F8 | Select COM1 data register.
+11101110 # instruction | OUT DX,AL | Emit the same character on serial.
+01011111 # instruction | POP DI | Restore the input cursor.
+01011110 # instruction | POP SI | Restore the string pointer.
+01011010 # instruction | POP DX | Restore DX.
+01011001 # instruction | POP CX | Restore CX.
+01011011 # instruction | POP BX | Restore BX.
+01011000 # instruction | POP AX | Restore AX.
+11000011 # instruction | RET | Return to the caller.
+01010000 # instruction | PUSH AX | Preserve the full input byte for its low nibble.
+01010001 # instruction | PUSH CX | Preserve the caller's input or output count.
+10110001 00000100 # instruction | MOV CL,04 | Select a four-bit shift.
+11010010 11101000 # instruction | SHR AL,CL | Move the high nibble into AL's low four bits.
+11101000 00000100 00000000 # instruction | CALL nibble | Next offset 528 plus four reaches nibble conversion at 532.
+01011001 # instruction | POP CX | Restore the caller's count.
+01011000 # instruction | POP AX | Restore the original byte.
+00100100 00001111 # instruction | AND AL,0F | Select the original low nibble.
+00111100 00001010 # instruction | CMP AL,0A | Digits ten through fifteen need alphabetic hex characters.
+01110010 00000010 # instruction | JB decimal_digit | Next offset 536 plus two skips the alphabetic adjustment.
+00000100 00000111 # instruction | ADD AL,07 | Convert ten through fifteen toward A through F.
+00000100 00110000 # instruction | ADD AL,30 | Add ASCII zero to produce the hex character.
+11101001 11000100 11111111 # instruction | JMP putc | Tail-call output: next offset 543 minus 60 reaches putc at 483.
+01010000 # instruction | PUSH AX | Preserve the word while displaying its high byte first.
+10001000 11100000 # instruction | MOV AL,AH | Select the high byte of the word.
+11101000 11100010 11111111 # instruction | CALL hex | Next offset 549 minus 30 reaches hex at 519.
+01011000 # instruction | POP AX | Restore the original word to select its low byte.
+11101000 11011110 11111111 # instruction | CALL hex | Next offset 553 minus 34 reaches hex at 519.
+11000011 # instruction | RET | Finish the four-digit hexadecimal word.
+01100010 01101001 01110100 01100010 01101111 01110010 01101110 00100000 01110011 01101000 01100101 01101100 01101100 00001101 00001010 00000000 # data | bitborn shell CR LF NUL | Banner begins at offset 554, physical 802A.
+00111110 00100000 00000000 # data | prompt | Offset 570, physical 803A.
+00001101 00001010 00000000 # data | newline | Offset 573, physical 803D.
+01101000 01100101 01101100 01110000 00000000 # data | help | Offset 576, physical 8040.
+01100001 01100010 01101111 01110101 01110100 00000000 # data | about | Offset 581, physical 8045.
+01100011 01101100 01100101 01100001 01110010 00000000 # data | clear | Offset 587, physical 804B.
+01110010 01100101 01100010 01101111 01101111 01110100 00000000 # data | reboot | Offset 593, physical 8051.
+01110010 01100101 01100001 01100100 00000000 # data | read | Offset 600, physical 8058.
+01110111 01110010 01101001 01110100 01100101 00000000 # data | write | Offset 605, physical 805D.
+01100100 01110101 01101101 01110000 00000000 # data | dump | Offset 611, physical 8063.
+01110010 01100101 01100111 01110011 00000000 # data | regs | Offset 616, physical 8068.
+01110010 01110101 01101110 00000000 # data | run | Offset 621, physical 806D.
+01101000 01100101 01101100 01110000 00100000 01100001 01100010 01101111 01110101 01110100 00100000 01100011 01101100 01100101 01100001 01110010 00100000 01110010 01100101 01100010 01101111 01101111 01110100 00100000 01100100 01110101 01101101 01110000 00100000 01110010 01100101 01100111 01110011 00100000 01110111 01110010 01101001 01110100 01100101 00100000 01110010 01100101 01100001 01100100 00100000 01110010 01110101 01101110 00001101 00001010 00000000 # data | help text | Nine supported exact lowercase commands, starting at offset 625.
+01010010 01100001 01110111 00100000 01100010 01101001 01110100 01110011 00101110 00100000 01000010 01001001 01001111 01010011 00101110 00100000 01010011 01100101 01110000 01100001 01110010 01100001 01110100 01100101 00100000 01100100 01101001 01110011 01101011 00100000 01100001 01110000 01110000 00101110 00001101 00001010 00000000 # data | about text | Offset 676, physical 80A4; truthful scope rather than an OS claim.
+00110000 00110110 00110000 00110000 00111010 00100000 00000000 # data | 0600 address prefix | Offset 713, physical 80C9.
+01010010 01000001 01001101 01011011 00110000 00110110 00110000 00110000 01011101 00111101 00110010 01000001 00001101 00001010 00000000 # data | RAM[0600]=2A CR LF NUL | Offset 720, physical 80D0, confirming the actual fixed write.
+01000001 01011000 00100000 01000010 01011000 00100000 01000011 01011000 00100000 01000100 01011000 00100000 01010011 01010000 00100000 01000010 01010000 00100000 01010011 01001001 00100000 01000100 01001001 00100000 01000011 01010011 00100000 01000100 01010011 00100000 01000101 01010011 00100000 01010011 01010011 00100000 01000110 01001100 00001101 00001010 00000000 # data | AX BX CX DX SP BP SI DI CS DS ES SS FL | Offset 735, physical 80DF; columns correspond to captured words 0500 through 0518.
+01000100 01101001 01110011 01101011 00100000 01110010 01100101 01100001 01100100 00100000 01100110 01100001 01101001 01101100 01100101 01100100 00001101 00001010 00000000 # data | Disk read failed CR LF NUL | Offset 776, physical 8108.
+01010101 01101110 01101011 01101110 01101111 01110111 01101110 00100000 01100011 01101111 01101101 01101101 01100001 01101110 01100100 00001101 00001010 00000000 # data | Unknown command CR LF NUL | Offset 795, physical 811B.

@@ -22,7 +22,7 @@ bitborn explores that question by encoding machine instructions directly as
 binary digits. Every opcode. Every operand. Every branch displacement. No
 assembler translates the target code: we author the bytes themselves.
 
-**A real 512-byte BIOS boot program, eleven reviewed examples, four byte tools,
+**A real 512-byte BIOS boot program, fourteen reviewed examples, four byte tools,
 an editable boot builder, a visual CPU lab, and 20 binary challenges.** This is an educational experiment, not a
 production operating system.
 
@@ -68,10 +68,13 @@ for exact evidence and remaining gates.
 | Full editable 512-byte boot-sector builder | ✅ Chrome-tested; exact downloaded image/source boot the one-bit edit in QEMU |
 | Visual CPU lab: registers, flags, stack, memory and breakpoints | ✅ Five literal teaching programs and Chrome controls verified |
 | 20 challenges across four levels | ✅ All solutions pass model and QEMU goals; seeds fail; local progress and sharing tested |
-| Eight dedicated `.io` routes and a size-comparison lab | ✅ Locally verified; CI and live publication checks underway |
-| Original 12-byte exit versus 8-byte alternative | ✅ Independent sizes/encodings checked; native Linux CI required |
+| Eight dedicated `.io` routes and a size-comparison lab | ✅ Public; expanded Linux CI and live builder checks passed |
+| Original 12-byte exit versus 8-byte alternative | ✅ Both return 42 in Linux CI; 132→128-byte ELF sizes, no speed claim |
 | New browser GIFs, showcase and contributor issue forms | ✅ Genuine captured states with provenance; contributor files checked |
-| Protected mode, interrupts and executable loading | Future research; no working claim |
+| Native shell and separately authored disk app | ✅ Nine commands, real RAM/register snapshots, checked disk load and repeated return in QEMU |
+| 32-bit protected mode and software interrupt | ✅ GDT, flat memory, IDT gate and IRETD verified in QEMU; native captures recorded |
+| Packaging and boundary correctness | ✅ Source aliases/collisions/corrupt derived files rejected; 16-bit IP wrap tested |
+| Paging, exception/hardware interrupt handling and physical hardware | Future research; no working claim |
 
 ## From text bits to CPU instructions
 
@@ -142,6 +145,9 @@ It then disables interrupts and enters a controlled halt loop.
 | [Interactive monitor](examples/monitor/README.md) | Five exact commands and edited input | BIOS |
 | [Disk reads](examples/disk-read/README.md) | Load and execute additional sectors | BIOS |
 | [Eight-byte exit](examples/exit-code-small/README.md) | Same exit 42; smaller payload, more stack traffic | Linux x86-64 |
+| [Binary shell](examples/shell/README.md) | Nine commands, real memory, register snapshot and disk app | BIOS |
+| [Returning disk app](examples/shell-app/README.md) | Computes 7×6, stores 2A in RAM, returns to shell | BIOS payload |
+| [Protected mode](examples/protected-mode/README.md) | 32-bit flat memory, IDT software interrupt and IRETD | BIOS → protected mode |
 
 Each guide links its canonical source, per-byte table, generated binary path,
 expected behavior and automated test. `make build` produces the artifacts.
@@ -156,6 +162,14 @@ Type in the QEMU display and press Enter. The monitor supports exact lowercase
 `help`, `clear`, `about`, `reboot` and `peek`; a 15-character input bound and
 Backspace editing. `peek` loads the actual byte at physical `7C00`. The monitor
 and disk-read images use a separately handwritten loader and two padded sectors.
+
+The new shell adds `dump`, `regs`, `write`, `read` and `run` alongside help,
+about, clear and reboot. Its five-sector disk loads a separately authored app
+at `9000`; BIOS carry errors stop the launch. `regs` samples the actual CPU at
+handler entry. The memory experiment and app calculation are checked against
+guest RAM. The separate protected-mode target enters 32-bit ring zero, loads a
+GDT and one software-interrupt gate, then verifies memory and interrupt return.
+Neither experiment supplies paging, general exception handling or a full OS.
 
 ## Explore and contribute
 

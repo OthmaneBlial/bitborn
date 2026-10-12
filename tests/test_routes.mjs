@@ -31,13 +31,18 @@ for (const route of routes) {
 assert.equal(new Set(titles).size,routes.length,'unique route titles');
 assert.equal(new Set(descriptions).size,routes.length,'unique route descriptions');
 const examples = readFileSync(resolve(root,'site/examples/index.html'),'utf8');
-assert.equal([...examples.matchAll(/data-example="/g)].length,11);
-const targets = JSON.parse(readFileSync(resolve(root,'targets.json'),'utf8'));
+assert.equal([...examples.matchAll(/data-example="/g)].length,14);
+const targets = [
+  ...JSON.parse(readFileSync(resolve(root,'targets.json'),'utf8')),
+  ...JSON.parse(readFileSync(resolve(root,'examples/shell/targets.json'),'utf8')),
+];
 for (const [,slug,size] of examples.matchAll(/data-example="([^"]+)"[^]*?<span>(\d+)-BYTE/g)) {
   const source = slug === 'boot-sector' ? 'boot/boot.bits' : `examples/${slug}/program.bits`;
-  assert.equal(Number(size),targets.find(target => target.source === source).size,`${slug} displayed payload size`);
+  const target = targets.find(target => target.source === source);
+  assert.ok(target,`${slug} has a reviewed target manifest entry`);
+  assert.equal(Number(size),target.size,`${slug} displayed payload size`);
 }
 const progress = JSON.parse(readFileSync(resolve(root,'site/progress.json'),'utf8'));
 assert.match(progress.updated,/^\d{4}-\d{2}-\d{2}$/);assert.ok(progress.milestones.length > 0);
 assert.ok(progress.milestones.every(item => typeof item.milestone === 'string' && typeof item.progress === 'string'));
-console.log('route checks passed: five portable dedicated routes, unique metadata, local source/tutorial/download links, eleven real example sizes, generated repository progress data');
+console.log('route checks passed: five portable dedicated routes, unique metadata, local source/tutorial/download links, fourteen real example sizes, generated repository progress data');

@@ -1,0 +1,68 @@
+# Separate handwritten disk app at 0000:9000. Called by the shell and returns with balanced stack.
+01100000 # instruction | PUSHA | Preserve all eight caller GPRs, including the original SP slot.
+00011110 # instruction | PUSH DS | Preserve the caller data segment.
+00000110 # instruction | PUSH ES | Preserve the caller extra segment.
+10011100 # instruction | PUSHF | Preserve caller flags, including interrupt and direction state.
+11111100 # instruction | CLD | String traversal inside this app runs forward.
+10111110 01101110 10010000 # instruction | MOV SI,906E | Prefix begins at app offset 110.
+11101000 00011100 00000000 # instruction | CALL puts | Next offset 11 plus 28 reaches puts at 39.
+10111000 00000000 00000000 # instruction | MOV AX,0 | Begin the actual arithmetic result at zero.
+10111001 00000111 00000000 # instruction | MOV CX,7 | Execute seven additions of six.
+00000101 00000110 00000000 # instruction | ADD AX,6 | Add six to the actual 16-bit result.
+11100010 11111011 # instruction | LOOP add_six | Next offset 22 minus five returns to ADD at 17 until CX becomes zero.
+10100010 00000001 00000110 # instruction | MOV [0601],AL | Store the actual result 2A into a second fixed RAM experiment byte.
+11101000 00111010 00000000 # instruction | CALL hex | Next offset 28 plus 58 reaches hexadecimal output at 86.
+10111110 10000001 10010000 # instruction | MOV SI,9081 | Suffix begins at app offset 129.
+11101000 00000101 00000000 # instruction | CALL puts | Next offset 34 plus five reaches puts at 39.
+10011101 # instruction | POPF | Restore caller flags after app output.
+00000111 # instruction | POP ES | Restore the caller extra segment.
+00011111 # instruction | POP DS | Restore the caller data segment.
+01100001 # instruction | POPA | Restore caller GPRs; the saved SP slot is discarded as specified by x86.
+11000011 # instruction | RET | Return to the shell's near-call return IP, 7FAD.
+10101100 # instruction | LODSB | Fetch the next NUL-terminated output byte through DS:SI.
+10000100 11000000 # instruction | TEST AL,AL | Test for the terminator.
+01110100 00000101 # instruction | JZ puts_done | Next offset 44 plus five reaches RET at 49.
+11101000 00000011 00000000 # instruction | CALL putc | Next offset 47 plus three reaches putc at 50.
+11101011 11110110 # instruction | JMP puts | Next offset 49 minus ten returns to LODSB at 39.
+11000011 # instruction | RET | Return after the complete string.
+01010000 # instruction | PUSH AX | Preserve the original character and caller value.
+01010011 # instruction | PUSH BX | Preserve caller BX across BIOS output.
+01010001 # instruction | PUSH CX | Preserve the arithmetic loop counter.
+01010010 # instruction | PUSH DX | Preserve caller DX across UART polling.
+01010110 # instruction | PUSH SI | Preserve the string pointer.
+01010111 # instruction | PUSH DI | Preserve the input cursor.
+01010000 # instruction | PUSH AX | Keep the character across the video BIOS call.
+10110100 00001110 # instruction | MOV AH,0E | Select BIOS teletype output.
+10111011 00000111 00000000 # instruction | MOV BX,0007 | Select page zero and text attribute seven.
+11001101 00010000 # instruction | INT 10 | Print the actual character on VGA.
+01011000 # instruction | POP AX | Recover the original character.
+01010000 # instruction | PUSH AX | Preserve the character while polling readiness.
+10111010 11111101 00000011 # instruction | MOV DX,03FD | Select COM1 line-status port.
+11101100 # instruction | IN AL,DX | Read actual UART status.
+10101000 00100000 # instruction | TEST AL,20 | Test the transmit-ready bit.
+01110100 11111011 # instruction | JZ poll_serial | Next offset 74 minus five returns to IN at 69.
+01011000 # instruction | POP AX | Recover the character after polling.
+10111010 11111000 00000011 # instruction | MOV DX,03F8 | Select COM1 data port.
+11101110 # instruction | OUT DX,AL | Emit the actual character to serial.
+01011111 # instruction | POP DI | Restore DI.
+01011110 # instruction | POP SI | Restore SI.
+01011010 # instruction | POP DX | Restore DX.
+01011001 # instruction | POP CX | Restore CX.
+01011011 # instruction | POP BX | Restore BX.
+01011000 # instruction | POP AX | Restore AX.
+11000011 # instruction | RET | Return from output.
+01010000 # instruction | PUSH AX | Preserve the input byte for its low nibble.
+01010001 # instruction | PUSH CX | Preserve the caller count.
+10110001 00000100 # instruction | MOV CL,04 | Select a four-bit shift.
+11010010 11101000 # instruction | SHR AL,CL | Select the high nibble.
+11101000 00000100 00000000 # instruction | CALL nibble | Next offset 95 plus four reaches nibble conversion at 99.
+01011001 # instruction | POP CX | Restore the caller count.
+01011000 # instruction | POP AX | Recover the input byte.
+00100100 00001111 # instruction | AND AL,0F | Select its low nibble.
+00111100 00001010 # instruction | CMP AL,0A | Test whether the hex digit needs alphabetic adjustment.
+01110010 00000010 # instruction | JB decimal_digit | Next offset 103 plus two skips the alphabetic adjustment.
+00000100 00000111 # instruction | ADD AL,07 | Adjust ten through fifteen toward A through F.
+00000100 00110000 # instruction | ADD AL,30 | Convert the nibble to an ASCII hex digit.
+11101001 11000100 11111111 # instruction | JMP putc | Tail-call output; next offset 110 minus 60 reaches putc at 50.
+01000100 01001001 01010011 01001011 00100000 01000001 01010000 01010000 00111010 00100000 00110111 00100000 01111000 00100000 00110110 00100000 00111101 00100000 00000000 # data | DISK APP: 7 x 6 = space NUL | Literal prefix at offset 110, physical 906E; the following hex digits come from computed AX.
+00100000 01101000 01100101 01111000 00111011 00100000 01010010 01000001 01001101 01011011 00110000 00110110 00110000 00110001 01011101 00111101 00110010 01000001 00001101 00001010 00000000 # data | space hex; RAM[0601]=2A CR LF NUL | Literal suffix at offset 129, physical 9081; the RAM store is separately verified.

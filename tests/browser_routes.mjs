@@ -39,8 +39,10 @@ try {
   await page.locator('#instruction-select').selectOption('cmp');await page.locator('#execute-instruction').click();
   assert.match(await page.locator('#play-registers').textContent(),/ZF1/);
   await page.goto(new URL('examples/',base).href);
-  assert.equal(await page.locator('[data-example]').count(),11);
-  assert.equal(await page.locator('[data-example] a[download]').count(),11);
+  assert.equal(await page.locator('[data-example]').count(),14);
+  assert.equal(await page.locator('[data-example] a[download]').count(),14);
+  assert.match(await page.locator('[data-example="shell-app"]').textContent(),/not independently bootable/);
+  assert.equal(await page.locator('[data-example="shell-app"] a[download]').getAttribute('href'),'../downloads/shell-app.bin');
   await page.goto(new URL('roadmap/',base).href);
   const progress = JSON.parse(await readFile(resolve(root,'site/progress.json'),'utf8'));
   await page.waitForFunction(() => document.querySelectorAll('.milestone-row').length > 0);
@@ -70,5 +72,5 @@ try {
     }
   }
   assert.deepEqual(errors,[],'route console / failed assets');
-  console.log('dedicated-route browser checks passed: nested playground editing/keyboard/flags, eleven example downloads, exact generated roadmap, safe text rendering and invalid-data handling, all five routes at 1440/768/390/320px; screenshots in build/');
+  console.log('dedicated-route browser checks passed: nested playground editing/keyboard/flags, fourteen example downloads and app payload boundary, exact generated roadmap, safe text rendering and invalid-data handling, all five routes at 1440/768/390/320px; screenshots in build/');
 } finally {await browser?.close();await new Promise(resolve => server.close(resolve));}

@@ -1,6 +1,12 @@
 # Changelog
 
-## Unreleased
+## 0.2.0 — 2026-10-12
+
+- Add an 813-byte native shell with nine exact commands, real memory experiments,
+  handler-entry register/flag snapshots and checked loading of a returning
+  150-byte disk app. Preserve the original monitor.
+- Add a 568-byte 32-bit protected-mode/GDT/IDT software-interrupt experiment,
+  independent success/failure QEMU checks and authentic native capture provenance.
 
 - Add an editable 512-byte Boot Sector Builder with live byte fields, safe
   unsupported-encoding handling and exact image/source downloads.
@@ -18,6 +24,9 @@
   validation and per-bit change descriptions shared by new browser instruments.
 - Restrict public downloads and release archives to reviewed manifest outputs;
   browser test exports or other temporary images cannot enter published artifacts.
+- Reject in-place packing and source aliases, packaged-output collisions and
+  corrupted derived images/ELFs before publication. Honor 16-bit IP wrap in the
+  teaching model and CPU Lab sequential preview.
 
 ## 0.1.1 — 2026-10-12
 

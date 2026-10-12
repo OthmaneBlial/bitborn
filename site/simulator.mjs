@@ -80,7 +80,7 @@ export function createState(bytes = [], loadAddress = 0x7C00) {
   if (!Number.isInteger(loadAddress) || loadAddress < 0 || loadAddress + bytes.length > (1 << 20)) throw new Error('The loaded program must fit in the 1 MiB model memory.');
   const memory = new Uint8Array(1 << 20);
   memory.set(bytes, loadAddress);
-  return {AX:0,CX:0,DX:0,BX:0,SP:0,BP:0,SI:0,DI:0,CS:0,DS:0,ES:0,SS:0,ip:0,loadAddress,zf:false,cf:false,sf:false,of:false,pf:false,af:false,df:false,interrupts:false,halted:false,steps:0,output:'',serial:'',uartDLAB:false,memory};
+  return {AX:0,CX:0,DX:0,BX:0,SP:0,BP:0,SI:0,DI:0,CS:loadAddress > 65535 ? loadAddress >>> 4 : 0,DS:0,ES:0,SS:0,ip:0,loadAddress,zf:false,cf:false,sf:false,of:false,pf:false,af:false,df:false,interrupts:false,halted:false,steps:0,output:'',serial:'',uartDLAB:false,memory};
 }
 
 function resultFlags(state, result, width) {
@@ -105,7 +105,7 @@ export function step(bytes, state) {
   if (state.steps >= 4096) throw new Error('The 4,096-step educational limit was reached. Reset to continue.');
   if (state.ip < 0 || state.ip >= bytes.length) throw new Error('Instruction pointer left the loaded program.');
   const instruction = decode(state.memory.subarray(state.loadAddress, state.loadAddress + bytes.length), state.ip);
-  let next = state.ip + instruction.size;
+  let next;
   const low = value => { state.AX = (state.AX & 0xFF00) | (value & 255); };
   const address = (segment, offset, width = 1) => {
     if (width === 2 && offset === 65535) throw new Error('A word crossing a segment limit is outside this model.');
@@ -125,6 +125,7 @@ export function step(bytes, state) {
   const toProgramIP = ip => physicalAddress(state.CS, ip & 65535) - state.loadAddress;
   const branch = () => { next = toProgramIP(logicalIP(state) + instruction.size + instruction.displacement); };
   const logicFlags = (value, width) => { resultFlags(state, value, width); state.cf = false; state.of = false; state.af = null; };
+  next = toProgramIP(logicalIP(state) + instruction.size);
   switch (instruction.operation) {
     case 'mov16': state[instruction.register] = instruction.value; break;
     case 'mov8': {

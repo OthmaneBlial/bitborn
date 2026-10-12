@@ -86,16 +86,28 @@ not release requirements or advertised capabilities.
   CPU controls, memory, breakpoints, challenge edits/progress and the roadmap.
   Firefox exposed a detached-download-anchor bug; connecting the anchor fixes
   the actual image and source downloads, now covered by both engines.
-- [ ] Verify the expanded milestone in Linux CI, including all six ELF programs,
-  three browser engines and the actual downloaded image boot.
+- [x] Expanded [Linux CI at 8dad62b](https://github.com/OthmaneBlial/bitborn/actions/runs/38221372210)
+  passes all six ELF programs, three browser engines, twenty challenge solutions
+  in QEMU and the actual downloaded image boot.
+- [x] [Pages deployment at 8dad62b](https://github.com/OthmaneBlial/bitborn/actions/runs/38221582708)
+  passed. Live builder interactions/downloads and public source/assets match.
+- [x] Add the native nine-command shell, handler-entry register snapshot, actual
+  memory read/write/dump and a separately handwritten disk app returning to the
+  prompt. Five QEMU tests cover disk failure, command/edit bounds and repeat runs.
+- [x] Add the 568-byte protected-mode target: GDT, CR0.PE, 32-bit flat segments,
+  memory write/read, IDT software interrupt gate, IRETD and controlled success/fail
+  halts. Three independent QEMU tests and genuine native recordings pass locally.
+- [x] Reject source aliases, output collisions and corrupted packaged artifacts;
+  fix logical-IP wrap and its CPU Lab preview. Regression tests cover each bug.
+- [ ] Verify the native additions in exact-commit Linux CI and public downloads.
 - [ ] Verify all new routes/assets/downloads live after automatic Pages deployment.
 - [ ] Publish a meaningful v0.2 release and independently verify its downloads.
 
-## Future experiments
+## Further research
 
-- [ ] Protected-mode transition and explicit GDT explanation.
-- [ ] Interrupt handling beyond BIOS services.
-- [ ] Basic memory management and executable loading.
+- [ ] Paging or a bounded allocator with explicit memory-map evidence.
+- [ ] General exception handlers and hardware interrupt delivery.
+- [ ] Physical-hardware calibration and broader boot compatibility.
 
 These experiments require separate bootable targets, byte explanations and actual
 execution tests before appearing as completed capabilities. No hardware, UEFI,

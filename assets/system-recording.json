@@ -1,0 +1,827 @@
+{
+  "kind": "Actual QEMU/TCG native guest VGA screendumps, not browser simulation",
+  "qemu": "QEMU emulator version 11.1.1",
+  "ffmpeg": "ffmpeg version 9.0.1 Copyright (c) 2000-2026 the FFmpeg developers",
+  "recording_script_sha256": "0078a793499b3c240ba0cbbe33c7e5b829c5cd17ce0c3b8ccfb6a68f70e53b1d",
+  "sources": [
+    {
+      "source": "boot/loader.bits",
+      "size": 79,
+      "literal_bytes_sha256": "de99a4ddd22a7625c6bf80fc8d85d21cafd457951ee9be310ac51bc2f55c02b3",
+      "source_file_sha256": "4553161a5d37d3f3d7a4fae75c7d61f277163601e7f4b65986a0de37f5b1b539"
+    },
+    {
+      "source": "examples/protected-mode/program.bits",
+      "size": 568,
+      "literal_bytes_sha256": "358e284ead6a98bd0bf9dd024e943abc2acd271fb5ff8659df67399c14d6e2ac",
+      "source_file_sha256": "0b39409444c38ff34730c2cf2aa2132a076ea8ccd267cfdc4d0c64e14fb68e56"
+    },
+    {
+      "source": "examples/shell/program.bits",
+      "size": 813,
+      "literal_bytes_sha256": "deb651a82f9bc924b4f08d1e033010be068ebeea60599f0cadfc1bc6535f6de1",
+      "source_file_sha256": "ef65a7ae95e49b07064fd173c832da85a5be6232bebc51a8f59640824fa36b21"
+    },
+    {
+      "source": "examples/shell-app/program.bits",
+      "size": 150,
+      "literal_bytes_sha256": "dd2e698f23ba8f7d68b18f6bd57eaadab374d0bc94a162803f5d7ad95ad983bf",
+      "source_file_sha256": "8d18a12b4affecb2f274ae7218ff9bc7e2023f5451cafacef740410fde41c4bc"
+    }
+  ],
+  "captures": [
+    {
+      "gif": "assets/protected-mode-demo.gif",
+      "gif_sha256": "e080a2aa32014d9b42a09bc86c345d54007dff95c78c8c4d66e7859c734158ab",
+      "png": "assets/protected-mode-demo.png",
+      "png_sha256": "07933aa1cd01272d170ad7c8e168dcd8d2bfaf98fe5ccbc2f337a0edd185deea",
+      "captured_frames": 31,
+      "encoded_frames": 31,
+      "duration_seconds": 3.1,
+      "capture_elapsed_seconds": 3.0111,
+      "fps": 10,
+      "output_dimensions": [
+        720,
+        400
+      ],
+      "native_frame_dimensions": [
+        [
+          640,
+          480
+        ],
+        [
+          720,
+          400
+        ]
+      ],
+      "final_png_and_gif_pixels_match_native_frame": true,
+      "frames": [
+        {
+          "file": "build/system-recording/protected-mode/0000.ppm",
+          "sha256": "15e7d086f38e02fb3b8af538b68d76619b0ecf56927333e1ba7510e79346fb03",
+          "captured_at_seconds": 0.0472,
+          "action": "QEMU paused before BIOS execution."
+        },
+        {
+          "file": "build/system-recording/protected-mode/0001.ppm",
+          "sha256": "f7dc22e5fe7bd98f54debf4e767da7cb0954464ca2d96bb84bf9b6ed5f4f16fe",
+          "captured_at_seconds": 0.1146,
+          "action": "Resumed the real BIOS boot and protected-mode stage."
+        },
+        {
+          "file": "build/system-recording/protected-mode/0002.ppm",
+          "sha256": "43b6d56ccd8a41cd87f13052036f289825ee8c14674437935a32bf8c077c45d2",
+          "captured_at_seconds": 0.2053
+        },
+        {
+          "file": "build/system-recording/protected-mode/0003.ppm",
+          "sha256": "43b6d56ccd8a41cd87f13052036f289825ee8c14674437935a32bf8c077c45d2",
+          "captured_at_seconds": 0.3144
+        },
+        {
+          "file": "build/system-recording/protected-mode/0004.ppm",
+          "sha256": "c434691c7e98e7f9eda26271ccc26394a51c9cf98728f4a61b192afbc3309985",
+          "captured_at_seconds": 0.4067
+        },
+        {
+          "file": "build/system-recording/protected-mode/0005.ppm",
+          "sha256": "c434691c7e98e7f9eda26271ccc26394a51c9cf98728f4a61b192afbc3309985",
+          "captured_at_seconds": 0.5093
+        },
+        {
+          "file": "build/system-recording/protected-mode/0006.ppm",
+          "sha256": "c434691c7e98e7f9eda26271ccc26394a51c9cf98728f4a61b192afbc3309985",
+          "captured_at_seconds": 0.6054
+        },
+        {
+          "file": "build/system-recording/protected-mode/0007.ppm",
+          "sha256": "43b6d56ccd8a41cd87f13052036f289825ee8c14674437935a32bf8c077c45d2",
+          "captured_at_seconds": 0.7121
+        },
+        {
+          "file": "build/system-recording/protected-mode/0008.ppm",
+          "sha256": "43b6d56ccd8a41cd87f13052036f289825ee8c14674437935a32bf8c077c45d2",
+          "captured_at_seconds": 0.8066
+        },
+        {
+          "file": "build/system-recording/protected-mode/0009.ppm",
+          "sha256": "43b6d56ccd8a41cd87f13052036f289825ee8c14674437935a32bf8c077c45d2",
+          "captured_at_seconds": 0.9115
+        },
+        {
+          "file": "build/system-recording/protected-mode/0010.ppm",
+          "sha256": "c434691c7e98e7f9eda26271ccc26394a51c9cf98728f4a61b192afbc3309985",
+          "captured_at_seconds": 1.0143
+        },
+        {
+          "file": "build/system-recording/protected-mode/0011.ppm",
+          "sha256": "c434691c7e98e7f9eda26271ccc26394a51c9cf98728f4a61b192afbc3309985",
+          "captured_at_seconds": 1.107
+        },
+        {
+          "file": "build/system-recording/protected-mode/0012.ppm",
+          "sha256": "c434691c7e98e7f9eda26271ccc26394a51c9cf98728f4a61b192afbc3309985",
+          "captured_at_seconds": 1.2136
+        },
+        {
+          "file": "build/system-recording/protected-mode/0013.ppm",
+          "sha256": "43b6d56ccd8a41cd87f13052036f289825ee8c14674437935a32bf8c077c45d2",
+          "captured_at_seconds": 1.3094
+        },
+        {
+          "file": "build/system-recording/protected-mode/0014.ppm",
+          "sha256": "43b6d56ccd8a41cd87f13052036f289825ee8c14674437935a32bf8c077c45d2",
+          "captured_at_seconds": 1.4094
+        },
+        {
+          "file": "build/system-recording/protected-mode/0015.ppm",
+          "sha256": "43b6d56ccd8a41cd87f13052036f289825ee8c14674437935a32bf8c077c45d2",
+          "captured_at_seconds": 1.5115
+        },
+        {
+          "file": "build/system-recording/protected-mode/0016.ppm",
+          "sha256": "c434691c7e98e7f9eda26271ccc26394a51c9cf98728f4a61b192afbc3309985",
+          "captured_at_seconds": 1.6144
+        },
+        {
+          "file": "build/system-recording/protected-mode/0017.ppm",
+          "sha256": "c434691c7e98e7f9eda26271ccc26394a51c9cf98728f4a61b192afbc3309985",
+          "captured_at_seconds": 1.7144
+        },
+        {
+          "file": "build/system-recording/protected-mode/0018.ppm",
+          "sha256": "c434691c7e98e7f9eda26271ccc26394a51c9cf98728f4a61b192afbc3309985",
+          "captured_at_seconds": 1.8113
+        },
+        {
+          "file": "build/system-recording/protected-mode/0019.ppm",
+          "sha256": "43b6d56ccd8a41cd87f13052036f289825ee8c14674437935a32bf8c077c45d2",
+          "captured_at_seconds": 1.9138
+        },
+        {
+          "file": "build/system-recording/protected-mode/0020.ppm",
+          "sha256": "43b6d56ccd8a41cd87f13052036f289825ee8c14674437935a32bf8c077c45d2",
+          "captured_at_seconds": 2.0146
+        },
+        {
+          "file": "build/system-recording/protected-mode/0021.ppm",
+          "sha256": "43b6d56ccd8a41cd87f13052036f289825ee8c14674437935a32bf8c077c45d2",
+          "captured_at_seconds": 2.115
+        },
+        {
+          "file": "build/system-recording/protected-mode/0022.ppm",
+          "sha256": "c434691c7e98e7f9eda26271ccc26394a51c9cf98728f4a61b192afbc3309985",
+          "captured_at_seconds": 2.2048
+        },
+        {
+          "file": "build/system-recording/protected-mode/0023.ppm",
+          "sha256": "c434691c7e98e7f9eda26271ccc26394a51c9cf98728f4a61b192afbc3309985",
+          "captured_at_seconds": 2.3151
+        },
+        {
+          "file": "build/system-recording/protected-mode/0024.ppm",
+          "sha256": "c434691c7e98e7f9eda26271ccc26394a51c9cf98728f4a61b192afbc3309985",
+          "captured_at_seconds": 2.4068
+        },
+        {
+          "file": "build/system-recording/protected-mode/0025.ppm",
+          "sha256": "43b6d56ccd8a41cd87f13052036f289825ee8c14674437935a32bf8c077c45d2",
+          "captured_at_seconds": 2.5162
+        },
+        {
+          "file": "build/system-recording/protected-mode/0026.ppm",
+          "sha256": "43b6d56ccd8a41cd87f13052036f289825ee8c14674437935a32bf8c077c45d2",
+          "captured_at_seconds": 2.6154
+        },
+        {
+          "file": "build/system-recording/protected-mode/0027.ppm",
+          "sha256": "43b6d56ccd8a41cd87f13052036f289825ee8c14674437935a32bf8c077c45d2",
+          "captured_at_seconds": 2.7114
+        },
+        {
+          "file": "build/system-recording/protected-mode/0028.ppm",
+          "sha256": "c434691c7e98e7f9eda26271ccc26394a51c9cf98728f4a61b192afbc3309985",
+          "captured_at_seconds": 2.8068
+        },
+        {
+          "file": "build/system-recording/protected-mode/0029.ppm",
+          "sha256": "c434691c7e98e7f9eda26271ccc26394a51c9cf98728f4a61b192afbc3309985",
+          "captured_at_seconds": 2.9142
+        },
+        {
+          "file": "build/system-recording/protected-mode/0030.ppm",
+          "sha256": "c434691c7e98e7f9eda26271ccc26394a51c9cf98728f4a61b192afbc3309985",
+          "captured_at_seconds": 3.0111
+        }
+      ],
+      "name": "protected-mode",
+      "image_sha256": "1e931b2ea21a4e237be8cd0aa69fcdb9ef0075d65264ea85698a3b27b75fcbcf",
+      "key_actions": [],
+      "native_probes": {
+        "CR0": "00000011",
+        "CS": "0008 / CS32",
+        "ECX": "4B4F4D50 / PMOK",
+        "ESP": "00009000",
+        "EIP": "00007E93",
+        "HLT": true,
+        "RAM_9000": "44332211DEC0DEC0",
+        "VGA_B8000": "500A4D0A",
+        "literal_instruction_bytes_loaded": true,
+        "serial_text": ""
+      }
+    },
+    {
+      "gif": "assets/shell-demo.gif",
+      "gif_sha256": "cb92b73ed2c098833bbcdbad3539f68eda9547aa23d7e788b5cd2e3aded26914",
+      "png": "assets/shell-demo.png",
+      "png_sha256": "197a670f81809dc6f0fd67dc0e27e9d18700e44f92f149e599adee919a371477",
+      "captured_frames": 88,
+      "encoded_frames": 88,
+      "duration_seconds": 8.8,
+      "capture_elapsed_seconds": 8.7157,
+      "fps": 10,
+      "output_dimensions": [
+        720,
+        400
+      ],
+      "native_frame_dimensions": [
+        [
+          640,
+          480
+        ],
+        [
+          720,
+          400
+        ]
+      ],
+      "final_png_and_gif_pixels_match_native_frame": true,
+      "frames": [
+        {
+          "file": "build/system-recording/shell/0000.ppm",
+          "sha256": "15e7d086f38e02fb3b8af538b68d76619b0ecf56927333e1ba7510e79346fb03",
+          "captured_at_seconds": 0.069,
+          "action": "QEMU paused before BIOS execution."
+        },
+        {
+          "file": "build/system-recording/shell/0001.ppm",
+          "sha256": "15e7d086f38e02fb3b8af538b68d76619b0ecf56927333e1ba7510e79346fb03",
+          "captured_at_seconds": 0.1052,
+          "action": "Resumed the real BIOS boot and shell stage."
+        },
+        {
+          "file": "build/system-recording/shell/0002.ppm",
+          "sha256": "fe28e4d5734da52959f9df9982c26ecde665dfa61066f618564cd4aaec4847ff",
+          "captured_at_seconds": 0.2155
+        },
+        {
+          "file": "build/system-recording/shell/0003.ppm",
+          "sha256": "fe28e4d5734da52959f9df9982c26ecde665dfa61066f618564cd4aaec4847ff",
+          "captured_at_seconds": 0.3144
+        },
+        {
+          "file": "build/system-recording/shell/0004.ppm",
+          "sha256": "fe28e4d5734da52959f9df9982c26ecde665dfa61066f618564cd4aaec4847ff",
+          "captured_at_seconds": 0.4143
+        },
+        {
+          "file": "build/system-recording/shell/0005.ppm",
+          "sha256": "0dd4d3adff8912ccdadfddf0ef6fcdcea36f845acf20b6d60db7a7a21e0e6091",
+          "captured_at_seconds": 0.5144
+        },
+        {
+          "file": "build/system-recording/shell/0006.ppm",
+          "sha256": "0dd4d3adff8912ccdadfddf0ef6fcdcea36f845acf20b6d60db7a7a21e0e6091",
+          "captured_at_seconds": 0.6065
+        },
+        {
+          "file": "build/system-recording/shell/0007.ppm",
+          "sha256": "0dd4d3adff8912ccdadfddf0ef6fcdcea36f845acf20b6d60db7a7a21e0e6091",
+          "captured_at_seconds": 0.715
+        },
+        {
+          "file": "build/system-recording/shell/0008.ppm",
+          "sha256": "fe28e4d5734da52959f9df9982c26ecde665dfa61066f618564cd4aaec4847ff",
+          "captured_at_seconds": 0.8144
+        },
+        {
+          "file": "build/system-recording/shell/0009.ppm",
+          "sha256": "fe28e4d5734da52959f9df9982c26ecde665dfa61066f618564cd4aaec4847ff",
+          "captured_at_seconds": 0.9147
+        },
+        {
+          "file": "build/system-recording/shell/0010.ppm",
+          "sha256": "fe28e4d5734da52959f9df9982c26ecde665dfa61066f618564cd4aaec4847ff",
+          "captured_at_seconds": 1.0151
+        },
+        {
+          "file": "build/system-recording/shell/0011.ppm",
+          "sha256": "0dd4d3adff8912ccdadfddf0ef6fcdcea36f845acf20b6d60db7a7a21e0e6091",
+          "captured_at_seconds": 1.1151,
+          "action": "The native shell reached its prompt; loaded bytes match the canonical source."
+        },
+        {
+          "file": "build/system-recording/shell/0012.ppm",
+          "sha256": "d5e1cefd6708edb39ed99a557a5722d70401ed0c2927adbc55462cad94909e76",
+          "captured_at_seconds": 1.2142,
+          "action": "Sent real QEMU key w for the write command."
+        },
+        {
+          "file": "build/system-recording/shell/0013.ppm",
+          "sha256": "703e77bdcb20514ce4cadce32900f3b9a05a166e58fa69fada1d932c00dd0251",
+          "captured_at_seconds": 1.3069,
+          "action": "Sent real QEMU key r for the write command."
+        },
+        {
+          "file": "build/system-recording/shell/0014.ppm",
+          "sha256": "851c938635dc21ef84b0f75e84553d8eb2437b16e3e0380987c818dabd0a651b",
+          "captured_at_seconds": 1.4144,
+          "action": "Sent real QEMU key i for the write command."
+        },
+        {
+          "file": "build/system-recording/shell/0015.ppm",
+          "sha256": "5ceca55e18c7b2ed4b4674d02954f0857a333dcbc799599da69de1c08c4e8f3d",
+          "captured_at_seconds": 1.5148,
+          "action": "Sent real QEMU key t for the write command."
+        },
+        {
+          "file": "build/system-recording/shell/0016.ppm",
+          "sha256": "85f6920e9de1fbe12b8260256e8bf18ea5e199bef3759132c78232c828cc74bb",
+          "captured_at_seconds": 1.6143,
+          "action": "Sent real QEMU key e for the write command."
+        },
+        {
+          "file": "build/system-recording/shell/0017.ppm",
+          "sha256": "292c1d246caa07aecebcaf77d7a235a3c8b88eeba756d22f4275fe20148a41ee",
+          "captured_at_seconds": 1.7144,
+          "action": "write executed natively and returned to the shell prompt."
+        },
+        {
+          "file": "build/system-recording/shell/0018.ppm",
+          "sha256": "292c1d246caa07aecebcaf77d7a235a3c8b88eeba756d22f4275fe20148a41ee",
+          "captured_at_seconds": 1.8147
+        },
+        {
+          "file": "build/system-recording/shell/0019.ppm",
+          "sha256": "292c1d246caa07aecebcaf77d7a235a3c8b88eeba756d22f4275fe20148a41ee",
+          "captured_at_seconds": 1.9154
+        },
+        {
+          "file": "build/system-recording/shell/0020.ppm",
+          "sha256": "050b4637362423d266f1a1f6df5d0ac202e69a6530e7440d1760b06eec6fd53a",
+          "captured_at_seconds": 2.0135
+        },
+        {
+          "file": "build/system-recording/shell/0021.ppm",
+          "sha256": "050b4637362423d266f1a1f6df5d0ac202e69a6530e7440d1760b06eec6fd53a",
+          "captured_at_seconds": 2.1145
+        },
+        {
+          "file": "build/system-recording/shell/0022.ppm",
+          "sha256": "050b4637362423d266f1a1f6df5d0ac202e69a6530e7440d1760b06eec6fd53a",
+          "captured_at_seconds": 2.2095
+        },
+        {
+          "file": "build/system-recording/shell/0023.ppm",
+          "sha256": "292c1d246caa07aecebcaf77d7a235a3c8b88eeba756d22f4275fe20148a41ee",
+          "captured_at_seconds": 2.3085
+        },
+        {
+          "file": "build/system-recording/shell/0024.ppm",
+          "sha256": "292c1d246caa07aecebcaf77d7a235a3c8b88eeba756d22f4275fe20148a41ee",
+          "captured_at_seconds": 2.4099
+        },
+        {
+          "file": "build/system-recording/shell/0025.ppm",
+          "sha256": "4c531dae3bead232af011fba44e4b6c810a4be540bc19a895c83a1f90ef1e355",
+          "captured_at_seconds": 2.5143,
+          "action": "Sent real QEMU key r for the read command."
+        },
+        {
+          "file": "build/system-recording/shell/0026.ppm",
+          "sha256": "bed9f13df43f3b53c31d495534fbafa85fefdd34f7a61108f7b24c3b274a4976",
+          "captured_at_seconds": 2.6083,
+          "action": "Sent real QEMU key e for the read command."
+        },
+        {
+          "file": "build/system-recording/shell/0027.ppm",
+          "sha256": "d6a1f38ab26555e50d49e5bfeff0e20a12f1a50a5039c924a564355f1bb0a3bf",
+          "captured_at_seconds": 2.7135,
+          "action": "Sent real QEMU key a for the read command."
+        },
+        {
+          "file": "build/system-recording/shell/0028.ppm",
+          "sha256": "d3003ac0664fa7df74632883b5adde44c3ced89e1d031c5cdbdd244dab17320e",
+          "captured_at_seconds": 2.8144,
+          "action": "Sent real QEMU key d for the read command."
+        },
+        {
+          "file": "build/system-recording/shell/0029.ppm",
+          "sha256": "57f76148ebc1e260e2848b9bd2f0747388c55d103741e5626b7242318de30934",
+          "captured_at_seconds": 2.9148,
+          "action": "read executed natively and returned to the shell prompt."
+        },
+        {
+          "file": "build/system-recording/shell/0030.ppm",
+          "sha256": "57f76148ebc1e260e2848b9bd2f0747388c55d103741e5626b7242318de30934",
+          "captured_at_seconds": 3.0148
+        },
+        {
+          "file": "build/system-recording/shell/0031.ppm",
+          "sha256": "57f76148ebc1e260e2848b9bd2f0747388c55d103741e5626b7242318de30934",
+          "captured_at_seconds": 3.1067
+        },
+        {
+          "file": "build/system-recording/shell/0032.ppm",
+          "sha256": "d23df3f2d46246a2a80d3746130fb7c04f86bf5a0bfbcd0fe2a53ba651a5ac6e",
+          "captured_at_seconds": 3.2084
+        },
+        {
+          "file": "build/system-recording/shell/0033.ppm",
+          "sha256": "d23df3f2d46246a2a80d3746130fb7c04f86bf5a0bfbcd0fe2a53ba651a5ac6e",
+          "captured_at_seconds": 3.3145
+        },
+        {
+          "file": "build/system-recording/shell/0034.ppm",
+          "sha256": "d23df3f2d46246a2a80d3746130fb7c04f86bf5a0bfbcd0fe2a53ba651a5ac6e",
+          "captured_at_seconds": 3.4144
+        },
+        {
+          "file": "build/system-recording/shell/0035.ppm",
+          "sha256": "57f76148ebc1e260e2848b9bd2f0747388c55d103741e5626b7242318de30934",
+          "captured_at_seconds": 3.5159
+        },
+        {
+          "file": "build/system-recording/shell/0036.ppm",
+          "sha256": "57f76148ebc1e260e2848b9bd2f0747388c55d103741e5626b7242318de30934",
+          "captured_at_seconds": 3.6143
+        },
+        {
+          "file": "build/system-recording/shell/0037.ppm",
+          "sha256": "310d11e606755dccc066a7210461d8c44df64689da71165a0664e100f454e679",
+          "captured_at_seconds": 3.7152,
+          "action": "Sent real QEMU key d for the dump command."
+        },
+        {
+          "file": "build/system-recording/shell/0038.ppm",
+          "sha256": "364da79220dee18b149ac9f00b697eec16749bf26bb4da4ba4e09d93cf6635dc",
+          "captured_at_seconds": 3.8148,
+          "action": "Sent real QEMU key u for the dump command."
+        },
+        {
+          "file": "build/system-recording/shell/0039.ppm",
+          "sha256": "7a09d5b3fbfbac63d8475eb16a4d81d074700039fb5058ed2cb71b70ba55ae86",
+          "captured_at_seconds": 3.9073,
+          "action": "Sent real QEMU key m for the dump command."
+        },
+        {
+          "file": "build/system-recording/shell/0040.ppm",
+          "sha256": "e743584e122238c887a86af1155e7ef24b273e1d030dfe4769326be6fb9b45f4",
+          "captured_at_seconds": 4.0083,
+          "action": "Sent real QEMU key p for the dump command."
+        },
+        {
+          "file": "build/system-recording/shell/0041.ppm",
+          "sha256": "600999d6712c155a9802b79da76a29a0d63f3e871c3aefbdaf7a6af0603c9e60",
+          "captured_at_seconds": 4.1085,
+          "action": "dump executed natively and returned to the shell prompt."
+        },
+        {
+          "file": "build/system-recording/shell/0042.ppm",
+          "sha256": "600999d6712c155a9802b79da76a29a0d63f3e871c3aefbdaf7a6af0603c9e60",
+          "captured_at_seconds": 4.2116
+        },
+        {
+          "file": "build/system-recording/shell/0043.ppm",
+          "sha256": "600999d6712c155a9802b79da76a29a0d63f3e871c3aefbdaf7a6af0603c9e60",
+          "captured_at_seconds": 4.3051
+        },
+        {
+          "file": "build/system-recording/shell/0044.ppm",
+          "sha256": "88d95abb232095b94fee95491e76c72676c251148ca92fe0e0625f8cab14a5a9",
+          "captured_at_seconds": 4.4138
+        },
+        {
+          "file": "build/system-recording/shell/0045.ppm",
+          "sha256": "88d95abb232095b94fee95491e76c72676c251148ca92fe0e0625f8cab14a5a9",
+          "captured_at_seconds": 4.5139
+        },
+        {
+          "file": "build/system-recording/shell/0046.ppm",
+          "sha256": "88d95abb232095b94fee95491e76c72676c251148ca92fe0e0625f8cab14a5a9",
+          "captured_at_seconds": 4.6142
+        },
+        {
+          "file": "build/system-recording/shell/0047.ppm",
+          "sha256": "600999d6712c155a9802b79da76a29a0d63f3e871c3aefbdaf7a6af0603c9e60",
+          "captured_at_seconds": 4.7082
+        },
+        {
+          "file": "build/system-recording/shell/0048.ppm",
+          "sha256": "600999d6712c155a9802b79da76a29a0d63f3e871c3aefbdaf7a6af0603c9e60",
+          "captured_at_seconds": 4.8145
+        },
+        {
+          "file": "build/system-recording/shell/0049.ppm",
+          "sha256": "4dc02d628c7e0e089ffa2c6024d1e8954253ab34671286f2fe42b3741dc90287",
+          "captured_at_seconds": 4.9083,
+          "action": "Sent real QEMU key r for the regs command."
+        },
+        {
+          "file": "build/system-recording/shell/0050.ppm",
+          "sha256": "418d2b4a8ab181c6de6cb0fd905b6d33c163d67b1ed3d3730ec0f025a32c3681",
+          "captured_at_seconds": 5.0153,
+          "action": "Sent real QEMU key e for the regs command."
+        },
+        {
+          "file": "build/system-recording/shell/0051.ppm",
+          "sha256": "39e1597c88b7d6487adace472c3c472071544e4ae8750472cf85e416b5db41ab",
+          "captured_at_seconds": 5.1043,
+          "action": "Sent real QEMU key g for the regs command."
+        },
+        {
+          "file": "build/system-recording/shell/0052.ppm",
+          "sha256": "923c72b8dc910097ceee8ac51e60eb18dfb1c15e25d16b41656673b83378aed2",
+          "captured_at_seconds": 5.2115,
+          "action": "Sent real QEMU key s for the regs command."
+        },
+        {
+          "file": "build/system-recording/shell/0053.ppm",
+          "sha256": "51b44f2c9293c488157e69a862e56fcb9de3f1364a4082c6fc84f7e49d1f4cdc",
+          "captured_at_seconds": 5.3143,
+          "action": "regs executed natively and returned to the shell prompt."
+        },
+        {
+          "file": "build/system-recording/shell/0054.ppm",
+          "sha256": "51b44f2c9293c488157e69a862e56fcb9de3f1364a4082c6fc84f7e49d1f4cdc",
+          "captured_at_seconds": 5.4145
+        },
+        {
+          "file": "build/system-recording/shell/0055.ppm",
+          "sha256": "51b44f2c9293c488157e69a862e56fcb9de3f1364a4082c6fc84f7e49d1f4cdc",
+          "captured_at_seconds": 5.5102
+        },
+        {
+          "file": "build/system-recording/shell/0056.ppm",
+          "sha256": "8ef33ebe644159c24ac1924c3029589dda808a0e95064d7bc9df7c91b6746025",
+          "captured_at_seconds": 5.6143
+        },
+        {
+          "file": "build/system-recording/shell/0057.ppm",
+          "sha256": "8ef33ebe644159c24ac1924c3029589dda808a0e95064d7bc9df7c91b6746025",
+          "captured_at_seconds": 5.7149
+        },
+        {
+          "file": "build/system-recording/shell/0058.ppm",
+          "sha256": "8ef33ebe644159c24ac1924c3029589dda808a0e95064d7bc9df7c91b6746025",
+          "captured_at_seconds": 5.8119
+        },
+        {
+          "file": "build/system-recording/shell/0059.ppm",
+          "sha256": "51b44f2c9293c488157e69a862e56fcb9de3f1364a4082c6fc84f7e49d1f4cdc",
+          "captured_at_seconds": 5.9144
+        },
+        {
+          "file": "build/system-recording/shell/0060.ppm",
+          "sha256": "51b44f2c9293c488157e69a862e56fcb9de3f1364a4082c6fc84f7e49d1f4cdc",
+          "captured_at_seconds": 6.0143
+        },
+        {
+          "file": "build/system-recording/shell/0061.ppm",
+          "sha256": "718017366793634d231ef7651ac653ab77bec16d7dde2f27b8f68251709aa47b",
+          "captured_at_seconds": 6.1091,
+          "action": "Sent real QEMU key r for the run command."
+        },
+        {
+          "file": "build/system-recording/shell/0062.ppm",
+          "sha256": "e7d54c50267e63d05de9b21e0a3a40cc93f118ffc4445255b31811abf1278861",
+          "captured_at_seconds": 6.2081,
+          "action": "Sent real QEMU key u for the run command."
+        },
+        {
+          "file": "build/system-recording/shell/0063.ppm",
+          "sha256": "4639c82567b3667a135b1226f7c49554ac8c732162158342a02bcaade351dfaa",
+          "captured_at_seconds": 6.3146,
+          "action": "Sent real QEMU key n for the run command."
+        },
+        {
+          "file": "build/system-recording/shell/0064.ppm",
+          "sha256": "e73a617f20beb58780b5b80483c361b04f7fb7ea2de030cb6787270efec95b4a",
+          "captured_at_seconds": 6.4148,
+          "action": "run executed natively and returned to the shell prompt."
+        },
+        {
+          "file": "build/system-recording/shell/0065.ppm",
+          "sha256": "0ef147e2e5cad085e6a33932798dc15be8da456e429275a3ffc76645eb72bc8d",
+          "captured_at_seconds": 6.5156
+        },
+        {
+          "file": "build/system-recording/shell/0066.ppm",
+          "sha256": "0ef147e2e5cad085e6a33932798dc15be8da456e429275a3ffc76645eb72bc8d",
+          "captured_at_seconds": 6.615
+        },
+        {
+          "file": "build/system-recording/shell/0067.ppm",
+          "sha256": "0ef147e2e5cad085e6a33932798dc15be8da456e429275a3ffc76645eb72bc8d",
+          "captured_at_seconds": 6.7074
+        },
+        {
+          "file": "build/system-recording/shell/0068.ppm",
+          "sha256": "e73a617f20beb58780b5b80483c361b04f7fb7ea2de030cb6787270efec95b4a",
+          "captured_at_seconds": 6.8069
+        },
+        {
+          "file": "build/system-recording/shell/0069.ppm",
+          "sha256": "e73a617f20beb58780b5b80483c361b04f7fb7ea2de030cb6787270efec95b4a",
+          "captured_at_seconds": 6.9152
+        },
+        {
+          "file": "build/system-recording/shell/0070.ppm",
+          "sha256": "e73a617f20beb58780b5b80483c361b04f7fb7ea2de030cb6787270efec95b4a",
+          "captured_at_seconds": 7.0094
+        },
+        {
+          "file": "build/system-recording/shell/0071.ppm",
+          "sha256": "0ef147e2e5cad085e6a33932798dc15be8da456e429275a3ffc76645eb72bc8d",
+          "captured_at_seconds": 7.1144
+        },
+        {
+          "file": "build/system-recording/shell/0072.ppm",
+          "sha256": "0ef147e2e5cad085e6a33932798dc15be8da456e429275a3ffc76645eb72bc8d",
+          "captured_at_seconds": 7.2146,
+          "action": "Verified computed RAM[0601]=2A, app disk-byte identity at 9000, and the returned prompt."
+        },
+        {
+          "file": "build/system-recording/shell/0073.ppm",
+          "sha256": "0ef147e2e5cad085e6a33932798dc15be8da456e429275a3ffc76645eb72bc8d",
+          "captured_at_seconds": 7.3077
+        },
+        {
+          "file": "build/system-recording/shell/0074.ppm",
+          "sha256": "e73a617f20beb58780b5b80483c361b04f7fb7ea2de030cb6787270efec95b4a",
+          "captured_at_seconds": 7.4094
+        },
+        {
+          "file": "build/system-recording/shell/0075.ppm",
+          "sha256": "e73a617f20beb58780b5b80483c361b04f7fb7ea2de030cb6787270efec95b4a",
+          "captured_at_seconds": 7.5094
+        },
+        {
+          "file": "build/system-recording/shell/0076.ppm",
+          "sha256": "e73a617f20beb58780b5b80483c361b04f7fb7ea2de030cb6787270efec95b4a",
+          "captured_at_seconds": 7.6145
+        },
+        {
+          "file": "build/system-recording/shell/0077.ppm",
+          "sha256": "0ef147e2e5cad085e6a33932798dc15be8da456e429275a3ffc76645eb72bc8d",
+          "captured_at_seconds": 7.7153
+        },
+        {
+          "file": "build/system-recording/shell/0078.ppm",
+          "sha256": "0ef147e2e5cad085e6a33932798dc15be8da456e429275a3ffc76645eb72bc8d",
+          "captured_at_seconds": 7.8149
+        },
+        {
+          "file": "build/system-recording/shell/0079.ppm",
+          "sha256": "0ef147e2e5cad085e6a33932798dc15be8da456e429275a3ffc76645eb72bc8d",
+          "captured_at_seconds": 7.9106
+        },
+        {
+          "file": "build/system-recording/shell/0080.ppm",
+          "sha256": "e73a617f20beb58780b5b80483c361b04f7fb7ea2de030cb6787270efec95b4a",
+          "captured_at_seconds": 8.012
+        },
+        {
+          "file": "build/system-recording/shell/0081.ppm",
+          "sha256": "e73a617f20beb58780b5b80483c361b04f7fb7ea2de030cb6787270efec95b4a",
+          "captured_at_seconds": 8.1161
+        },
+        {
+          "file": "build/system-recording/shell/0082.ppm",
+          "sha256": "e73a617f20beb58780b5b80483c361b04f7fb7ea2de030cb6787270efec95b4a",
+          "captured_at_seconds": 8.2149
+        },
+        {
+          "file": "build/system-recording/shell/0083.ppm",
+          "sha256": "0ef147e2e5cad085e6a33932798dc15be8da456e429275a3ffc76645eb72bc8d",
+          "captured_at_seconds": 8.3142
+        },
+        {
+          "file": "build/system-recording/shell/0084.ppm",
+          "sha256": "0ef147e2e5cad085e6a33932798dc15be8da456e429275a3ffc76645eb72bc8d",
+          "captured_at_seconds": 8.4147
+        },
+        {
+          "file": "build/system-recording/shell/0085.ppm",
+          "sha256": "0ef147e2e5cad085e6a33932798dc15be8da456e429275a3ffc76645eb72bc8d",
+          "captured_at_seconds": 8.515
+        },
+        {
+          "file": "build/system-recording/shell/0086.ppm",
+          "sha256": "e73a617f20beb58780b5b80483c361b04f7fb7ea2de030cb6787270efec95b4a",
+          "captured_at_seconds": 8.6098
+        },
+        {
+          "file": "build/system-recording/shell/0087.ppm",
+          "sha256": "e73a617f20beb58780b5b80483c361b04f7fb7ea2de030cb6787270efec95b4a",
+          "captured_at_seconds": 8.7157
+        }
+      ],
+      "name": "shell",
+      "image_sha256": "5d2e2ff9d2b89c7649f2bab59b278d809dcfc167bc50b037e26cce6cc4c35a3e",
+      "key_actions": [
+        {
+          "command": "write",
+          "qcodes": [
+            "w",
+            "r",
+            "i",
+            "t",
+            "e",
+            "ret"
+          ],
+          "first_frame": 12,
+          "last_frame": 24,
+          "response_text": "\r\nRAM[0600]=2A\r\n> "
+        },
+        {
+          "command": "read",
+          "qcodes": [
+            "r",
+            "e",
+            "a",
+            "d",
+            "ret"
+          ],
+          "first_frame": 25,
+          "last_frame": 36,
+          "response_text": "\r\n0600: 2A\r\n> "
+        },
+        {
+          "command": "dump",
+          "qcodes": [
+            "d",
+            "u",
+            "m",
+            "p",
+            "ret"
+          ],
+          "first_frame": 37,
+          "last_frame": 48,
+          "response_text": "\r\n0600: 2A 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 \r\n> "
+        },
+        {
+          "command": "regs",
+          "qcodes": [
+            "r",
+            "e",
+            "g",
+            "s",
+            "ret"
+          ],
+          "first_frame": 49,
+          "last_frame": 60,
+          "response_text": "\r\nAX BX CX DX SP BP SI DI CS DS ES SS FL\r\n1C01 7E00 0004 03FB 7C00 0000 806D 8205 0000 0000 0000 0000 0202 \r\n> "
+        },
+        {
+          "command": "run",
+          "qcodes": [
+            "r",
+            "u",
+            "n",
+            "ret"
+          ],
+          "first_frame": 61,
+          "last_frame": 71,
+          "response_text": "\r\nDISK APP: 7 x 6 = 2A hex; RAM[0601]=2A\r\n> "
+        }
+      ],
+      "native_probes": {
+        "RAM_0600": "2A2A0000000000000000000000000000",
+        "RAM_0601": "2A",
+        "app_loaded_at_9000_sha256": "dd2e698f23ba8f7d68b18f6bd57eaadab374d0bc94a162803f5d7ad95ad983bf",
+        "app_loaded_from_disk_matches_literal_source": true,
+        "returned_prompt": true,
+        "sampled_registers": {
+          "AX": "1C01",
+          "BX": "7E00",
+          "CX": "0004",
+          "DX": "03FB",
+          "SP": "7C00",
+          "BP": "0000",
+          "SI": "806D",
+          "DI": "8205",
+          "CS": "0000",
+          "DS": "0000",
+          "ES": "0000",
+          "SS": "0000",
+          "FLAGS": "0202"
+        },
+        "serial_text": "bitborn shell\r\n> write\r\nRAM[0600]=2A\r\n> read\r\n0600: 2A\r\n> dump\r\n0600: 2A 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 \r\n> regs\r\nAX BX CX DX SP BP SI DI CS DS ES SS FL\r\n1C01 7E00 0004 03FB 7C00 0000 806D 8205 0000 0000 0000 0000 0202 \r\n> run\r\nDISK APP: 7 x 6 = 2A hex; RAM[0601]=2A\r\n> ",
+        "serial_sha256": "7bf8c0c1afcec395bf664a5e08fd96576ba9f093731f7f47840f2e9363fa7371"
+      }
+    }
+  ],
+  "alterations": "GIF palette encoding and nearest-neighbor 720x400 normalization of BIOS resolution changes only; PNGs are unchanged final native screens. No overlays, invented text or composited output.",
+  "timing": "10 fps presentation of actual screendumps paced at 100 ms; capture timestamps record QMP/key-processing overhead. Not a performance benchmark.",
+  "reproduce": "make build && python3 tools/record_system.py"
+}

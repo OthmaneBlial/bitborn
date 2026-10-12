@@ -77,7 +77,9 @@ function renderListing() {
 }
 
 function renderTrace() {
-  const current = state.halted ? null : instructionAt(state.ip), next = current && !current.unsupported ? instructionAt(state.ip + current.size) : null;
+  const current = state.halted ? null : instructionAt(state.ip);
+  const nextOffset = current ? physicalAddress(state.CS,(logicalIP(state) + current.size) & 65535) - state.loadAddress : -1;
+  const next = current && !current.unsupported ? instructionAt(nextOffset) : null;
   $('previous-instruction').textContent = previous?.mnemonic ?? '—';
   $('previous-address').textContent = previous ? `${previous.location} · ${previous.size} byte${previous.size === 1 ? '' : 's'}` : 'No instruction executed';
   $('current-instruction').textContent = state.halted ? 'HLT reached' : current?.mnemonic ?? 'Outside loaded program';

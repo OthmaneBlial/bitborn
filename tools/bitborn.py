@@ -10,17 +10,40 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 
+def target_output_paths(target):
+    output = Path(target['output'])
+    paths = {output}
+    if target.get('environment') == 'linux-x86_64':
+        executable = output.with_suffix('.elf')
+        if executable == output:
+            raise ValueError('ELF packaging needs a distinct raw output path')
+        paths.add(executable)
+    if target.get('bootable') or target.get('loader'):
+        image = output.with_suffix('.img')
+        if image == output and not target.get('bios'):
+            raise ValueError('BIOS framing needs a distinct raw output path')
+        paths.add(image)
+    return paths
+
+
 def targets(root=ROOT):
     manifest = json.loads((root / 'targets.json').read_text())
-    challenge_manifest = root / 'challenges/targets.json'
-    if challenge_manifest.exists():
-        manifest += json.loads(challenge_manifest.read_text())
+    for relative in ('challenges/targets.json', 'examples/shell/targets.json'):
+        extra = root / relative
+        if extra.exists():
+            manifest += json.loads(extra.read_text())
     sources, outputs = [target['source'] for target in manifest], [target['output'] for target in manifest]
     if len(set(sources)) != len(sources) or len(set(outputs)) != len(outputs):
         raise ValueError('Reviewed targets must have unique sources and outputs')
     for name in sources + outputs:
         if Path(name).is_absolute() or '..' in Path(name).parts:
             raise ValueError('Reviewed target paths must stay inside the project')
+    emitted = set()
+    for target in manifest:
+        paths = target_output_paths(target)
+        if emitted & paths:
+            raise ValueError('Reviewed targets have colliding raw or packaged output paths')
+        emitted |= paths
     return manifest
 
 
@@ -28,16 +51,9 @@ def artifact_paths(root=ROOT):
     """Only reviewed target outputs belong in public downloads or releases."""
     paths = set()
     for target in targets(root):
-        output = Path(target['output'])
-        if output.is_absolute() or '..' in output.parts:
-            raise ValueError('Target outputs must stay inside build/')
         if target['source'] == 'boot/loader.bits':
             continue
-        paths.add(output)
-        if target.get('environment') == 'linux-x86_64':
-            paths.add(output.with_suffix('.elf'))
-        if target.get('bootable') or target.get('loader'):
-            paths.add(output.with_suffix('.img'))
+        paths |= target_output_paths(target)
     return sorted(paths)
 
 
@@ -91,6 +107,10 @@ def bitdiff(before, after):
 
 
 def verify(root=ROOT):
+    if __package__:
+        from .build import package_target
+    else:
+        from build import package_target
     manifest = targets(root)
     failures = []
     for target in manifest:
@@ -106,15 +126,16 @@ def verify(root=ROOT):
             failures.append(f"{source}: every byte range needs a valid explanation")
         if read_bits(source)[0] != data:
             failures.append(f"{source}: non-reproducible packing")
-        binary = root / "build" / target["output"]
-        if not binary.exists() or binary.read_bytes() != data:
-            failures.append(f"{binary}: missing or different; run make build")
+        for path, expected in package_target(target, data, root, manifest).items():
+            binary = root / 'build' / path
+            if not binary.exists() or binary.read_bytes() != expected:
+                failures.append(f"{binary}: missing or different packaged artifact; run make build")
     allowed = {".bits", ".json", ".md"}
     for directory in (root / "boot", root / "examples", root / 'challenges'):
         failures.extend(f"unauthorized target file: {p}" for p in directory.rglob("*") if p.is_file() and p.suffix.lower() not in allowed)
     if failures:
         raise ValueError("\n".join(failures))
-    return f"verified {len(manifest)} handwritten targets: sizes, signatures, annotations, hashes and packed bytes"
+    return f"verified {len(manifest)} handwritten targets: sizes, signatures, annotations, hashes and every packed artifact"
 
 
 def main(command=None):
@@ -129,7 +150,10 @@ def main(command=None):
     try:
         if command == "bitpack" and len(args) == 2:
             data, _ = read_bits(args[0])
-            Path(args[1]).write_bytes(data)
+            source, output = Path(args[0]), Path(args[1])
+            if source.resolve() == output.resolve() or output.exists() and source.samefile(output):
+                raise ValueError('cannot overwrite the literal input source; choose a different output file')
+            output.write_bytes(data)
             print(f"{len(data)} bytes → {args[1]} · sha256 {digest(data)}")
         elif command == "bitinspect" and len(args) == 1:
             annotations = json.loads(parsed.annotations.read_text()) if parsed.annotations else []

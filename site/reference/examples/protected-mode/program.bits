@@ -1,0 +1,75 @@
+# Entry: BIOS real mode at 0000:7E00 through the existing two-sector loader.
+# Every target instruction and descriptor below is authored as literal binary digits.
+11111010 # instruction | CLI | FA clears IF before changing mode; no external IRQs are handled.
+00110001 11000000 # instruction | XOR AX,AX | 31 C0 selects real-mode segment base zero.
+10001110 11011000 # instruction | MOV DS,AX | 8E D8 makes the descriptor pointers addressable through DS=0000.
+10001110 11010000 # instruction | MOV SS,AX | 8E D0 selects the initial real-mode stack segment.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | BC imm16 puts the initial stack below the loader.
+11111100 # instruction | CLD | FC clears direction for a deterministic initial flag.
+10110000 11111111 # instruction | MOV AL,FF | B0 FF prepares all eight PIC mask bits.
+11100110 00100001 # instruction | OUT 21,AL | E6 21 masks all eight master PIC IRQ lines.
+11100110 10100001 # instruction | OUT A1,AL | E6 A1 masks all eight slave PIC IRQ lines.
+00001111 00000001 00010110 00011000 01111111 # instruction | LGDT [7F18] | 0F 01 /2 with real-mode ModRM 16 and disp16 loads the six-byte GDTR pointer.
+00001111 00100000 11000000 # instruction | MOV EAX,CR0 | 0F 20 /r C0 reads the control register into a 32-bit general register.
+01100110 10000011 11001000 00000001 # instruction | OR EAX,1 | 66 selects a 32-bit operand; 83 /1 C8 sign-extends imm8 01 to set only CR0.PE.
+00001111 00100010 11000000 # instruction | MOV CR0,EAX | 0F 22 /r C0 enables protected mode while preserving the other CR0 bits.
+01100110 11101010 01000000 01111110 00000000 00000000 00001000 00000000 # instruction | JMP 0008:00007E40 | 66 EA ptr16:32 supplies offset 00007E40 then selector 0008, loading the GDT code descriptor.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | Entry alignment part 1 | Far JMP skips these bytes; they are not executed.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | Entry alignment part 2 | Eight more bytes put the 32-bit entry at source offset 64, physical 7E40.
+# From source offset 64 onward, CS.D=1 selects 32-bit default operands and addresses.
+10111000 00010000 00000000 00000000 00000000 # instruction | MOV EAX,00000010 | B8 imm32 selects GDT entry two, the writable flat data descriptor.
+10001110 11011000 # instruction | MOV DS,AX | 8E D8 loads data selector 0010 from AX; this instruction uses a 16-bit selector in 32-bit code.
+10001110 11000000 # instruction | MOV ES,AX | 8E C0 loads the same flat data descriptor into ES.
+10001110 11100000 # instruction | MOV FS,AX | 8E E0 loads the flat data descriptor into FS.
+10001110 11101000 # instruction | MOV GS,AX | 8E E8 loads the flat data descriptor into GS.
+10001110 11010000 # instruction | MOV SS,AX | 8E D0 loads the writable flat 32-bit stack descriptor.
+10111100 00000000 10010000 00000000 00000000 # instruction | MOV ESP,00009000 | BC imm32 places the downward-growing stack below physical 9000.
+00001111 00000001 00011101 00011110 01111111 00000000 00000000 # instruction | LIDT [00007F1E] | 0F 01 /3 with ModRM 1D and disp32 loads the six-byte IDTR pointer.
+10111000 01000100 00110011 00100010 00010001 # instruction | MOV EAX,11223344 | B8 imm32 demonstrates all four little-endian immediate bytes in 32-bit mode.
+10100011 00000000 10010000 00000000 00000000 # instruction | MOV [00009000],EAX | A3 moffs32 stores 44 33 22 11 through flat DS into physical RAM 9000.
+10001011 00011101 00000000 10010000 00000000 00000000 # instruction | MOV EBX,[00009000] | 8B /r ModRM 1D selects EBX and an absolute disp32, reading the stored doubleword back.
+11001101 00100000 # instruction | INT 20 | CD 20 dispatches through IDT vector 32, a present ring-zero 32-bit interrupt gate.
+10001011 00010101 00000100 10010000 00000000 00000000 # instruction | MOV EDX,[00009004] | 8B /r ModRM 15 reads the marker left by the returned interrupt handler.
+10000001 11111011 01000100 00110011 00100010 00010001 # instruction | CMP EBX,11223344 | 81 /7 FB compares the flat-memory readback against the known 32-bit value.
+01110101 00011010 # instruction | JNE failure_from_ram | 75 rel8; next address 7E7B plus 1A reaches the controlled failure path at 7E95.
+10000001 11111010 11011110 11000000 11011110 11000000 # instruction | CMP EDX,C0DEC0DE | 81 /7 FA checks that the software interrupt handler executed and returned.
+01110101 00010010 # instruction | JNE failure_from_handler | 75 rel8; next address 7E83 plus 12 reaches the controlled failure path at 7E95.
+10111001 01010000 01001101 01001111 01001011 # instruction | MOV ECX,4B4F4D50 | B9 imm32 records ASCII PMOK in ECX, a success predicate independent of screen output.
+11000111 00000101 00000000 10000000 00001011 00000000 01010000 00001010 01001101 00001010 # instruction | MOV dword [000B8000],0A4D0A50 | C7 /0 ModRM 05 writes P and M with green attributes directly to VGA text memory.
+11110100 # instruction | HLT success | F4 halts at 7E92 with IF=0; EIP becomes 7E93 and the guest remains halted.
+11101011 11111101 # instruction | JMP success_halt | EB FD returns to the preceding HLT if execution is resumed.
+10111001 01000110 01000001 01001001 01001100 # instruction | MOV ECX,4C494146 | B9 imm32 records ASCII FAIL for a failed RAM or handler comparison.
+11110100 # instruction | HLT failure | F4 provides a separate controlled failure halt at 7E9A, with EIP=7E9B.
+11101011 11111101 # instruction | JMP failure_halt | EB FD returns to the failure HLT if execution is resumed.
+00000000 00000000 00000000 # padding | Handler alignment | Three skipped bytes place the handler at source offset 160, physical 7EA0.
+11000111 00000101 00000100 10010000 00000000 00000000 11011110 11000000 11011110 11000000 # instruction | MOV dword [00009004],C0DEC0DE | C7 /0 ModRM 05 writes a unique marker without clobbering a general register or arithmetic flags.
+11001111 # instruction | IRETD | CF in 32-bit code restores the saved EIP, CS and EFLAGS, returning ESP to 9000.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | GDT alignment part 1 | Zero padding; control flow never enters it.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | GDT alignment part 2 | Zero padding; control flow never enters it.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | GDT alignment part 3 | Zero padding; control flow never enters it.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | GDT alignment part 4 | Zero padding; control flow never enters it.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | GDT alignment part 5 | Zero padding; control flow never enters it.
+00000000 00000000 00000000 00000000 00000000 # padding | GDT alignment part 6 | Five final bytes put the GDT at source offset 256, physical 7F00.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | GDT null descriptor | Selector zero is deliberately unusable in protected mode.
+11111111 11111111 00000000 00000000 00000000 10011010 11001111 00000000 # data | GDT flat 32-bit code descriptor | Base zero, limit FFFFF, access 9A, flags C; granularity expands the inclusive limit to FFFFFFFF, D=1 selects 32-bit code.
+11111111 11111111 00000000 00000000 00000000 10010010 11001111 00000000 # data | GDT flat 32-bit data descriptor | Base zero, limit FFFFF, access 92, flags C; writable ring-zero data, with B=1 for a 32-bit stack.
+00010111 00000000 00000000 01111111 00000000 00000000 # data | GDTR pointer | Limit 0017 is 24 descriptor bytes minus one; base is little-endian 00007F00.
+00000111 00000001 00110000 01111111 00000000 00000000 # data | IDTR pointer | Limit 0107 is 33 eight-byte entries minus one; base is little-endian 00007F30.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | IDT alignment | Twelve skipped bytes place the IDT at physical 7F30.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 00 and 01 | Null gates: this minimal target does not implement exception handling.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 02 and 03 | Null gates; no NMI or breakpoint handler is provided.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 04 and 05 | Null gates outside the software interrupt demonstration.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 06 and 07 | Null gates outside the software interrupt demonstration.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 08 and 09 | Null gates outside the software interrupt demonstration.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 0A and 0B | Null gates outside the software interrupt demonstration.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 0C and 0D | Null gates outside the software interrupt demonstration.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 0E and 0F | Null gates outside the software interrupt demonstration.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 10 and 11 | Null gates outside the software interrupt demonstration.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 12 and 13 | Null gates outside the software interrupt demonstration.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 14 and 15 | Null gates outside the software interrupt demonstration.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 16 and 17 | Null gates outside the software interrupt demonstration.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 18 and 19 | Null gates outside the software interrupt demonstration.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 1A and 1B | Null gates outside the software interrupt demonstration.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 1C and 1D | Null gates outside the software interrupt demonstration.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 1E and 1F | Null gates outside the software interrupt demonstration.
+10100000 01111110 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT vector 20 interrupt gate | Offset 00007EA0 split low and high, selector 0008, reserved byte zero, attributes 8E: present DPL0 32-bit interrupt gate.

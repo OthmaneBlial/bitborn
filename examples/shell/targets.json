@@ -1,0 +1,29 @@
+[
+  {
+    "name": "shell",
+    "source": "examples/shell/program.bits",
+    "output": "shell.bin",
+    "size": 813,
+    "sha256": "deb651a82f9bc924b4f08d1e033010be068ebeea60599f0cadfc1bc6535f6de1",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits",
+    "disk_payloads": [
+      {
+        "source": "examples/shell-app/program.bits",
+        "sectors": 2,
+        "first_sector": 4,
+        "load_address": 36864
+      }
+    ]
+  },
+  {
+    "name": "shell-app",
+    "source": "examples/shell-app/program.bits",
+    "output": "shell-app.bin",
+    "size": 150,
+    "sha256": "dd2e698f23ba8f7d68b18f6bd57eaadab374d0bc94a162803f5d7ad95ad983bf",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  }
+]

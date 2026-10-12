@@ -9,10 +9,10 @@
   "alterations": "960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.",
   "sourceSha256": {
     "boot/boot.bits": "230bbafbfa02abd62dc964efbad02db0431f0efa263216bba02146cd164262b8",
-    "site/simulator.mjs": "30dd2086420df56c210e7c569b395f5fb786c1531325d28210d9f4179c0b3937",
+    "site/simulator.mjs": "c172bf98a98b341f9134d9843992957fd3bed9bcd04cb52ba783d76a104da9b6",
     "site/binary.mjs": "c69a35f7d3b2bfdc91cac78f9f691be0eeadcbe518ac7a4d7f266061b2d84051",
     "site/boot-builder/app.mjs": "13f9234f36f0b6c166dd3ab9f16750ba680c8e3e7045d6c9bbc7e5a275fd1cb4",
-    "site/cpu-lab/lab.mjs": "ec92799e623638dd05c44abbd7b5b08c94a5c9a8c88b50bcafe28dfcfa77d8a7",
+    "site/cpu-lab/lab.mjs": "a55c25278ac9ce9d30c02db5d07a4f0fff69d9b7addb3e86506f6e896b54a98e",
     "site/cpu-lab/presets.mjs": "4b0ed3df4b5ca8d9f53b8d407cd0761cdbd1cc047d169c66f15f99cf93624941",
     "site/challenges/challenges.mjs": "871be9c721a83d2066fe51b10f8df93c7e84de59ba04f52a18048d1cd1bdadba",
     "challenges/catalog.json": "81e9abfbf8fbe7c6c3709fe5bb483f87f4ee15bbba708dd96b59b948b2629b02"

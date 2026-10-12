@@ -129,12 +129,97 @@ node tests/browser_challenges.mjs
 python3 -m unittest tests.test_challenges -v
 ```
 
+## 5. Enter 32-bit protected mode and return from an interrupt
+
+![Actual QEMU capture of the protected-mode stage](assets/protected-mode-demo.gif)
+
+**Environment:** actual QEMU x86 guest execution. The loader enters in BIOS
+real mode; the [568-byte literal stage](examples/protected-mode/program.bits)
+installs a GDT, sets CR0.PE, and far-jumps into code with 32-bit defaults. It
+stores `11223344` in actual RAM, reads it back, and calls a software interrupt
+through its IDT gate. The handler writes `C0DEC0DE`; IRETD restores the saved
+instruction pointer, code selector, flags and stack pointer before the success
+path prints green `PM` in VGA and halts.
+
+```sh
+make build
+qemu-system-i386 -machine pc,accel=tcg -drive file=build/protected-mode.img,format=raw,if=floppy -boot a
+python3 -m unittest tests.test_protected_mode -v
+```
+
+The native tests check CR0.PE, CS32, segment selectors, RAM readback, the
+interrupt frame and return, VGA bytes, and the controlled failure path.
+The browser's bounded 16-bit model does not run this stage. There is no paging,
+user mode, exception handler, external interrupt driver or complete OS claim.
+
+[Still QEMU capture](assets/protected-mode-demo.png) ·
+[Exact byte layout and limits](examples/protected-mode/README.md)
+
+## 6. Run a disk-loaded app and return to a binary shell
+
+![Actual QEMU capture of the binary shell](assets/shell-demo.gif)
+
+**Environment:** actual QEMU BIOS real-mode execution. The five-sector disk
+contains the existing handwritten loader, an
+[813-byte shell](examples/shell/program.bits), and a separately authored
+[150-byte app](examples/shell-app/program.bits). The shell provides nine exact
+lowercase commands with bounded input editing; the app is not independently
+bootable.
+
+```sh
+make build
+qemu-system-i386 -machine pc,accel=tcg -drive file=build/shell.img,format=raw,if=floppy -boot a -serial stdio
+```
+
+Focus the guest's QEMU display and type these commands, each followed by Enter:
+
+```text
+help
+write
+read
+dump
+regs
+run
+dump
+```
+
+`write` stores the fixed byte `2A` at physical `0600`; `read` and `dump` inspect
+actual RAM. `regs` samples eight general registers, four segments and FLAGS
+into RAM before printing those words. `run` reads disk sectors 4–5 into
+`0000:9000`, checks BIOS carry, and calls the separate app. It computes seven
+additions of six, stores the computed `2A` at `0601`, prints the result, and
+RETs to the shell prompt. The second `dump` shows both RAM experiments.
+
+```sh
+python3 -m unittest tests.test_shell -v
+```
+
+The native tests cover every command, actual register and memory sampling,
+keyboard bounds and Backspace, exact matching, disk bytes, repeated app returns,
+and the actual BIOS disk-error path. The fixed RAM window and sector layout are
+educational limits; this is not a filesystem or general application loader.
+
+[Still QEMU capture](assets/shell-demo.png) ·
+[Shell commands and layout](examples/shell/README.md) ·
+[App calling convention](examples/shell-app/README.md)
+
+Regenerate both native guest recordings:
+
+```sh
+make build
+python3 tools/record_system.py
+```
+
 ## Capture and verification records
 
 - [QEMU capture provenance](assets/boot-recording.json): source image hash,
   emulator version, frame counts and reproduction command.
 - [Browser capture provenance](assets/browser-demo-recording.json): actual
   browser actions, input bytes and recording conditions.
+- [Protected-mode and shell capture provenance](assets/system-recording.json):
+  actual QEMU frame captures, source hashes, emulator conditions and the
+  reproduction command. These native guest captures are separate from the
+  bounded browser-model recordings.
 - [Validation method](docs/validation.md), [architecture](docs/architecture/README.md)
   and [current roadmap](ROADMAP.md) separate packaging, simulated behavior,
   QEMU/native execution and publication evidence.

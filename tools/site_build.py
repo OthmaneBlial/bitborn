@@ -5,10 +5,11 @@ import json
 import re
 import shutil
 from pathlib import Path
-from bitborn import ROOT, artifact_paths, read_bits, digest, targets
+from bitborn import ROOT, artifact_paths, read_bits, digest, targets, verify
 
 
 def prepare():
+    print(verify())
     readme = (ROOT / 'README.md').read_text()
     table = readme.split('## Roadmap — visible progress\n', 1)[1].split('\n## ', 1)[0]
     milestones = []
