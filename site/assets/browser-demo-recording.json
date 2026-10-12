@@ -1,5 +1,5 @@
 {
-  "kind": "Actual browser screenshots of bounded educational simulation; not native CPU or QEMU footage",
+  "kind": "Actual browser screenshots of instruction inspection and bounded educational simulation; not native CPU or QEMU footage",
   "browser": "156.0.8078.4",
   "viewport": {
     "width": 1280,
@@ -9,16 +9,56 @@
   "alterations": "960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.",
   "sourceSha256": {
     "boot/boot.bits": "230bbafbfa02abd62dc964efbad02db0431f0efa263216bba02146cd164262b8",
+    "site/styles.css": "f255737251dfa8c6c0d133b70367b09578a5f0ebaa01a6d044c3902c555f6a38",
+    "site/app.js": "5ee86e439e83cdb24a8b80935904917b12f3eb7da304950fbb677ba5ee8e30f3",
+    "site/encoding.mjs": "ab77b9f5981353da316806df7890b40aca12cc589a995b53724498ea153f9e8b",
+    "site/encoding-presets.mjs": "6714e7b8300776e32567cd564a9dd5a6d29004e315e9feb129382bfeff71077e",
+    "site/playground/index.html": "56c328199b27e5c0711d3b7b2ab6a893c9aad319a77eaec91470be4b6b599c68",
+    "docs/instruction-encoding/fixtures/mov32.bits": "52504d7b850f70f6ac262d1d07308878d686c80f485b347490c62f854b86c2cd",
+    "docs/instruction-encoding/fixtures/mov64.bits": "01bbd5025d57433cdaf764232ade240dad18fcf879a227f29e0e3b94ea3c3e6e",
     "site/simulator.mjs": "0fdb791271021e5b16b3da27cb0d47283cc64e0f1c400be41c1b7535a7d62a98",
     "site/binary.mjs": "3e05c9aee0dbe8023d9568b7bcc206f8be47e7a4da43fa1229bb9226f84a56d8",
     "site/history.mjs": "45cbd1d494fe7b1f0867c1dc1978ebf2b1a0fce3599f1a704bff75dbe399e321",
+    "site/boot-builder/index.html": "12d26a44418d8f21eb2897de9e25084f079f80969fa7126a4b1810515247f742",
+    "site/boot-builder/builder.css": "2a5c2803c671e4fb33f55a200c16fc7d597127bf019a3c2b7b2f381417e51a4c",
+    "site/boot-builder/model.mjs": "92a78eb396054298a2c170cd2a2fb770e7201b0478b6678321c000a46f3108f3",
     "site/boot-builder/app.mjs": "13f9234f36f0b6c166dd3ab9f16750ba680c8e3e7045d6c9bbc7e5a275fd1cb4",
+    "site/cpu-lab/index.html": "4ef2adf10db6b23e5705c7fcec9270a519a8fa9b55d45608b20d06283535181b",
+    "site/cpu-lab/lab.css": "ec283e3071f88d474c753755a4682ac1eb5785b84ece820b1751f95d3abd884b",
     "site/cpu-lab/lab.mjs": "ef687c5b81955ccfb943ff626e83b64c0e08a723bd2296eba37e04f944ab4836",
     "site/cpu-lab/presets.mjs": "4b0ed3df4b5ca8d9f53b8d407cd0761cdbd1cc047d169c66f15f99cf93624941",
+    "site/challenges/index.html": "8939e5722f8bb3e9016ceca1fc4e309272519b14759bced24e3fe36300f4aff5",
+    "site/challenges/challenges.css": "49eb44bbd41c5f154aa68bb7b7392b05e682766a714010d4cc15c98394362218",
     "site/challenges/challenges.mjs": "871be9c721a83d2066fe51b10f8df93c7e84de59ba04f52a18048d1cd1bdadba",
+    "site/challenges/catalog.json": "2b51f2b288973f94c35510887c9ae1b011ff12137895d1220d723682782604aa",
     "challenges/catalog.json": "81e9abfbf8fbe7c6c3709fe5bb483f87f4ee15bbba708dd96b59b948b2629b02"
   },
   "captures": [
+    {
+      "file": "assets/encoding-demo.gif",
+      "sha256": "e815896c4ca98fdcd23a75917057e323708b7a925222d857c6d16b432d34c2b2",
+      "capturedFrames": 7,
+      "encodedFrames": 7,
+      "durationSeconds": 7,
+      "actions": [
+        "Inspected the literal B8 fixture in 16-bit context: three bytes consumed for MOV AX,42.",
+        "Selected explicit 32-bit context: the same B8 fixture consumes five bytes for MOV EAX,42; simulation is disabled.",
+        "Inspected the literal REX.W+B prefix, register opcode and eight immediate bytes in 64-bit mode.",
+        "Displayed exact unsigned imm64 without Number rounding; no instruction was executed.",
+        "Flipped REX.B: the destination changes from R8 to RAX, with the same exact immediate.",
+        "Cleared REX.W: the operand becomes 32-bit and consumes only four immediate bytes.",
+        "Changed context to 16-bit: the same initial 40 byte is INC AX rather than a REX prefix."
+      ],
+      "sourceFrameSha256": [
+        "dfa349532bd2ef276bac20e915b23b1643f7842d9104a7e2456c509da3d0ef69",
+        "d6fc5ce35e0e0c39eacc3ba43b5d135e98899649a813b38d03039d9cf44c962b",
+        "c08de5bda3393e435a8e69ab5bdbe82573126614b7d9406cd28c7dda9cd89e5e",
+        "c08de5bda3393e435a8e69ab5bdbe82573126614b7d9406cd28c7dda9cd89e5e",
+        "33773e1ccc23958f45a2639648432a89c010924e198d8ac9dcc66e46184cdaff",
+        "386b12440eadc68178c8a61a61fc9d49068b1a03516effd62253ed39396cbf84",
+        "1122c0cff49d89b12b803dbfa2e2779db2422bad01d1e7ac938cb2cab90e7eb7"
+      ]
+    },
     {
       "file": "assets/boot-builder-demo.gif",
       "sha256": "01b0e7dd27e373d579a1ffde27bbc4774e3be7cb87210abf6400d081b91a0415",

@@ -1,0 +1,2 @@
+10111000 # instruction | MOV EAX,42 (32-bit default) | B8 embeds register selector 000; four immediate bytes follow in 32-bit and default 64-bit operand contexts.
+00101010 00000000 00000000 00000000 # data | imm32 | Little-endian 0000002A. In a 16-bit default context only the first two operand bytes belong to MOV AX.

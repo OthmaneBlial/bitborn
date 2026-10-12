@@ -91,6 +91,7 @@ for exact evidence and remaining gates.
 | Localized `.io` introductions | ✅ Source-generated pages, language links/SEO metadata, mobile and keyboard checks; Arabic prose and LTR code verified in three browsers |
 | Reproducible model benchmark | ✅ Fixed reviewed workload, source/environment hashes and measured distributions; no native x86 speed claim |
 | Atomic packed-file output | ✅ Injected sync/rename failures preserve previous files and clean staging; source aliases and non-file outputs rejected |
+| Mode-aware instruction inspection | ✅ Explicit 16/32/64 context, 66/REX fields and exact imm64; independent disassembly goldens and three-browser checks; simulation remains 16-bit |
 | [v0.2.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0) | ✅ Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified |
 | Paging, exception/hardware interrupt handling and physical hardware | Future research; no working claim |
 
@@ -194,6 +195,15 @@ GDT and one software-interrupt gate, then verifies memory and interrupt return.
 Neither experiment supplies paging, general exception handling or a full OS.
 
 ## Explore and contribute
+
+The [instruction playground](https://othmaneblial.github.io/bitborn/playground/)
+inspects selected encodings in an explicit 16-, 32- or 64-bit context. The same
+`B8` fixture consumes two or four immediate bytes; `49` is DEC CX/ECX in legacy
+contexts and a REX prefix in 64-bit mode. Flip REX.B to change R8 to RAX, or REX.W
+to change operand width. Bit buttons explain their opcode/register/ModR/M/immediate
+roles, and 64-bit values stay exact with BigInt. This is
+[scoped inspection](docs/instruction-encoding/fixtures/README.md); execution remains
+the separately tested 16-bit model.
 
 Start with the [Boot Sector Builder](https://othmaneblial.github.io/bitborn/boot-builder/):
 all 512 bytes are editable, current decoding explains fields, and `.bits`/`.img`

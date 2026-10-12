@@ -6,6 +6,7 @@ import {resolve,dirname,extname} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {parseBits} from '../site/binary.mjs';
 import {checkIntroductions} from './introduction_browser_checks.mjs';
+import {checkEncoding} from './encoding_browser_checks.mjs';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..'),site=resolve(root,'site');
 const playwright=await import(process.env.PLAYWRIGHT_MODULE ? pathToFileURL(resolve(process.env.PLAYWRIGHT_MODULE)).href : 'playwright');
@@ -165,8 +166,9 @@ try {
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`${engine}: mobile state-change layout`);
       await page.screenshot({path:resolve(root,`build/cross-engine/${engine}-cpu-mobile.png`),fullPage:true});
       await checkIntroductions(page,base);
+      await open('playground/');await checkEncoding(page);
       assert.deepEqual(errors,[],`${engine}: page errors and HTTP asset failures`);
-      console.log(`${engine} ${browser.version()} passed locally: 8 dedicated routes + optimization, home/docs, eight localized introductions with RTL/LTR code and keyboard navigation, desktop/320px reduced motion, real H→h binary downloads, CPU state/flags/memory/breakpoint resume, two bit-button challenges and local progress, generated roadmap, optimization byte inspection.`);
+      console.log(`${engine} ${browser.version()} passed locally: 8 dedicated routes + optimization, home/docs, eight localized introductions with RTL/LTR code and keyboard navigation, 16/32/64 inspection with exact imm64 and read-only bit/context changes, desktop/320px reduced motion, real H→h binary downloads, CPU state/flags/memory/breakpoint resume, two bit-button challenges and local progress, generated roadmap, optimization byte inspection.`);
     } finally {await browser.close();}
   }
 } finally {await new Promise(resolve=>server.close(resolve));}

@@ -17,6 +17,26 @@ Writing EAX also clears the upper 32 bits of RAX. In 16-bit real mode the same
 opcode consumes **two** immediate bytes, so instruction interpretation depends
 on the mode. Our BIOS code uses `B8 03 00` for `MOV AX,3`.
 
+## Mode-aware inspection
+
+The [live playground](https://othmaneblial.github.io/bitborn/playground/) now
+lets you select an explicit decoding context. Choose the four-byte immediate
+fixture, then change 16 → 32 → 64: `B8` selects AX with two operand bytes in the
+first context, and EAX with four in the others. The simulation button stays
+disabled for 32-/64-bit contexts because inspection adds no execution support.
+
+Choose the REX fixture in 64-bit context. `49` is `0100 W R X B`: W=1 chooses
+64-bit operands and B=1 extends the register selector, giving R8. Flip B to select
+RAX; clear W to inspect EAX and a four-byte immediate. In legacy contexts the
+same prefix-range bytes are one-byte INC/DEC instructions. With REX.W set, it
+takes precedence over the supported 66 operand-size override. The inspector
+limits prefix handling rather than guessing repeated or reordered prefixes.
+
+See the [literal fixtures and exact inspection scope](fixtures/README.md).
+Register/opcode/ModR/M/immediate roles are exposed in each bit's accessible label
+and tooltip. The 64-bit immediate is kept as BigInt, including
+`FFFFFFFFFFFFFFFF` = `18446744073709551615` without floating-point rounding.
+
 ## ModR/M fields
 
 `31 C0` is `XOR AX,AX` in real mode. `31` selects XOR register into register/memory;

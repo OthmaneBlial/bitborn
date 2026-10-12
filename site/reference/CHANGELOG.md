@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Add explicit 16/32/64 decoding context to the existing bit playground: scoped
+  MOV/XOR/legacy INC/DEC inspection, 66/REX fields, exact imm64, per-bit roles,
+  literal `.bits` fixtures and independent disassembly goldens. Disable simulation
+  for unsupported contexts; add actual context/bit-change recording and mobile checks.
+
 - Stage and atomically replace `bitpack` outputs, preserving old files on injected
   sync/rename failures and cleaning staging files. Keep output symlinks, isolate
   other hard links, preserve existing basic modes, create private new files and

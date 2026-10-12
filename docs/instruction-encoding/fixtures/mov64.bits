@@ -1,0 +1,3 @@
+01001001 # instruction | REX.W+B (64-bit mode only) | 0100 identifies REX, W=1 chooses 64-bit operands, R=X=0, B=1 extends the opcode register selector. In legacy contexts 49 is DEC CX/ECX.
+10111000 # instruction | MOV R8,imm64 (64-bit mode) | B8 has low selector bits 000. REX.B adds eight; REX.W requires an eight-byte immediate.
+11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 # data | imm64 | Unsigned FFFFFFFFFFFFFFFF equals 18446744073709551615, held exactly with BigInt during inspection.

@@ -1,4 +1,6 @@
 import {binary, hex, decode, createState, step, validateBootData} from './simulator.mjs';
+import {inspectEncoding} from './encoding.mjs';
+import {encodingExamples} from './encoding-presets.mjs';
 
 const $ = id => document.getElementById(id);
 const element = (tag, text, className) => {
@@ -70,11 +72,14 @@ function showRegisters(container, state, boot = false) {
 }
 
 if ($('bit-editor')) {
+  $('decode-mode').setAttribute('aria-label','Decoding context, inspection only');
   const templates = {mov:[0xB8,0x2A,0x00],add:[0x05,0x07,0x00],cmp:[0x3D,0x2A,0x00],inc:[0x40],xor:[0x31,0xC0],nop:[0x90]};
+  for(const [name,example] of Object.entries(encodingExamples))templates[name]=example.bytes;
   let bytes = [...templates.mov], cpu = createState();
   function renderEditor(focusBit) {
     let instruction, problem;
-    try { instruction = decode(bytes); } catch (error) { problem = error.message; }
+    const mode=Number($('decode-mode').value);
+    try { instruction = inspectEncoding(bytes,mode); } catch (error) { problem = error.message; }
     $('bit-editor').replaceChildren();
     bytes.forEach((value, byteIndex) => {
       const byteNode = element('div', undefined, 'byte-editor'), positions = element('div', undefined, 'bit-position-labels'), bits = element('div', undefined, 'bits');
@@ -84,7 +89,9 @@ if ($('bit-editor')) {
         const button = element('button', set ? '1' : '0', `bit${set ? ' on' : ''}`);
         button.type = 'button'; button.dataset.bit = `${byteIndex}-${bit}`;
         button.setAttribute('aria-pressed', String(set));
-        button.setAttribute('aria-label', `Byte ${byteIndex}, bit ${bit}, value ${Number(set)}. Toggle bit.`);
+        const role=instruction?.bitFields[byteIndex]?.[bit];
+        button.setAttribute('aria-label', `Byte ${byteIndex}, bit ${bit}, value ${Number(set)}. Toggle bit.${role ? ` ${role}.` : ''}`);
+        if(role)button.title=role;
         button.addEventListener('click', () => { bytes[byteIndex] ^= 1 << bit; renderEditor(button.dataset.bit); });
         bits.append(button);
       }
@@ -92,14 +99,18 @@ if ($('bit-editor')) {
       caption.append(element('span', `BYTE ${byteIndex} / ${instruction?.fields[byteIndex]?.toUpperCase() || 'UNKNOWN'}`), element('code', `0x${hex(value)} · ${value}`));
       byteNode.append(positions,bits,caption); $('bit-editor').append(byteNode);
     });
-    $('decoded-instruction').textContent = instruction?.mnemonic || 'Outside this simulator';
-    $('encoding-explanation').textContent = instruction ? instruction.explanation + (instruction.size < bytes.length ? ` This instruction consumes ${instruction.size} of the ${bytes.length} displayed bytes; the remaining bytes are not simulated.` : '') : problem;
+    $('decoded-instruction').textContent = instruction?.mnemonic || 'Outside this inspector';
+    $('encoding-explanation').textContent = instruction ? instruction.explanation + (instruction.size < bytes.length ? ` This instruction consumes ${instruction.size} of the ${bytes.length} displayed bytes; the remaining bytes are not inspected or simulated.` : '') : problem;
     $('decoded-instruction').classList.toggle('error', Boolean(problem));
     $('byte-values').textContent = bytes.map(value => hex(value)).join(' ');
-    $('execute-instruction').disabled = Boolean(problem);
+    let canSimulate=mode===16;
+    try {decode(bytes);}catch{canSimulate=false;}
+    $('execute-instruction').disabled = Boolean(problem)||!canSimulate;
+    $('inspection-scope').textContent=canSimulate?'Inspection context: 16-bit default. The separate simulator executes its supported 16-bit subset.':`Inspection context: ${mode}-bit. Simulation of this encoding/context is unavailable; no instruction was executed.`;
     if (focusBit) document.querySelector(`[data-bit="${focusBit}"]`)?.focus({preventScroll:true});
   }
   $('instruction-select').addEventListener('change', event => { bytes = [...templates[event.target.value]]; renderEditor(); });
+  $('decode-mode').addEventListener('change',()=>renderEditor());
   $('reset-bits').addEventListener('click', () => { bytes = [...templates[$('instruction-select').value]]; renderEditor(); });
   $('reset-state').addEventListener('click', () => { cpu = createState(); showRegisters($('play-registers'),cpu); $('play-status').textContent = 'CPU state reset. AX = 0, ZF = 0, CF = 0.'; $('play-status').classList.remove('error'); });
   $('execute-instruction').addEventListener('click', () => {

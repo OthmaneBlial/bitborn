@@ -1,0 +1,13 @@
+{
+  "kind": "Independent disassembly only; target bytes were never executed",
+  "producer": "NDISASM version 3.02 compiled on Jun 29 2026",
+  "command": "ndisasm -b CONTEXT - < literal parsed source bytes",
+  "cases": [
+    {"source":"mov32","mode":16,"size":3,"disassembly":"mov ax,0x2a"},
+    {"source":"mov32","mode":32,"size":5,"disassembly":"mov eax,0x2a"},
+    {"source":"mov32","mode":64,"size":5,"disassembly":"mov eax,0x2a"},
+    {"source":"mov64","mode":16,"size":1,"disassembly":"dec cx"},
+    {"source":"mov64","mode":32,"size":1,"disassembly":"dec ecx"},
+    {"source":"mov64","mode":64,"size":10,"disassembly":"mov r8,0xffffffffffffffff"}
+  ]
+}

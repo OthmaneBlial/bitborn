@@ -4,6 +4,7 @@ import {createServer} from 'node:http';
 import {readFile,mkdir} from 'node:fs/promises';
 import {resolve,dirname,extname} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
+import {checkEncoding} from './encoding_browser_checks.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const modulePath = process.env.PLAYWRIGHT_MODULE;
@@ -44,6 +45,7 @@ try {
   assert.match(await page.locator('#encoding-explanation').textContent(),/outside this limited simulator/);
   await page.locator('#reset-bits').click(); await page.locator('#reset-state').click();
   assert.match(await page.locator('#play-registers').textContent(),/AX0000/);
+  await checkEncoding(page);
   await page.locator('[data-offset="510"]').click(); assert.equal(await page.locator('#selected-hex').textContent(),'0x55');
   assert.equal(await page.locator('#selected-kind').textContent(),'SIGNATURE');
   await page.locator('[data-offset="510"]').press('End'); assert.equal(await page.locator('#selected-hex').textContent(),'0xAA');

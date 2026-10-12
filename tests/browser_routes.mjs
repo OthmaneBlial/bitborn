@@ -3,6 +3,7 @@ import {createServer} from 'node:http';
 import {readFile,mkdir} from 'node:fs/promises';
 import {resolve,dirname,extname} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
+import {checkEncoding} from './encoding_browser_checks.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const modulePath = process.env.PLAYWRIGHT_MODULE;
@@ -38,6 +39,7 @@ try {
   await page.locator('#reset-bits').click();await page.locator('#reset-state').click();await page.locator('#execute-instruction').click();
   await page.locator('#instruction-select').selectOption('cmp');await page.locator('#execute-instruction').click();
   assert.match(await page.locator('#play-registers').textContent(),/ZF1/);
+  await checkEncoding(page);
   await page.goto(new URL('examples/',base).href);
   assert.equal(await page.locator('[data-example]').count(),14);
   assert.equal(await page.locator('[data-example] a[download]').count(),14);

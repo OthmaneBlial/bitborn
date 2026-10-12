@@ -27,6 +27,12 @@ def prepare():
         comparison[role] = {'source': source, 'bytes': list(data), 'annotations': annotations,
                             'sha256': digest(data), 'payloadSize': len(data), 'elfSize': 120 + len(data)}
     (ROOT / 'site/optimization.json').write_text(json.dumps(comparison, indent=2) + '\n')
+    encoding = {}
+    for name, filename in (('mov32', 'mov32.bits'), ('mov64', 'mov64.bits')):
+        source = 'docs/instruction-encoding/fixtures/' + filename
+        data, _ = read_bits(ROOT / source)
+        encoding[name] = {'source': source, 'bytes': list(data), 'sha256': digest(data)}
+    (ROOT / 'site/encoding-presets.mjs').write_text('export const encodingExamples = ' + json.dumps(encoding, indent=2) + ';\n')
     downloads = ROOT / "site/downloads"
     downloads.mkdir(parents=True, exist_ok=True)
     checksums = []

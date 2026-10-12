@@ -143,7 +143,10 @@ The v0.2 milestone is published and verified. The following research remains ope
 - [x] Check 81,691 modeled arithmetic/logical instructions against independent
   ripple-carry and parity oracles; seed 16-bit ADD/SUB/CMP, preserve CF for every
   INC/DEC register and exhaust all 8-bit TEST masks. IF/DF stay unchanged.
-- [ ] Add architecture-aware byte inspection with explicit execution modes.
+- [x] Add explicit 16/32/64 context for scoped instruction inspection: MOV
+  immediates, register-direct XOR, 66/REX fields, legacy INC/DEC and selected bare
+  encodings. Exact imm64, independent NDISASM goldens and three-browser bit/context
+  changes are checked. Simulation remains the separately tested 16-bit subset.
 - [x] Align browser/CLI source parsing: accept only an initial UTF-8 BOM, use the
   same Unicode whitespace and line boundaries, and keep exact comment scope.
   658 seeded valid/invalid cases compare bytes and source-line diagnostics.

@@ -4,6 +4,23 @@ These demonstrations are reproducible from the repository. Browser recordings
 show real interactions with the bounded JavaScript teaching model. QEMU captures
 show guest machine-code execution. Those are separate kinds of evidence.
 
+## Inspect the same bytes in three contexts
+
+![Actual browser context and bit changes; inspection only](assets/encoding-demo.gif)
+
+Open the [instruction playground](https://othmaneblial.github.io/bitborn/playground/).
+Choose the four-byte immediate fixture: 16-bit context reads MOV AX,42 and consumes
+three bytes; 32-/64-bit contexts read MOV EAX,42 and consume five. Choose the
+`49 B8` fixture in 64-bit mode to inspect R8 and the exact unsigned 64-bit value.
+Flip prefix B to select RAX, then W to select EAX and reduce the immediate width.
+Change context to see 40–4F interpreted as legacy INC/DEC instead of REX prefixes.
+
+This recording performs inspection only. The simulation button stays disabled
+for unsupported contexts. [Literal source and scope](docs/instruction-encoding/fixtures/README.md)
+and independent disassembly goldens back the explanations; these checks are
+separate from native execution. Capture provenance includes the loaded code,
+HTML, CSS, literal fixtures and frame hashes.
+
 ## 1. Boot a sector authored directly as bits
 
 ![Actual QEMU boot capture](assets/boot.gif)

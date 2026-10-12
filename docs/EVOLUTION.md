@@ -43,6 +43,11 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 - Pushed benchmark: `771eed8`. Completed atomic packed-file replacement; injected
   sync/rename failures preserve old/absent outputs, staging cleanup and link/mode
   behavior are checked. Next: mode-aware opcode inspection and exact program export.
+- Atomic milestone `5fc5482` passed exact-commit CI and Pages. Completed explicit
+  16/32/64 instruction inspection, exact imm64, per-bit roles, literal fixtures,
+  independent disassembly goldens and three-browser context/bit changes. A wide
+  hex readout overflow was caught and fixed before publication.
+- Next: exact program export/import, binary/hex synchronization and ELF anatomy.
 - Risks: browser behavior is modeled, not native x86. Hardware, paging and general
   interrupt support require separate native targets and evidence.
 
@@ -58,9 +63,9 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 02 | 1 | Binary Time Machine: undo/redo every recorded register, flag, RAM and output transition | H | H | 01 | Medium | Complete |
 | 03 | 0 | Seeded binary parser properties and Python/JS token-syntax parity | H | H | Existing parsers | Low | Complete |
 | 04 | 0 | Arithmetic flags fuzzing against independent signed/unsigned oracles | H | H | Existing model | Medium | Complete |
-| 05 | 1 | Opcode microscope with explicit 16/32/64-bit context and mode-specific fixtures | H | M | Intel references | Medium | Open |
+| 05 | 1 | Opcode microscope with explicit 16/32/64-bit context and mode-specific fixtures | H | M | Intel references | Medium | Complete: scoped inspection; model execution stays 16-bit |
 | 06 | 1 | Synchronize binary and hexadecimal input without generating instructions | H | H | Existing parser | Low | Open |
-| 07 | 1 | Explain opcode, register, ModR/M and immediate fields bit by bit | H | H | 05 | Medium | Open |
+| 07 | 1 | Explain opcode, register, ModR/M and immediate fields bit by bit | H | H | 05 | Medium | Complete for documented MOV/XOR/prefix subset |
 | 08 | 1 | Export and re-import exact CPU Lab programs with cross-browser download proof | H | H | Existing builder export | Low | Open |
 | 09 | 1 | Share bounded CPU Lab programs through validated URLs | H | M | 03,08 | Medium | Open |
 | 10 | 1 | Rewind branches and CALL/RET; verify stack and logical IP restoration | H | H | 02 | Medium | Complete |
