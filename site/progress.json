@@ -90,6 +90,10 @@
       "progress": "\u2705 Seeded cases check identical bytes/error lines, Unicode line boundaries and initial UTF-8 BOM handling"
     },
     {
+      "milestone": "Arithmetic flag properties",
+      "progress": "\u2705 Independent ripple-carry oracle, seeded 16-bit arithmetic and exhaustive 8-bit TEST masks; IF/DF and INC/DEC carry preserved"
+    },
+    {
       "milestone": "v0.2.0 release",
       "progress": "\u2705 Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified"
     },

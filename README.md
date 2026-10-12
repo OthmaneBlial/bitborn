@@ -77,6 +77,7 @@ for exact evidence and remaining gates.
 | CPU Lab memory-change journal | ✅ Full-memory oracle and Chrome checks pass; whole-RAM copying/scanning removed from each step |
 | Binary Time Machine | ✅ Exact recorded-state Back/Forward, forks and halt restoration pass model and three-browser checks |
 | Browser/CLI literal source parity | ✅ Seeded cases check identical bytes/error lines, Unicode line boundaries and initial UTF-8 BOM handling |
+| Arithmetic flag properties | ✅ Independent ripple-carry oracle, seeded 16-bit arithmetic and exhaustive 8-bit TEST masks; IF/DF and INC/DEC carry preserved |
 | [v0.2.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0) | ✅ Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified |
 | Paging, exception/hardware interrupt handling and physical hardware | Future research; no working claim |
 

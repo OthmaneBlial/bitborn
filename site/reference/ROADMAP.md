@@ -129,7 +129,10 @@ The v0.2 milestone is published and verified. The following research remains ope
   Stack/calls, output clearing, self-modification, A20, failures and the full boot
   have independent round-trip checks. Chrome, Firefox and WebKit controls pass.
 - [ ] Add direct recorded-timeline navigation and instruction-state inspection.
-- [ ] Add parser/flag property tests and architecture-aware byte inspection.
+- [x] Check 81,691 modeled arithmetic/logical instructions against independent
+  ripple-carry and parity oracles; seed 16-bit ADD/SUB/CMP, preserve CF for every
+  INC/DEC register and exhaust all 8-bit TEST masks. IF/DF stay unchanged.
+- [ ] Add architecture-aware byte inspection with explicit execution modes.
 - [x] Align browser/CLI source parsing: accept only an initial UTF-8 BOM, use the
   same Unicode whitespace and line boundaries, and keep exact comment scope.
   658 seeded valid/invalid cases compare bytes and source-line diagnostics.

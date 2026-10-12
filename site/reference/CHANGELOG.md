@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Check arithmetic flags with an independent ripple-carry oracle, seeded ADD/SUB/CMP
+  cases, all INC/DEC registers and exhaustive 8-bit TEST masks. Preserve IF/DF;
+  represent undefined logical AF explicitly. These checks run in site CI.
+
 - Align browser and host source parsing for initial UTF-8 BOMs, Unicode whitespace
   and comment-ending line boundaries; reject embedded BOMs consistently. Add
   658 seeded round-trip/rejection and cross-language diagnostic cases.

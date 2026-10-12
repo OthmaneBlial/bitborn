@@ -18,7 +18,10 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 - Pushed Time Machine: `cebcd95`; exact-commit Linux CI passed.
 - Completed parser parity: 658 seeded cases agree on bytes and error lines,
   covering Unicode line boundaries, non-ASCII comments and initial/embedded BOMs.
-- Next: flags fuzzing, direct timeline navigation and architecture-aware
+- Pushed parser parity: `ada41c5`; exact-commit Linux CI passed.
+- Completed flags properties: independent bit-by-bit arithmetic oracle, seeded
+  16-bit cases and exhaustive 8-bit TEST masks, with preserved IF/DF and INC/DEC CF.
+- Next: direct timeline navigation, contributor policies and architecture-aware
   instruction inspection; introductory documentation in eight languages.
 - Risks: browser behavior is modeled, not native x86. Hardware, paging and general
   interrupt support require separate native targets and evidence.
@@ -34,7 +37,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 01 | 0 | Record changed RAM bytes; compare with an independent full-memory oracle | H | H | Existing model | Low | Complete |
 | 02 | 1 | Binary Time Machine: undo/redo every recorded register, flag, RAM and output transition | H | H | 01 | Medium | Complete |
 | 03 | 0 | Seeded binary parser properties and Python/JS token-syntax parity | H | H | Existing parsers | Low | Complete |
-| 04 | 0 | Arithmetic flags fuzzing against independent signed/unsigned oracles | H | H | Existing model | Medium | Open |
+| 04 | 0 | Arithmetic flags fuzzing against independent signed/unsigned oracles | H | H | Existing model | Medium | Complete |
 | 05 | 1 | Opcode microscope with explicit 16/32/64-bit context and mode-specific fixtures | H | M | Intel references | Medium | Open |
 | 06 | 1 | Synchronize binary and hexadecimal input without generating instructions | H | H | Existing parser | Low | Open |
 | 07 | 1 | Explain opcode, register, ModR/M and immediate fields bit by bit | H | H | 05 | Medium | Open |
