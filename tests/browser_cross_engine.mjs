@@ -10,6 +10,7 @@ import {checkEncoding} from './encoding_browser_checks.mjs';
 import {checkProgramDownloads} from './program_download_checks.mjs';
 import {checkHexDrafts} from './hex_browser_checks.mjs';
 import {checkProgramLinks} from './program_link_browser_checks.mjs';
+import {checkRegisterMOV} from './register_mov_browser_checks.mjs';
 import {checkELF} from './elf_browser_checks.mjs';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..'),site=resolve(root,'site');
@@ -173,6 +174,7 @@ try {
       await open('playground/');await checkEncoding(page);
       await open('cpu-lab/');await checkProgramDownloads(page);
       await checkHexDrafts(page);
+      await checkRegisterMOV(page);
       await checkProgramLinks(page);
       await checkELF(page,base);
       assert.deepEqual(errors,[],`${engine}: page errors and HTTP asset failures`);

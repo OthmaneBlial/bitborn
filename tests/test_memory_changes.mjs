@@ -15,6 +15,7 @@ function check(bytes, initialize = () => {}) {
   return state;
 }
 for(const preset of presets)check(parseBits(preset.source),state=>{state.SP=0x7C00;});
+check([0xB8,0xCD,0xAB,0x88,0xE0,0x8A,0xE0,0x89,0xC3,0xF4]);
 const wrap=check([0xA3,15,0,0xF4],state=>{state.DS=0xFFFF;state.AX=0x1234;});
 assert.deepEqual([wrap.memory[0xFFFFF],wrap.memory[0]],[0x34,0x12]);
 check([0xA3,0,0x82,0xF4]); // Writing zero over zero has no changed bytes.

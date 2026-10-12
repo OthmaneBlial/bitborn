@@ -35,6 +35,16 @@ export function decode(bytes, offset = 0) {
   });
   if (opcode >= 0xB8 && opcode <= 0xBF) return instruction(3, `MOV ${registers[opcode - 0xB8]}, ${word(1)}`, 'The opcode chooses a 16-bit register. The next two bytes hold the immediate, least significant byte first.', 'mov16', {register: registers[opcode - 0xB8], value: word(1)});
   if (opcode >= 0xB0 && opcode <= 0xB7) return instruction(2, `MOV ${['AL','CL','DL','BL','AH','CH','DH','BH'][opcode - 0xB0]}, ${byte(1)}`, 'The opcode chooses an 8-bit register; the following byte is the immediate.', 'mov8', {register: registers[(opcode - 0xB0) % 4], high: opcode >= 0xB4, value: byte(1)});
+  if (opcode >= 0x88 && opcode <= 0x8B) {
+    const modrm=byte(1);
+    if(modrm<0xC0)throw new Error('Memory-form MOV is outside this limited simulator. No instruction was executed.');
+    const width=opcode&1?2:1,reg=(modrm>>3)&7,rm=modrm&7;
+    const destination=opcode&2?reg:rm,source=opcode&2?rm:reg;
+    const names=width===2?registers:['AL','CL','DL','BL','AH','CH','DH','BH'];
+    const result=instruction(2,`MOV ${names[destination]}, ${names[source]}`,'Copy a register word or byte without changing flags. Byte aliases preserve the other half of their word register.','movRegister',
+      {width,register:registers[width===2?destination:destination%4],source:registers[width===2?source:source%4],high:width===1&&destination>=4,sourceHigh:width===1&&source>=4});
+    result.fields[1]='ModR/M';return result;
+  }
   if ([0x05, 0x2D, 0x3D].includes(opcode)) return instruction(3, `${({5:'ADD',45:'SUB',61:'CMP'})[opcode]} AX, ${word(1)}`, 'A 16-bit immediate follows the opcode in little-endian order. CMP updates flags without changing AX.', ({5:'add',45:'sub',61:'cmp'})[opcode], {value: word(1)});
   if (opcode >= 0x40 && opcode <= 0x4F) return instruction(1, `${opcode < 0x48 ? 'INC' : 'DEC'} ${registers[opcode % 8]}`, 'The register is encoded in the low three opcode bits. INC and DEC preserve the carry flag.', opcode < 0x48 ? 'inc' : 'dec', {register: registers[opcode % 8]});
   if (opcode >= 0x50 && opcode <= 0x5F) return instruction(1, `${opcode < 0x58 ? 'PUSH' : 'POP'} ${registers[opcode % 8]}`, 'A 16-bit register is saved to or restored from SS:SP. The stack grows downward by two bytes.', opcode < 0x58 ? 'push' : 'pop', {register: registers[opcode % 8]});
@@ -135,6 +145,15 @@ export function step(bytes, state) {
     case 'mov8': {
       const current = state[instruction.register];
       state[instruction.register] = instruction.high ? (current & 255) | (instruction.value << 8) : (current & 0xFF00) | instruction.value; break;
+    }
+    case 'movRegister': {
+      const source=state[instruction.source];
+      if(instruction.width===2)state[instruction.register]=source;
+      else {
+        const value=(source>>(instruction.sourceHigh?8:0))&255,current=state[instruction.register];
+        state[instruction.register]=instruction.high?(current&255)|(value<<8):(current&0xFF00)|value;
+      }
+      break;
     }
     case 'segment': state[instruction.segment] = state[instruction.source]; break;
     case 'xor': state[instruction.register] ^= state[instruction.source]; logicFlags(state[instruction.register], 16); break;

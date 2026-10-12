@@ -123,7 +123,11 @@
     },
     {
       "milestone": "Register-to-register MOV microscope",
-      "progress": "\u2705 Direction/width and ModR/M selectors, 8/16/32/64 operands, REX high-byte rules; 9,728 combinations and 18 independent disassembly goldens; inspection only"
+      "progress": "\u2705 Direction/width and ModR/M selectors, 8/16/32/64 operands, REX high-byte rules; 9,728 combinations and 18 independent disassembly goldens; wider forms remain inspection-only"
+    },
+    {
+      "milestone": "Modeled register copies",
+      "progress": "\u2705 Unprefixed 8-/16-bit forms, aliased byte preservation and history; 2,048 independent oracle cases plus seven native QEMU copy/flag checks"
     },
     {
       "milestone": "CPU Lab program downloads and imports",

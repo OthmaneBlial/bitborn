@@ -8,6 +8,7 @@
   "presentationFps": 1,
   "alterations": "960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.",
   "sourceSha256": {
+    "tools/record_browser.mjs": "f4581f26a97f43a47921e788906c78595397e4b70d01034b8ea240c49ca7a437",
     "boot/boot.bits": "230bbafbfa02abd62dc964efbad02db0431f0efa263216bba02146cd164262b8",
     "site/elf.mjs": "552aabb816be8add70c470c951f0110697d491d0a0e926c3bd9e6001e623832b",
     "site/elf/index.html": "767e441bc2b8d9e29a626d264b2d437bce24c296196a5b37c33d09cf6f58f29b",
@@ -28,7 +29,7 @@
     "docs/instruction-encoding/fixtures/mov-register64.bits": "866d2abe79f9f63f363a68aeaadf407351e38ee0e7e81c69dc524934e237401f",
     "docs/instruction-encoding/fixtures/mov-byte.bits": "0b828951f81c1db36a02d15ef88bb59dd4836b5539fac99760fcb708933acf8c",
     "docs/instruction-encoding/fixtures/mov-byte-rex.bits": "1ecf5481962b6821fce3636e1d04ef4fe4701204089f3b5a7c7ef79e60fbeb64",
-    "site/simulator.mjs": "0fdb791271021e5b16b3da27cb0d47283cc64e0f1c400be41c1b7535a7d62a98",
+    "site/simulator.mjs": "3f02ec0f61e9dc476d946e33d281227fa4fe06d1b0fd57d1a78d1af88ade2def",
     "site/binary.mjs": "afddfeb96e78242eb1b4a3f42236276605e3656ef7fc08362791520d79006ea9",
     "site/history.mjs": "45cbd1d494fe7b1f0867c1dc1978ebf2b1a0fce3599f1a704bff75dbe399e321",
     "site/program-link.mjs": "df9a7ad9924dcd19b137407e62557c664b833b5e13a191e9b86b3ca964fe0b40",
@@ -68,10 +69,10 @@
     },
     {
       "file": "assets/encoding-demo.gif",
-      "sha256": "665bdfd9877fab5377ea9759243ee3673c055756b7f59ad633381306c2f5c108",
-      "capturedFrames": 12,
-      "encodedFrames": 12,
-      "durationSeconds": 12,
+      "sha256": "73f1fefb504ba6c88f1400aa59ea8e96d812cbeb3cfbd926603d6912f88ab6d4",
+      "capturedFrames": 13,
+      "encodedFrames": 13,
+      "durationSeconds": 13,
       "actions": [
         "Inspected the literal B8 fixture in 16-bit context: three bytes consumed for MOV AX,42.",
         "Selected explicit 32-bit context: the same B8 fixture consumes five bytes for MOV EAX,42; simulation is disabled.",
@@ -80,8 +81,9 @@
         "Flipped REX.B: the destination changes from R8 to RAX, with the same exact immediate.",
         "Cleared REX.W: the operand becomes 32-bit and consumes only four immediate bytes.",
         "Changed context to 16-bit: the same initial 40 byte is INC AX rather than a REX prefix.",
-        "Inspected register-direct MOV AX,BX and ModR/M source/destination roles; this form is inspection-only.",
+        "Inspected register-direct MOV AX,BX and ModR/M roles; unprefixed byte/word forms are available in the bounded 16-bit model.",
         "Flipped only opcode direction bit1: source/destination names and ModR/M role labels reverse.",
+        "Simulated MOV BX,AX: the previously loaded 42 is copied into BX; this is model state, not native CPU execution.",
         "Without REX, register selector100 names the high byte AH.",
         "The literal 40 REX prefix remaps selector100 to SPL in 64-bit mode; no instruction executes.",
         "Setting REX.W leaves the eight-bit MOV unchanged; the bit label identifies W as unused."
@@ -94,11 +96,12 @@
         "b61be16b947048c9c0737638d947e1d1ad7fa723c1ac5a50d886bf1aa84cd9d0",
         "eec1688dbbf0f884f05d38b7d6c16b550b562c39238ad8195cfac3f0f6f883ef",
         "1ca00a926eb08ca1b3fca4bb0a4e2944828f31bf7e8ea24d04340e8402646085",
-        "f95e347f6128a30c19f5171bd1d1520b80298f56c59dac3abf76bb432ebc74c2",
-        "6ddc58885e9c261c61d44be4d2327d02b8b8c5e26e260fe70625d0ca3570224f",
-        "748f7416f68443dfd84499783cc15fb7aad97f3867f73087d5e907a954fe153b",
-        "52e8a95eca147141b04695f237a31932a25b48392f8d1606f4f35140eddd230e",
-        "3bbbff8e4686f393ef55ebdacadbd452d12798fa086b5e9d6cc8baf9b3712fb5"
+        "759815c4e6a0ddb5bef897d5b3f210e050df8d6db588b271d551aba0d1099172",
+        "779cf5cd0c7ca0faae50f0f49e0aa045e0a3237e12b67b3bfe3745b31c5361f9",
+        "bf808669311bbd0ee1318ac0cffd7b047a5450164e3a7e71483b4978a0a5689e",
+        "316d5b162f435844ad608c67322f82fbe0f7efad046b90bbbeb19434e710a893",
+        "b64be386974fd35f3c9a9c933c829d079b84bceedad30d5b1891468861624922",
+        "79b80fb19886f7158c514b06cf75efe63f6e2e0383aebee607c8f3ee9e1a63aa"
       ]
     },
     {
@@ -124,10 +127,10 @@
     },
     {
       "file": "assets/cpu-lab-demo.gif",
-      "sha256": "8f89545ed79cb69fe028da012707fc5c42accd40a1b46e107e94654d25ad469f",
-      "capturedFrames": 20,
-      "encodedFrames": 20,
-      "durationSeconds": 20,
+      "sha256": "ca6bf15dc7c0ca8405a0689b34caf5a19798b84d0cc503c66a4fb9f9bb933852",
+      "capturedFrames": 24,
+      "encodedFrames": 24,
+      "durationSeconds": 24,
       "actions": [
         "Loaded the literal stack/CALL/RET preset.",
         "Actual browser Step control 1; registers, flags and stack are model state.",
@@ -148,6 +151,10 @@
         "Explicit Load hex replaces the binary draft with the same literal bytes and resets the model.",
         "The loaded four-byte program becomes an exact bounded URL fragment; comments, drafts and machine history are omitted.",
         "Opened the shared literal bytes in a paused deterministic state; the link does not execute the program.",
+        "Modeled MOV AL,AH reads the original high byte and preserves AH, changing ABCD to ABAB.",
+        "Modeled MOV AH,BL copies byte34 while preserving AL=AB.",
+        "Recorded-state rewind restores the exact byte-alias result ABAB without executing instructions.",
+        "Recorded replay restores 34AB and the instruction pointer; wider/prefixed execution remains unavailable.",
         "Arithmetic preset FFFF+1 wraps AX to zero and sets CF/ZF in the teaching model."
       ],
       "sourceFrameSha256": [
@@ -165,11 +172,15 @@
         "2efb5ff6eaec7f08bf8c1134b1f5a85495f80e51e84baa11222a6cd3cc56b28b",
         "7bcefd9e48ef131fc54a35594a6ec284d9b909705ad442ea26cfc3ba12f9748c",
         "650122f5788e33f09a1b88270b335d0c6737dfc2e94c61f01c187348090dc1e2",
-        "43d83ad74b5e34b24d4c0dec368a85bb6fdf8c2dd3e406b0ced2e607790da320",
+        "0a32f651253b6e5d2482cd0f8554930a33ba2d4ca423f79b3f35ce9ab9e21d65",
         "67d53c6c71582ae73822c42e0d5ae2a8a6023b27cf22de037af8c0b3e4fa93c4",
         "9c21a03c93c1e08e66e17454d4d700fff2189752ae86c1b5dc4bd5d15c1eff7c",
-        "a155588f73e1ea661c05e31ea6b3de778f53b942cfb9fdbefb623de7b3257007",
+        "ef79652074374d5bf83dcc9b16c07217f5242fab9f9d4403011c3642709dae04",
         "0bdbffd65ade2c80e9a60c04f019f0e3e9f2b67dd4ef8af9f43a5e96faada4b8",
+        "588be8ff36bd291e7285b13386e80033cf4df29325a38ecf4ed2992cfe509cfa",
+        "ad3996f7963cccf7144491fea5b81f93c5cbfa647f6941c5d22e98484448c928",
+        "769e2f8212a1819336a48ebb19d1f8eb741fd7a7675435f308a4d4d3c188fef4",
+        "07dc98922d0ca21183ae20ab21301e24291a56c3627c450e34146aed27512d8c",
         "5a47dbc81ca66aab5fa56891bf5e505fc6b485b51cdf592f62c1497071c98af4"
       ]
     },

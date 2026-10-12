@@ -120,10 +120,15 @@ The v0.2 milestone is published and verified. The following research remains ope
 
 ## Evolution session
 
+- [x] Execute unprefixed register-direct 8-/16-bit MOV in the model: 2,048
+  independent byte-layout cases, aliased bytes, preserved nullable flags and
+  exact undo/replay. A 48-byte native fixture verifies seven copies, actual
+  sampled FLAGS preservation, restored stack and literal code identity in QEMU.
+
 - [x] Inspect register-direct MOV 88/89/8A/8B with direction/width bit roles,
   ModR/M selectors, 66/REX precedence and high-byte/REX byte-register names.
   9,728 register/context/prefix combinations and 18 independent NDISASM goldens
-  pass. Memory forms and execution of these new forms remain outside scope.
+  pass. Memory and wider/prefixed execution forms remain outside scope.
 
 - [x] Share 1–512 loaded CPU Lab bytes through strict versioned URL fragments.
   Links open paused and omit drafts/comments/history; malformed links keep state.

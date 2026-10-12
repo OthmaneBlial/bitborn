@@ -1,0 +1,24 @@
+# Curated native 16-bit register MOV probe. Every instruction byte is literal.
+11111010 # instruction | CLI | Keep maskable interrupts disabled.
+11101010 00000110 01111100 00000000 00000000 # instruction | JMP 0000:7C06 | Normalize CS.
+00110001 11000000 # instruction | XOR AX,AX | Prepare zero segment values.
+10001110 11011000 # instruction | MOV DS,AX | Normalize the data segment.
+10001110 11010000 # instruction | MOV SS,AX | Normalize the stack segment.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Initialize the stack below the code.
+10111000 11001101 10101011 # instruction | MOV AX,ABCD | Distinguish high and low bytes.
+10111011 00110100 00010010 # instruction | MOV BX,1234 | Supply a second word and byte source.
+10111001 01111000 01010110 # instruction | MOV CX,5678 | Supply the BP word source.
+10111010 10111100 10011010 # instruction | MOV DX,9ABC | Supply high-byte DH.
+11111001 # instruction | STC | Set carry before the copy instructions.
+11111101 # instruction | STD | Set direction before the copy instructions.
+10011100 # instruction | PUSHF | Sample real CPU flags without generating a model value.
+01011111 # instruction | POP DI | Keep the pre-copy flags in DI and restore SP.
+10001001 11011110 # instruction | MOV SI,BX | Copy 1234 using opcode direction zero.
+10001011 11101001 # instruction | MOV BP,CX | Copy 5678 using opcode direction one.
+10001000 11100000 # instruction | MOV AL,AH | Same-word alias: AX becomes ABAB.
+10001010 11100011 # instruction | MOV AH,BL | Cross-word byte copy: AX becomes 34AB.
+10001000 11110001 # instruction | MOV CL,DH | CX becomes 569A, preserving CH.
+10001010 11110000 # instruction | MOV DH,AL | DX becomes ABBC, preserving DL.
+10001000 11011111 # instruction | MOV BH,BL | Same-word alias: BX becomes 3434.
+11110100 # instruction | HLT | Halt at 7C2D; next IP is 7C2E.
+11101011 11111101 # instruction | JMP -3 | Return to HLT if execution resumes.

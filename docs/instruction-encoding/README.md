@@ -55,8 +55,10 @@ Byte registers expose a separate rule: `88 E0` is MOV AL,AH without REX; adding
 the literal `40` prefix selects SPL in 64-bit mode. Any REX prefix remaps selectors
 4–7 from AH/CH/DH/BH to SPL/BPL/SIL/DIL. REX.W does not widen a byte MOV, and the
 66 prefix has no operand-size effect on it. MOV leaves arithmetic flags unchanged;
-a 32-bit destination in 64-bit mode clears its upper 32 bits. These additions are
-inspection-only; the existing bounded simulator does not execute 88/89/8A/8B.
+a 32-bit destination in 64-bit mode clears its upper 32 bits. The bounded simulator
+executes only the unprefixed byte/word register forms in 16-bit context. Wider or
+prefixed forms remain inspection-only; memory addressing is rejected. See the
+[independent model and native register-copy evidence](../architecture/register-mov.md).
 
 ## Signed relative branches
 

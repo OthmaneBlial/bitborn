@@ -2,10 +2,15 @@
 
 ## Unreleased
 
+- Execute unprefixed register-direct byte/word MOV in the bounded model, preserving
+  the other byte of aliased registers and every modeled flag. Add 2,048 independent
+  byte-layout oracle cases, exact history checks and a native seven-copy/FLAGS probe.
+  Memory addressing and wider/prefixed execution remain unsupported.
+
 - Inspect register-direct MOV direction/width and ModR/M register fields in
   explicit 16/32/64 contexts, including independent REX.R/B extensions, AH versus
   SPL and byte forms that ignore 66/REX.W operand sizing. Add four literal fixtures
-  and 18 independent disassembly goldens; no memory-form or execution support.
+  and 18 independent disassembly goldens; no memory-form or wider execution support.
 
 - Share exact loaded CPU Lab bytes through bounded, versioned URL fragments.
   Shared programs open paused in the model; malformed links preserve state.

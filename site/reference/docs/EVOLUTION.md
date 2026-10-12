@@ -80,7 +80,19 @@ and 18 independent NDISASM goldens pass. Native payloads remain unchanged.
 Chromium, Firefox 157 and WebKit 27.2 verify direction-bit edits, REX register
 extensions, high-byte names, read-only state and 320px layout. The encoding demo
 has 12 actual frames; source/frame/GIF hashes match current files. Local full
-Python/site checks pass; publication of this MOV milestone remains to be verified.
+Python/site checks pass. MOV inspection commit `3c10777` passed CI `38309158481`
+and deployment `38309496687`; public encoding module, presets and playground
+match exact source bytes.
+Unprefixed register-direct byte/word MOV now executes in the model. 2,048
+independent byte-layout cases, full-RAM journal checks and undo/replay pass; a
+48-byte literal QEMU fixture verifies seven word/byte copies, actual FLAGS
+preservation and guest code identity. Wider/prefixed and memory forms remain
+outside execution scope. Native release payloads are unchanged.
+All three browsers also verify modeled copies and preserved displayed flags;
+the CPU Lab rewinds/replays an aliased-byte copy. The full Python suite now has
+56 tests (one expected macOS native-Linux skip), and all site/module checks pass.
+Encoding/CPU recordings contain 13/24 actual frames, with current source/GIF
+hashes including the capture script. Publication of the execution milestone is pending.
 Current local validation: 55 Python tests, one expected native-Linux skip on
 macOS, plus all site/module checks. Protected-fault commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide

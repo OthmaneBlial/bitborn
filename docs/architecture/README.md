@@ -112,6 +112,9 @@ The browser simulator is a bounded educational subset. It models only the
 documented instruction forms, simplified flags/BIOS/COM1, and bounded memory.
 Unknown or unsupported instructions stop with a diagnostic; it is not a complete
 x86 emulator, a security sandbox or evidence of native execution.
+Unprefixed register-direct MOV byte/word copies have independent byte-layout,
+history and [native sampled-flags evidence](register-mov.md); wider/prefixed and
+memory forms remain outside model execution.
 
 ## Technical references
 

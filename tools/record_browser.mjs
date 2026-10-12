@@ -81,10 +81,13 @@ try {
   await page.locator('#decode-mode').selectOption('16');
   assert.equal(await page.locator('#decoded-instruction').textContent(),'INC AX');
   await capture('Changed context to 16-bit: the same initial 40 byte is INC AX rather than a REX prefix.');
+  await page.locator('#instruction-select').selectOption('mov');await page.locator('#execute-instruction').click();
   await page.locator('#instruction-select').selectOption('movRegister');assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV AX, BX');
-  assert.equal(await page.locator('#execute-instruction').isDisabled(),true);await capture('Inspected register-direct MOV AX,BX and ModR/M source/destination roles; this form is inspection-only.');
+  assert.equal(await page.locator('#execute-instruction').isEnabled(),true);await capture('Inspected register-direct MOV AX,BX and ModR/M roles; unprefixed byte/word forms are available in the bounded 16-bit model.');
   await page.locator('[data-bit="0-1"]').click();assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV BX, AX');
   await capture('Flipped only opcode direction bit1: source/destination names and ModR/M role labels reverse.');
+  await page.locator('#execute-instruction').click();assert.equal(await page.locator('#play-registers .register').filter({hasText:/^BX/}).locator('strong').textContent(),'002A');
+  await capture('Simulated MOV BX,AX: the previously loaded 42 is copied into BX; this is model state, not native CPU execution.');
   await page.locator('#decode-mode').selectOption('64');await page.locator('#instruction-select').selectOption('movByte');
   assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV AL, AH');await capture('Without REX, register selector100 names the high byte AH.');
   await page.locator('#instruction-select').selectOption('movByteRex');assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV AL, SPL');
@@ -139,6 +142,12 @@ try {
   await page.locator('#program-link').scrollIntoViewIfNeeded();await capture('The loaded four-byte program becomes an exact bounded URL fragment; comments, drafts and machine history are omitted.');
   await page.goto(sharedProgram);await page.waitForFunction(()=>document.getElementById('lesson').textContent.startsWith('Shared literal'));
   assert.equal(await page.locator('#step-count').textContent(),'0000');await page.locator('.control-panel').scrollIntoViewIfNeeded();await capture('Opened the shared literal bytes in a paused deterministic state; the link does not execute the program.');
+  await page.locator('#binary-editor').fill('10111000 11001101 10101011\n10111011 00110100 00010010\n10001000 11100000\n10001010 11100011\n11110100');await page.locator('#load-program').click();
+  for(let index=0;index<3;index++)await page.locator('#step').click();
+  assert.equal(await page.locator('[data-register="AX"] .register-value').textContent(),'ABAB');await page.locator('#registers').scrollIntoViewIfNeeded();await capture('Modeled MOV AL,AH reads the original high byte and preserves AH, changing ABCD to ABAB.');
+  await page.locator('#step').click();assert.equal(await page.locator('[data-register="AX"] .register-value').textContent(),'34AB');await capture('Modeled MOV AH,BL copies byte34 while preserving AL=AB.');
+  await page.locator('#back').click();assert.equal(await page.locator('[data-register="AX"] .register-value').textContent(),'ABAB');await capture('Recorded-state rewind restores the exact byte-alias result ABAB without executing instructions.');
+  await page.locator('#forward').click();assert.equal(await page.locator('[data-register="AX"] .register-value').textContent(),'34AB');await capture('Recorded replay restores 34AB and the instruction pointer; wider/prefixed execution remains unavailable.');
   await page.locator('#preset').selectOption('flags');
   await page.locator('#step').click();await page.locator('#step').click();
   await page.locator('#flags').scrollIntoViewIfNeeded();await capture('Arithmetic preset FFFF+1 wraps AX to zero and sets CF/ZF in the teaching model.');await encode();
@@ -155,7 +164,7 @@ try {
   await capture('Held the solved challenge result and local progress count.');await encode();
   assert.deepEqual(errors,[]);
   const hashes={};
-  for(const source of ['boot/boot.bits','site/elf.mjs','site/elf/index.html','site/elf/app.mjs','site/elf/elf.css','site/elf/catalog.json','site/downloads/exit-code-small.elf','site/downloads/exit-code.elf','site/styles.css','site/learn/routes.css','site/app.js','site/encoding.mjs','site/encoding-presets.mjs','site/playground/index.html','docs/instruction-encoding/fixtures/mov32.bits','docs/instruction-encoding/fixtures/mov64.bits','docs/instruction-encoding/fixtures/mov-register.bits','docs/instruction-encoding/fixtures/mov-register64.bits','docs/instruction-encoding/fixtures/mov-byte.bits','docs/instruction-encoding/fixtures/mov-byte-rex.bits','site/simulator.mjs','site/binary.mjs','site/history.mjs','site/program-link.mjs','site/boot-builder/index.html','site/boot-builder/builder.css','site/boot-builder/model.mjs','site/boot-builder/app.mjs','site/cpu-lab/index.html','site/cpu-lab/lab.css','site/cpu-lab/lab.mjs','site/cpu-lab/presets.mjs','site/challenges/index.html','site/challenges/challenges.css','site/challenges/challenges.mjs','site/challenges/catalog.json','challenges/catalog.json']){
+  for(const source of ['tools/record_browser.mjs','boot/boot.bits','site/elf.mjs','site/elf/index.html','site/elf/app.mjs','site/elf/elf.css','site/elf/catalog.json','site/downloads/exit-code-small.elf','site/downloads/exit-code.elf','site/styles.css','site/learn/routes.css','site/app.js','site/encoding.mjs','site/encoding-presets.mjs','site/playground/index.html','docs/instruction-encoding/fixtures/mov32.bits','docs/instruction-encoding/fixtures/mov64.bits','docs/instruction-encoding/fixtures/mov-register.bits','docs/instruction-encoding/fixtures/mov-register64.bits','docs/instruction-encoding/fixtures/mov-byte.bits','docs/instruction-encoding/fixtures/mov-byte-rex.bits','site/simulator.mjs','site/binary.mjs','site/history.mjs','site/program-link.mjs','site/boot-builder/index.html','site/boot-builder/builder.css','site/boot-builder/model.mjs','site/boot-builder/app.mjs','site/cpu-lab/index.html','site/cpu-lab/lab.css','site/cpu-lab/lab.mjs','site/cpu-lab/presets.mjs','site/challenges/index.html','site/challenges/challenges.css','site/challenges/challenges.mjs','site/challenges/catalog.json','challenges/catalog.json']){
     hashes[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');
   }
   const metadata={kind:'Actual browser screenshots of instruction inspection and bounded educational simulation; not native CPU or QEMU footage',browser:browser.version(),viewport:{width:1280,height:960},presentationFps:1,alterations:'960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.',sourceSha256:hashes,captures,reproduce:'make site-test && npm ci && npx playwright install chromium && npm run record:browser',requires:'ffmpeg and ffprobe; PLAYWRIGHT_CHROMIUM_EXECUTABLE may select an installed Chrome'};

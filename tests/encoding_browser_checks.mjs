@@ -29,7 +29,7 @@ export async function checkEncoding(page) {
     await page.locator('#instruction-select').selectOption('movRegister');
     await page.locator('#decode-mode').selectOption('16');
     assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV AX, BX');
-    assert.equal(await page.locator('#execute-instruction').isDisabled(),true,'new register-direct inspection adds no execution support');
+    assert.equal(await page.locator('#execute-instruction').isEnabled(),true,'unprefixed 16-bit register forms are modeled');
     assert.match(await page.locator('[data-bit="0-1"]').getAttribute('aria-label'),/Direction/);
     assert.match(await page.locator('[data-bit="1-0"]').getAttribute('aria-label'),/Destination register/);
     await page.locator('[data-bit="0-1"]').press('Space');
@@ -54,4 +54,15 @@ export async function checkEncoding(page) {
   await page.locator('#instruction-select').selectOption('mov64');await page.locator('#decode-mode').selectOption('16');await page.locator('#reset-bits').click();
   assert.equal(await page.locator('#decoded-instruction').textContent(),'DEC CX');
   await page.locator('#instruction-select').selectOption('mov');
+  await page.locator('#execute-instruction').click();
+  await page.locator('#instruction-select').selectOption('movRegister');await page.locator('[data-bit="0-1"]').click();
+  const flags=await page.locator('#play-registers .register').filter({hasText:/^(ZF|CF)/}).allTextContents();
+  await page.locator('#execute-instruction').click();
+  assert.equal(await page.locator('#play-registers .register').filter({hasText:/^BX/}).locator('strong').textContent(),'002A');
+  assert.deepEqual(await page.locator('#play-registers .register').filter({hasText:/^(ZF|CF)/}).allTextContents(),flags);
+  await page.locator('#instruction-select').selectOption('movByte');
+  assert.equal(await page.locator('#execute-instruction').isEnabled(),true);
+  await page.locator('#execute-instruction').click();
+  assert.equal(await page.locator('#play-registers .register').filter({hasText:/^AX/}).locator('strong').textContent(),'0000','AH copied into AL while preserving AH');
+  await page.locator('#reset-state').click();await page.locator('#instruction-select').selectOption('mov');
 }

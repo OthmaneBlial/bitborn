@@ -25,6 +25,7 @@ site-test: site
 	node tests/test_memory_changes.mjs
 	node tests/test_history.mjs
 	node tests/test_program_link.mjs
+	node tests/test_register_mov.mjs
 	node tests/test_builder.mjs
 	node tests/test_cpu_lab.mjs
 	node tests/test_challenges.mjs
