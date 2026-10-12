@@ -146,6 +146,10 @@
       "progress": "\u2705 200 literal bytes: actual UD2/#UD gate, saved EIP adjustment, IRETD and CPU-managed descriptor accessed bits checked in QEMU; one controlled fault only"
     },
     {
+      "milestone": "Native selector error-code research",
+      "progress": "\u2705 256 literal bytes: #GP selector code, extra frame doubleword, preserved DS and correct IRETD stack cleanup checked in QEMU; one invalid load only"
+    },
+    {
       "milestone": "v0.3.0 release and provenance",
       "progress": "\u2705 Exact-commit CI passed; all 14 public files re-downloaded anonymously, bytes/checksums and source/artifact provenance verified"
     },

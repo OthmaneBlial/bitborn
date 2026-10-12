@@ -1,0 +1,43 @@
+# Literal protected-mode selector-fault probe with an error-code frame. Entry 0000:7C00.
+11111010 # instruction | CLI | Keep maskable external interrupts disabled.
+00110001 11000000 # instruction | XOR AX,AX | Prepare zero real-mode segments.
+10001110 11011000 # instruction | MOV DS,AX | Address descriptor pointers through DS zero.
+10001110 11010000 # instruction | MOV SS,AX | Normalize the initial stack segment.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Keep the initial stack below the image.
+00001111 00000001 00010110 10000000 01111100 # instruction | LGDT [7C80] | Load the six-byte pointer to the literal GDT at 7C68.
+00001111 00100000 11000000 # instruction | MOV EAX,CR0 | Read the current control register.
+01100110 10000011 11001000 00000001 # instruction | OR EAX,1 | Set CR0.PE with 32-bit operand size.
+00001111 00100010 11000000 # instruction | MOV CR0,EAX | Enter protected mode with paging unchanged.
+01100110 11101010 00101000 01111100 00000000 00000000 00001000 00000000 # instruction | JMP 0008:00007C28 | Load the flat 32-bit code selector.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | Entry alignment | Seven skipped bytes place the protected entry at offset 40.
+10111000 00010000 00000000 00000000 00000000 # instruction | MOV EAX,10 | Select the flat writable data descriptor.
+10001110 11011000 # instruction | MOV DS,AX | Load flat data segment 0010.
+10001110 11010000 # instruction | MOV SS,AX | Load flat 32-bit stack segment 0010.
+10111100 00000000 10010000 00000000 00000000 # instruction | MOV ESP,9000 | Place the exception frame below result memory.
+00001111 00000001 00011101 10000110 01111100 00000000 00000000 # instruction | LIDT [7C86] | Load fourteen literal gates at physical 7C90.
+10111000 00011000 00000000 00000000 00000000 # instruction | MOV EAX,18 | Selector 0018 is beyond the three-entry GDT.
+10001110 11011000 # instruction | MOV DS,AX invalid | Raise general protection at 7C42 without replacing the valid DS descriptor.
+10001011 00001101 00000000 10010000 00000000 00000000 # instruction | MOV ECX,[9000] | Read the original fault EIP recorded by the returned handler.
+11110100 # instruction | HLT | Halt at 7C4A; next EIP is 7C4B.
+11101011 11111101 # instruction | JMP -3 | Return to HLT if execution resumes.
+01011010 # instruction | POP EDX | Remove the CPU-pushed error code before reading the saved EIP.
+10001001 00010101 00000100 10010000 00000000 00000000 # instruction | MOV [9004],EDX | Record selector error code 0018.
+10001011 00000100 00100100 # instruction | MOV EAX,[ESP] | Read saved EIP after removing the error-code doubleword.
+10100011 00000000 10010000 00000000 00000000 # instruction | MOV [9000],EAX | Record the original fault address 7C42.
+10000011 00000100 00100100 00000010 # instruction | ADD dword [ESP],2 | Skip this known two-byte failed MOV DS by changing only the saved EIP.
+11001111 # instruction | IRETD | Restore EIP, CS and EFLAGS from the actual 32-bit exception frame.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | GDT alignment | Put the GDT at offset 104, physical 7C68.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | GDT null | Selector zero is unusable.
+11111111 11111111 00000000 00000000 00000000 10011010 11001111 00000000 # data | GDT code | Flat base, inclusive FFFFFFFF limit, present ring-zero 32-bit code.
+11111111 11111111 00000000 00000000 00000000 10010010 11001111 00000000 # data | GDT data | Flat writable ring-zero data with a 32-bit stack.
+00010111 00000000 01101000 01111100 00000000 00000000 # data | GDTR | Limit 23 and base 00007C68.
+01101111 00000000 10010000 01111100 00000000 00000000 # data | IDTR | Limit 111 and base 00007C90.
+00000000 00000000 00000000 00000000 # padding | IDT alignment | Put the first gate at offset 144.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 0 and 1 | Null gates; divide error and debugging are outside this probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 2 and 3 | Null gates; NMI and breakpoint handling are outside this probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 4 and 5 | Null gates outside the controlled selector fault.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 6 and 7 | Null gates outside this selector-fault probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 8 and 9 | Null gates outside this selector-fault probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 10 and 11 | Null gates outside this selector-fault probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 12 | Null stack-fault gate outside this probe.
+01001101 01111100 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT vector 13 | Present DPL0 32-bit interrupt gate to selector 0008, offset 00007C4D.

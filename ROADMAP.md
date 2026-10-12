@@ -120,6 +120,10 @@ The v0.2 milestone is published and verified. The following research remains ope
 
 ## Evolution session
 
+- [x] Verify one protected-mode selector #GP with its CPU-pushed error code:
+  exact four-doubleword frame, removal of the code before IRETD, preserved DS,
+  saved-EIP adjustment and restored stack. General fault dispatch remains open.
+
 - [x] Verify one controlled protected-mode UD2/#UD in a separate 200-byte literal
   research fixture: exact vector-six gate/frame, original EIP, saved-EIP adjustment,
   IRETD, restored stack, flat selectors and descriptor accessed-bit behavior.

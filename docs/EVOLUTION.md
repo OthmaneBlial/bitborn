@@ -58,8 +58,10 @@ the real saved frame and repaired-instruction retry with divisors 1/2, plus repe
 faults without repair (`422e21b`, 51 Python tests, one expected macOS skip).
 A separate 200-byte protected-mode UD2 fixture now proves vector-six fault entry,
 original/adjusted saved EIP, IRETD, stack restoration and CPU-managed descriptor
-accessed bits. Next: error-code exception frames and bounded general dispatch;
-one deliberately skipped UD2 is not a general fault handler.
+accessed bits (`85ccc5d`, 53 Python tests, one expected macOS skip). A separate
+256-byte selector #GP fixture verifies the CPU-pushed error code, unchanged DS,
+four-doubleword frame and error-code removal before IRETD. Next: bounded general
+dispatch; skipping two specific known instructions is not general recovery.
 Risks: inspection supports a documented subset; execution remains the bounded
 16-bit model. Native-speaker review, hardware, paging and general interrupts
 require separate evidence. Detailed technical guides remain English.
@@ -127,7 +129,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 53 | 3 | Real VGA bitmap experiment with manually authored pixel/instruction bytes | H | M | BIOS target | High | Open |
 | 54 | 3 | Tiny text-mode game with deterministic input and genuine QEMU recording | H | M | Shell keyboard helpers | High | Open |
 | 55 | 3 | Bounded native allocator with memory-map, ownership and overflow evidence | H | M | Protected-mode target | High | Open |
-| 56 | 3 | Protected-mode exception handlers with controlled fault injection | H | M | IDT target | High | Partial: one native UD2/#UD fixture; general dispatch/error-code frames open |
+| 56 | 3 | Protected-mode exception handlers with controlled fault injection | H | M | IDT target | High | Partial: native #UD and selector #GP/error-code fixtures; general dispatch open |
 | 57 | 3 | Timer IRQ experiment with explicit PIC setup and deterministic QEMU assertions | H | M | 56 | High | Open |
 | 58 | 3 | Paging experiment with inspected page tables and deliberate page-fault evidence | H | L | 55,56 | High | Open |
 | 59 | 0 | QEMU runner resource/error-path checks and bounded process cleanup | H | H | Existing Guest harness | Medium | Open |

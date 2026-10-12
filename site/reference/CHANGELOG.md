@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Add a curated 256-byte protected-mode invalid-selector #GP probe verifying the
+  CPU-pushed error-code doubleword, preserved DS and correct stack cleanup before
+  IRETD. This handles one known invalid load, not general exception recovery.
+
 - Add a curated 200-byte protected-mode UD2/#UD research probe with native gate,
   saved-frame, known-length EIP adjustment and IRETD evidence. Tests verify the
   CPU-set descriptor accessed bit while preserving all literal instruction bytes.
