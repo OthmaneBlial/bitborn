@@ -78,6 +78,10 @@
       "progress": "\u2705 Source aliases/collisions/corrupt derived files rejected; 16-bit IP wrap tested"
     },
     {
+      "milestone": "v0.2.0 release",
+      "progress": "\u2705 Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified"
+    },
+    {
       "milestone": "Paging, exception/hardware interrupt handling and physical hardware",
       "progress": "Future research; no working claim"
     }

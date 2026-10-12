@@ -99,9 +99,22 @@ not release requirements or advertised capabilities.
   halts. Three independent QEMU tests and genuine native recordings pass locally.
 - [x] Reject source aliases, output collisions and corrupted packaged artifacts;
   fix logical-IP wrap and its CPU Lab preview. Regression tests cover each bug.
-- [ ] Verify the native additions in exact-commit Linux CI and public downloads.
-- [ ] Verify all new routes/assets/downloads live after automatic Pages deployment.
-- [ ] Publish a meaningful v0.2 release and independently verify its downloads.
+- [x] Native additions passed [exact-commit Linux CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38223386652)
+  and [v0.2.0 tag CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38223865244):
+  all 37 Python tests, six ELFs, QEMU checks, three engines and deterministic builds.
+- [x] [Native milestone Pages deployment](https://github.com/OthmaneBlial/bitborn/actions/runs/38223692480)
+  passed. All 135 live runtime files match local bytes, including 86 reviewed
+  downloads. Detailed Chrome interactions were repeated against the live site.
+- [x] Synchronize the central Pages mirror at `7f25d05`; its
+  [deployment](https://github.com/OthmaneBlial/OthmaneBlial.github.io/actions/runs/38223873350)
+  passed, and all 180 changed paths are contained in `bitborn/`.
+- [x] Publish [v0.2.0](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0)
+  at immutable commit `4706efeeab9133f53b2b9e80089f144d9983ff89`.
+  All 13 authenticated and anonymous public re-downloads match the prepared files;
+  all 12 checksummed files pass. The image archive contains 86 reviewed artifacts
+  plus its README, and the source archive equals the exact release commit.
+
+The v0.2 milestone is published and verified. The following research remains open.
 
 ## Further research
 

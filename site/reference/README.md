@@ -74,6 +74,7 @@ for exact evidence and remaining gates.
 | Native shell and separately authored disk app | ✅ Nine commands, real RAM/register snapshots, checked disk load and repeated return in QEMU |
 | 32-bit protected mode and software interrupt | ✅ GDT, flat memory, IDT gate and IRETD verified in QEMU; native captures recorded |
 | Packaging and boundary correctness | ✅ Source aliases/collisions/corrupt derived files rejected; 16-bit IP wrap tested |
+| [v0.2.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0) | ✅ Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified |
 | Paging, exception/hardware interrupt handling and physical hardware | Future research; no working claim |
 
 ## From text bits to CPU instructions
@@ -208,7 +209,8 @@ python3 -m http.server 8000 --directory site
 [Beginner tutorial](docs/tutorials/from-bits-to-boot.md) · [Contributing](CONTRIBUTING.md) ·
 [Reproducible showcase](SHOWCASE.md) · [Good first contributions](GOOD_FIRST_ISSUES.md) ·
 [Changelog](CHANGELOG.md) · [Roadmap](ROADMAP.md) ·
-[v0.1.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.1.0)
+[Latest release](https://github.com/OthmaneBlial/bitborn/releases/latest) ·
+[Dated public metrics](docs/metrics.md)
 
 ## What the tests establish
 
@@ -224,6 +226,11 @@ flags, live memory fetch, breakpoints, and source-derived roadmap rendering.
 
 Hashes prove byte identity, not correctness or authorship. QEMU proves emulated
 behavior, not physical-hardware support. CI status is linked above.
+The [v0.2.0 exact-commit CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38223386652)
+and [tag CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38223865244)
+both passed all 37 Python tests, browser checks and artifact reproduction.
+All 135 live runtime files match local bytes, including all 86 curated downloads;
+the published interactions were repeated in Chrome.
 
 ## FAQ and limits
 

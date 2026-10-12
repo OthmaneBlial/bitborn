@@ -48,3 +48,28 @@ staging prevents older archives from entering new checksum lists.
 All eight patch assets were downloaded from GitHub and match the prepared files;
 SHA-256 checks passed. All five bootable images match public v0.1.0 byte-for-byte.
 Original v0.1.0 tags/assets were preserved. This patch changes host tooling only.
+
+## v0.2.0 evolution verified
+
+Immutable release commit `4706efeeab9133f53b2b9e80089f144d9983ff89` passed
+[37-test Linux CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38223386652)
+and [tag CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38223865244).
+Evidence now covers 55 reviewed literal targets, all six native Linux ELFs,
+all twenty challenge solutions in QEMU, original and expanded monitor behavior,
+protected-mode success/failure paths, three browser engines, exact browser
+downloads and source-to-packaged-artifact reproduction.
+
+The builder's one-bit-edited image is checked against the canonical bytes before
+QEMU execution. In-place source aliases, artifact collisions, corrupt wrappers,
+source limits and logical-IP wrap each have regression checks. Native recordings
+and browser recordings are separate and carry hashes and capture provenance.
+
+[v0.2.0](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0) has thirteen
+public attachments; authenticated and anonymous re-downloads match prepared
+bytes. Every listed SHA-256 passes. All 135 live runtime pages/assets/downloads
+match local output, and Chrome interaction checks were repeated live. The central
+Pages mirror was checked to change only `bitborn/`.
+
+These checks do not establish physical-hardware support, a complete BIOS/CPU
+emulator, paging, general exceptions or hardware IRQ delivery. Progress and
+research boundaries remain in [ROADMAP.md](../ROADMAP.md).
