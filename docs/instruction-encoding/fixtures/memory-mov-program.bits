@@ -1,0 +1,29 @@
+# Curated shared model/native memory exercise; every instruction is literal.
+11111010 # instruction | CLI | Keep maskable interrupts disabled.
+11101010 00000110 01111100 00000000 00000000 # instruction | JMP 0000:7C06 | Normalize CS identically in the model and native guest.
+00110001 11000000 # instruction | XOR AX,AX | Start with zero AX and defined logic flags except AF.
+10111000 00000000 00010000 # instruction | MOV AX,1000 | Prepare DS base.
+10001110 11011000 # instruction | MOV DS,AX | DS base becomes physical 10000.
+10111000 00000000 00100000 # instruction | MOV AX,2000 | Prepare the other segment base.
+10001110 11000000 # instruction | MOV ES,AX | ES selects the initialization destination at physical 20000.
+10001110 11010000 # instruction | MOV SS,AX | BP-based memory operands use SS base 20000.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Initialize the stack offset.
+11111100 # instruction | CLD | Initialize the ES word using forward STOSW.
+10111000 00010001 00010001 # instruction | MOV AX,1111 | Prepare the DS word.
+10100011 00100000 00000000 # instruction | MOV [DS:0020],AX | Existing absolute-offset store initializes physical 10020.
+10111000 00110011 00100010 # instruction | MOV AX,2233 | Distinct bytes reveal high/low alias mistakes.
+10111111 00100000 00000000 # instruction | MOV DI,0020 | Select the ES initialization offset.
+10101011 # instruction | STOSW | Initialize physical 20020 with 33 22 and advance DI to 0022.
+10111011 00100000 00000000 # instruction | MOV BX,0020 | Prepare the DS base register.
+10111101 00100010 00000000 # instruction | MOV BP,0022 | BP minus two reaches the same offset in SS.
+00110001 11110110 # instruction | XOR SI,SI | BX+SI equals 0020.
+11111001 # instruction | STC | Set carry before memory MOV.
+11111101 # instruction | STD | Set direction after initialization; MOV is not a string operation.
+10001011 01000110 11111110 # instruction | MOV AX,[BP-2] | Read SS:0020, obtaining 2233.
+10001011 00001000 # instruction | MOV CX,[BX+SI] | Read DS:0020, obtaining 1111.
+10001011 00010110 00100000 00000000 # instruction | MOV DX,[0020] | Absolute mod00/rm110 reads DS, not BP-derived SS.
+10001001 11010110 # instruction | MOV SI,DX | Save the absolute word readback before changing DL.
+10001001 00001110 00110000 00000000 # instruction | MOV [0030],CX | Store 1111 at physical 10030.
+10001000 00100110 00110010 00000000 # instruction | MOV [0032],AH | Store high byte22 at physical 10032, preserving AX=2233.
+10001010 00010110 00110010 00000000 # instruction | MOV DL,[0032] | Load byte22 while preserving DH=11.
+11110100 # instruction | HLT | Halt after the shared literal exercise; no arbitrary imported program runs natively.

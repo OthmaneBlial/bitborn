@@ -36,6 +36,7 @@ macOS cannot natively run the Linux ELF examples; CI runs their native checks.
 | Shared browser CPU and history | `site/simulator.mjs`, `site/history.mjs` | `node tests/test_cpu.mjs` and `node tests/test_history.mjs` |
 | Register-copy execution | `site/simulator.mjs`, `tests/fixtures/register-mov.bits` | `node tests/test_register_mov.mjs` and `python3 -m unittest tests.test_register_mov` |
 | Mode/bit/address inspection | `site/encoding.mjs`, `docs/instruction-encoding/fixtures/` | `node tests/test_encoding.mjs` and `node tests/test_memory_encoding.mjs` |
+| Shared memory addressing/execution | `site/address16.mjs`, `site/simulator.mjs` | `node tests/test_memory_mov.mjs` and `python3 -m unittest tests.test_memory_parity` |
 | Loaded-program links | `site/program-link.mjs`, `site/cpu-lab/lab.mjs` | `node tests/test_program_link.mjs` and `node tests/browser_cpu_lab.mjs` |
 | ELF anatomy | `site/elf.mjs`, `site/elf/` | `node tests/test_elf.mjs` and `node tests/browser_elf.mjs` |
 | Parser syntax and diagnostics | `tools/bitborn.py`, `site/binary.mjs` | `python3 -m unittest tests.test_parser_properties` |

@@ -67,11 +67,14 @@ labels reverse. Choose **40 88 E0 / REX byte names** in 64-bit context to inspec
 MOV AL,SPL; without REX, the **88 E0** fixture selects AH instead. REX.W does not
 widen a byte MOV. Unprefixed byte/word forms run in the 16-bit model: first execute
 MOV AX,42, then simulate **8B D8** to copy AX to BX without changing flags.
-Wider/prefixed execution remains unavailable; memory execution is rejected.
+Wider/prefixed execution remains unavailable; unprefixed 16-bit-addressed byte/word
+memory MOV is supported in the model.
 Memory inspection is available in 16-bit context: **8B 46 FE / BP and SS** shows
 BP-2 selecting SS; flipping displacement bit7 changes it to BP+126. **8B 08**
 shows BX+SI selecting DS, and **8B 16 20 00** selects an absolute offset in DS
-rather than BP. These memory forms are read-only; the model does not execute them.
+rather than BP. Inspection itself reads no RAM; simulation uses the current model
+registers and bounded memory. The CPU Lab's **BP, DS and SS** preset initializes
+different DS/SS words, reads and stores them, and exposes exact RAM undo/replay.
 
 ## 2. Change H to h by flipping one bit
 
@@ -129,6 +132,11 @@ bounded 16-bit teaching model. The literal preset sources live in
   The downloads preserve original loaded bytes, before self-modification; comments
   and pending editor drafts are omitted. Export does not change the recorded state.
   Raw downloads have no BIOS framing or ELF headers and are not automatically bootable.
+- Select **BP, DS and SS**. After initialization, BP-2 reads `2233` from SS while
+  BX+SI reads `1111` from DS at the same effective offset. The word store at
+  physical `10030` writes `11 11`; rewind restores zeros and replay restores both
+  bytes. A later high-byte store/low-byte load produces DX=`1122`. The identical
+  canonical 71-byte program also passes curated native QEMU state/RAM/flag checks.
 - Edit a valid binary draft and inspect the equivalent hex view: binary comments
   remain intact, and the loaded machine keeps its recorded state. Edit hex byte
   tokens, then choose **Load hex & reset** to replace source notation/comments

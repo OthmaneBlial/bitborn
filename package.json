@@ -4,7 +4,7 @@
   "private": true,
   "description": "Development-only browser checks; target instructions are canonical .bits files",
   "scripts": {
-    "test": "node tests/test_site.mjs && node tests/test_cpu.mjs && node tests/test_encoding.mjs && node tests/test_memory_encoding.mjs && node tests/test_elf.mjs && node tests/test_hex.mjs && node tests/test_flags_properties.mjs && node tests/test_memory_changes.mjs && node tests/test_history.mjs && node tests/test_program_link.mjs && node tests/test_register_mov.mjs && node tests/test_builder.mjs && node tests/test_cpu_lab.mjs && node tests/test_challenges.mjs && node tests/test_routes.mjs",
+    "test": "node tests/test_site.mjs && node tests/test_cpu.mjs && node tests/test_encoding.mjs && node tests/test_memory_encoding.mjs && node tests/test_elf.mjs && node tests/test_hex.mjs && node tests/test_flags_properties.mjs && node tests/test_memory_changes.mjs && node tests/test_history.mjs && node tests/test_program_link.mjs && node tests/test_register_mov.mjs && node tests/test_memory_mov.mjs && node tests/test_builder.mjs && node tests/test_cpu_lab.mjs && node tests/test_challenges.mjs && node tests/test_routes.mjs",
     "test:browser": "node tests/browser_site.mjs && node tests/browser_builder.mjs && node tests/browser_cpu_lab.mjs && node tests/browser_challenges.mjs && node tests/browser_routes.mjs && node tests/browser_introductions.mjs && node tests/browser_elf.mjs",
     "record:browser": "node tools/record_browser.mjs",
     "benchmark": "node tools/benchmark_model.mjs",

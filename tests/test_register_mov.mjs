@@ -25,7 +25,10 @@ for(const opcode of [0x88,0x89,0x8A,0x8B])for(let reg=0;reg<8;reg++)for(let rm=0
 }
 for(const opcode of [0x88,0x89,0x8A,0x8B]) {
   assert.throws(()=>decode([opcode]),/Truncated/);
-  for(let modrm=0;modrm<0xC0;modrm++)assert.throws(()=>decode([opcode,modrm]),/Memory-form MOV/);
+  for(let modrm=0;modrm<0xC0;modrm++) {
+    const mod=modrm>>6,rm=modrm&7,count=mod===2||mod===0&&rm===6?2:mod===1?1:0;
+    assert.equal(decode([opcode,modrm,...Array(count).fill(0)]).size,2+count);
+  }
 }
 assert.throws(()=>decode([0x66,0x89,0xD8]),/outside this limited/);
 const program=Uint8Array.from([0xB8,0xCD,0xAB,0x88,0xE0,0x8A,0xE0,0x89,0xC3,0xF4]);

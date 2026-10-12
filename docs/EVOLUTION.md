@@ -114,6 +114,19 @@ program links (`8bbacf0`), register inspection (`3c10777`), register execution
 site checks pass. Next: unprefixed 16-bit memory MOV execution, sharing one
 address decoder and retaining journal/rewind/source identity guarantees; wider
 addressing and general protected-mode fault dispatch remain separate work.
+Unprefixed memory MOV execution now uses `site/address16.mjs` for the same address
+table as inspection. 2,304 independent load/store/flag/journal cases cover old-base
+aliases and byte halves; boundary tests cover A20, byte/word segment limits and
+self-modifying code rewind/replay. The expanded 70-byte native probe samples all
+FLAGS before/after memory copies with distinct high/low bytes. One canonical
+71-byte program is copied into the sixth CPU Lab preset and run identically in
+the model and native QEMU; all general/configured-segment words, RAM ranges and
+defined flags match. Undefined AF is preserved as unknown, not compared as a value.
+Local full validation passes 58 Python tests (one expected macOS native-Linux
+skip) and all model/site checks. Chromium, Firefox 157 and WebKit 27.2 verify the
+sixth preset, actual model RAM stores/loads, unchanged displayed flags and exact
+memory rewind/replay. The CPU demo now has 29 actual frames with current source,
+frame and GIF hashes. This execution milestone is not yet published/CI-verified.
 Current local validation: 55 Python tests, one expected native-Linux skip on
 macOS, plus all site/module checks. Protected-fault commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -200,7 +213,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 59 | 0 | QEMU runner resource/error-path checks and bounded process cleanup | H | H | Existing Guest harness | Medium | Open |
 | 60 | 2 | Accurate release/community draft showing actual new capabilities; no automatic posting | M | H | Verified release | Low | Complete: release published; community draft remains unposted |
 | 61 | 0 | Cancel delayed file imports/errors after a newer source choice or editor draft | H | H | CPU Lab import | Medium | Complete: race reproduced and checked in three browsers |
-| 62 | 1 | Execute unprefixed 16-bit ModR/M memory MOV using one shared address decoder and native/journal/boundary proof | H | M | 18,01,02 | High | Open |
+| 62 | 1 | Execute unprefixed 16-bit ModR/M memory MOV using one shared address decoder and native/journal/boundary proof | H | M | 18,01,02 | High | Complete: 2,304 cases and identical model/native 71-byte exercise |
 
 Large tasks are divided into useful verified milestones. Native experiments only
 become capabilities after literal source review and real QEMU checks; hardware

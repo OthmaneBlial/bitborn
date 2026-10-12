@@ -94,7 +94,8 @@ for exact evidence and remaining gates.
 | Mode-aware instruction inspection | ✅ Explicit 16/32/64 context, 66/REX fields and exact imm64; independent disassembly goldens and three-browser checks; simulation remains 16-bit |
 | Register-to-register MOV microscope | ✅ Direction/width and ModR/M selectors, 8/16/32/64 operands, REX high-byte rules; 9,728 combinations and 18 independent disassembly goldens; wider forms remain inspection-only |
 | [Modeled register copies](docs/architecture/register-mov.md) | ✅ Unprefixed 8-/16-bit forms, aliased byte preservation and history; 2,048 independent oracle cases plus seven native QEMU copy/flag checks |
-| [16-bit memory-address microscope](docs/instruction-encoding/memory-addressing.md) | ✅ ModR/M address fields, default DS/SS, signed displacements and absolute offsets; 5,888 cases and a native three-address probe; inspection-only |
+| [16-bit memory-address microscope](docs/instruction-encoding/memory-addressing.md) | ✅ ModR/M fields, default DS/SS, signed displacements and absolute offsets; 5,888 cases and a native load/store/FLAGS probe; inspection reads no RAM |
+| Memory MOV execution and shared exercise | ✅ 2,304 independent load/store cases, exact journals, boundaries and rewind; one canonical 71-byte exercise matches native registers/RAM/defined flags in QEMU |
 | CPU Lab program downloads and imports | ✅ Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks |
 | Share loaded CPU Lab programs | ✅ Versioned URL fragments preserve 1–512 loaded bytes and open paused; 1,000 seeded round trips, malformed-link preservation, history navigation and clipboard fallback verified in three browsers |
 | Binary and hexadecimal drafts | ✅ Literal byte views, explicit hex loading and comment preservation; all byte values and 1,000 seeded round trips pass; CLI .bits remains binary |

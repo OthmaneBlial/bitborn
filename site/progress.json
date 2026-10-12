@@ -131,7 +131,11 @@
     },
     {
       "milestone": "16-bit memory-address microscope",
-      "progress": "\u2705 ModR/M address fields, default DS/SS, signed displacements and absolute offsets; 5,888 cases and a native three-address probe; inspection-only"
+      "progress": "\u2705 ModR/M fields, default DS/SS, signed displacements and absolute offsets; 5,888 cases and a native load/store/FLAGS probe; inspection reads no RAM"
+    },
+    {
+      "milestone": "Memory MOV execution and shared exercise",
+      "progress": "\u2705 2,304 independent load/store cases, exact journals, boundaries and rewind; one canonical 71-byte exercise matches native registers/RAM/defined flags in QEMU"
     },
     {
       "milestone": "CPU Lab program downloads and imports",

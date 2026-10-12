@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Execute unprefixed 16-bit-addressed memory MOV byte/word loads and stores with
+  one decoder shared by inspection and execution. Preserve byte aliases/flags,
+  journal RAM writes, reject word segment-limit crossings atomically, and restore
+  self-modifying code through history. Add 2,304 oracle cases and one canonical
+  model/native exercise as the sixth CPU Lab preset; registers/RAM/defined flags
+  match QEMU. Wider/address-overridden/segment-overridden forms remain unsupported.
+
 - Inspect 16-bit MOV memory address fields with symbolic bases, default DS/SS,
   signed displacements and the absolute r/m6 exception. Add 5,888 bounded cases,
   three disassembly goldens and a native DS/SS load probe. No memory execution,

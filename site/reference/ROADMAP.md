@@ -120,11 +120,16 @@ The v0.2 milestone is published and verified. The following research remains ope
 
 ## Evolution session
 
+- [x] Execute unprefixed byte/word ModR/M memory MOV with one shared address
+  decoder. 2,304 cases cover load-base aliases, byte halves, flags and journals;
+  segment-limit errors are atomic and A20/self-modification rewind is checked.
+  A canonical 71-byte sixth CPU Lab exercise matches native QEMU state and RAM.
+
 - [x] Inspect 16-bit memory MOV address fields, BP-derived SS versus DS,
   signed disp8/disp16 and absolute r/m6. 5,888 cases and three independent
-  disassembly goldens pass; a 52-byte native probe distinguishes DS/SS loads.
-  The browser model still rejects these ModR/M memory MOV forms; existing
-  absolute-offset and string memory operations are unchanged.
+  disassembly goldens pass; the expanded 70-byte native probe distinguishes
+  DS/SS loads, word/high-byte stores and unchanged sampled FLAGS. The model now
+  executes unprefixed byte/word forms; wider/overridden addressing remains outside scope.
 
 - [x] Execute unprefixed register-direct 8-/16-bit MOV in the model: 2,048
   independent byte-layout cases, aliased bytes, preserved nullable flags and

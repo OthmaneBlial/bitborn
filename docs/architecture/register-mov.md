@@ -53,7 +53,9 @@ browser model, so the complete probe is not presented as a CPU Lab preset.
 The probe is a curated research test, not a new release download or arbitrary
 imported-code execution. QEMU disks are read-only and networking is disabled.
 
-Execution still rejects memory-form MOV and operand/address-size prefixes.
+Execution also supports unprefixed 16-bit-addressed memory MOV, with
+[shared address decoding and native parity](../instruction-encoding/memory-addressing.md).
+Operand/address-size and segment-override prefixes remain outside execution scope.
 32-/64-bit and REX interpretation remains available in the read-only inspector;
 it does not grant execution support. No fault, hardware IRQ or physical-hardware
 compatibility follows from these register-copy checks.

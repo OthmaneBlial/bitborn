@@ -7,10 +7,10 @@ import {parseBits} from '../site/binary.mjs';
 import {createState,step,decode,physicalAddress,logicalIP,flagsWord} from '../site/simulator.mjs';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
-assert.equal(presets.length,5);
+assert.equal(presets.length,6);
 const results=new Map();
 for (const preset of presets) {
-  assert.match(preset.source,/^[01\s]+$/,'preset target instructions are literal binary digits');
+  assert.match(preset.source.split('\n').map(line=>line.split('#')[0]).join('\n'),/^[01\s]+$/,'preset target instructions are literal binary digits; comments are not compiled');
   const bytes=parseBits(preset.source), state=createState(bytes); state.SP=0x7C00;
   for (let offset=0; offset<bytes.length;) offset+=decode(bytes,offset).size;
   while (!state.halted) step(bytes,state);
@@ -25,6 +25,10 @@ assert.equal(results.get('branch').AX,3); assert.equal(results.get('branch').CX,
 const memory=results.get('memory');
 assert.equal(memory.DS,0x10); assert.equal(memory.ES,0x10); assert.equal(memory.AX,0xABAB); assert.equal(memory.DI,0x24); assert.equal(memory.SI,0x20); assert.equal(memory.df,false);
 assert.deepEqual([...memory.memory.slice(0x120,0x124)],[0xCD,0xAB,0xCD,0xAB]);
+const memoryMOV=results.get('memory-mov');
+assert.equal(presets.find(preset=>preset.id==='memory-mov').source,readFileSync(resolve(root,'docs/instruction-encoding/fixtures/memory-mov-program.bits'),'utf8'),'the exercise is copied from canonical literal source');
+assert.equal(memoryMOV.AX,0x2233);assert.equal(memoryMOV.CX,0x1111);assert.equal(memoryMOV.DX,0x1122);assert.equal(memoryMOV.cf,true);assert.equal(memoryMOV.df,true);assert.equal(memoryMOV.af,null);assert.equal(memoryMOV.steps,28);
+assert.deepEqual([...memoryMOV.memory.slice(0x10030,0x10033)],[0x11,0x11,0x22]);
 assert.equal(physicalAddress(0xFFFF,0xFFFF),0x0FFEF); assert.ok(flagsWord(memory)&2); assert.equal(logicalIP(createState()),0x7C00);
 const bounded=createState(parseBits('11101011 11111110'));
 bounded.steps=4096; assert.throws(()=>step(parseBits('11101011 11111110'),bounded),/4,096-step/); assert.equal(bounded.steps,4096);
@@ -37,4 +41,4 @@ for (const [,url] of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
   assert.ok(existsSync(target),`lab link exists: ${url}`);
 }
 assert.match(html,/not a complete emulator or native CPU/); assert.match(html,/A20 is masked/); assert.match(html,/not a BIOS register snapshot/);
-console.log('CPU lab checks passed: five literal-binary programs, exact register/flag/stack/memory results, 4,096-step boundary, unique controls, links and model disclosure.');
+console.log('CPU lab checks passed: six literal-binary programs including one canonical model/native memory exercise, exact state/RAM/flags, 4,096-step boundary, unique controls, links and model disclosure.');

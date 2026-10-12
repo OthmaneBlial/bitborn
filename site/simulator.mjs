@@ -1,4 +1,5 @@
 // A bounded 286+ real-mode teaching model; it does not model CPU faults or a BIOS.
+import {decodeAddress16} from './address16.mjs';
 const registers = ['AX', 'CX', 'DX', 'BX', 'SP', 'BP', 'SI', 'DI'];
 const signed = value => value < 128 ? value : value - 256;
 export const binary = value => value.toString(2).padStart(8, '0');
@@ -37,8 +38,13 @@ export function decode(bytes, offset = 0) {
   if (opcode >= 0xB0 && opcode <= 0xB7) return instruction(2, `MOV ${['AL','CL','DL','BL','AH','CH','DH','BH'][opcode - 0xB0]}, ${byte(1)}`, 'The opcode chooses an 8-bit register; the following byte is the immediate.', 'mov8', {register: registers[(opcode - 0xB0) % 4], high: opcode >= 0xB4, value: byte(1)});
   if (opcode >= 0x88 && opcode <= 0x8B) {
     const modrm=byte(1);
-    if(modrm<0xC0)throw new Error('Memory-form MOV is outside this limited simulator. No instruction was executed.');
     const width=opcode&1?2:1,reg=(modrm>>3)&7,rm=modrm&7;
+    if(modrm<0xC0) {
+      const memory=decodeAddress16(bytes,offset+1),name=width===2?registers[reg]:['AL','CL','DL','BL','AH','CH','DH','BH'][reg],operand=`[${memory.expression}]`,load=Boolean(opcode&2);
+      const result=instruction(2+memory.displacementBytes,`MOV ${load?name+', '+operand:operand+', '+name}`,'Copy a byte or word through 16-bit addressing. BP-based forms default to SS; other forms use DS. Flags are unchanged.',load?'loadRegisterMemory':'storeRegisterMemory',
+        {width,register:registers[width===2?reg:reg%4],high:width===1&&reg>=4,memory});
+      result.fields[1]='ModR/M';return result;
+    }
     const destination=opcode&2?reg:rm,source=opcode&2?rm:reg;
     const names=width===2?registers:['AL','CL','DL','BL','AH','CH','DH','BH'];
     const result=instruction(2,`MOV ${names[destination]}, ${names[source]}`,'Copy a register word or byte without changing flags. Byte aliases preserve the other half of their word register.','movRegister',
@@ -118,6 +124,7 @@ export function step(bytes, state) {
   instruction.memoryChanges = [];
   let next;
   const low = value => { state.AX = (state.AX & 0xFF00) | (value & 255); };
+  const registerByte=(name,high,value)=>{state[name]=high?(state[name]&255)|((value&255)<<8):(state[name]&0xFF00)|(value&255);};
   const address = (segment, offset, width = 1) => {
     if (width === 2 && offset === 65535) throw new Error('A word crossing a segment limit is outside this model.');
     return physicalAddress(segment, offset);
@@ -142,16 +149,23 @@ export function step(bytes, state) {
   next = toProgramIP(logicalIP(state) + instruction.size);
   switch (instruction.operation) {
     case 'mov16': state[instruction.register] = instruction.value; break;
-    case 'mov8': {
-      const current = state[instruction.register];
-      state[instruction.register] = instruction.high ? (current & 255) | (instruction.value << 8) : (current & 0xFF00) | instruction.value; break;
-    }
+    case 'mov8': registerByte(instruction.register,instruction.high,instruction.value);break;
     case 'movRegister': {
       const source=state[instruction.source];
       if(instruction.width===2)state[instruction.register]=source;
       else {
-        const value=(source>>(instruction.sourceHigh?8:0))&255,current=state[instruction.register];
-        state[instruction.register]=instruction.high?(current&255)|(value<<8):(current&0xFF00)|value;
+        registerByte(instruction.register,instruction.high,source>>(instruction.sourceHigh?8:0));
+      }
+      break;
+    }
+    case 'loadRegisterMemory': case 'storeRegisterMemory': {
+      const memory=instruction.memory,offset=(memory.bases.reduce((sum,name)=>sum+state[name],0)+memory.displacement)&65535;
+      if(instruction.operation==='loadRegisterMemory') {
+        const value=read(state[memory.segment],offset,instruction.width);
+        if(instruction.width===2)state[instruction.register]=value;else registerByte(instruction.register,instruction.high,value);
+      }else {
+        const value=instruction.width===2?state[instruction.register]:(state[instruction.register]>>(instruction.high?8:0))&255;
+        write(state[memory.segment],offset,instruction.width,value);
       }
       break;
     }

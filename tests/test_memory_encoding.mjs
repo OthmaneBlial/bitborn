@@ -23,10 +23,11 @@ for(const prefix of [[],[0x66]])for(const opcode of [0x88,0x89,0x8A,0x8B])for(le
     assert.equal(result.fields.length,bytes.length);assert.equal(result.bitFields.length,bytes.length);assert.deepEqual(bytes,before);
     assert.ok(result.bitFields.every(bits=>bits.length===8));
     for(let end=prefix.length+2;end<bytes.length;end++)assert.throws(()=>inspectEncoding(bytes.slice(0,end),16),/Truncated MOV/);
-    assert.throws(()=>decode(bytes),/Memory-form MOV|outside this limited/,'inspection grants no memory execution');cases++;
+    if(prefix.length)assert.throws(()=>decode(bytes),/outside this limited/);
+    else assert.equal(decode(bytes).mnemonic,result.mnemonic,'model and inspector share the address decoder');cases++;
   }
 }
 assert.throws(()=>inspectEncoding([0x67,0x8B,0],16),/outside/);
 assert.throws(()=>inspectEncoding([0x36,0x8B,0x46,0],16),/outside/);
 for(const mode of [32,64])assert.throws(()=>inspectEncoding([0x8B,0],mode),/16-bit addressing context only/);
-console.log(`Memory encoding checks passed: ${cases} context/opcode/register/address/displacement cases, DS versus BP-derived SS, absolute rm6 exception, signed extrema, 66 operand versus address size, truncation and strict execution/scope rejection.`);
+console.log(`Memory encoding checks passed: ${cases} context/opcode/register/address/displacement cases, DS versus BP-derived SS, absolute rm6 exception, signed extrema, 66 operand versus address size, truncation and shared model/inspection addressing.`);

@@ -1,4 +1,5 @@
-// Target instructions are authored here as literal binary digits, never assembled.
+// Instructions remain literal binary digits; the memory exercise comes from canonical .bits source.
+import {memoryProgramSource} from './memory-program.mjs';
 export const presets = [
   {
     id: 'immediates', title: '01 / Load an immediate',
@@ -60,5 +61,10 @@ export const presets = [
 10101100
 11111100
 11110100`,
+  },
+  {
+    id:'memory-mov',title:'06 / BP, DS and SS',
+    lesson:'The same offset 0020 holds 1111 in DS and 2233 in SS. BP-2 selects SS; BX+SI and the absolute form select DS. Word/high-byte stores preserve flags and byte loads preserve the other register half.',
+    source:memoryProgramSource,
   },
 ];

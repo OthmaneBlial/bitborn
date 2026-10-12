@@ -95,14 +95,14 @@ try {
   await page.locator('[data-bit="0-3"]').click();assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV AL, SPL');
   await capture('Setting REX.W leaves the eight-bit MOV unchanged; the bit label identifies W as unused.');
   await page.locator('#instruction-select').selectOption('movMemoryBP');await page.locator('#decode-mode').selectOption('16');
-  assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV AX, [BP-2]');assert.equal(await page.locator('#execute-instruction').isDisabled(),true);
-  await capture('Inspected BP minus signed disp8: default SS is explained without reading registers or RAM. Memory execution is disabled.');
+  assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV AX, [BP-2]');assert.equal(await page.locator('#execute-instruction').isEnabled(),true);
+  await capture('Inspected BP minus signed disp8: default SS is explained without reading registers or RAM; simulation is available for the unprefixed form.');
   await page.locator('[data-bit="2-7"]').click();assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV AX, [BP+126]');
   await capture('Flipped only displacement sign bit7: FE (-2) becomes 7E (+126); BP still selects SS.');
   await page.locator('#instruction-select').selectOption('movMemoryAbsolute');assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV DX, [32]');
   await capture('The mod00/rm110 exception selects an absolute little-endian offset in default DS, not BP.');
   await page.locator('#instruction-select').selectOption('movMemoryPair');assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV CX, [BX+SI]');
-  await capture('Inspected BX+SI addressing in default DS; wider addressing and memory execution remain unavailable.');await encode();
+  await capture('Inspected BX+SI addressing in default DS; wider/overridden addressing remains unavailable.');await encode();
 
   await begin('boot-builder');
   await page.goto(new URL('boot-builder/',base).href);
@@ -159,7 +159,17 @@ try {
   await page.locator('#forward').click();assert.equal(await page.locator('[data-register="AX"] .register-value').textContent(),'34AB');await capture('Recorded replay restores 34AB and the instruction pointer; wider/prefixed execution remains unavailable.');
   await page.locator('#preset').selectOption('flags');
   await page.locator('#step').click();await page.locator('#step').click();
-  await page.locator('#flags').scrollIntoViewIfNeeded();await capture('Arithmetic preset FFFF+1 wraps AX to zero and sets CF/ZF in the teaching model.');await encode();
+  await page.locator('#flags').scrollIntoViewIfNeeded();await capture('Arithmetic preset FFFF+1 wraps AX to zero and sets CF/ZF in the teaching model.');
+  await page.locator('#preset').selectOption('memory-mov');
+  for(let index=0;index<21;index++)await page.locator('#step').click();
+  assert.equal(await page.locator('[data-register="AX"] .register-value').textContent(),'2233');await page.locator('#registers').scrollIntoViewIfNeeded();await capture('Canonical BP/DS/SS exercise: BP-2 reads2233 from SS while the matching DS offset contains1111. Identical source also runs in curated QEMU checks.');
+  for(let index=0;index<4;index++)await page.locator('#step').click();
+  await page.locator('#memory-address').fill('10030');await page.locator('#memory-form button').click();
+  assert.equal(await page.locator('[data-address="10030"]').textContent(),'11');await page.locator('#memory').scrollIntoViewIfNeeded();await capture('Modeled ModR/M word store writes11 11 to physical10030; exact changed bytes are journaled.');
+  await page.locator('#back').click();assert.equal(await page.locator('[data-address="10030"]').textContent(),'00');await capture('Rewind restores both original zero RAM bytes without executing an instruction.');
+  await page.locator('#forward').click();assert.equal(await page.locator('[data-address="10030"]').textContent(),'11');await capture('Replay restores the exact word store and register/flag state.');
+  for(let index=0;index<3;index++)await page.locator('#step').click();
+  assert.equal(await page.locator('[data-register="DX"] .register-value').textContent(),'1122');await page.locator('#registers').scrollIntoViewIfNeeded();await capture('A high-byte store and low-byte load produce DX1122 while preserving flags; the exercise halts after28 supported steps.');await encode();
 
   await begin('challenges');
   await page.goto(new URL('challenges/?id=repair-boot',base).href);
@@ -173,7 +183,7 @@ try {
   await capture('Held the solved challenge result and local progress count.');await encode();
   assert.deepEqual(errors,[]);
   const hashes={};
-  for(const source of ['tools/record_browser.mjs','boot/boot.bits','site/elf.mjs','site/elf/index.html','site/elf/app.mjs','site/elf/elf.css','site/elf/catalog.json','site/downloads/exit-code-small.elf','site/downloads/exit-code.elf','site/styles.css','site/learn/routes.css','site/app.js','site/encoding.mjs','site/encoding-presets.mjs','site/playground/index.html','docs/instruction-encoding/fixtures/mov32.bits','docs/instruction-encoding/fixtures/mov64.bits','docs/instruction-encoding/fixtures/mov-register.bits','docs/instruction-encoding/fixtures/mov-register64.bits','docs/instruction-encoding/fixtures/mov-byte.bits','docs/instruction-encoding/fixtures/mov-byte-rex.bits','docs/instruction-encoding/fixtures/mov-memory-bp.bits','docs/instruction-encoding/fixtures/mov-memory-absolute.bits','docs/instruction-encoding/fixtures/mov-memory-pair.bits','site/simulator.mjs','site/binary.mjs','site/history.mjs','site/program-link.mjs','site/boot-builder/index.html','site/boot-builder/builder.css','site/boot-builder/model.mjs','site/boot-builder/app.mjs','site/cpu-lab/index.html','site/cpu-lab/lab.css','site/cpu-lab/lab.mjs','site/cpu-lab/presets.mjs','site/challenges/index.html','site/challenges/challenges.css','site/challenges/challenges.mjs','site/challenges/catalog.json','challenges/catalog.json']){
+  for(const source of ['tools/record_browser.mjs','boot/boot.bits','site/elf.mjs','site/elf/index.html','site/elf/app.mjs','site/elf/elf.css','site/elf/catalog.json','site/downloads/exit-code-small.elf','site/downloads/exit-code.elf','site/styles.css','site/learn/routes.css','site/app.js','site/encoding.mjs','site/encoding-presets.mjs','site/playground/index.html','docs/instruction-encoding/fixtures/mov32.bits','docs/instruction-encoding/fixtures/mov64.bits','docs/instruction-encoding/fixtures/mov-register.bits','docs/instruction-encoding/fixtures/mov-register64.bits','docs/instruction-encoding/fixtures/mov-byte.bits','docs/instruction-encoding/fixtures/mov-byte-rex.bits','docs/instruction-encoding/fixtures/mov-memory-bp.bits','docs/instruction-encoding/fixtures/mov-memory-absolute.bits','docs/instruction-encoding/fixtures/mov-memory-pair.bits','site/address16.mjs','site/simulator.mjs','site/binary.mjs','site/history.mjs','site/program-link.mjs','site/boot-builder/index.html','site/boot-builder/builder.css','site/boot-builder/model.mjs','site/boot-builder/app.mjs','site/cpu-lab/index.html','site/cpu-lab/lab.css','site/cpu-lab/lab.mjs','site/cpu-lab/presets.mjs','site/cpu-lab/memory-program.mjs','docs/instruction-encoding/fixtures/memory-mov-program.bits','site/challenges/index.html','site/challenges/challenges.css','site/challenges/challenges.mjs','site/challenges/catalog.json','challenges/catalog.json']){
     hashes[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');
   }
   const metadata={kind:'Actual browser screenshots of instruction inspection and bounded educational simulation; not native CPU or QEMU footage',browser:browser.version(),viewport:{width:1280,height:960},presentationFps:1,alterations:'960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.',sourceSha256:hashes,captures,reproduce:'make site-test && npm ci && npx playwright install chromium && npm run record:browser',requires:'ffmpeg and ffprobe; PLAYWRIGHT_CHROMIUM_EXECUTABLE may select an installed Chrome'};

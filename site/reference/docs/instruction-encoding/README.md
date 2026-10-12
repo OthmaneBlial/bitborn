@@ -57,7 +57,8 @@ the literal `40` prefix selects SPL in 64-bit mode. Any REX prefix remaps select
 66 prefix has no operand-size effect on it. MOV leaves arithmetic flags unchanged;
 a 32-bit destination in 64-bit mode clears its upper 32 bits. The bounded simulator
 executes only the unprefixed byte/word register forms in 16-bit context. Wider or
-prefixed forms remain inspection-only; memory execution is rejected. Selected
+prefixed forms remain inspection-only. Unprefixed byte/word memory MOV executes
+with the same 16-bit address decoder used by inspection. Selected
 [16-bit memory address forms](memory-addressing.md) expose default DS/SS,
 signed displacements and the absolute r/m6 exception without reading RAM. See the
 [independent model and native register-copy evidence](../architecture/register-mov.md).

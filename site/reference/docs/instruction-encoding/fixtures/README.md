@@ -32,7 +32,10 @@ NOP/HLT; it recognizes bare SYSCALL only in the selected 64-bit context. Other
 by at most one REX prefix is supported; repeated/reordered prefixes and other
 addressing forms stop with an explicit scope error. Memory MOV inspection supports
 the 16-bit ModR/M address table only; default DS/SS and signed displacements are
-explained without reading RAM. Wider addressing and memory execution are rejected.
+explained without reading RAM. The model executes unprefixed byte/word forms;
+wider/overridden addressing is rejected. [memory-mov-program.bits](memory-mov-program.bits)
+is the complete sixth CPU Lab exercise, copied without assembling its comments
+and independently compared with native QEMU using identical literal bytes.
 
 References: Intel SDM [instruction formats and INC/DEC](https://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-vol-2a-manual.pdf),
 [MOV encodings](https://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-vol-2b-manual.pdf).

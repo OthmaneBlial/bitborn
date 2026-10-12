@@ -33,6 +33,8 @@ def prepare():
         data, _ = read_bits(ROOT / source)
         encoding[name] = {'source': source, 'bytes': list(data), 'sha256': digest(data)}
     (ROOT / 'site/encoding-presets.mjs').write_text('export const encodingExamples = ' + json.dumps(encoding, indent=2) + ';\n')
+    memory_source = ROOT / 'docs/instruction-encoding/fixtures/memory-mov-program.bits'
+    (ROOT / 'site/cpu-lab/memory-program.mjs').write_text('export const memoryProgramSource = ' + json.dumps(memory_source.read_bytes().decode('utf-8')) + ';\n')
     downloads = ROOT / "site/downloads"
     downloads.mkdir(parents=True, exist_ok=True)
     checksums = []

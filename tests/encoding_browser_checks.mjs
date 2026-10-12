@@ -52,7 +52,7 @@ export async function checkEncoding(page) {
     await page.locator('#instruction-select').selectOption('movMemoryBP');await page.locator('#decode-mode').selectOption('16');
     assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV AX, [BP-2]');
     assert.match(await page.locator('#encoding-explanation').textContent(),/Default SS because BP/);
-    assert.equal(await page.locator('#execute-instruction').isDisabled(),true);
+    assert.equal(await page.locator('#execute-instruction').isEnabled(),true,'unprefixed 16-bit memory MOV is modeled');
     assert.match(await page.locator('[data-bit="2-7"]').getAttribute('aria-label'),/Displacement sign bit/);
     await page.locator('[data-bit="2-7"]').click();
     assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV AX, [BP+126]');
