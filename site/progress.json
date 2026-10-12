@@ -94,6 +94,10 @@
       "progress": "\u2705 Independent ripple-carry oracle, seeded 16-bit arithmetic and exhaustive 8-bit TEST masks; IF/DF and INC/DEC carry preserved"
     },
     {
+      "milestone": "Contributor policies and source map",
+      "progress": "\u2705 Conduct contact and private GitHub vulnerability reporting available; focused setup/check commands documented"
+    },
+    {
       "milestone": "v0.2.0 release",
       "progress": "\u2705 Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified"
     },

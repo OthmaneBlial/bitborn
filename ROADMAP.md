@@ -138,7 +138,9 @@ The v0.2 milestone is published and verified. The following research remains ope
   658 seeded valid/invalid cases compare bytes and source-line diagnostics.
 - [ ] Add maintained introductory documentation in English, Simplified Chinese,
   Spanish, French, Japanese, Portuguese, German and Arabic.
-- [ ] Add contributor conduct and security reporting policies.
+- [x] Add contributor conduct/security policies with usable reporting contacts;
+  verify GitHub private reporting is enabled. Document setup and a focused source
+  map, and check canonical policy/reference copies during website validation.
 
 The [60-item working backlog](docs/EVOLUTION.md) records prioritization,
 dependencies, risks and the current execution record. It is not a feature list.

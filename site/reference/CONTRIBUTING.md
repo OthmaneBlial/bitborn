@@ -6,6 +6,45 @@ an encoding explanation, the byte tools or the educational interface.
 Use [GOOD_FIRST_ISSUES.md](GOOD_FIRST_ISSUES.md) for concrete small tasks and
 [SHOWCASE.md](SHOWCASE.md) to reproduce the current demonstrations. GitHub issue
 forms collect bug reports, feature ideas, binary examples and challenge proposals.
+Follow the [code of conduct](CODE_OF_CONDUCT.md). Report vulnerabilities through
+the [private security reporting path](SECURITY.md), rather than a public issue.
+
+## Development setup and source map
+
+Python 3.10+, Make and QEMU are needed for the native checks. Node.js 22+ is the
+CI baseline for browser tooling. On macOS, install QEMU with `brew install qemu`;
+on Ubuntu, use `sudo apt-get install python3 make qemu-system-x86`.
+
+```sh
+make test                 # build, reviewed artifacts, unit tests and headless QEMU
+make site-test            # rebuild website references; model, route and link checks
+npm ci                    # development-only Playwright dependency
+npx playwright install chromium firefox webkit
+npm run test:browser
+npm run test:cross-browser
+python3 -m http.server 8000 --directory site
+```
+
+Open `http://localhost:8000/` to develop the website. On Linux, Playwright may
+require its documented system dependencies (`npx playwright install --with-deps`).
+macOS cannot natively run the Linux ELF examples; CI runs their native checks.
+
+| Work on | Start here | Focused check |
+| --- | --- | --- |
+| Literal source, manifest and packaging | `boot/`, `examples/`, `targets.json`, `tools/bitborn.py`, `tools/build.py` | `python3 -m unittest tests.test_tools tests.test_packaging` |
+| Actual guest behavior | `tests/qemu.py`, `tests/test_boot.py`, example-specific tests | `make test` |
+| Shared browser CPU and history | `site/simulator.mjs`, `site/history.mjs` | `node tests/test_cpu.mjs` and `node tests/test_history.mjs` |
+| Parser syntax and diagnostics | `tools/bitborn.py`, `site/binary.mjs` | `python3 -m unittest tests.test_parser_properties` |
+| Builder and CPU Lab | `site/boot-builder/`, `site/cpu-lab/` | `node tests/browser_builder.mjs` or `node tests/browser_cpu_lab.mjs` |
+| Challenges | `challenges/`, `site/challenge-engine.mjs`, `site/challenges/` | `node tests/test_challenges.mjs` and `python3 -m unittest tests.test_challenges` |
+| Docs, routes and progress | `README.md`, `ROADMAP.md`, `docs/`, `tools/site_build.py` | `make site-test` |
+
+Run full relevant checks before sharing a change. Browser scripts serve their own
+test site; they do not need the development server. Focused checks complement the
+full CI suite. Edit canonical documents, then regenerate `site/reference/` with
+`make site-test`; do not edit the generated copies directly.
+
+## Source and contribution rules
 
 - Write target instructions as literal eight-digit binary tokens. No assembler,
   target compiler, code-generating macros or copied executable blobs.

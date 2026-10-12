@@ -4,7 +4,7 @@ title: "[Bug]: "
 body:
   - type: markdown
     attributes:
-      value: "Include a small reproduction. Distinguish browser simulation from QEMU or native execution. Keep credentials and unrelated personal data out of logs and captures."
+      value: "Include a small reproduction. Distinguish browser simulation from QEMU or native execution. Keep credentials and unrelated personal data out of logs and captures. For security vulnerabilities use https://github.com/OthmaneBlial/bitborn/security/advisories/new instead of a public issue."
   - type: dropdown
     id: area
     attributes:

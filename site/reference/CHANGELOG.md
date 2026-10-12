@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Add conduct and security policies, enable private GitHub vulnerability reporting,
+  route sensitive reports away from public issue forms and document a contributor
+  source map. Verify published root reference files match canonical documents.
+
 - Check arithmetic flags with an independent ripple-carry oracle, seeded ADD/SUB/CMP
   cases, all INC/DEC registers and exhaustive 8-bit TEST masks. Preserve IF/DF;
   represent undefined logical AF explicitly. These checks run in site CI.

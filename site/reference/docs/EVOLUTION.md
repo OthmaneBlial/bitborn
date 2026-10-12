@@ -21,7 +21,9 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 - Pushed parser parity: `ada41c5`; exact-commit Linux CI passed.
 - Completed flags properties: independent bit-by-bit arithmetic oracle, seeded
   16-bit cases and exhaustive 8-bit TEST masks, with preserved IF/DF and INC/DEC CF.
-- Next: direct timeline navigation, contributor policies and architecture-aware
+- Pushed flags checks: `6e73fa0`. Completed conduct/security policies, enabled
+  private GitHub reporting and documented the contributor setup/source map.
+- Next: direct timeline navigation and architecture-aware
   instruction inspection; introductory documentation in eight languages.
 - Risks: browser behavior is modeled, not native x86. Hardware, paging and general
   interrupt support require separate native targets and evidence.
@@ -78,9 +80,9 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 42 | 0 | Keyboard accessibility regression for timeline, imports, controls and error focus | H | H | 12 | Low | Open |
 | 43 | 0 | Contrast and narrow-screen checks for changed-bit and flag indicators | H | H | Existing CSS | Low | Open |
 | 44 | 2 | Explicit shortcuts guide and screen-reader-friendly execution announcements | M | H | 12,42 | Low | Open |
-| 45 | 2 | CODE_OF_CONDUCT with real, usable reporting paths | H | H | Maintainer/profile evidence | Low | Open |
-| 46 | 0 | SECURITY policy with scoped supported versions and verified private reporting | H | H | GitHub repository settings | Medium | Open |
-| 47 | 2 | Contributor source map and focused per-component development commands | H | H | Existing CONTRIBUTING | Low | Open |
+| 45 | 2 | CODE_OF_CONDUCT with real, usable reporting paths | H | H | Maintainer/profile evidence | Low | Complete |
+| 46 | 0 | SECURITY policy with scoped supported versions and verified private reporting | H | H | GitHub repository settings | Medium | Complete |
+| 47 | 2 | Contributor source map and focused per-component development commands | H | H | Existing CONTRIBUTING | Low | Complete |
 | 48 | 0 | Verify every generated documentation/source copy, including translation and trace fixtures | H | H | Site build | Low | Open |
 | 49 | 2 | Genuine Time Machine capture with source/frame provenance | H | H | 02,12 | Low | Open |
 | 50 | 0 | Reproducible host-model benchmark; distinguish rendering, interpretation and native execution | H | M | 01,02 | Medium | Open |

@@ -6,12 +6,12 @@ from tools.bitborn import ROOT, read_bits
 
 class DocsTests(unittest.TestCase):
     def test_local_markdown_links(self):
-        paths = [ROOT / name for name in ("README.md", "ROADMAP.md", "CONTRIBUTING.md", "CHANGELOG.md")]
+        paths = [ROOT / name for name in ("README.md", "ROADMAP.md", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md", "SECURITY.md", "CHANGELOG.md")]
         paths += list((ROOT / "docs").rglob("*.md")) + list((ROOT / "examples").rglob("*.md"))
         for path in paths:
             text = re.sub(r"```.*?```", "", path.read_text(), flags=re.S)
             for url in re.findall(r"\]\(([^)]+)\)", text):
-                if re.match(r"https?://|#", url):
+                if re.match(r"https?://|mailto:|#", url):
                     continue
                 target = path.parent / url.split("#")[0]
                 self.assertTrue(target.exists(), f"{path.relative_to(ROOT)} links to missing {url}")

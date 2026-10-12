@@ -47,7 +47,7 @@ def prepare():
     for folder in sorted(example_folders):
         shutil.copytree(ROOT / 'examples' / folder, reference / 'examples' / folder, dirs_exist_ok=True)
     shutil.copyfile(ROOT / 'examples/README.md', reference / 'examples/README.md')
-    for name in ("README.md", "ROADMAP.md", "CONTRIBUTING.md", "CHANGELOG.md", "LICENSE", "targets.json", 'SHOWCASE.md', 'GOOD_FIRST_ISSUES.md'):
+    for name in ("README.md", "ROADMAP.md", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md", "SECURITY.md", "CHANGELOG.md", "LICENSE", "targets.json", 'SHOWCASE.md', 'GOOD_FIRST_ISSUES.md'):
         shutil.copyfile(ROOT / name, reference / name)
     for asset in (ROOT / "assets").iterdir():
         shutil.copyfile(asset, ROOT / "site/assets" / asset.name)

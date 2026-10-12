@@ -43,6 +43,9 @@ for (const [,slug,size] of examples.matchAll(/data-example="([^"]+)"[^]*?<span>(
   assert.equal(Number(size),target.size,`${slug} displayed payload size`);
 }
 const progress = JSON.parse(readFileSync(resolve(root,'site/progress.json'),'utf8'));
+for (const name of ['README.md','ROADMAP.md','CONTRIBUTING.md','CODE_OF_CONDUCT.md','SECURITY.md','CHANGELOG.md','LICENSE','targets.json','SHOWCASE.md','GOOD_FIRST_ISSUES.md']) {
+  assert.deepEqual(readFileSync(resolve(root,name)),readFileSync(resolve(root,'site/reference',name)),`${name} published reference matches canonical source`);
+}
 assert.match(progress.updated,/^\d{4}-\d{2}-\d{2}$/);assert.ok(progress.milestones.length > 0);
 assert.ok(progress.milestones.every(item => typeof item.milestone === 'string' && typeof item.progress === 'string'));
 console.log('route checks passed: five portable dedicated routes, unique metadata, local source/tutorial/download links, fourteen real example sizes, generated repository progress data');
