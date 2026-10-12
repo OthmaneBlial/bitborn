@@ -1,0 +1,8 @@
+10111000 00110100 00010010 # instruction | MOV AX,1234 | Prepare a word to save.
+01010000 # instruction | PUSH AX | Store 34 12 at SS:SP after decrementing SP by two.
+00110001 11000000 # instruction | XOR AX,AX | Clear AX independently of the saved stack word.
+01011011 # instruction | POP BX | Recover 1234 into BX and restore SP.
+11101000 00000001 00000000 # instruction | CALL +1 | Save the next logical IP and skip the HLT to the subroutine.
+11110100 # instruction | HLT | The subroutine returns here.
+01000000 # instruction | INC AX | The subroutine increments AX to one.
+11000011 # instruction | RET | Pop the saved near return IP from SS:SP.

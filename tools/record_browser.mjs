@@ -221,6 +221,7 @@ try {
   metadata.sourceSha256[branchSource]=createHash('sha256').update(await readFile(resolve(root,branchSource))).digest('hex');
   const carrySource='docs/instruction-encoding/fixtures/carry-borrow.bits';
   metadata.sourceSha256[carrySource]=createHash('sha256').update(await readFile(resolve(root,carrySource))).digest('hex');
+  for(const preset of presets)metadata.sourceSha256[preset.sourcePath]=createHash('sha256').update(await readFile(resolve(root,preset.sourcePath))).digest('hex');
   await writeFile(resolve(root,'assets/browser-demo-recording.json'),JSON.stringify(metadata,null,2)+'\n');
   console.log('Recorded six genuine browser GIFs with frame/source hashes and explicit inspection/simulation provenance.');
 } finally {await browser?.close();await new Promise(resolve=>server.close(resolve));}

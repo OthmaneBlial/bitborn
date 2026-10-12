@@ -1,0 +1,4 @@
+10111000 00101010 00000000 # instruction | MOV AX,002A | AX receives decimal 42 from little-endian 2A 00.
+10111011 01100001 00000000 # instruction | MOV BX,0061 | The low opcode bits select BX instead of AX.
+10111001 00110100 00010010 # instruction | MOV CX,1234 | Low byte 34 precedes high byte 12.
+11110100 # instruction | HLT | Stop the bounded teaching program.

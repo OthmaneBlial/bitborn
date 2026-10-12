@@ -1,0 +1,15 @@
+10111000 00010000 00000000 # instruction | MOV AX,0010 | Prepare segment 0010.
+10001110 11011000 # instruction | MOV DS,AX | DS becomes 0010.
+10001110 11000000 # instruction | MOV ES,AX | ES becomes 0010.
+10111000 11001101 10101011 # instruction | MOV AX,ABCD | Prepare a little-endian word.
+10100011 00100000 00000000 # instruction | MOV [0020],AX | Store CD AB at physical 00120 through DS.
+00110001 11000000 # instruction | XOR AX,AX | Clear AX before reading the stored word.
+10100001 00100000 00000000 # instruction | MOV AX,[0020] | Recover ABCD through DS.
+10111111 00100010 00000000 # instruction | MOV DI,0022 | Select the next destination word.
+10101011 # instruction | STOSW | Store ABCD through ES:DI and advance DI by two.
+10111110 00100000 00000000 # instruction | MOV SI,0020 | Select the original low byte through DS.
+10101100 # instruction | LODSB | Load CD into AL and advance SI by one.
+11111101 # instruction | STD | Reverse the next string pointer update.
+10101100 # instruction | LODSB | Load AB into AL and decrease SI by one.
+11111100 # instruction | CLD | Restore forward direction.
+11110100 # instruction | HLT | Stop with AX ABAB, SI 0020 and DI 0024.

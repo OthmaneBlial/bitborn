@@ -1,0 +1,8 @@
+10111001 00000011 00000000 # instruction | MOV CX,0003 | Count three loop iterations.
+10111000 00000000 00000000 # instruction | MOV AX,0000 | Start the result at zero.
+01000000 # instruction | INC AX | Add one on each iteration.
+11100010 11111101 # instruction | LOOP -3 | Decrement CX and return to INC while nonzero; flags are preserved.
+00111101 00000011 00000000 # instruction | CMP AX,0003 | Compare the final three increments with three.
+01110100 00000011 # instruction | JZ +3 | Equality skips the failure sentinel.
+10111000 11111111 11111111 # instruction | MOV AX,FFFF | Must be skipped after the correct loop.
+11110100 # instruction | HLT | Stop with AX three and CX zero.

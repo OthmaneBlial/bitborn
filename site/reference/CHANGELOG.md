@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Move the remaining five CPU Lab programs from inline JS into annotated canonical
+  `.bits` files without changing their bytes. Generate all six preset texts with
+  source paths, validate build limits/file boundaries, and expose source downloads
+  matched to loaded bytes. Preserve editor/reference identity and the memory export.
+
 - Execute unprefixed immediate ADC/SBB on AL and AX with incoming CF, exact
   outgoing carry/borrow and arithmetic status flags. Preserve AH/IF/DF, check
   270,736 independent ripple cases, and add the same 81-byte native/model/browser

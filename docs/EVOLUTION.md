@@ -188,6 +188,22 @@ native-Linux skip), all site/model modules and Chromium/Firefox157/WebKit27.2
 exercise checks. The CPU recording has 38 actual frames, including four new
 carry/borrow states, with all six GIF/source hashes verified. Next: canonical
 sources for every CPU teaching preset.
+Carry commit `ddeff03` passed CI `38320950179` and deployment `38321242519`;
+its Pages mirror is `f9e2b67`. The public simulator, lesson and literal exercise
+were anonymously fetched and match exact committed bytes. GitHub retains 20
+relevant topics and the canonical `.io` homepage link.
+All six CPU presets now come from canonical `.bits` sources. The remaining five
+inline programs retain their original bytes and add instruction comments. The
+site build captures/validates one source snapshot, enforces file/text/byte bounds,
+and writes identical module/reference text. Pure text parsing reuses the original
+CLI grammar without changing readable errors. Source tests cover missing/FIFO/
+external-alias inputs, Unicode limits and an edit between capture and validation.
+Loaded byte-identical presets expose canonical source downloads; custom programs
+hide them and invalid drafts retain the existing loaded source. Existing model
+states, byte goldens and three-browser links/loads pass; recording provenance
+includes every canonical preset source. All 76 Python tests pass locally (one
+expected macOS native-Linux skip), along with all site/model checks. Next: a native one-bit self-modification
+experiment with model/native RAM and output evidence.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -236,7 +252,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 21 | 1 | ELF anatomy viewer: headers, entry point, segment permissions and payload bytes | H | H | Existing ELF packaging | Medium | Complete: bounded ELF64 scope; no imported-code execution |
 | 22 | 1 | Explain Linux syscall encodings in 64-bit inspection mode without host execution | H | H | 05 | Medium | Open |
 | 23 | 1 | Literal native self-modification experiment with controlled halt and RAM proof | H | M | Existing BIOS loader | Medium | Open |
-| 24 | 1 | Program gallery presets derived from canonical .bits instead of duplicated source | H | M | Site packaging | Medium | Open |
+| 24 | 1 | Program gallery presets derived from canonical .bits instead of duplicated source | H | M | Site packaging | Medium | Complete: all six CPU presets from canonical files, exact source/byte identity and loaded-source downloads |
 | 25 | 2 | Progressive interactive byte-order lesson: one byte, one word, one branch | H | H | Existing playground | Low | Open |
 | 26 | 2 | Guided stack/calling-convention lesson with return-address inspection | H | H | 02,10 | Low | Open |
 | 27 | 2 | Flags lesson separating signed overflow, carry, parity and undefined AF | H | H | 04 | Medium | Open |

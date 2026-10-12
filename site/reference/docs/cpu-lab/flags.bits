@@ -1,0 +1,6 @@
+10111000 11111111 11111111 # instruction | MOV AX,FFFF | Prepare the largest unsigned word.
+00000101 00000001 00000000 # instruction | ADD AX,0001 | Wrap to zero and set outgoing carry.
+01000000 # instruction | INC AX | Increment without changing carry.
+00101101 00000010 00000000 # instruction | SUB AX,0002 | Return FFFF with borrow.
+00111101 11111111 11111111 # instruction | CMP AX,FFFF | Equal comparison sets zero without changing AX.
+11110100 # instruction | HLT | Stop after the flag examples.

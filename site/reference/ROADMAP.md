@@ -240,6 +240,10 @@ The v0.2 milestone is published and verified. The following research remains ope
   flags and byte alias preservation. Exhaust byte operands, seed boundary words,
   and compare the same 81-byte multiword exercise with QEMU. Eight additional
   native FLAGS samples have an independent integer oracle. See [lesson](docs/carry-borrow.md).
+- [x] Derive all six CPU presets from canonical `.bits` files, preserving original
+  bytes and adding instruction comments. Verify exact text/reference copies and
+  bounded regular-file inputs; link loaded byte-identical presets to their source.
+  See the [canonical program guide](docs/cpu-lab/README.md).
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

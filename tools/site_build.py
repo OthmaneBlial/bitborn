@@ -5,12 +5,32 @@ import json
 import re
 import shutil
 from pathlib import Path
-from bitborn import ROOT, artifact_paths, read_bits, digest, targets, verify
+from bitborn import ROOT, artifact_paths, read_bits, _parse_bits, digest, targets, verify
 from introduction_pages import build_introductions
+
+
+def preset_sources(root=ROOT):
+    root = Path(root).resolve()
+    program_sources = {}
+    for name, relative in [(name, f'docs/cpu-lab/{name}.bits') for name in ('immediates', 'flags', 'stack', 'branch', 'memory')] + [('memory-mov', 'docs/instruction-encoding/fixtures/memory-mov-program.bits')]:
+        source = root / relative
+        if not source.is_file() or not source.resolve().is_relative_to(root):
+            raise ValueError(f'{relative}: preset source must be a regular file inside the project')
+        if source.stat().st_size > 4 * 65536:
+            raise ValueError(f'{relative}: preset source exceeds browser input limits')
+        text = source.read_bytes().decode('utf-8')
+        if len(text.encode('utf-16-le')) // 2 > 65536:
+            raise ValueError(f'{relative}: preset source exceeds browser input limits')
+        data, _ = _parse_bits(text.removeprefix('\ufeff'), source)
+        if len(data) > 512:
+            raise ValueError(f'{relative}: preset source exceeds browser input limits')
+        program_sources[name] = {'sourcePath': relative, 'source': text}
+    return program_sources
 
 
 def prepare():
     print(verify())
+    program_sources = preset_sources()
     readme = (ROOT / 'README.md').read_text()
     table = readme.split('## Roadmap — visible progress\n', 1)[1].split('\n## ', 1)[0]
     milestones = []
@@ -33,8 +53,7 @@ def prepare():
         data, _ = read_bits(ROOT / source)
         encoding[name] = {'source': source, 'bytes': list(data), 'sha256': digest(data)}
     (ROOT / 'site/encoding-presets.mjs').write_text('export const encodingExamples = ' + json.dumps(encoding, indent=2) + ';\n')
-    memory_source = ROOT / 'docs/instruction-encoding/fixtures/memory-mov-program.bits'
-    (ROOT / 'site/cpu-lab/memory-program.mjs').write_text('export const memoryProgramSource = ' + json.dumps(memory_source.read_bytes().decode('utf-8')) + ';\n')
+    (ROOT / 'site/cpu-lab/memory-program.mjs').write_text('export const programSources = ' + json.dumps(program_sources, indent=2) + ';\nexport const memoryProgramSource = programSources["memory-mov"].source;\n')
     downloads = ROOT / "site/downloads"
     downloads.mkdir(parents=True, exist_ok=True)
     checksums = []
@@ -58,6 +77,8 @@ def prepare():
     reference = ROOT / "site/reference"
     for folder in ("docs", "boot", 'challenges'):
         shutil.copytree(ROOT / folder, reference / folder, dirs_exist_ok=True)
+    for entry in program_sources.values():
+        (reference / entry['sourcePath']).write_bytes(entry['source'].encode('utf-8'))
     example_folders = {'boot-sector'} | {Path(target['source']).parent.name for target in targets() if target['source'].startswith('examples/')}
     for folder in sorted(example_folders):
         shutil.copytree(ROOT / 'examples' / folder, reference / 'examples' / folder, dirs_exist_ok=True)

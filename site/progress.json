@@ -158,6 +158,10 @@
       "progress": "\u2705 Byte/word ADC and SBB, 270,736 ripple-oracle cases and AH/IF/DF preservation; exact 81-byte multiword exercise plus eight native FLAGS samples"
     },
     {
+      "milestone": "Canonical CPU teaching sources",
+      "progress": "\u2705 All six presets come from `.bits` files; editor/reference identity, original bytes, bounded build inputs and loaded-preset source links verified"
+    },
+    {
       "milestone": "CPU Lab program downloads and imports",
       "progress": "\u2705 Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks"
     },

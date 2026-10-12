@@ -162,9 +162,13 @@ class SourceError(ValueError):
 
 
 def read_bits(path):
+    return _parse_bits(Path(path).read_text(encoding="utf-8-sig"), path)
+
+
+def _parse_bits(text, path):
     data = bytearray()
     annotations = []
-    for number, line in enumerate(Path(path).read_text(encoding="utf-8-sig").splitlines(), 1):
+    for number, line in enumerate(text.splitlines(), 1):
         source, _, comment = line.partition("#")
         tokens = source.split()
         if not tokens:

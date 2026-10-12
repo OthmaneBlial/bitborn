@@ -9,9 +9,13 @@ import {createState,step,decode,physicalAddress,logicalIP,flagsWord} from '../si
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 assert.equal(presets.length,6);
 const results=new Map();
+const originalBytes={immediates:'b82a00bb6100b93412f4',flags:'b8ffff050100402d02003dfffff4',stack:'b834125031c05be80100f440c3',branch:'b90300b8000040e2fd3d03007403b8fffff4',memory:'b810008ed88ec0b8cdaba3200031c0a12000bf2200abbe2000acfdacfcf4'};
 for (const preset of presets) {
+  assert.equal(preset.source,readFileSync(resolve(root,preset.sourcePath),'utf8'),'every preset uses exact canonical UTF-8 source');
+  assert.equal(preset.source,readFileSync(resolve(root,'site/reference',preset.sourcePath),'utf8'),'published source copy matches the editor');
   assert.match(preset.source.split('\n').map(line=>line.split('#')[0]).join('\n'),/^[01\s]+$/,'preset target instructions are literal binary digits; comments are not compiled');
   const bytes=parseBits(preset.source), state=createState(bytes); state.SP=0x7C00;
+  if(originalBytes[preset.id])assert.equal(Buffer.from(bytes).toString('hex'),originalBytes[preset.id],'migration preserves the original literal bytes');
   for (let offset=0; offset<bytes.length;) offset+=decode(bytes,offset).size;
   while (!state.halted) step(bytes,state);
   assert.ok(state.steps<40,`${preset.id} finishes within its small teaching program`);

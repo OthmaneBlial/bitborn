@@ -244,6 +244,10 @@ function loadSource(source) {
   sourceRevision++;
   try {
     const parsed = parseBits(source,512);
+    const preset=presets.find(item=>{const expected=parseBits(item.source);return expected.length===parsed.length&&expected.every((value,index)=>value===parsed[index]);});
+    const sourceLink=$('preset-source');sourceLink.hidden=!preset;
+    if(preset) {sourceLink.href=`../reference/${preset.sourcePath}`;sourceLink.download=preset.sourcePath.split('/').pop();}
+    else {sourceLink.removeAttribute('href');sourceLink.removeAttribute('download');}
     bytes = parsed; breakpoints.clear(); memoryStart = 0x7C00; $('memory-address').value = '07C00';
     const shared=new URL(window.location.href);shared.search='';shared.hash=programFragment(bytes);
     $('program-link').value=shared.href;$('open-program-link').href=shared.href;$('share-status').textContent='';
