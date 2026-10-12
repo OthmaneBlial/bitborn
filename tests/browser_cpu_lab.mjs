@@ -3,6 +3,7 @@ import {createServer} from 'node:http';
 import {readFile,mkdir} from 'node:fs/promises';
 import {resolve,dirname,extname} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
+import {checkProgramDownloads} from './program_download_checks.mjs';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE ? pathToFileURL(resolve(process.env.PLAYWRIGHT_MODULE)).href : 'playwright');
@@ -125,6 +126,8 @@ try {
   await page.locator('#memory-address').fill('00120'); await page.locator('#memory-form button').click();
   assert.equal(await page.locator('[data-address="00120"]').textContent(),'CD'); assert.equal(await page.locator('[data-address="00121"]').textContent(),'AB');
   assert.equal(await page.locator('.memory-byte.changed-bit').count(),2);
+  await checkProgramDownloads(page);await page.locator('#preset').selectOption('memory');
+  for(let index=0;index<5;index++)await page.locator('#step').click();
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),true,'desktop overflow');
   await mkdir(resolve(root,'build'),{recursive:true}); await page.screenshot({path:resolve(root,'build/cpu-lab-desktop.png'),fullPage:true});
   for(const width of [390,320]) {
@@ -138,5 +141,5 @@ try {
   }
   await page.screenshot({path:resolve(root,'build/cpu-lab-mobile.png'),fullPage:true});
   assert.deepEqual(errors,[],'browser errors and asset failures');
-  console.log('CPU lab browser checks passed: exact changed bits/flags/stack bytes, rewind/replay/fork/halt restoration, branch pointer, breakpoints/resume, speed, pause, reset, keyboard, memory bounds, import/parser errors, 1440/390/320px layouts; screenshots in build/.');
+  console.log('CPU lab browser checks passed: exact changed bits/flags/stack bytes, rewind/replay/fork/halt restoration, source/raw download/import round trips, self-modification exports and stale-read/error cancellation, branch pointer, breakpoints/resume, speed, pause, reset, keyboard, memory bounds, import/parser errors, 1440/390/320px layouts; screenshots in build/.');
 } finally {await browser?.close();await new Promise(resolve=>server.close(resolve));}

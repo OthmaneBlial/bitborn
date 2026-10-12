@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Export/import exact loaded CPU Lab programs as `.bits` or raw `.bin`; preserve
+  original bytes before self-modification and leave model execution/history intact.
+  Reject invalid raw sizes and cancel stale asynchronous reads/errors after a newer
+  source choice or draft. Real downloads and round trips pass in three browsers.
+
 - Add explicit 16/32/64 decoding context to the existing bit playground: scoped
   MOV/XOR/legacy INC/DEC inspection, 66/REX fields, exact imm64, per-bit roles,
   literal `.bits` fixtures and independent disassembly goldens. Disable simulation

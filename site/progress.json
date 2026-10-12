@@ -122,6 +122,10 @@
       "progress": "\u2705 Explicit 16/32/64 context, 66/REX fields and exact imm64; independent disassembly goldens and three-browser checks; simulation remains 16-bit"
     },
     {
+      "milestone": "CPU Lab program downloads and imports",
+      "progress": "\u2705 Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks"
+    },
+    {
       "milestone": "v0.2.0 release",
       "progress": "\u2705 Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified"
     },

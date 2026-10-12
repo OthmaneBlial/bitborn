@@ -48,6 +48,12 @@ executable instructions remain literal `.bits`; host tooling never assembles the
   independent disassembly goldens and three-browser context/bit changes. A wide
   hex readout overflow was caught and fixed before publication.
 - Next: exact program export/import, binary/hex synchronization and ELF anatomy.
+- Inspection milestone `09f5f2c` passed exact-commit CI/Pages. Completed `.bits`/raw
+  export/import with exact downloaded bytes and preserved history in three browsers.
+  A deliberately delayed read reproduced stale-import overwrite; newer source
+  choices/drafts now cancel old reads and errors. Original self-modified bytes and
+  empty/513-byte rejection plus the 512-byte boundary are checked.
+- Next: binary/hex synchronization, ELF anatomy and a verified public release.
 - Risks: browser behavior is modeled, not native x86. Hardware, paging and general
   interrupt support require separate native targets and evidence.
 
@@ -66,7 +72,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 05 | 1 | Opcode microscope with explicit 16/32/64-bit context and mode-specific fixtures | H | M | Intel references | Medium | Complete: scoped inspection; model execution stays 16-bit |
 | 06 | 1 | Synchronize binary and hexadecimal input without generating instructions | H | H | Existing parser | Low | Open |
 | 07 | 1 | Explain opcode, register, ModR/M and immediate fields bit by bit | H | H | 05 | Medium | Complete for documented MOV/XOR/prefix subset |
-| 08 | 1 | Export and re-import exact CPU Lab programs with cross-browser download proof | H | H | Existing builder export | Low | Open |
+| 08 | 1 | Export and re-import exact CPU Lab programs with cross-browser download proof | H | H | Existing builder export | Low | Complete |
 | 09 | 1 | Share bounded CPU Lab programs through validated URLs | H | M | 03,08 | Medium | Open |
 | 10 | 1 | Rewind branches and CALL/RET; verify stack and logical IP restoration | H | H | 02 | Medium | Complete |
 | 11 | 1 | Rewind self-modifying code; restore the fetched instruction bytes | H | H | 02 | Medium | Complete |
@@ -119,6 +125,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 58 | 3 | Paging experiment with inspected page tables and deliberate page-fault evidence | H | L | 55,56 | High | Open |
 | 59 | 0 | QEMU runner resource/error-path checks and bounded process cleanup | H | H | Existing Guest harness | Medium | Open |
 | 60 | 2 | Accurate release/community draft showing actual new capabilities; no automatic posting | M | H | Verified release | Low | Open |
+| 61 | 0 | Cancel delayed file imports/errors after a newer source choice or editor draft | H | H | CPU Lab import | Medium | Complete: race reproduced and checked in three browsers |
 
 Large tasks are divided into useful verified milestones. Native experiments only
 become capabilities after literal source review and real QEMU checks; hardware

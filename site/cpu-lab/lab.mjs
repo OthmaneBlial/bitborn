@@ -1,5 +1,5 @@
 import {hex, decode, createState, logicalIP, flagsWord, physicalAddress} from '../simulator.mjs';
-import {parseBits} from '../binary.mjs';
+import {parseBits,formatBits} from '../binary.mjs';
 import {presets} from './presets.mjs';
 import {createHistory,recordStep,seek} from '../history.mjs';
 
@@ -8,7 +8,7 @@ const registers = ['AX','BX','CX','DX','SI','DI','BP','SP','CS','DS','ES','SS','
 const flags = [['CF','cf','Carry / unsigned overflow'],['PF','pf','Even parity in the low byte'],['AF','af','Carry or borrow across bit 3'],['ZF','zf','Zero result'],['SF','sf','Sign / highest result bit'],['IF','interrupts','Interrupt-enable flag; no interrupt delivery is modeled'],['DF','df','Direction of string pointer movement'],['OF','of','Signed overflow']];
 let bytes, state, previous = null, before = null, memoryChanges = [], memoryStart = 0x7C00;
 let running = false, timer = null, failed = false, stoppedAtBreakpoint = null, skipBreakpoint = null;
-let history, transition = 'execute';
+let history, transition = 'execute', sourceRevision = 0;
 const breakpoints = new Set();
 const registerValue = (cpu, name) => name === 'IP' ? logicalIP(cpu) : name === 'FLAGS' ? flagsWord(cpu) : cpu[name];
 const location = (cpu, offset = cpu.ip) => `${hex(cpu.CS,4)}:${hex((cpu.loadAddress + offset - (cpu.CS << 4)) & 0xFFFF,4)}`;
@@ -23,6 +23,15 @@ function instructionAt(offset) {
 function setStatus(message, error = false) {
   $('status').textContent = message;
   $('status').classList.toggle('error', error);
+}
+
+function downloadProgram(binary) {
+  const filename=`bitborn-program.${binary?'bin':'bits'}`;
+  const url=URL.createObjectURL(new Blob([binary?bytes:formatBits(bytes)],{type:binary?'application/octet-stream':'text/plain;charset=utf-8'}));
+  const link=document.createElement('a');link.href=url;link.download=filename;
+  document.body.append(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  $('download-status').textContent=`Download requested: ${filename}; ${bytes.length} loaded bytes. Execution state and history are unchanged.`;
 }
 
 function renderRegisters() {
@@ -226,10 +235,12 @@ function reset() {
   clearTimeout(timer); timer = null; running = false; failed = false; stoppedAtBreakpoint = null; skipBreakpoint = null;
   state = createState(bytes); state.SP = 0x7C00; previous = null; before = null; memoryChanges = [];
   history=createHistory(state);transition='execute';
+  $('download-status').textContent='';
   setStatus('Deterministic initial state loaded: CS:IP 0000:7C00, SS:SP 0000:7C00. Ready to step.'); render();
 }
 
 function loadSource(source) {
+  sourceRevision++;
   try {
     const parsed = parseBits(source,512);
     bytes = parsed; breakpoints.clear(); memoryStart = 0x7C00; $('memory-address').value = '07C00';
@@ -252,6 +263,8 @@ $('preset').addEventListener('change', () => {
 $('step').addEventListener('click',performStep); $('run').addEventListener('click',run); $('pause').addEventListener('click',() => pause(`Paused at ${location(state)}. Last state change is shown below.`)); $('reset').addEventListener('click',reset);
 $('back').addEventListener('click',()=>travel('rewind'));$('forward').addEventListener('click',()=>travel('replay'));
 $('timeline').addEventListener('input',()=>travelTo(Number($('timeline').value)));
+$('export-source').addEventListener('click',()=>downloadProgram(false));$('export-raw').addEventListener('click',()=>downloadProgram(true));
+$('binary-editor').addEventListener('input',()=>sourceRevision++);
 $('speed').addEventListener('input',() => {
   $('speed-label').textContent = `${$('speed').value} steps/s`;
   if (running) {clearTimeout(timer); timer=setTimeout(tick,1000 / Number($('speed').value));}
@@ -270,16 +283,25 @@ $('load-program').addEventListener('click',() => {
 });
 $('import-program').addEventListener('change',async event => {
   const file=event.target.files[0]; if (!file) return;
+  const request=++sourceRevision;
   try {
     if (file.size > 65536) throw new Error('Source files must be at most 64 KiB.');
     const buffer=await file.arrayBuffer();let source;
+    if(request!==sourceRevision)return;
     // Preserve the BOM so the shared parser validates it exactly once.
-    try {source=new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(buffer);}
-    catch {throw new Error('Source files must contain valid UTF-8 text.');}
+    if(/\.bin$/i.test(file.name)) {
+      if(buffer.byteLength<1||buffer.byteLength>512)throw new Error('Raw programs require 1–512 bytes.');
+      source=formatBits(new Uint8Array(buffer));
+    } else {
+      try {source=new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(buffer);}
+      catch {throw new Error('Source files must contain valid UTF-8 text.');}
+    }
     $('binary-editor').value=source;
     if (loadSource(source)) {$('lesson').textContent='Imported literal binary program. Only the bounded supported instruction subset runs here.'; $('preset').selectedIndex=-1;}
-  } catch (error) {$('editor-status').classList.add('error'); $('editor-status').textContent=`${error.message} Current program and state kept.`;}
-  event.target.value='';
+  } catch (error) {
+    if(request!==sourceRevision)return;
+    $('editor-status').classList.add('error'); $('editor-status').textContent=`${error.message} Current program and state kept.`;
+  } finally {if(event.target.files[0]===file)event.target.value='';}
 });
 document.addEventListener('keydown',event => {
   if (event.altKey || event.ctrlKey || event.metaKey || event.repeat || event.target.closest('input,textarea,select,button,a,summary')) return;

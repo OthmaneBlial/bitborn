@@ -120,6 +120,11 @@ The v0.2 milestone is published and verified. The following research remains ope
 
 ## Evolution session
 
+- [x] Export/import exact loaded CPU Lab programs as literal `.bits` or raw `.bin`.
+  Three browsers check actual downloads, unchanged execution/history, empty/513-byte
+  rejection, the 512-byte boundary, original bytes before self-modification and
+  cancellation of delayed reads/errors after a newer preset or editor draft.
+
 - [x] Publish packed output atomically; injected sync/rename failures preserve
   existing bytes, leave absent outputs absent and clean temporary files. Source
   aliases, symlink destinations, hard-link isolation, permissions and non-files
@@ -161,7 +166,7 @@ The v0.2 milestone is published and verified. The following research remains ope
   verify GitHub private reporting is enabled. Document setup and a focused source
   map, and check canonical policy/reference copies during website validation.
 
-The [60-item working backlog](docs/EVOLUTION.md) records prioritization,
+The [working improvement backlog](docs/EVOLUTION.md) records prioritization,
 dependencies, risks and the current execution record. It is not a feature list.
 
 ## Further research

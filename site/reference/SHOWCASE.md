@@ -99,6 +99,10 @@ bounded 16-bit teaching model. The literal preset sources live in
   Arrow keys move one recorded state. Back/Forward work one state at a time.
   Register bits and RAM highlights compare the displayed states. Step after a
   rewind discards the old future; restoring history does not execute instructions.
+- Export loaded `.bits` or raw `.bin`, then import it and run the same model program.
+  The downloads preserve original loaded bytes, before self-modification; comments
+  and pending editor drafts are omitted. Export does not change the recorded state.
+  Raw downloads have no BIOS framing or ELF headers and are not automatically bootable.
 - Select **Arithmetic & flags**. Step the first MOV and ADD. `FFFF + 1` wraps
   AX to zero and sets CF and ZF. The following INC preserves carry.
 - Select **Follow a branch**. Set a breakpoint before the loop body, run, then

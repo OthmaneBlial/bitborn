@@ -7,6 +7,8 @@ import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
+import {parseBits} from '../site/binary.mjs';
+import {presets} from '../site/cpu-lab/presets.mjs';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const types={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.png':'image/png'};
@@ -98,6 +100,11 @@ try {
   await page.locator('#timeline').scrollIntoViewIfNeeded();await page.locator('#timeline').focus();
   await page.keyboard.press('End');assert.equal(await page.locator('#step-count').textContent(),'0008');
   await capture('Selected final recorded state with End; exact registers, RAM and HLT restored through recorded replay.');
+  const pendingDownload=page.waitForEvent('download');await page.locator('#export-raw').click();
+  const download=await pendingDownload;
+  const exported=await readFile(await download.path());
+  assert.equal(download.suggestedFilename(),'bitborn-program.bin');assert.deepEqual(new Uint8Array(exported),parseBits(presets.find(preset=>preset.id==='stack').source));
+  await page.locator('#download-status').scrollIntoViewIfNeeded();await capture('Downloaded the exact loaded raw program; export controls identify original loaded bytes and no BIOS/ELF framing.');
   await page.locator('#preset').selectOption('flags');
   await page.locator('#step').click();await page.locator('#step').click();
   await page.locator('#flags').scrollIntoViewIfNeeded();await capture('Arithmetic preset FFFF+1 wraps AX to zero and sets CF/ZF in the teaching model.');await encode();

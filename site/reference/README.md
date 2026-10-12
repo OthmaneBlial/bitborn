@@ -92,6 +92,7 @@ for exact evidence and remaining gates.
 | Reproducible model benchmark | ✅ Fixed reviewed workload, source/environment hashes and measured distributions; no native x86 speed claim |
 | Atomic packed-file output | ✅ Injected sync/rename failures preserve previous files and clean staging; source aliases and non-file outputs rejected |
 | Mode-aware instruction inspection | ✅ Explicit 16/32/64 context, 66/REX fields and exact imm64; independent disassembly goldens and three-browser checks; simulation remains 16-bit |
+| CPU Lab program downloads and imports | ✅ Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks |
 | [v0.2.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0) | ✅ Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified |
 | Paging, exception/hardware interrupt handling and physical hardware | Future research; no working claim |
 
@@ -216,6 +217,11 @@ pause, adjust speed, set breakpoints or inspect a bounded literal program.
 Back and Forward restore recorded registers, flags, memory, output and halt state
 without executing an instruction. New execution after rewinding replaces the
 abandoned future; Reset and loading a program clear history.
+Export the loaded program as `.bits` or raw `.bin`, then import either format.
+Exports preserve the original loaded bytes before self-modification and omit
+comments or pending editor edits. They leave execution and history unchanged;
+raw programs have no BIOS framing or ELF headers. A newer source choice or editor
+draft cancels an older asynchronous import.
 The recorded timeline selects any state with a slider or Arrow/Home/End keys.
 Changed bits and RAM compare the state you left with the selected state, including
 multiple recorded instructions; revisiting states consumes no new execution steps.
