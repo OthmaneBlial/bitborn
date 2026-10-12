@@ -47,7 +47,7 @@
     },
     {
       "milestone": "Visual CPU lab: registers, flags, stack, memory and breakpoints",
-      "progress": "\u2705 Five literal teaching programs and Chrome controls verified"
+      "progress": "\u2705 Six literal teaching programs; controls and memory exercise verified in Chrome, Firefox and WebKit"
     },
     {
       "milestone": "20 challenges across four levels",

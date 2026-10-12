@@ -73,7 +73,7 @@ for exact evidence and remaining gates.
 | [v0.1.1 host-tool patch](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.1.1) | ✅ Published; comment/failed-write checks and downloaded artifacts verified |
 | Shared CPU model: flags, calls, stack and segmented memory | ✅ Locally verified; modern PUSH SP semantics checked in real QEMU |
 | Full editable 512-byte boot-sector builder | ✅ Chrome-tested; exact downloaded image/source boot the one-bit edit in QEMU |
-| Visual CPU lab: registers, flags, stack, memory and breakpoints | ✅ Five literal teaching programs and Chrome controls verified |
+| Visual CPU lab: registers, flags, stack, memory and breakpoints | ✅ Six literal teaching programs; controls and memory exercise verified in Chrome, Firefox and WebKit |
 | 20 challenges across four levels | ✅ All solutions pass model and QEMU goals; seeds fail; local progress and sharing tested |
 | Eight dedicated `.io` routes and a size-comparison lab | ✅ Public; expanded Linux CI and live builder checks passed |
 | Original 12-byte exit versus 8-byte alternative | ✅ Both return 42 in Linux CI; 132→128-byte ELF sizes, no speed claim |
