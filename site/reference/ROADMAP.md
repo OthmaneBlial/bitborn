@@ -53,8 +53,11 @@ not release requirements or advertised capabilities.
   packing. Annotation validation remains part of target-source verification.
 - [x] Invalid binary input fails with a line number and preserves existing output.
 - [x] Release staging is isolated by version to keep checksum lists correct.
-- [ ] Publish and re-download the verified v0.1.1 host-tool patch; all target bytes
-  and boot images remain identical to v0.1.0.
+- [x] Publish and re-download the verified [v0.1.1 host-tool patch](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.1.1).
+  [Exact-commit CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38213753618)
+  passed all 20 Python tests, browser checks and reproduction. All eight public
+  assets match the prepared files and all checksums pass; the five boot images
+  are byte-for-byte identical to v0.1.0.
 
 ## Future experiments
 

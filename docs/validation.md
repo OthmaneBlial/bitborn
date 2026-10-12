@@ -32,3 +32,19 @@ OS, indexing result or performance benchmark is claimed. The browser model is
 bounded and educational. A SHA-256 digest proves identity, not human authorship.
 No language registry package was published; images/source are the intended
 artifacts for this project. The central Pages mirror changes only `bitborn/`.
+
+## v0.1.1 maintenance verified
+
+[v0.1.1](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.1.1) is public at
+immutable commit `48ccfd4b1727555543f51310c4e1a9f077b18720`.
+[Exact-commit CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38213753618)
+and the [tag CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38213913985)
+passed all 20 Python tests, browser checks, docs and reproduction. Additional CLI
+regressions prove arbitrary comment text never affects packed bytes, failed
+packing preserves an existing output, and malformed annotations still fail
+target verification independently of byte syntax. Version-specific artifact
+staging prevents older archives from entering new checksum lists.
+
+All eight patch assets were downloaded from GitHub and match the prepared files;
+SHA-256 checks passed. All five bootable images match public v0.1.0 byte-for-byte.
+Original v0.1.0 tags/assets were preserved. This patch changes host tooling only.
