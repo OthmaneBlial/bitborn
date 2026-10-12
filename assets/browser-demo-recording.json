@@ -12,7 +12,7 @@
     "site/simulator.mjs": "0fdb791271021e5b16b3da27cb0d47283cc64e0f1c400be41c1b7535a7d62a98",
     "site/binary.mjs": "c69a35f7d3b2bfdc91cac78f9f691be0eeadcbe518ac7a4d7f266061b2d84051",
     "site/boot-builder/app.mjs": "13f9234f36f0b6c166dd3ab9f16750ba680c8e3e7045d6c9bbc7e5a275fd1cb4",
-    "site/cpu-lab/lab.mjs": "f0cc0ffda8cbabe5b7be705287295c50393bc94b99110dc585fef5347431db04",
+    "site/cpu-lab/lab.mjs": "1b007d6fffea4ac849655b3a301cd30654897918fba10568c9e074ee7b4f3b65",
     "site/cpu-lab/presets.mjs": "4b0ed3df4b5ca8d9f53b8d407cd0761cdbd1cc047d169c66f15f99cf93624941",
     "site/challenges/challenges.mjs": "871be9c721a83d2066fe51b10f8df93c7e84de59ba04f52a18048d1cd1bdadba",
     "challenges/catalog.json": "81e9abfbf8fbe7c6c3709fe5bb483f87f4ee15bbba708dd96b59b948b2629b02"
@@ -41,7 +41,7 @@
     },
     {
       "file": "assets/cpu-lab-demo.gif",
-      "sha256": "0a46093fbe53d60dc6a8febda86a53a043181322a18b7ad21301627fd5ffbdd8",
+      "sha256": "8aeb76a3050a14daa493aca573a66e2fc0017bf35f9f5e39b0cf2062ab6a599b",
       "capturedFrames": 12,
       "encodedFrames": 12,
       "durationSeconds": 12,
@@ -60,18 +60,18 @@
         "Arithmetic preset FFFF+1 wraps AX to zero and sets CF/ZF in the teaching model."
       ],
       "sourceFrameSha256": [
-        "f08a66f634c176e6424c780b218297f0c5224e6d2de87da72d2b67893b0161c8",
-        "dac8664473d989dcc800ecaa7adbc123dbbb5efec25b92e42df395f378022435",
-        "8011bc8665178d6fe8d4ed4947e886a53d1bdcbe6a063393fd38ade06a5e174f",
-        "272aea24b26b82de2d679e10ce41d5768e99eb98a732f7185785ec9d02fbfe4c",
-        "9ba0d8655c7155acddc036b5c3aaeebea4ba2bcfca6fd34c6f5f06fd7f05ec03",
-        "a0208f2a7a5386d77e03d7b35c6416f94714e574b3847a3d23860e877e3294ba",
-        "9ad17450d7eb24654f47f3551ea7841b05556feaed1f2d94e949ce218c060d02",
-        "33f5bed3074e1d2bdf1f50d77d8438e8fdb9923ad187770a031e68f576aa7062",
-        "a41253e12bdad239edb0487267399782a4f64e95b33b5439bedec834c98f6353",
-        "3226bca996c0480edc64ae9f00f974232feceffe45057e2b5af4bfeb9d134b79",
-        "5be7d1656a6cacabe557ec8e6687847bf06a976c4218f56833a5fdb1a881305d",
-        "0dbb753662d89724d168354506bc62df96484ace4c69c53d48baf780f5a681f5"
+        "9fbb7c266ca57b30d037296e78d05bf4b3efd7d5e8a8a46f78b579e92e663303",
+        "6ba88d6574cd452dfa826d5382597f2c91cf9395daf72d77c332d5b735efee04",
+        "599ecc887c6b682f5e6cf7efb9b590e2941d2bab3a7622aab736d04016d13e2d",
+        "b774d91046b5c697741479f2b81541eca3e26689be809eb3a5d54400ade8ee65",
+        "e13bca0c90b02828b68f8e5b7656c44106f93b07cc8bf3a5e3a57d42a8c919c3",
+        "79ca07bcab2faa2d9d9750da2325b41349efa3fa10f45b11d8f58e31767aa202",
+        "565e14d64f503ed8dcb254bdf9b8dfc1e021109d95f1452aa317150e397387ff",
+        "d8d5928f8f45aa3ac125fae799068db37d730aca45961ecb2c7d22f0cc0e59ca",
+        "5a80acc34b8f954ca11400a809b184f9a45033ae09aa37c8d18403c6c30332dc",
+        "c0f25f7f0dba8aac0db9b3d58abf04db204aecf36f52026021181a2bf69c2f3a",
+        "d351a503ba5efa7627238bc9755ecc41242bef4673276fbab161097cdfa73e93",
+        "39c6bac086efa083223df1524903eb5da89b2805650326f15826be178ad39445"
       ]
     },
     {

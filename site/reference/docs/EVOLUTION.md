@@ -12,6 +12,9 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 - Completed: journal actual model memory changes, removing per-step whole-RAM
   copies/scans. `node tests/test_memory_changes.mjs` checks an independent oracle
   across the full 2,825-step boot and all presets; Chrome CPU Lab interactions pass.
+- Pushed journal milestone: `94e6026`; exact-commit Linux CI and Pages deployment
+  passed. Completed next: exact Back/Forward, halt restoration and future forks;
+  Node round trips and Chrome/Firefox/WebKit controls pass.
 - Next: reversible execution, then parser/flags fuzzing and architecture-aware
   instruction inspection; introductory documentation in eight languages.
 - Risks: browser behavior is modeled, not native x86. Hardware, paging and general
@@ -26,7 +29,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | ID | Priority | Improvement and completion evidence | Impact | Feasibility | Dependencies | Risk | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 01 | 0 | Record changed RAM bytes; compare with an independent full-memory oracle | H | H | Existing model | Low | Complete |
-| 02 | 1 | Binary Time Machine: undo/redo every recorded register, flag, RAM and output transition | H | H | 01 | Medium | Open |
+| 02 | 1 | Binary Time Machine: undo/redo every recorded register, flag, RAM and output transition | H | H | 01 | Medium | Complete |
 | 03 | 0 | Seeded binary parser properties and Python/JS token-syntax parity | H | H | Existing parsers | Low | Open |
 | 04 | 0 | Arithmetic flags fuzzing against independent signed/unsigned oracles | H | H | Existing model | Medium | Open |
 | 05 | 1 | Opcode microscope with explicit 16/32/64-bit context and mode-specific fixtures | H | M | Intel references | Medium | Open |
@@ -34,8 +37,8 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 07 | 1 | Explain opcode, register, ModR/M and immediate fields bit by bit | H | H | 05 | Medium | Open |
 | 08 | 1 | Export and re-import exact CPU Lab programs with cross-browser download proof | H | H | Existing builder export | Low | Open |
 | 09 | 1 | Share bounded CPU Lab programs through validated URLs | H | M | 03,08 | Medium | Open |
-| 10 | 1 | Rewind branches and CALL/RET; verify stack and logical IP restoration | H | H | 02 | Medium | Open |
-| 11 | 1 | Rewind self-modifying code; restore the fetched instruction bytes | H | H | 02 | Medium | Open |
+| 10 | 1 | Rewind branches and CALL/RET; verify stack and logical IP restoration | H | H | 02 | Medium | Complete |
+| 11 | 1 | Rewind self-modifying code; restore the fetched instruction bytes | H | H | 02 | Medium | Complete |
 | 12 | 1 | Visual execution timeline with keyboard selection and recorded-step replay | H | M | 02 | Medium | Open |
 | 13 | 0 | Replace failed file writes atomically so existing packed outputs survive I/O errors | H | M | Existing CLI | Medium | Open |
 | 14 | 0 | Validate manifest types, output aliases and packaging options before writing | H | H | Existing manifest | Medium | Open |

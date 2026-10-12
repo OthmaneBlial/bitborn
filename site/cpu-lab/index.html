@@ -22,11 +22,12 @@
       <div class="intro-note"><p>One instruction. A handful of bits.<br>A machine that makes sense.</p><p>Step through literal binary and trace the path from instruction bytes to registers, flags, stack and memory.</p><span class="model-label">EDUCATIONAL SIMULATION · NOT NATIVE CPU EXECUTION</span></div>
     </section>
     <section class="control-panel" aria-label="Execution controls">
-      <div class="execution-buttons"><button id="step" class="lab-button primary" type="button">Step <span aria-hidden="true">→</span></button><button id="run" class="lab-button" type="button">Run <span aria-hidden="true">▶</span></button><button id="pause" class="lab-button" type="button" disabled>Pause <span aria-hidden="true">Ⅱ</span></button><button id="reset" class="lab-button" type="button">Reset <span aria-hidden="true">↺</span></button></div>
+      <div class="execution-buttons"><button id="step" class="lab-button primary" type="button">Step <span aria-hidden="true">→</span></button><button id="back" class="lab-button" type="button" disabled>Back <span aria-hidden="true">←</span></button><button id="forward" class="lab-button" type="button" disabled>Forward <span aria-hidden="true">⇢</span></button><button id="run" class="lab-button" type="button">Run <span aria-hidden="true">▶</span></button><button id="pause" class="lab-button" type="button" disabled>Pause <span aria-hidden="true">Ⅱ</span></button><button id="reset" class="lab-button" type="button">Reset <span aria-hidden="true">↺</span></button></div>
       <label class="speed-control" for="speed">SPEED <input id="speed" type="range" min="1" max="12" value="3"><output id="speed-label" for="speed">3 steps/s</output></label>
       <div class="execution-state"><span id="run-state">READY</span><span><b id="step-count">0000</b> / 4096 steps</span></div>
     </section>
     <p id="status" class="status-line" role="status">Loading the lab…</p>
+    <p class="history-note"><strong>Binary Time Machine</strong> · <span id="history-position">0 / 0 recorded</span>. Back/Forward restore exact recorded registers, flags, RAM and output. Step after rewinding replaces the future. Keys: B / F. Reset or loading a program clears history.</p>
     <div class="machine-layout">
       <section class="panel cpu-panel" aria-labelledby="registers-title">
         <div class="panel-title"><h2 id="registers-title">Register file</h2><span>16 BITS / EACH</span></div>
@@ -45,7 +46,7 @@
     </div>
     <section class="panel trace-panel" aria-labelledby="trace-title">
       <div class="panel-title"><h2 id="trace-title">Follow the instruction pointer</h2><span id="pointer-label">0000:7C00</span></div>
-      <div class="instruction-flow"><div><span class="flow-label">PREVIOUS / EXECUTED</span><strong id="previous-instruction">—</strong><small id="previous-address">No instruction executed</small></div><span class="flow-arrow" aria-hidden="true">→</span><div class="current-instruction"><span class="flow-label">CURRENT / TO EXECUTE</span><strong id="current-instruction">—</strong><small id="current-address">—</small></div><span class="flow-arrow" aria-hidden="true">→</span><div><span class="flow-label">NEXT / SEQUENTIAL</span><strong id="next-instruction">—</strong><small id="next-address">Branch outcome may differ</small></div></div>
+      <div class="instruction-flow"><div><span class="flow-label" id="previous-label">PREVIOUS / EXECUTED</span><strong id="previous-instruction">—</strong><small id="previous-address">No instruction executed</small></div><span class="flow-arrow" aria-hidden="true">→</span><div class="current-instruction"><span class="flow-label">CURRENT / TO EXECUTE</span><strong id="current-instruction">—</strong><small id="current-address">—</small></div><span class="flow-arrow" aria-hidden="true">→</span><div><span class="flow-label">NEXT / SEQUENTIAL</span><strong id="next-instruction">—</strong><small id="next-address">Branch outcome may differ</small></div></div>
       <p id="pointer-change" class="pointer-change">IP starts at 7C00.</p><p id="changes" class="changes">Step to see exactly which register bits, flags and memory bytes change.</p>
     </section>
     <div class="memory-layout">

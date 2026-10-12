@@ -124,7 +124,11 @@ The v0.2 milestone is published and verified. The following research remains ope
   write journals. An independent full-memory oracle checks every step of the
   2,825-step boot, five presets, unchanged writes, stack/calls, A20 wrapping and
   self-modification. Chrome memory, stack, flag and breakpoint interactions pass.
-- [ ] Add reversible model execution and a navigable recorded timeline.
+- [x] Add exact Back/Forward model execution: recorded registers, flags, changed
+  RAM, outputs, UART and halt state restore without executing another instruction.
+  Stack/calls, output clearing, self-modification, A20, failures and the full boot
+  have independent round-trip checks. Chrome, Firefox and WebKit controls pass.
+- [ ] Add direct recorded-timeline navigation and instruction-state inspection.
 - [ ] Add parser/flag property tests and architecture-aware byte inspection.
 - [ ] Add maintained introductory documentation in English, Simplified Chinese,
   Spanish, French, Japanese, Portuguese, German and Arabic.

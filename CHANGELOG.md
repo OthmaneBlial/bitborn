@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Add exact recorded-state Back/Forward to the CPU Lab. Restore registers, flags,
+  changed RAM, screen/serial output, UART state, instruction pointer and halt state;
+  execution after a rewind replaces the old future. History uses scalar snapshots
+  and byte deltas, with no per-frame full-RAM copy.
+
 - Record exact changed model RAM bytes and consume that journal in the CPU Lab
   instead of copying/scanning 1 MiB on every instruction. Target binaries are unchanged.
 

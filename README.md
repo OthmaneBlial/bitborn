@@ -75,6 +75,7 @@ for exact evidence and remaining gates.
 | 32-bit protected mode and software interrupt | ✅ GDT, flat memory, IDT gate and IRETD verified in QEMU; native captures recorded |
 | Packaging and boundary correctness | ✅ Source aliases/collisions/corrupt derived files rejected; 16-bit IP wrap tested |
 | CPU Lab memory-change journal | ✅ Full-memory oracle and Chrome checks pass; whole-RAM copying/scanning removed from each step |
+| Binary Time Machine | ✅ Exact recorded-state Back/Forward, forks and halt restoration pass model and three-browser checks |
 | [v0.2.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0) | ✅ Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified |
 | Paging, exception/hardware interrupt handling and physical hardware | Future research; no working claim |
 
@@ -183,6 +184,9 @@ exports preserve your exact bytes. Change offset 176 from `01001000` to
 The [CPU Lab](https://othmaneblial.github.io/bitborn/cpu-lab/) shows all modeled
 16-bit registers, flags, changed register bits, stack and memory. Step, run,
 pause, adjust speed, set breakpoints or inspect a bounded literal program.
+Back and Forward restore recorded registers, flags, memory, output and halt state
+without executing an instruction. New execution after rewinding replaces the
+abandoned future; Reset and loading a program clear history.
 The [20 challenges](https://othmaneblial.github.io/bitborn/challenges/) provide
 four difficulty levels, hints, semantic goals, share links and progress stored
 only in your browser. Every reviewed solution also runs in QEMU; success is

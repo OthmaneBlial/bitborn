@@ -6,3 +6,4 @@
 @keyframes pointer-arrive{from{box-shadow:inset 8px 0 var(--green);background:#b8ff402a}to{box-shadow:inset 3px 0 var(--green);background:#b8ff4010}}
 @media(prefers-reduced-motion:reduce){.instruction-row.current{animation:none}}
 @media(max-width:760px){.register-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.register:nth-child(2n){border-right:0}.register:nth-last-child(-n+2){grid-column:auto}.register{padding-inline:10px}.register-value{font-size:18px}.register-bits{font-size:9px;letter-spacing:0}.register-bits span{min-width:5px}.register:nth-last-child(-n+2) .register-bits{justify-content:space-between;gap:0}.register-change{font-size:8px}.stack-word:nth-child(n+5){display:flex}}
+.execution-buttons{flex-wrap:wrap}.history-note{margin:18px 0 28px;font-size:11px;color:var(--muted)}.history-note strong{color:var(--green)}@media(max-width:650px){.execution-buttons .lab-button{flex:1 1 calc(33.333% - 6px)}}

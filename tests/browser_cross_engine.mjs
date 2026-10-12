@@ -84,11 +84,18 @@ try {
       assert.deepEqual(await page.locator('[data-register="AX"] .changed-bit').evaluateAll(bits=>bits.map(bit=>Number(bit.dataset.bit))),[5,3,1]);
       await page.locator('#preset').selectOption('flags'); await page.locator('#step').click(); await page.locator('#step').click();
       assert.match(await page.locator('[data-flag="CF"]').textContent(),/CF1/); assert.match(await page.locator('[data-flag="ZF"]').textContent(),/ZF1/);
+      await page.locator('#back').click();assert.equal(await page.locator('[data-register="AX"] .register-value').textContent(),'FFFF');
+      assert.match(await page.locator('[data-flag="CF"]').textContent(),/CF0/);
+      await page.locator('#forward').click();assert.equal(await page.locator('[data-register="AX"] .register-value').textContent(),'0000');
+      assert.equal(await page.locator('#history-position').textContent(),'2 / 2 recorded');
       await page.locator('#preset').selectOption('memory');
       for (let step=0;step<5;step++) await page.locator('#step').click();
       await page.locator('#memory-address').fill('00120'); await page.locator('#memory-form button').click();
       assert.equal(await page.locator('[data-address="00120"]').textContent(),'CD'); assert.equal(await page.locator('[data-address="00121"]').textContent(),'AB');
       assert.equal(await page.locator('.memory-byte.changed-bit').count(),2);
+      await page.locator('#back').click();assert.equal(await page.locator('[data-address="00120"]').textContent(),'00');
+      await page.locator('#forward').click();assert.equal(await page.locator('[data-address="00120"]').textContent(),'CD');
+      assert.equal(await page.locator('#step-count').textContent(),'0005');
       await page.locator('#memory-address').fill('FFFFF'); await page.locator('#memory-form button').click();
       assert.equal(await page.locator('.memory-byte').count(),1);
       await page.locator('#memory-address').fill('100000'); await page.locator('#memory-form button').click();

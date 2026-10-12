@@ -1,12 +1,14 @@
-import {hex, decode, createState, step, logicalIP, flagsWord, physicalAddress} from '../simulator.mjs';
+import {hex, decode, createState, logicalIP, flagsWord, physicalAddress} from '../simulator.mjs';
 import {parseBits} from '../binary.mjs';
 import {presets} from './presets.mjs';
+import {createHistory,recordStep,rewind,replay} from '../history.mjs';
 
 const $ = id => document.getElementById(id);
 const registers = ['AX','BX','CX','DX','SI','DI','BP','SP','CS','DS','ES','SS','IP','FLAGS'];
 const flags = [['CF','cf','Carry / unsigned overflow'],['PF','pf','Even parity in the low byte'],['AF','af','Carry or borrow across bit 3'],['ZF','zf','Zero result'],['SF','sf','Sign / highest result bit'],['IF','interrupts','Interrupt-enable flag; no interrupt delivery is modeled'],['DF','df','Direction of string pointer movement'],['OF','of','Signed overflow']];
 let bytes, state, previous = null, before = null, memoryChanges = [], memoryStart = 0x7C00;
 let running = false, timer = null, failed = false, stoppedAtBreakpoint = null, skipBreakpoint = null;
+let history, transition = 'execute';
 const breakpoints = new Set();
 const registerValue = (cpu, name) => name === 'IP' ? logicalIP(cpu) : name === 'FLAGS' ? flagsWord(cpu) : cpu[name];
 const location = (cpu, offset = cpu.ip) => `${hex(cpu.CS,4)}:${hex((cpu.loadAddress + offset - (cpu.CS << 4)) & 0xFFFF,4)}`;
@@ -81,6 +83,7 @@ function renderTrace() {
   const nextOffset = current ? physicalAddress(state.CS,(logicalIP(state) + current.size) & 65535) - state.loadAddress : -1;
   const next = current && !current.unsupported ? instructionAt(nextOffset) : null;
   $('previous-instruction').textContent = previous?.mnemonic ?? '—';
+  $('previous-label').textContent = transition === 'rewind' ? 'RESTORED / UNDONE' : transition === 'replay' ? 'RECORDED / REPLAYED' : 'PREVIOUS / EXECUTED';
   $('previous-address').textContent = previous ? `${previous.location} · ${previous.size} byte${previous.size === 1 ? '' : 's'}` : 'No instruction executed';
   $('current-instruction').textContent = state.halted ? 'HLT reached' : current?.mnemonic ?? 'Outside loaded program';
   $('current-address').textContent = current ? `${location(state)} · physical ${hex(physicalAddress(state.CS,logicalIP(state)),5)}` : 'Reset to restart';
@@ -93,7 +96,7 @@ function renderTrace() {
     return;
   }
   const expected = before.ip + previous.size;
-  const flow = state.ip === expected && before.CS === state.CS ? 'sequential' : 'control transfer';
+  const flow = transition === 'rewind' ? 'rewind' : transition === 'replay' ? 'recorded replay' : state.ip === expected && before.CS === state.CS ? 'sequential' : 'control transfer';
   $('pointer-change').textContent = `${previous.location} → ${location(state)} · ${flow}${state.halted ? ' · halted' : ''}`;
   const registerChanges = registers.filter(name => registerValue(state,name) !== registerValue(before,name)).map(name => `${name} ${hex(registerValue(before,name),4)} → ${hex(registerValue(state,name),4)}`);
   const flagChanges = flags.filter(([,key]) => state[key] !== before[key]).map(([name,key]) => `${name} ${before[key] == null ? '?' : Number(before[key])} → ${state[key] == null ? '?' : Number(state[key])}`);
@@ -133,6 +136,8 @@ function render() {
   $('step-count').textContent = String(state.steps).padStart(4,'0');
   $('run-state').textContent = failed ? 'STOPPED' : state.halted ? 'HALTED' : running ? 'RUNNING' : before ? 'PAUSED' : 'READY';
   $('step').disabled = running || state.halted || failed; $('run').disabled = running || state.halted || failed; $('pause').disabled = !running;
+  $('back').disabled = running || history.position===0; $('forward').disabled = running || history.position===history.frames.length;
+  $('history-position').textContent = `${history.position} / ${history.frames.length} recorded`;
   document.querySelector('.control-panel').classList.toggle('is-running',running);
   $('byte-count').textContent = `${bytes.length} BYTES`; $('screen-output').textContent = state.output || '∅'; $('serial-output').textContent = state.serial || '∅';
 }
@@ -145,11 +150,11 @@ function pause(message) {
 
 function performStep() {
   if (state.halted || failed) return false;
-  const {memory: _memory, ...snapshot} = state;
-  before = snapshot;
   const oldLocation = location(state), offset = state.ip;
   try {
-    const instruction = step(bytes,state);
+    const frame = recordStep(history,bytes), instruction=frame.instruction;
+    before=frame.before;
+    transition = 'execute';
     previous = {...instruction,offset,location:oldLocation};
     memoryChanges = instruction.memoryChanges;
     stoppedAtBreakpoint = null;
@@ -160,6 +165,19 @@ function performStep() {
     before = null; memoryChanges = []; failed = true;
     pause(); setStatus(error.message,true); return false;
   }
+}
+
+function travel(direction) {
+  if (running) return;
+  const frame = direction==='rewind' ? rewind(history) : replay(history);
+  if (!frame) return;
+  clearTimeout(timer);timer=null;failed=false;stoppedAtBreakpoint=null;skipBreakpoint=null;
+  transition=direction;
+  before=direction==='rewind' ? frame.after : frame.before;
+  previous={...frame.instruction,offset:frame.before.ip,location:location(frame.before)};
+  memoryChanges=direction==='rewind' ? frame.memoryChanges.map(change=>({offset:change.offset,before:change.after,after:change.before})) : frame.memoryChanges;
+  setStatus(`${direction==='rewind'?'Rewound':'Replayed'} ${frame.instruction.mnemonic}. Restored recorded state ${history.position}; no new instruction was executed.`);
+  render();
 }
 
 function tick() {
@@ -181,6 +199,7 @@ function run() {
 function reset() {
   clearTimeout(timer); timer = null; running = false; failed = false; stoppedAtBreakpoint = null; skipBreakpoint = null;
   state = createState(bytes); state.SP = 0x7C00; previous = null; before = null; memoryChanges = [];
+  history=createHistory(state);transition='execute';
   setStatus('Deterministic initial state loaded: CS:IP 0000:7C00, SS:SP 0000:7C00. Ready to step.'); render();
 }
 
@@ -205,6 +224,7 @@ $('preset').addEventListener('change', () => {
   $('binary-editor').value = preset.source; $('lesson').textContent = preset.lesson; loadSource(preset.source);
 });
 $('step').addEventListener('click',performStep); $('run').addEventListener('click',run); $('pause').addEventListener('click',() => pause(`Paused at ${location(state)}. Last state change is shown below.`)); $('reset').addEventListener('click',reset);
+$('back').addEventListener('click',()=>travel('rewind'));$('forward').addEventListener('click',()=>travel('replay'));
 $('speed').addEventListener('input',() => {
   $('speed-label').textContent = `${$('speed').value} steps/s`;
   if (running) {clearTimeout(timer); timer=setTimeout(tick,1000 / Number($('speed').value));}
@@ -235,5 +255,7 @@ document.addEventListener('keydown',event => {
   if (event.key.toLowerCase() === 's') {event.preventDefault(); if (!running) performStep();}
   else if (event.code === 'Space') {event.preventDefault(); if (running) pause(`Paused at ${location(state)}.`); else run();}
   else if (event.key.toLowerCase() === 'r') {event.preventDefault(); reset();}
+  else if (event.key.toLowerCase() === 'b') {event.preventDefault();travel('rewind');}
+  else if (event.key.toLowerCase() === 'f') {event.preventDefault();travel('replay');}
 });
 $('preset').value=presets[0].id; $('binary-editor').value=presets[0].source; $('lesson').textContent=presets[0].lesson; loadSource(presets[0].source);

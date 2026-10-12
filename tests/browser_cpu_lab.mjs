@@ -41,6 +41,21 @@ try {
   assert.equal(await page.locator('[data-register="SP"] .register-value').textContent(),'7BFE');
   assert.equal(await page.locator('.stack-word:first-child .changed-bit').count(),2);
   await page.locator('#inspect-stack').click(); assert.equal(await page.locator('[data-address="07BFE"]').textContent(),'34'); assert.equal(await page.locator('[data-address="07BFF"]').textContent(),'12');
+  assert.equal(await page.locator('#history-position').textContent(),'2 / 2 recorded');
+  await page.locator('#back').click();
+  assert.equal(await page.locator('#step-count').textContent(),'0001');
+  assert.equal(await page.locator('[data-register="SP"] .register-value').textContent(),'7C00');
+  assert.equal(await page.locator('[data-address="07BFE"]').textContent(),'00');
+  assert.match(await page.locator('#previous-label').textContent(),/UNDONE/);
+  assert.match(await page.locator('#pointer-change').textContent(),/rewind/);
+  assert.equal(await page.locator('#forward').isEnabled(),true);
+  await page.locator('#forward').click();
+  assert.equal(await page.locator('#step-count').textContent(),'0002','replay restores the recorded count without executing another step');
+  assert.equal(await page.locator('[data-address="07BFE"]').textContent(),'34');
+  assert.match(await page.locator('#status').textContent(),/no new instruction was executed/);
+  await page.locator('#back').click();await page.locator('#step').click();
+  assert.equal(await page.locator('#history-position').textContent(),'2 / 2 recorded');
+  assert.equal(await page.locator('#forward').isDisabled(),true,'fresh execution discards the abandoned future');
   await page.locator('#preset').selectOption('branch');
   await page.locator('#speed').evaluate(input=>{input.value='12';input.dispatchEvent(new Event('input',{bubbles:true}));});
   assert.equal(await page.locator('#speed-label').textContent(),'12 steps/s');
@@ -77,6 +92,9 @@ try {
   await page.locator('#import-program').setInputFiles({name:'halt.bits',mimeType:'text/plain',buffer:Buffer.from('11110100\n')});
   await page.waitForFunction(()=>document.getElementById('byte-count').textContent==='1 BYTES'); await page.locator('#step').click();
   assert.equal(await page.locator('#run-state').textContent(),'HALTED'); assert.equal(await page.locator('#step').isDisabled(),true);
+  await page.locator('#lab-title').click();await page.keyboard.press('b');
+  assert.equal(await page.locator('#step-count').textContent(),'0000');assert.equal(await page.locator('#step').isEnabled(),true,'rewind revives a halted model');
+  await page.keyboard.press('f');assert.equal(await page.locator('#run-state').textContent(),'HALTED');assert.equal(await page.locator('#history-position').textContent(),'1 / 1 recorded');
   await page.locator('#preset').selectOption('memory');
   for(let i=0;i<5;i++)await page.locator('#step').click();
   await page.locator('#memory-address').fill('00120'); await page.locator('#memory-form button').click();
@@ -95,5 +113,5 @@ try {
   }
   await page.screenshot({path:resolve(root,'build/cpu-lab-mobile.png'),fullPage:true});
   assert.deepEqual(errors,[],'browser errors and asset failures');
-  console.log('CPU lab browser checks passed: exact changed bits/flags/stack bytes, branch pointer, breakpoints/resume, speed, pause, reset, keyboard, memory bounds, import/parser errors, 1440/390/320px layouts; screenshots in build/.');
+  console.log('CPU lab browser checks passed: exact changed bits/flags/stack bytes, rewind/replay/fork/halt restoration, branch pointer, breakpoints/resume, speed, pause, reset, keyboard, memory bounds, import/parser errors, 1440/390/320px layouts; screenshots in build/.');
 } finally {await browser?.close();await new Promise(resolve=>server.close(resolve));}
