@@ -1,0 +1,4 @@
+# Linux x86-64 payload; ELF headers are host packaging, not executable code.
+10111000 00111100 00000000 00000000 00000000 # instruction | MOV EAX,60 | B8+EAX, imm32 60; selects Linux x86-64 exit syscall.
+10111111 00101010 00000000 00000000 00000000 # instruction | MOV EDI,42 | BF = B8+EDI, imm32 42; exit status goes in RDI via zero extension.
+00001111 00000101 # instruction | SYSCALL | 0F 05 enters the Linux kernel; exit does not return.

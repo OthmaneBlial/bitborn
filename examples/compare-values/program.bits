@@ -1,0 +1,6 @@
+10111111 00101010 00000000 00000000 00000000 # instruction | MOV EDI,42 | BF loads the value to compare.
+10000011 11111111 00101010 # instruction | CMP EDI,42 | 83 /7; FF selects EDI, imm8 42 is sign-extended; equality sets ZF.
+01110100 00000101 # instruction | JE offset 15 | 74 rel8; next offset 10 + 5 = 15, skipping the unequal status.
+10111111 00000001 00000000 00000000 00000000 # instruction | MOV EDI,1 | BF assigns exit status 1 on inequality.
+10111000 00111100 00000000 00000000 00000000 # instruction | MOV EAX,60 | B8 selects Linux exit; the equal branch retains EDI=42.
+00001111 00000101 # instruction | SYSCALL | 0F 05 exits with 42 when equal, or 1 when unequal.

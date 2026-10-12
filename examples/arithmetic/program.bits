@@ -1,0 +1,4 @@
+10111111 00000110 00000000 00000000 00000000 # instruction | MOV EDI,6 | BF loads the first arithmetic operand.
+01101011 11111111 00000111 # instruction | IMUL EDI,EDI,7 | 6B /r imm8; ModR/M FF means EDI times sign-extended 7; result is 42.
+10111000 00111100 00000000 00000000 00000000 # instruction | MOV EAX,60 | B8 loads Linux exit syscall number without changing EDI.
+00001111 00000101 # instruction | SYSCALL | 0F 05 exits with the computed result, 42.

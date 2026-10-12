@@ -1,3 +1,8 @@
 [
-  {"source": "boot/boot.bits", "output": "boot.img", "size": 512, "bios": true, "sha256": "46f0cf66a237fdc51d033d3e0fc86a1c7d7691770a42049077cf470f660cbfc9"}
+  {"source": "boot/boot.bits", "output": "boot.img", "size": 512, "bios": true, "sha256": "46f0cf66a237fdc51d033d3e0fc86a1c7d7691770a42049077cf470f660cbfc9"},
+  {"source": "examples/exit-code/program.bits", "output": "exit-code.bin", "size": 12, "environment": "linux-x86_64", "sha256": "5875e23660cb0ae0c3f4b13815230783dff9fdbb55746e26ebf0869c5d091359"},
+  {"source": "examples/arithmetic/program.bits", "output": "arithmetic.bin", "size": 15, "environment": "linux-x86_64", "sha256": "212164bc0e304cbe4ec40ed59a6b83aaf1b8538a1d8ef5fa621341f323f142e1"},
+  {"source": "examples/print-text/program.bits", "output": "print-text.bin", "size": 54, "environment": "linux-x86_64", "sha256": "1fac3e60a7a0520368efd9ea16f7006104f303a3dcb67df753d23107acec6043"},
+  {"source": "examples/loop-count/program.bits", "output": "loop-count.bin", "size": 23, "environment": "linux-x86_64", "sha256": "940578fe66ee9598517b4ba2f1330d45be337ebf06875b3f0cf1d4cb6e9abb7f"},
+  {"source": "examples/compare-values/program.bits", "output": "compare-values.bin", "size": 22, "environment": "linux-x86_64", "sha256": "c8a8c1a58cd1d392ccf66eecb262ced0a80ef5fcdd2af15ad96443cbe14e3487"}
 ]
