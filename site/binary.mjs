@@ -1,5 +1,8 @@
 // Literal binary input only: comments describe bytes, never generate instructions.
 const isByte = value => Number.isInteger(value) && value >= 0 && value <= 255;
+// Match the host parser's Unicode whitespace and splitlines rules, not JS \s.
+const sourceSpaces = /[\t-\r\x1C-\x20\x85\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000]+/u;
+const sourceLines = /\r\n|[\n\r\v\f\x1C-\x1E\x85\u2028\u2029]/u;
 const checkBytes = bytes => {
   if (!(Array.isArray(bytes) || bytes instanceof Uint8Array) || bytes.length > 4096 || !Array.from(bytes).every(isByte)) throw new Error('Expected at most 4,096 byte values.');
 };
@@ -8,8 +11,8 @@ export function parseBits(source, maxBytes = 512) {
   if (typeof source !== 'string' || source.length > 65536) throw new Error('Binary source must be text under 64 KiB.');
   if (!Number.isInteger(maxBytes) || maxBytes < 1 || maxBytes > 4096) throw new Error('Invalid byte limit.');
   const bytes = [];
-  for (const [index, line] of source.split(/\r?\n/).entries()) {
-    for (const token of line.split('#', 1)[0].trim().split(/\s+/).filter(Boolean)) {
+  for (const [index, line] of source.replace(/^\uFEFF/, '').split(sourceLines).entries()) {
+    for (const token of line.split('#', 1)[0].split(sourceSpaces).filter(Boolean)) {
       if (!/^[01]{8}$/.test(token)) throw new Error(`Line ${index + 1}: expected an eight-bit binary token, received ${token.slice(0, 32)}.`);
       bytes.push(Number.parseInt(token, 2));
       if (bytes.length > maxBytes) throw new Error(`The ${maxBytes}-byte limit was exceeded.`);

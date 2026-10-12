@@ -245,7 +245,11 @@ $('import-program').addEventListener('change',async event => {
   const file=event.target.files[0]; if (!file) return;
   try {
     if (file.size > 65536) throw new Error('Source files must be at most 64 KiB.');
-    const source=await file.text(); $('binary-editor').value=source;
+    const buffer=await file.arrayBuffer();let source;
+    // Preserve the BOM so the shared parser validates it exactly once.
+    try {source=new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(buffer);}
+    catch {throw new Error('Source files must contain valid UTF-8 text.');}
+    $('binary-editor').value=source;
     if (loadSource(source)) {$('lesson').textContent='Imported literal binary program. Only the bounded supported instruction subset runs here.'; $('preset').selectedIndex=-1;}
   } catch (error) {$('editor-status').classList.add('error'); $('editor-status').textContent=`${error.message} Current program and state kept.`;}
   event.target.value='';

@@ -111,6 +111,16 @@ try {
       await page.locator('#step').click(); assert.equal(await page.locator('#step-count').textContent(),'0005');
       await page.locator('#reset').click(); await page.locator('#step').focus(); await page.keyboard.press('Enter');
       assert.equal(await page.locator('#step-count').textContent(),'0001','keyboard activation works across engines');
+      await page.locator('#import-program').setInputFiles({name:'bom.bits',mimeType:'text/plain',buffer:Buffer.from('\ufeff11110100')});
+      await page.waitForFunction(()=>document.getElementById('byte-count').textContent==='1 BYTES');
+      await page.locator('#step').click();assert.equal(await page.locator('#run-state').textContent(),'HALTED');
+      await page.locator('#import-program').setInputFiles({name:'double.bits',mimeType:'text/plain',buffer:Buffer.from('\ufeff\ufeff11110100')});
+      await page.waitForFunction(()=>document.getElementById('editor-status').textContent.includes('Current program and state kept'));
+      assert.equal(await page.locator('#run-state').textContent(),'HALTED');
+      await page.locator('#preset').selectOption('immediates');
+      await page.locator('#import-program').setInputFiles({name:'invalid.bits',mimeType:'text/plain',buffer:Buffer.from([255])});
+      await page.waitForFunction(()=>document.getElementById('editor-status').textContent.includes('valid UTF-8'));
+      assert.equal(await page.locator('#step-count').textContent(),'0000');
 
       // Solve the two puzzles by their actual bit buttons and verify local progress after reload.
       await open('challenges/?id=return-42'); await page.locator('#validate').click();

@@ -76,6 +76,7 @@ for exact evidence and remaining gates.
 | Packaging and boundary correctness | ✅ Source aliases/collisions/corrupt derived files rejected; 16-bit IP wrap tested |
 | CPU Lab memory-change journal | ✅ Full-memory oracle and Chrome checks pass; whole-RAM copying/scanning removed from each step |
 | Binary Time Machine | ✅ Exact recorded-state Back/Forward, forks and halt restoration pass model and three-browser checks |
+| Browser/CLI literal source parity | ✅ Seeded cases check identical bytes/error lines, Unicode line boundaries and initial UTF-8 BOM handling |
 | [v0.2.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0) | ✅ Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified |
 | Paging, exception/hardware interrupt handling and physical hardware | Future research; no working claim |
 
@@ -113,6 +114,10 @@ The host tools are Python. The browser explorer is JavaScript. The **target
 machine instructions** are authored directly in `.bits`. Packaging gallery
 payloads adds non-executable zero fill, BIOS signatures or ELF headers; it never
 generates an instruction. The main boot source already contains all 512 bytes.
+
+The [literal source format](docs/binary-format.md) is shared by the browser and
+CLI, including comment boundaries and an optional initial UTF-8 BOM. A seeded
+cross-language corpus checks exact accepted bytes and malformed-token line numbers.
 
 ## Inside one sector
 

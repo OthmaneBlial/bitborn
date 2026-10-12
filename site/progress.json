@@ -86,6 +86,10 @@
       "progress": "\u2705 Exact recorded-state Back/Forward, forks and halt restoration pass model and three-browser checks"
     },
     {
+      "milestone": "Browser/CLI literal source parity",
+      "progress": "\u2705 Seeded cases check identical bytes/error lines, Unicode line boundaries and initial UTF-8 BOM handling"
+    },
+    {
       "milestone": "v0.2.0 release",
       "progress": "\u2705 Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified"
     },

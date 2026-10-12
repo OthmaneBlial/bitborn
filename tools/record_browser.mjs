@@ -79,7 +79,7 @@ try {
   await capture('Held the solved challenge result and local progress count.');await encode();
   assert.deepEqual(errors,[]);
   const hashes={};
-  for(const source of ['boot/boot.bits','site/simulator.mjs','site/binary.mjs','site/boot-builder/app.mjs','site/cpu-lab/lab.mjs','site/cpu-lab/presets.mjs','site/challenges/challenges.mjs','challenges/catalog.json']){
+  for(const source of ['boot/boot.bits','site/simulator.mjs','site/binary.mjs','site/history.mjs','site/boot-builder/app.mjs','site/cpu-lab/lab.mjs','site/cpu-lab/presets.mjs','site/challenges/challenges.mjs','challenges/catalog.json']){
     hashes[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');
   }
   const metadata={kind:'Actual browser screenshots of bounded educational simulation; not native CPU or QEMU footage',browser:browser.version(),viewport:{width:1280,height:960},presentationFps:1,alterations:'960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.',sourceSha256:hashes,captures,reproduce:'make site-test && npm ci && npx playwright install chromium && npm run record:browser',requires:'ffmpeg and ffprobe; PLAYWRIGHT_CHROMIUM_EXECUTABLE may select an installed Chrome'};

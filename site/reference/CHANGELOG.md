@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Align browser and host source parsing for initial UTF-8 BOMs, Unicode whitespace
+  and comment-ending line boundaries; reject embedded BOMs consistently. Add
+  658 seeded round-trip/rejection and cross-language diagnostic cases.
+
 - Add exact recorded-state Back/Forward to the CPU Lab. Restore registers, flags,
   changed RAM, screen/serial output, UART state, instruction pointer and halt state;
   execution after a rewind replaces the old future. History uses scalar snapshots

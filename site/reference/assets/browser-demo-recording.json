@@ -10,9 +10,10 @@
   "sourceSha256": {
     "boot/boot.bits": "230bbafbfa02abd62dc964efbad02db0431f0efa263216bba02146cd164262b8",
     "site/simulator.mjs": "0fdb791271021e5b16b3da27cb0d47283cc64e0f1c400be41c1b7535a7d62a98",
-    "site/binary.mjs": "c69a35f7d3b2bfdc91cac78f9f691be0eeadcbe518ac7a4d7f266061b2d84051",
+    "site/binary.mjs": "3e05c9aee0dbe8023d9568b7bcc206f8be47e7a4da43fa1229bb9226f84a56d8",
+    "site/history.mjs": "289faf91f4c9d05ae30c19a2e77c7b7fafee29dd6e79063d9ffdd35bc6b4eab8",
     "site/boot-builder/app.mjs": "13f9234f36f0b6c166dd3ab9f16750ba680c8e3e7045d6c9bbc7e5a275fd1cb4",
-    "site/cpu-lab/lab.mjs": "1b007d6fffea4ac849655b3a301cd30654897918fba10568c9e074ee7b4f3b65",
+    "site/cpu-lab/lab.mjs": "4a37cb9f2c37f4b28036f25db5391d0699abfaa71520608eccb6835031bfa05a",
     "site/cpu-lab/presets.mjs": "4b0ed3df4b5ca8d9f53b8d407cd0761cdbd1cc047d169c66f15f99cf93624941",
     "site/challenges/challenges.mjs": "871be9c721a83d2066fe51b10f8df93c7e84de59ba04f52a18048d1cd1bdadba",
     "challenges/catalog.json": "81e9abfbf8fbe7c6c3709fe5bb483f87f4ee15bbba708dd96b59b948b2629b02"
