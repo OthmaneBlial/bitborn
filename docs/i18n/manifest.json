@@ -1,0 +1,13 @@
+{
+  "source": "en/README.md",
+  "languages": [
+    {"tag":"en","name":"English","direction":"ltr","path":"en/README.md","sourceSha256":"84c9b4af6156634bd0f5783d890c99ceecc45292d62c239f74a107fb23df2415"},
+    {"tag":"zh-CN","name":"简体中文","direction":"ltr","path":"zh-CN/README.md","sourceSha256":"84c9b4af6156634bd0f5783d890c99ceecc45292d62c239f74a107fb23df2415"},
+    {"tag":"es","name":"Español","direction":"ltr","path":"es/README.md","sourceSha256":"84c9b4af6156634bd0f5783d890c99ceecc45292d62c239f74a107fb23df2415"},
+    {"tag":"fr","name":"Français","direction":"ltr","path":"fr/README.md","sourceSha256":"84c9b4af6156634bd0f5783d890c99ceecc45292d62c239f74a107fb23df2415"},
+    {"tag":"ja","name":"日本語","direction":"ltr","path":"ja/README.md","sourceSha256":"84c9b4af6156634bd0f5783d890c99ceecc45292d62c239f74a107fb23df2415"},
+    {"tag":"pt","name":"Português","direction":"ltr","path":"pt/README.md","sourceSha256":"84c9b4af6156634bd0f5783d890c99ceecc45292d62c239f74a107fb23df2415"},
+    {"tag":"de","name":"Deutsch","direction":"ltr","path":"de/README.md","sourceSha256":"84c9b4af6156634bd0f5783d890c99ceecc45292d62c239f74a107fb23df2415"},
+    {"tag":"ar","name":"العربية","direction":"rtl","path":"ar/README.md","sourceSha256":"84c9b4af6156634bd0f5783d890c99ceecc45292d62c239f74a107fb23df2415"}
+  ]
+}

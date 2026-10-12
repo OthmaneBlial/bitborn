@@ -136,8 +136,10 @@ The v0.2 milestone is published and verified. The following research remains ope
 - [x] Align browser/CLI source parsing: accept only an initial UTF-8 BOM, use the
   same Unicode whitespace and line boundaries, and keep exact comment scope.
   658 seeded valid/invalid cases compare bytes and source-line diagnostics.
-- [ ] Add maintained introductory documentation in English, Simplified Chinese,
-  Spanish, French, Japanese, Portuguese, German and Arabic.
+- [x] Add introductory documentation in English, Simplified Chinese, Spanish,
+  French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
+  literal code/quickstart blocks and local links are checked. Native-speaker review
+  remains welcome; detailed guides and interactive controls currently use English.
 - [x] Add contributor conduct/security policies with usable reporting contacts;
   verify GitHub private reporting is enabled. Document setup and a focused source
   map, and check canonical policy/reference copies during website validation.

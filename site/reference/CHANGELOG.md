@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Add concise introductions in English, Simplified Chinese, Spanish, French,
+  Japanese, Portuguese, German and Arabic; preserve shared literal examples and
+  quickstart commands, with an English-source freshness manifest and link checks.
+
 - Add conduct and security policies, enable private GitHub vulnerability reporting,
   route sensitive reports away from public issue forms and document a contributor
   source map. Verify published root reference files match canonical documents.

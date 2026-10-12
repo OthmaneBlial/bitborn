@@ -44,6 +44,11 @@ test site; they do not need the development server. Focused checks complement th
 full CI suite. Edit canonical documents, then regenerate `site/reference/` with
 `make site-test`; do not edit the generated copies directly.
 
+The [translation guide](docs/i18n/README.md) explains the shared English source and
+freshness manifest. Update translations when that introduction changes, preserve
+literal code blocks, and run `python3 -m unittest tests.test_translations tests.test_docs`.
+Link current roadmap evidence rather than repeating release counts in each language.
+
 ## Source and contribution rules
 
 - Write target instructions as literal eight-digit binary tokens. No assembler,

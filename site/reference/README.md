@@ -15,6 +15,12 @@
 [Documentation](https://othmaneblial.github.io/bitborn/docs.html) ·
 [Download the 512-byte image](https://othmaneblial.github.io/bitborn/downloads/boot.img)
 
+Introductions: [English](docs/i18n/en/README.md) · [简体中文](docs/i18n/zh-CN/README.md) ·
+[Español](docs/i18n/es/README.md) · [Français](docs/i18n/fr/README.md) ·
+[日本語](docs/i18n/ja/README.md) · [Português](docs/i18n/pt/README.md) ·
+[Deutsch](docs/i18n/de/README.md) · [العربية](docs/i18n/ar/README.md).
+These cover the same example, quickstart and boundaries; detailed guides remain in English.
+
 What if you could build a real bootable computer program without writing a
 single instruction in a programming language?
 
@@ -79,6 +85,7 @@ for exact evidence and remaining gates.
 | Browser/CLI literal source parity | ✅ Seeded cases check identical bytes/error lines, Unicode line boundaries and initial UTF-8 BOM handling |
 | Arithmetic flag properties | ✅ Independent ripple-carry oracle, seeded 16-bit arithmetic and exhaustive 8-bit TEST masks; IF/DF and INC/DEC carry preserved |
 | Contributor policies and source map | ✅ Conduct contact and private GitHub vulnerability reporting available; focused setup/check commands documented |
+| Introductions in eight languages | ✅ Shared literal example/quickstart and English-source freshness checks; detailed guides remain in English |
 | [v0.2.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0) | ✅ Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified |
 | Paging, exception/hardware interrupt handling and physical hardware | Future research; no working claim |
 

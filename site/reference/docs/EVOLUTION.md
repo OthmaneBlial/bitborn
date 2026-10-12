@@ -23,8 +23,13 @@ executable instructions remain literal `.bits`; host tooling never assembles the
   16-bit cases and exhaustive 8-bit TEST masks, with preserved IF/DF and INC/DEC CF.
 - Pushed flags checks: `6e73fa0`. Completed conduct/security policies, enabled
   private GitHub reporting and documented the contributor setup/source map.
-- Next: direct timeline navigation and architecture-aware
-  instruction inspection; introductory documentation in eight languages.
+- Pushed contributor policies: `f0cef18`; its CI caught a stale generated source
+  map. Corrected in `e940885`, whose CI and Pages deployment passed. Added
+  introductions in eight languages with shared examples and an English-source
+  freshness manifest. All 40 Python tests (one macOS skip) and site checks pass;
+  detailed technical guides remain English.
+- Next: direct timeline navigation, localized introductory website pages and
+  architecture-aware instruction inspection.
 - Risks: browser behavior is modeled, not native x86. Hardware, paging and general
   interrupt support require separate native targets and evidence.
 
@@ -66,15 +71,15 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 28 | 2 | Meaningful bit-diff explanations tied to instruction boundaries and execution mode | H | M | 05,07 | Medium | Open |
 | 29 | 2 | New optimization challenges with alternate valid solutions and actual size measurements | H | M | Challenge evaluator | Medium | Open |
 | 30 | 2 | Curated broken-program debugging walkthrough with recorded repair and native proof | H | H | 02 | Low | Open |
-| 31 | 2 | Stable English introduction as the maintained translation source | H | H | Existing README | Low | Open |
-| 32 | 2 | Simplified Chinese README/introduction and working command/link checks | H | H | 31 | Medium | Open |
-| 33 | 2 | Spanish README/introduction and working command/link checks | H | H | 31 | Medium | Open |
-| 34 | 2 | French README/introduction and working command/link checks | H | H | 31 | Medium | Open |
-| 35 | 2 | Japanese README/introduction and working command/link checks | H | H | 31 | Medium | Open |
-| 36 | 2 | Portuguese README/introduction and working command/link checks | H | H | 31 | Medium | Open |
-| 37 | 2 | German README/introduction and working command/link checks | H | H | 31 | Medium | Open |
-| 38 | 2 | Arabic README/introduction; preserve left-to-right code and verify RTL layout | H | M | 31 | Medium | Open |
-| 39 | 0 | Translation freshness manifest with explicit source revisions and consistency checks | H | H | 31–38 | Medium | Open |
+| 31 | 2 | Stable English introduction as the maintained translation source | H | H | Existing README | Low | Complete |
+| 32 | 2 | Simplified Chinese README/introduction and working command/link checks | H | H | 31 | Medium | Complete |
+| 33 | 2 | Spanish README/introduction and working command/link checks | H | H | 31 | Medium | Complete |
+| 34 | 2 | French README/introduction and working command/link checks | H | H | 31 | Medium | Complete |
+| 35 | 2 | Japanese README/introduction and working command/link checks | H | H | 31 | Medium | Complete |
+| 36 | 2 | Portuguese README/introduction and working command/link checks | H | H | 31 | Medium | Complete |
+| 37 | 2 | German README/introduction and working command/link checks | H | H | 31 | Medium | Complete |
+| 38 | 2 | Arabic README/introduction; preserve left-to-right code and verify RTL layout | H | M | 31 | Medium | In progress: docs added; browser layout pending |
+| 39 | 0 | Translation freshness manifest with explicit source revisions and consistency checks | H | H | 31–38 | Medium | Complete |
 | 40 | 2 | Localized introductory site routes with lang/dir/canonical/hreflang metadata | H | M | 31–39 | Medium | Open |
 | 41 | 2 | Print-friendly lessons with readable code and source attribution | M | H | 25–27 | Low | Open |
 | 42 | 0 | Keyboard accessibility regression for timeline, imports, controls and error focus | H | H | 12 | Low | Open |
