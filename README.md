@@ -195,6 +195,9 @@ native browser code. `make site-test` verifies source hashes, execution and link
 [examples](https://othmaneblial.github.io/bitborn/examples/) and the
 [live roadmap](https://othmaneblial.github.io/bitborn/roadmap/) have dedicated pages.
 The roadmap and homepage progress feed are rebuilt from the table above.
+The website documentation links all fourteen current examples and the latest
+release. The original 512-byte boot message still reports v0.1; its exact bytes
+are preserved while v0.2 adds separate instruments and native targets.
 
 ```sh
 npm ci                         # development-only browser test dependency

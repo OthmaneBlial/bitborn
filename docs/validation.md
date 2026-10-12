@@ -12,7 +12,7 @@ simulation, live publication and hardware limitations.
 | Four documented host tools | Syntax/comment/error, inspection, reviewed size/hash/signature and bit-diff checks in tests/test_tools.py |
 | Ten real examples with source/binary/explanations | examples/ guides and complete byte tables; unchanged payloads, framed images and ELF files available in release archive/site downloads |
 | Real BIOS keyboard/VGA/disk/monitor behavior | QEMU key injection, actual VGA/disk memory, exact command tests, Backspace/bounds, reboot, alternate memory operand and forced BIOS disk error |
-| Native Linux behavior | Ubuntu x86-64 CI executes all five ELF examples, including alternate comparison input |
+| Native Linux behavior | Ubuntu x86-64 CI executes all six ELF examples, including the smaller exit and alternate comparison input |
 | Professional README/docs and visible roadmap | Root README.md, ROADMAP.md, architecture/tutorial/encoding guides, live website link and real QEMU captures |
 | Description, topics, homepage and social preview | GitHub API confirms specified description, fifteen topics, live homepage and custom open-graph image |
 | Interactive website and accessible mobile controls | Static decoder/stack/flags/bounds tests and real Chrome bit-editing, all512 bytes, keyboard navigation, boot stepping, clipboard, 1440/390/320px and reduced motion checks |

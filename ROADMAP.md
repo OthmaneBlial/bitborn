@@ -115,6 +115,8 @@ not release requirements or advertised capabilities.
   plus its README, and the source archive equals the exact release commit.
 
 The v0.2 milestone is published and verified. The following research remains open.
+- [x] Refresh the main documentation's example counts, latest-release links and
+  protected-mode status; preserve the original boot image and its v0.1 greeting.
 
 ## Further research
 
