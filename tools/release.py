@@ -28,7 +28,7 @@ def prepare():
         raise ValueError("release requires a clean worktree")
     print(verify())
     version = (ROOT / "VERSION").read_text().strip()
-    destination = ROOT / "build/release"
+    destination = ROOT / "build" / f"release-v{version}"
     destination.mkdir(exist_ok=True)
     files = {path.name: path.read_bytes() for path in (ROOT / "build").iterdir()
              if path.suffix in {".img", ".bin", ".elf"} and path.stem != "loader"}

@@ -22,9 +22,7 @@ def read_bits(path):
             if not re.fullmatch(r"[01]{8}", token):
                 raise ValueError(f"{path}:{number}: expected eight binary digits, got {token!r}")
         parts = [part.strip() for part in comment.split("|")]
-        if "|" in comment and len(parts) != 3:
-            raise ValueError(f"{path}:{number}: annotation must be kind | mnemonic | explanation")
-        annotated = len(parts) == 3
+        annotated = len(parts) == 3 and parts[0] in {"instruction", "data", "padding", "signature"}
         annotations.append({"offset": len(data), "size": len(tokens), "kind": parts[0] if annotated else "data",
                             "mnemonic": parts[1] if annotated else "unannotated bytes",
                             "explanation": parts[2] if annotated else "", "bits": " ".join(tokens)})

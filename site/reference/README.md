@@ -63,6 +63,7 @@ for exact evidence and remaining gates.
 | Real boot screenshot/GIF and architecture tutorial | ✅ Captured from QEMU and reproducible |
 | Interactive `.io` website and mobile browser checks | ✅ Live; HTTPS assets and Chrome interactions verified |
 | Public v0.1.0 images, source and checksums | ✅ Published; downloaded artifacts and checksums verified |
+| v0.1.1 host-tool patch | ✅ Comments/failed-write regression checks pass; patch publication in progress |
 | Protected mode, interrupts and executable loading | Future research; no working claim |
 
 ## From text bits to CPU instructions

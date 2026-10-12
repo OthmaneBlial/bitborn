@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.1 — 2026-10-12
+
+- Accept arbitrary `#` comment prose, including pipe separators, without changing
+  the packed bytes. Structured annotations remain separate from byte syntax;
+  malformed target metadata still fails source verification.
+- Verify failed CLI packing leaves an existing output file intact.
+- Isolate release artifacts by version so checksums cannot include older archives.
+- Target instruction bytes and all boot images match v0.1.0 exactly.
+
 ## 0.1.0 — 2026-10-12
 
 - Handwritten 512-byte x86 BIOS boot program with VGA/COM1 greeting and halt.

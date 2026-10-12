@@ -1,6 +1,6 @@
 {
   "name": "bitborn-host-checks",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Development-only browser checks; target instructions are canonical .bits files",
   "scripts": {

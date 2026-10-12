@@ -1,8 +1,9 @@
 import json
 import tempfile
+import subprocess
 import unittest
 from pathlib import Path
-from tools.bitborn import ROOT, bitdiff, digest, inspect, read_bits
+from tools.bitborn import ROOT, bitdiff, digest, inspect, read_bits, verify
 
 
 class ToolTests(unittest.TestCase):
@@ -11,12 +12,43 @@ class ToolTests(unittest.TestCase):
             path = Path(tmp) / "source.bits"
             path.write_text("# comment\n 10111000\t00101010 # data | value | two bytes\n")
             self.assertEqual(read_bits(path)[0], bytes.fromhex("b8 2a"))
-            path.write_text("10101010 # ordinary trailing comment\n")
-            self.assertEqual(read_bits(path)[0], b"\xaa")
-            for invalid in ("2", "0000000", "000000000", "0xFA", "", "10101010 # instruction | incomplete"):
+            for comment in ("ordinary trailing comment", "text | separator", "text | two | separators", "instruction | incomplete"):
+                path.write_text(f"10101010 # {comment}\n")
+                self.assertEqual(read_bits(path)[0], b"\xaa")
+            for invalid in ("2", "0000000", "000000000", "0xFA", ""):
                 path.write_text(invalid)
                 with self.assertRaises(ValueError):
                     read_bits(path)
+
+    def test_cli_comments_and_failed_pack_preserves_output(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, output = Path(tmp) / "source.bits", Path(tmp) / "out.bin"
+            source.write_text("10101010 # prose | with | arbitrary | separators\n")
+            result = subprocess.run([str(ROOT / "tools/bitpack"), str(source), str(output)], capture_output=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(output.read_bytes(), b"\xaa")
+            source.write_text("1010101X # invalid source byte\n")
+            result = subprocess.run([str(ROOT / "tools/bitpack"), str(source), str(output)], capture_output=True)
+            self.assertEqual(result.returncode, 1)
+            self.assertIn(b":1: expected eight binary digits", result.stderr)
+            self.assertEqual(output.read_bytes(), b"\xaa")
+
+    def test_target_annotations_are_verified_separately(self):
+        data, _ = read_bits(ROOT / "boot/boot.bits")
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for name in ("boot", "examples", "build"):
+                (root / name).mkdir()
+            source = (ROOT / "boot/boot.bits").read_text().replace(
+                "11111010 # instruction | CLI | FA disables maskable interrupts during stack setup.",
+                "11111010 # instruction | incomplete")
+            (root / "boot/boot.bits").write_text(source)
+            self.assertEqual(read_bits(root / "boot/boot.bits")[0], data)
+            (root / "build/boot.img").write_bytes(data)
+            manifest = json.loads((ROOT / "targets.json").read_text())[:1]
+            (root / "targets.json").write_text(json.dumps(manifest))
+            with self.assertRaisesRegex(ValueError, "every byte range needs a valid explanation"):
+                verify(root)
 
     def test_boot_known_encodings_and_branches(self):
         data, annotations = read_bits(ROOT / "boot/boot.bits")

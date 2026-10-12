@@ -47,6 +47,15 @@ an idea below is not an advertised feature.
 The v0.1 foundation is complete. Future experiments below remain open research,
 not release requirements or advertised capabilities.
 
+## v0.1.1 maintenance
+
+- [x] General `#` comments, including arbitrary pipe separators, do not alter
+  packing. Annotation validation remains part of target-source verification.
+- [x] Invalid binary input fails with a line number and preserves existing output.
+- [x] Release staging is isolated by version to keep checksum lists correct.
+- [ ] Publish and re-download the verified v0.1.1 host-tool patch; all target bytes
+  and boot images remain identical to v0.1.0.
+
 ## Future experiments
 
 - [ ] Protected-mode transition and explicit GDT explanation.
