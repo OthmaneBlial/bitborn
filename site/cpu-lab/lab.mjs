@@ -1,5 +1,5 @@
 import {hex, decode, createState, logicalIP, flagsWord, physicalAddress} from '../simulator.mjs';
-import {parseBits,formatBits} from '../binary.mjs';
+import {parseBits,formatBits,parseHex,formatHex} from '../binary.mjs';
 import {presets} from './presets.mjs';
 import {createHistory,recordStep,seek} from '../history.mjs';
 
@@ -244,10 +244,19 @@ function loadSource(source) {
   try {
     const parsed = parseBits(source,512);
     bytes = parsed; breakpoints.clear(); memoryStart = 0x7C00; $('memory-address').value = '07C00';
-    reset(); $('editor-status').classList.remove('error'); $('editor-status').textContent = `${bytes.length} literal bytes loaded. State reset; breakpoints cleared.`;
+    reset(); syncHex(); $('editor-status').classList.remove('error'); $('editor-status').textContent = `${bytes.length} literal bytes loaded. State reset; breakpoints cleared.`;
     return true;
   } catch (error) {
     $('editor-status').classList.add('error'); $('editor-status').textContent = `${error.message} Current program and state kept.`; return false;
+  }
+}
+
+function syncHex() {
+  try {
+    $('hex-editor').value=formatHex(parseBits($('binary-editor').value,512));
+    $('hex-status').classList.remove('error');$('hex-status').textContent='Hex matches the current binary draft. Load a draft to replace the loaded program.';
+  } catch(error) {
+    $('hex-status').classList.add('error');$('hex-status').textContent=`Binary draft invalid: ${error.message} Hex field and loaded program are unchanged.`;
   }
 }
 
@@ -264,7 +273,22 @@ $('step').addEventListener('click',performStep); $('run').addEventListener('clic
 $('back').addEventListener('click',()=>travel('rewind'));$('forward').addEventListener('click',()=>travel('replay'));
 $('timeline').addEventListener('input',()=>travelTo(Number($('timeline').value)));
 $('export-source').addEventListener('click',()=>downloadProgram(false));$('export-raw').addEventListener('click',()=>downloadProgram(true));
-$('binary-editor').addEventListener('input',()=>sourceRevision++);
+$('binary-editor').addEventListener('input',()=>{sourceRevision++;syncHex();});
+$('hex-editor').addEventListener('input',()=>{
+  sourceRevision++;
+  try {
+    const draft=parseHex($('hex-editor').value,512);
+    $('hex-status').classList.remove('error');$('hex-status').textContent=`${draft.length} hex bytes in this draft. Load hex to replace binary source/comments and reset.`;
+  } catch(error) {$('hex-status').classList.add('error');$('hex-status').textContent=`${error.message} Loaded program and binary source are unchanged.`;}
+});
+$('load-hex').addEventListener('click',()=>{
+  sourceRevision++;
+  try {
+    const source=formatBits(parseHex($('hex-editor').value,512));
+    $('binary-editor').value=source;
+    if(loadSource(source)){$('lesson').textContent='Loaded literal hexadecimal bytes; binary source is the same byte sequence.';$('preset').selectedIndex=-1;}
+  } catch(error) {$('hex-status').classList.add('error');$('hex-status').textContent=`${error.message} Loaded program and binary source are unchanged.`;}
+});
 $('speed').addEventListener('input',() => {
   $('speed-label').textContent = `${$('speed').value} steps/s`;
   if (running) {clearTimeout(timer); timer=setTimeout(tick,1000 / Number($('speed').value));}

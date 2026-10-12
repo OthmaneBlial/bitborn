@@ -105,6 +105,12 @@ try {
   const exported=await readFile(await download.path());
   assert.equal(download.suggestedFilename(),'bitborn-program.bin');assert.deepEqual(new Uint8Array(exported),parseBits(presets.find(preset=>preset.id==='stack').source));
   await page.locator('#download-status').scrollIntoViewIfNeeded();await capture('Downloaded the exact loaded raw program; export controls identify original loaded bytes and no BIOS/ELF framing.');
+  await page.locator('#binary-editor').fill('10111000 00101010 00000000 # retained comment\n11110100');
+  assert.equal((await page.locator('#hex-editor').inputValue()).trim(),'B8 2A 00 F4');
+  await page.locator('#hex-editor').scrollIntoViewIfNeeded();await capture('A valid binary draft updates the equivalent hex view while preserving binary comments and the loaded execution state.');
+  await page.locator('#hex-editor').fill('B8 07 00 F4');await page.locator('#load-hex').click();
+  assert.equal(await page.locator('#step-count').textContent(),'0000');
+  await capture('Explicit Load hex replaces the binary draft with the same literal bytes and resets the model.');
   await page.locator('#preset').selectOption('flags');
   await page.locator('#step').click();await page.locator('#step').click();
   await page.locator('#flags').scrollIntoViewIfNeeded();await capture('Arithmetic preset FFFF+1 wraps AX to zero and sets CF/ZF in the teaching model.');await encode();

@@ -1,6 +1,6 @@
 # Literal binary source format
 
-The browser and host CLI use the same token, comment and line-boundary rules.
+Browser and host CLI `.bits` input use the same token, comment and line-boundary rules.
 This is byte notation, not a language that selects or generates instructions.
 
 ```text
@@ -34,6 +34,19 @@ diagnostics across the Python and JavaScript parsers:
 ```sh
 python3 -m unittest tests.test_parser_properties -v
 ```
+
+## Hexadecimal drafts in the CPU Lab
+
+The optional hex editor accepts two ASCII hexadecimal digits per byte, such as
+`B8 2A 00`, with the same whitespace, comment, BOM and line rules as browser binary
+input. `0x` prefixes, incomplete bytes and instruction names are rejected. It
+uses the same 64 KiB text and selected byte limits. This is an explicit alternate
+byte notation; host `.bits` parsing remains eight binary digits per token.
+
+Valid binary drafts update the hex view and retain their comments. Hex edits stay
+pending until **Load hex & reset**, which replaces binary source/comments with
+equivalent literal bytes and resets the model. Invalid input preserves the loaded
+program and the other source field. No parser selects an opcode from a mnemonic.
 
 ## Publishing packed output
 

@@ -7,19 +7,30 @@ const checkBytes = bytes => {
   if (!(Array.isArray(bytes) || bytes instanceof Uint8Array) || bytes.length > 4096 || !Array.from(bytes).every(isByte)) throw new Error('Expected at most 4,096 byte values.');
 };
 
-export function parseBits(source, maxBytes = 512) {
-  if (typeof source !== 'string' || source.length > 65536) throw new Error('Binary source must be text under 64 KiB.');
+function parseBytes(source, maxBytes, hexadecimal) {
+  const name=hexadecimal?'Hexadecimal':'Binary';
+  if (typeof source !== 'string' || source.length > 65536) throw new Error(`${name} source must be text under 64 KiB.`);
   if (!Number.isInteger(maxBytes) || maxBytes < 1 || maxBytes > 4096) throw new Error('Invalid byte limit.');
   const bytes = [];
   for (const [index, line] of source.replace(/^\uFEFF/, '').split(sourceLines).entries()) {
     for (const token of line.split('#', 1)[0].split(sourceSpaces).filter(Boolean)) {
-      if (!/^[01]{8}$/.test(token)) throw new Error(`Line ${index + 1}: expected an eight-bit binary token, received ${token.slice(0, 32)}.`);
-      bytes.push(Number.parseInt(token, 2));
+      if (!(hexadecimal?/^[0-9a-f]{2}$/i:/^[01]{8}$/).test(token)) throw new Error(`Line ${index + 1}: expected ${hexadecimal?'a two-digit hexadecimal token':'an eight-bit binary token'}, received ${token.slice(0, 32)}.`);
+      bytes.push(Number.parseInt(token, hexadecimal?16:2));
       if (bytes.length > maxBytes) throw new Error(`The ${maxBytes}-byte limit was exceeded.`);
     }
   }
-  if (!bytes.length) throw new Error('The binary source contains no bytes.');
+  if (!bytes.length) throw new Error(`The ${name.toLowerCase()} source contains no bytes.`);
   return Uint8Array.from(bytes);
+}
+
+export function parseBits(source, maxBytes = 512) {return parseBytes(source,maxBytes,false);}
+export function parseHex(source, maxBytes = 512) {return parseBytes(source,maxBytes,true);}
+
+export function formatHex(bytes) {
+  checkBytes(bytes);
+  const lines=[];
+  for(let offset=0;offset<bytes.length;offset+=16)lines.push(Array.from(bytes.slice(offset,offset+16),value=>value.toString(16).toUpperCase().padStart(2,'0')).join(' '));
+  return lines.join('\n')+'\n';
 }
 
 export function formatBits(bytes) {

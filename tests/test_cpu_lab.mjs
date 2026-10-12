@@ -30,7 +30,7 @@ const bounded=createState(parseBits('11101011 11111110'));
 bounded.steps=4096; assert.throws(()=>step(parseBits('11101011 11111110'),bounded),/4,096-step/); assert.equal(bounded.steps,4096);
 const html=readFileSync(resolve(root,'site/cpu-lab/index.html'),'utf8');
 const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(match=>match[1]); assert.equal(new Set(ids).size,ids.length,'unique lab IDs');
-for (const id of ['step','back','forward','history-position','timeline','timeline-value','timeline-steps','run','pause','reset','speed','registers','flags','stack','memory','program-listing','binary-editor','import-program','export-source','export-raw','download-status']) assert.ok(ids.includes(id),`${id} control exists`);
+for (const id of ['step','back','forward','history-position','timeline','timeline-value','timeline-steps','run','pause','reset','speed','registers','flags','stack','memory','program-listing','binary-editor','hex-editor','load-hex','hex-status','import-program','export-source','export-raw','download-status']) assert.ok(ids.includes(id),`${id} control exists`);
 for (const [,url] of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
   if (/^(https?:|data:|#)/.test(url)) continue;
   const target=resolve(root,'site/cpu-lab',url);

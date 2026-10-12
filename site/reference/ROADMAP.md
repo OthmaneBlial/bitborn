@@ -120,6 +120,11 @@ The v0.2 milestone is published and verified. The following research remains ope
 
 ## Evolution session
 
+- [x] Synchronize valid binary drafts with a literal hexadecimal view; explicit
+  hex loading replaces notation/comments and resets the model. All byte values,
+  1,000 seeded round trips, Unicode boundaries, input limits and three-browser
+  draft/state behavior pass; CLI `.bits` syntax remains binary-only.
+
 - [x] Export/import exact loaded CPU Lab programs as literal `.bits` or raw `.bin`.
   Three browsers check actual downloads, unchanged execution/history, empty/513-byte
   rejection, the 512-byte boundary, original bytes before self-modification and
