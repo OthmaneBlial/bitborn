@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Add a curated 70-byte native divide-error probe with exact exception-frame,
+  repaired-instruction retry and unrepaired repeated-fault QEMU checks. This is
+  real-mode research; protected-mode fault handling and release assets are unchanged.
+
 - Reject malformed manifests, conflicting packaging options and resolved output
   aliases before writing; preflight every literal source and derived package so a
   bad later target preserves previous build artifacts. I/O errors and concurrent

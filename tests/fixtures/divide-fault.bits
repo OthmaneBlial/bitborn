@@ -1,0 +1,28 @@
+# Literal 286+ real-mode divide-fault retry probe; no assembler generates bytes.
+11111010 # instruction | CLI | Keep maskable interrupts disabled.
+11101010 00000110 01111100 00000000 00000000 # instruction | JMP 0000:7C06 | Normalize CS for the interrupt vector.
+00110001 11000000 # instruction | XOR AX,AX | Initialize zero segment and memory values.
+10001110 11011000 # instruction | MOV DS,AX | Address the real-mode vector table and result memory.
+10001110 11010000 # instruction | MOV SS,AX | Normalize the stack segment.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Keep the exception frame below the code.
+10100011 00000000 10010000 # instruction | MOV [9000],AX | Clear the handler count.
+10111000 00101010 00000000 # instruction | MOV AX,42 | Prepare the dividend low word.
+00110001 11010010 # instruction | XOR DX,DX | Prepare the dividend high word.
+00110001 11011011 # instruction | XOR BX,BX | A zero divisor deliberately raises divide error.
+11000111 00000110 00000000 00000000 00110001 01111100 # instruction | MOV word [0000],7C31 | Set vector zero to the literal handler offset.
+11000111 00000110 00000010 00000000 00000000 00000000 # instruction | MOV word [0002],0 | Set the handler code segment to zero.
+11110111 11110011 # instruction | DIV BX | Fault at 7C25; a repaired divisor allows this same instruction to retry.
+10100011 00000100 10010000 # instruction | MOV [9004],AX | Store the resulting quotient.
+10001001 00010110 00000110 10010000 # instruction | MOV [9006],DX | Store the resulting remainder.
+11110100 # instruction | HLT | Controlled halt at 7C2E; next IP is 7C2F.
+11101011 11111101 # instruction | JMP -3 | Return to the halt if execution resumes.
+01010000 # instruction | PUSH AX | Preserve the dividend across the handler.
+01010101 # instruction | PUSH BP | Preserve the frame-pointer register.
+10001001 11100101 # instruction | MOV BP,SP | BP+4 points to the saved fault IP after two handler pushes.
+10001011 01001110 00000100 # instruction | MOV CX,[BP+4] | Read the real CPU-saved fault IP from SS.
+10001001 00001110 00000010 10010000 # instruction | MOV [9002],CX | Record the saved IP without modifying the exception frame.
+10111011 00000001 00000000 # instruction | MOV BX,1 | Repair the divisor, leaving the saved IP unchanged.
+11111111 00000110 00000000 10010000 # instruction | INC word [9000] | Count native handler entries.
+01011101 # instruction | POP BP | Restore the original frame pointer.
+01011000 # instruction | POP AX | Restore the dividend low word.
+11001111 # instruction | IRET | Restore IP, CS and FLAGS; retry DIV BX at 7C25.

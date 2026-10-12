@@ -50,8 +50,13 @@ Completed next: read-only ELF64 anatomy, six actual artifacts/payloads, exact
 entry/segment mapping, 2,000 seeded mutations and three-browser import/mobile
 checks. Manifest validation now checks types/options, references and resolved
 output aliases, and preflights every source/package before writes. The ELF
-milestone is committed as `c9c0bf4`; its website mirror is `12d91b7` (deployment
-verification pending). Next: deeper native experiments.
+milestone is committed as `c9c0bf4`; CI `38304983340`, deployment `38305254803`
+and actual public browser checks pass. Website bytes match that commit. Build
+preflight is committed as `c8418f8` (49 Python tests, one expected macOS skip;
+native output hashes unchanged). A 70-byte real-mode divide-fault probe now verifies
+the real saved frame and repaired-instruction retry with divisors 1/2, plus repeated
+faults without repair. Next: protected-mode fault injection; real-mode evidence
+does not satisfy that milestone.
 Risks: inspection supports a documented subset; execution remains the bounded
 16-bit model. Native-speaker review, hardware, paging and general interrupts
 require separate evidence. Detailed technical guides remain English.

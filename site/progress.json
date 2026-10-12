@@ -138,6 +138,10 @@
       "progress": "\u2705 Manifest types/options, source/output aliases and every payload/package checked before writes; malformed later targets preserve previous artifacts"
     },
     {
+      "milestone": "Native divide-fault research",
+      "progress": "\u2705 70 literal bytes: real-mode #DE frame, divisor repair and same-instruction retry checked in QEMU; unrepaired divisor faults repeatedly"
+    },
+    {
       "milestone": "v0.3.0 release and provenance",
       "progress": "\u2705 Exact-commit CI passed; all 14 public files re-downloaded anonymously, bytes/checksums and source/artifact provenance verified"
     },
