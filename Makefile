@@ -18,6 +18,7 @@ site-test: site
 	node --check site/simulator.mjs
 	node tests/test_site.mjs
 	node tests/test_cpu.mjs
+	node tests/test_memory_changes.mjs
 	node tests/test_builder.mjs
 	node tests/test_cpu_lab.mjs
 	node tests/test_challenges.mjs

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Record exact changed model RAM bytes and consume that journal in the CPU Lab
+  instead of copying/scanning 1 MiB on every instruction. Target binaries are unchanged.
+
 ## 0.2.0 — 2026-10-12
 
 - Add an 813-byte native shell with nine exact commands, real memory experiments,

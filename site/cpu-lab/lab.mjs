@@ -145,13 +145,13 @@ function pause(message) {
 
 function performStep() {
   if (state.halted || failed) return false;
-  before = {...state, memory:state.memory.slice()};
+  const {memory: _memory, ...snapshot} = state;
+  before = snapshot;
   const oldLocation = location(state), offset = state.ip;
   try {
     const instruction = step(bytes,state);
     previous = {...instruction,offset,location:oldLocation};
-    memoryChanges = [];
-    for (let address=0; address<state.memory.length; address++) if (before.memory[address] !== state.memory[address]) memoryChanges.push({offset:address,before:before.memory[address],after:state.memory[address]});
+    memoryChanges = instruction.memoryChanges;
     stoppedAtBreakpoint = null;
     if (state.halted) pause(`HLT reached after ${state.steps} steps. Reset to restart.`);
     else {setStatus(`${instruction.mnemonic} executed. ${instruction.explanation}`); render();}

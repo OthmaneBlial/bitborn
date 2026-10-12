@@ -74,6 +74,7 @@ for exact evidence and remaining gates.
 | Native shell and separately authored disk app | ✅ Nine commands, real RAM/register snapshots, checked disk load and repeated return in QEMU |
 | 32-bit protected mode and software interrupt | ✅ GDT, flat memory, IDT gate and IRETD verified in QEMU; native captures recorded |
 | Packaging and boundary correctness | ✅ Source aliases/collisions/corrupt derived files rejected; 16-bit IP wrap tested |
+| CPU Lab memory-change journal | ✅ Full-memory oracle and Chrome checks pass; whole-RAM copying/scanning removed from each step |
 | [v0.2.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0) | ✅ Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified |
 | Paging, exception/hardware interrupt handling and physical hardware | Future research; no working claim |
 
@@ -214,6 +215,9 @@ python3 -m http.server 8000 --directory site
 [Changelog](CHANGELOG.md) · [Roadmap](ROADMAP.md) ·
 [Latest release](https://github.com/OthmaneBlial/bitborn/releases/latest) ·
 [Dated public metrics](docs/metrics.md)
+
+The [evolution backlog](docs/EVOLUTION.md) records the next engineering,
+interactive, documentation and research tasks with dependencies and risk.
 
 ## What the tests establish
 

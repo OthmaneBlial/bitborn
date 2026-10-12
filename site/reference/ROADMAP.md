@@ -118,6 +118,21 @@ The v0.2 milestone is published and verified. The following research remains ope
 - [x] Refresh the main documentation's example counts, latest-release links and
   protected-mode status; preserve the original boot image and its v0.1 greeting.
 
+## Evolution session
+
+- [x] Replace whole-memory copies/scans during CPU Lab stepping with actual
+  write journals. An independent full-memory oracle checks every step of the
+  2,825-step boot, five presets, unchanged writes, stack/calls, A20 wrapping and
+  self-modification. Chrome memory, stack, flag and breakpoint interactions pass.
+- [ ] Add reversible model execution and a navigable recorded timeline.
+- [ ] Add parser/flag property tests and architecture-aware byte inspection.
+- [ ] Add maintained introductory documentation in English, Simplified Chinese,
+  Spanish, French, Japanese, Portuguese, German and Arabic.
+- [ ] Add contributor conduct and security reporting policies.
+
+The [60-item working backlog](docs/EVOLUTION.md) records prioritization,
+dependencies, risks and the current execution record. It is not a feature list.
+
 ## Further research
 
 - [ ] Paging or a bounded allocator with explicit memory-map evidence.

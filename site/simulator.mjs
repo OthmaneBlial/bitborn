@@ -105,6 +105,7 @@ export function step(bytes, state) {
   if (state.steps >= 4096) throw new Error('The 4,096-step educational limit was reached. Reset to continue.');
   if (state.ip < 0 || state.ip >= bytes.length) throw new Error('Instruction pointer left the loaded program.');
   const instruction = decode(state.memory.subarray(state.loadAddress, state.loadAddress + bytes.length), state.ip);
+  instruction.memoryChanges = [];
   let next;
   const low = value => { state.AX = (state.AX & 0xFF00) | (value & 255); };
   const address = (segment, offset, width = 1) => {
@@ -117,8 +118,11 @@ export function step(bytes, state) {
   };
   const write = (segment, offset, width, value) => {
     const start = address(segment, offset, width);
-    state.memory[start] = value & 255;
-    if (width === 2) state.memory[(start + 1) & 0xFFFFF] = (value >> 8) & 255;
+    for (let index = 0; index < width; index++) {
+      const offset = (start + index) & 0xFFFFF, before = state.memory[offset], after = (value >> (index * 8)) & 255;
+      state.memory[offset] = after;
+      if (before !== after) instruction.memoryChanges.push({offset,before,after});
+    }
   };
   const push = value => { const sp = (state.SP - 2) & 65535; write(state.SS, sp, 2, value); state.SP = sp; };
   const pop = () => { const value = read(state.SS, state.SP, 2); state.SP = (state.SP + 2) & 65535; return value; };
