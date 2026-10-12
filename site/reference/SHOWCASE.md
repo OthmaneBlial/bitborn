@@ -123,6 +123,11 @@ bounded 16-bit teaching model. The literal preset sources live in
   and reset. This converts literal byte notation; it does not assemble names.
 - Select **Arithmetic & flags**. Step the first MOV and ADD. `FFFF + 1` wraps
   AX to zero and sets CF and ZF. The following INC preserves carry.
+- Choose **Copy program link** or use the selectable URL. The link contains
+  1–512 original loaded bytes, excluding drafts, comments and execution history.
+  Open it to get the same bytes in a ready-to-step state. The recorded demo uses
+  `B8 07 00 F4`; opening the link executes zero instructions. Invalid links keep
+  the current model state. Clipboard denial leaves the URL available to copy.
 - Select **Follow a branch**. Set a breakpoint before the loop body, run, then
   step the branch and follow the instruction-pointer transfer.
 

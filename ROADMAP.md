@@ -120,6 +120,11 @@ The v0.2 milestone is published and verified. The following research remains ope
 
 ## Evolution session
 
+- [x] Share 1–512 loaded CPU Lab bytes through strict versioned URL fragments.
+  Links open paused and omit drafts/comments/history; malformed links keep state.
+  Exact round trips, self-modification, navigation, clipboard fallback, 320px
+  controls and delayed-import cancellation pass three-browser checks.
+
 - [x] Verify one protected-mode selector #GP with its CPU-pushed error code:
   exact four-doubleword frame, removal of the code before IRETD, preserved DS,
   saved-EIP adjustment and restored stack. General fault dispatch remains open.

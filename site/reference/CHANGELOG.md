@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Share exact loaded CPU Lab bytes through bounded, versioned URL fragments.
+  Shared programs open paused in the model; malformed links preserve state.
+  Comments, pending drafts, runtime memory and history are excluded. A selectable
+  URL remains available when clipboard permission is denied.
+
 - Reject source directories and named pipes during manifest preflight before
   opening source data or creating build output; a FIFO cannot stall the packer.
 

@@ -48,6 +48,36 @@ pending until **Load hex & reset**, which replaces binary source/comments with
 equivalent literal bytes and resets the model. Invalid input preserves the loaded
 program and the other source field. No parser selects an opcode from a mnemonic.
 
+## CPU Lab program links
+
+**Copy program link** shares the original loaded bytes, just like `.bits`/`.bin`
+exports, before self-modification. The selectable link field is available when
+the browser denies clipboard access. Use this generated link after editing or
+changing presets; it describes the current loaded program, while an existing
+address-bar fragment can still describe the program originally opened.
+
+The strict format is `#program=v1.B82A00F4`: two ASCII hex digits per byte,
+1–512 bytes, with no whitespace, comments, encoded characters or extra fields.
+Generated hex is uppercase; decoding accepts either hex case. Empty, odd-length,
+oversized and unknown-version program links are rejected. Other page anchors are
+ignored. This notation preserves bytes; it never resolves instruction names.
+
+Opening a valid fragment resets the bounded 16-bit model and leaves it paused.
+Hash navigation uses the same validation; an invalid link preserves the current
+program, draft, registers and recorded history. A newer valid link cancels an
+older delayed file import. Registers, flags, output, history, runtime memory,
+breakpoints, binary comments and pending editor drafts are not shared.
+
+The fragment contains readable program bytes. Real-browser reload checks verify
+that those bytes are absent from network request URLs; anyone given the full link
+can still decode it. No file upload, storage service or native execution is added.
+
+```sh
+node tests/test_program_link.mjs
+npm run test:browser
+npm run test:cross-browser
+```
+
 ## Publishing packed output
 
 `make build` validates every manifest before opening outputs: required types,

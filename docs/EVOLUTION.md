@@ -64,6 +64,15 @@ four-doubleword frame and error-code removal before IRETD. Next: bounded general
 dispatch; skipping two specific known instructions is not general recovery.
 Source directories and FIFOs are now rejected before opening data, preventing
 named-pipe stalls in build preflight.
+CPU Lab links now encode 1–512 original loaded bytes in strict versioned fragments
+and open paused. Independent seeded round trips and three-browser checks verify
+malformed-link preservation, actual network requests, navigation, self-modification,
+clipboard fallback and newer-link cancellation of an older delayed import.
+The new module passes all byte values and 1,000 seeded round trips. CPU browser
+checks pass Chromium, Firefox 157 and WebKit 27.2, including 320px controls; the
+recaptured CPU demo has 20 actual frames with current source/frame/GIF hashes.
+The full 55-test Python suite and all site checks pass locally (one expected
+native-Linux skip on macOS). Publication of this link milestone is not yet verified.
 Current local validation: 55 Python tests, one expected native-Linux skip on
 macOS, plus all site/module checks. Protected-fault commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -97,7 +106,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 06 | 1 | Synchronize binary and hexadecimal input without generating instructions | H | H | Existing parser | Low | Complete: valid binary views and explicit hex loading |
 | 07 | 1 | Explain opcode, register, ModR/M and immediate fields bit by bit | H | H | 05 | Medium | Complete for documented MOV/XOR/prefix subset |
 | 08 | 1 | Export and re-import exact CPU Lab programs with cross-browser download proof | H | H | Existing builder export | Low | Complete |
-| 09 | 1 | Share bounded CPU Lab programs through validated URLs | H | M | 03,08 | Medium | Open |
+| 09 | 1 | Share bounded CPU Lab programs through validated URLs | H | M | 03,08 | Medium | Complete: loaded bytes only, paused model, strict versioned fragment |
 | 10 | 1 | Rewind branches and CALL/RET; verify stack and logical IP restoration | H | H | 02 | Medium | Complete |
 | 11 | 1 | Rewind self-modifying code; restore the fetched instruction bytes | H | H | 02 | Medium | Complete |
 | 12 | 1 | Visual execution timeline with keyboard selection and recorded-step replay | H | M | 02 | Medium | Complete |

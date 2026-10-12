@@ -2,6 +2,7 @@ import {hex, decode, createState, logicalIP, flagsWord, physicalAddress} from '.
 import {parseBits,formatBits,parseHex,formatHex} from '../binary.mjs';
 import {presets} from './presets.mjs';
 import {createHistory,recordStep,seek} from '../history.mjs';
+import {programFragment,parseProgramFragment} from '../program-link.mjs';
 
 const $ = id => document.getElementById(id);
 const registers = ['AX','BX','CX','DX','SI','DI','BP','SP','CS','DS','ES','SS','IP','FLAGS'];
@@ -244,6 +245,8 @@ function loadSource(source) {
   try {
     const parsed = parseBits(source,512);
     bytes = parsed; breakpoints.clear(); memoryStart = 0x7C00; $('memory-address').value = '07C00';
+    const shared=new URL(window.location.href);shared.search='';shared.hash=programFragment(bytes);
+    $('program-link').value=shared.href;$('open-program-link').href=shared.href;$('share-status').textContent='';
     reset(); syncHex(); $('editor-status').classList.remove('error'); $('editor-status').textContent = `${bytes.length} literal bytes loaded. State reset; breakpoints cleared.`;
     return true;
   } catch (error) {
@@ -273,6 +276,11 @@ $('step').addEventListener('click',performStep); $('run').addEventListener('clic
 $('back').addEventListener('click',()=>travel('rewind'));$('forward').addEventListener('click',()=>travel('replay'));
 $('timeline').addEventListener('input',()=>travelTo(Number($('timeline').value)));
 $('export-source').addEventListener('click',()=>downloadProgram(false));$('export-raw').addEventListener('click',()=>downloadProgram(true));
+$('copy-program-link').addEventListener('click',async()=>{
+  const link=$('program-link').value;
+  try {await navigator.clipboard.writeText(link);$('share-status').textContent='Program link copied. It opens paused with the loaded bytes.';}
+  catch {$('program-link').focus();$('program-link').select();$('share-status').textContent='Clipboard unavailable. Select and copy the program link below.';}
+});
 $('binary-editor').addEventListener('input',()=>{sourceRevision++;syncHex();});
 $('hex-editor').addEventListener('input',()=>{
   sourceRevision++;
@@ -336,3 +344,11 @@ document.addEventListener('keydown',event => {
   else if (event.key.toLowerCase() === 'f') {event.preventDefault();travel('replay');}
 });
 $('preset').value=presets[0].id; $('binary-editor').value=presets[0].source; $('lesson').textContent=presets[0].lesson; loadSource(presets[0].source);
+function loadProgramFragment() {
+  try {
+    const shared=parseProgramFragment(window.location.hash);if(shared===null)return;
+    $('binary-editor').value=formatBits(shared);
+    if(loadSource($('binary-editor').value)){$('preset').selectedIndex=-1;$('lesson').textContent='Shared literal program loaded and paused. Step or Run uses only the bounded 16-bit model.';}
+  }catch(error){sourceRevision++;$('editor-status').classList.add('error');$('editor-status').textContent=`${error.message} Current program and state kept.`;}
+}
+window.addEventListener('hashchange',loadProgramFragment);loadProgramFragment();
