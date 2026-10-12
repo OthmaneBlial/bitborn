@@ -36,9 +36,12 @@ Chrome repeats actual program downloads/imports and delayed-read checks. The
 shared Pages mirror `f812c119` changed only 60 paths under `bitborn/`; its deployment
 passed. Twenty relevant repository topics and the canonical homepage are verified.
 
-Completed next, awaiting push: binary/hex drafts, every byte value and 1,000 seeded
-round trips; three-browser draft/loading/state checks pass. Binary comments are
+Binary/hex drafts are pushed in `c836b9e`: every byte value, 1,000 seeded round
+trips and three-browser draft/loading/state checks pass. Binary comments are
 retained until explicit hex loading. CLI binary syntax remains unchanged.
+
+Prepared next: v0.3 version/notes, deterministic release provenance and staging
+guards. Exact-commit CI, publication and anonymous asset re-download are pending.
 
 Next: ELF anatomy and a verified public release, then deeper native experiments.
 Risks: inspection supports a documented subset; execution remains the bounded
@@ -103,7 +106,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 48 | 0 | Verify every generated documentation/source copy, including translation and trace fixtures | H | H | Site build | Low | Complete |
 | 49 | 2 | Genuine Time Machine capture with source/frame provenance | H | H | 02,12 | Low | Complete |
 | 50 | 0 | Reproducible host-model benchmark; distinguish rendering, interpretation and native execution | H | M | 01,02 | Medium | Complete |
-| 51 | 0 | Release-provenance manifest tying reviewed source, packaged output and commit | H | H | Existing releases | Medium | Open |
+| 51 | 0 | Release-provenance manifest tying reviewed source, packaged output and commit | H | H | Existing releases | Medium | In progress: generator/checks ready; public release proof pending |
 | 52 | 0 | Clean-checkout reproduction and platform-specific validation documentation | H | H | CI | Low | Open |
 | 53 | 3 | Real VGA bitmap experiment with manually authored pixel/instruction bytes | H | M | BIOS target | High | Open |
 | 54 | 3 | Tiny text-mode game with deterministic input and genuine QEMU recording | H | M | Shell keyboard helpers | High | Open |

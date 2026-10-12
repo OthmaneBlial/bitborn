@@ -59,7 +59,7 @@ not release requirements or advertised capabilities.
   assets match the prepared files and all checksums pass; the five boot images
   are byte-for-byte identical to v0.1.0.
 
-## v0.2 evolution — work in progress
+## v0.2 completed evolution
 
 - [x] Audit the v0.1.1 foundation: existing 20 Python tests and site checks pass.
 - [x] Fix the bounded simulator's `PUSH SP` behavior for 286+ real-mode x86.
@@ -119,6 +119,12 @@ The v0.2 milestone is published and verified. The following research remains ope
   protected-mode status; preserve the original boot image and its v0.1 greeting.
 
 ## Evolution session
+
+- [x] Prepare v0.3 version/notes and deterministic provenance tying the reviewed
+  source commit, target source files, payloads, packaged outputs and release assets.
+  Reject unexpected/aliased staging entries before writing.
+- [ ] Publish v0.3 after exact-commit CI; verify immutable tag and anonymously
+  re-download every public asset against prepared bytes and checksums.
 
 - [x] Synchronize valid binary drafts with a literal hexadecimal view; explicit
   hex loading replaces notation/comments and resets the model. All byte values,

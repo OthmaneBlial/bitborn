@@ -16,8 +16,8 @@ coordinated in the private report after assessment.
 
 ## Supported revisions and scope
 
-Security fixes are considered for current `main` and the latest published release
-(currently v0.2.0). Older releases are historical examples; separate maintenance
+Security fixes are considered for current `main` and the [latest published release](https://github.com/OthmaneBlial/bitborn/releases/latest).
+Older releases are historical examples; separate maintenance
 branches are not supported. Fix availability is documented in the changelog and
 release notes rather than assumed to be backported.
 

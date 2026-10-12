@@ -5,11 +5,54 @@ import json
 import tempfile
 from pathlib import Path
 import unittest
-from tools.release import archive
-from tools.bitborn import artifact_paths
+from tools.release import archive, provenance, check_staging
+from tools.bitborn import artifact_paths, digest
 
 
 class ReleaseTests(unittest.TestCase):
+    def test_staging_rejects_unreviewed_files_and_aliases_without_overwriting(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            destination = root / 'release'
+            destination.mkdir()
+            unknown = destination / 'unreviewed.img'
+            unknown.write_bytes(b'preserve me')
+            with self.assertRaisesRegex(ValueError, 'unexpected release staging'):
+                check_staging(destination, '0.3.0')
+            self.assertEqual(unknown.read_bytes(), b'preserve me')
+            unknown.unlink()
+            protected = root / 'protected.txt'
+            protected.write_bytes(b'outside the release')
+            (destination / 'boot.img').symlink_to(protected)
+            with self.assertRaisesRegex(ValueError, 'unexpected release staging'):
+                check_staging(destination, '0.3.0')
+            self.assertEqual(protected.read_bytes(), b'outside the release')
+            alias = root / 'alias'
+            alias.symlink_to(destination, target_is_directory=True)
+            with self.assertRaisesRegex(ValueError, 'must not be a symlink'):
+                check_staging(alias, '0.3.0')
+
+    def test_provenance_ties_sources_outputs_and_release_files_to_commit(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for folder in ('boot', 'build', 'release'):
+                (root / folder).mkdir()
+            source, payload = b'11111010\n', b'\xfa'
+            (root / 'boot/boot.bits').write_bytes(source)
+            (root / 'build/boot.img').write_bytes(payload)
+            (root / 'build/unreviewed.bin').write_bytes(b'not reviewed')
+            (root / 'targets.json').write_text(json.dumps([{'source':'boot/boot.bits','output':'boot.img','sha256':digest(payload)}]))
+            (root / 'release/source.tar.gz').write_bytes(b'fixed source archive')
+            (root / 'release/SHA256SUMS').write_bytes(b'not self-hashed')
+            (root / 'release/release-provenance.json').write_bytes(b'previous manifest')
+            expected = provenance(root, '0.3.0', 'a' * 40, root / 'release')
+            self.assertEqual(expected['sourceCommit'], 'a' * 40)
+            self.assertEqual(expected['sourceFiles'], {'boot/boot.bits':digest(source)})
+            self.assertEqual(expected['reviewedPayloads'], {'boot/boot.bits':digest(payload)})
+            self.assertEqual(expected['artifacts'], {'boot.img':digest(payload)})
+            self.assertEqual(expected['releaseFiles'], {'source.tar.gz':digest(b'fixed source archive')})
+            self.assertEqual(expected, provenance(root, '0.3.0', 'a' * 40, root / 'release'))
+
     def test_only_manifest_artifacts_can_be_published(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
