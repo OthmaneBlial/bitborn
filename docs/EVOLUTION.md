@@ -26,7 +26,7 @@ remain unchanged throughout these host/browser milestones.
 | Exact program download/import | `810182a` | Actual bytes, state/history preservation, 512-byte boundary and reproduced stale-read/error cancellation |
 
 All corrected milestones above passed exact-commit CI and Pages. The current
-44 Python tests pass locally with one expected macOS skip. Generated documents,
+46 Python tests pass locally with one expected macOS skip. Generated documents,
 literal sources and assets are checked byte-for-byte. Four browser GIFs carry
 actual frame/source hashes, including loaded HTML/CSS and literal fixtures.
 
@@ -40,8 +40,11 @@ Binary/hex drafts are pushed in `c836b9e`: every byte value, 1,000 seeded round
 trips and three-browser draft/loading/state checks pass. Binary comments are
 retained until explicit hex loading. CLI binary syntax remains unchanged.
 
-Prepared next: v0.3 version/notes, deterministic release provenance and staging
-guards. Exact-commit CI, publication and anonymous asset re-download are pending.
+Published v0.3 at `8bc0797d6f8ef97126e0fcba652ed25a20b07fe6` after exact-commit CI
+`38301698299`. Repeated preparation is byte-identical; all 14 public assets were
+anonymously downloaded and match staged bytes, all 13 checksums pass, and source/
+artifact provenance matches. All 55 native source files and seven BIOS images are
+identical to immutable v0.2. Staging rejects unknown files and aliases before writing.
 
 Next: ELF anatomy and a verified public release, then deeper native experiments.
 Risks: inspection supports a documented subset; execution remains the bounded
@@ -106,7 +109,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 48 | 0 | Verify every generated documentation/source copy, including translation and trace fixtures | H | H | Site build | Low | Complete |
 | 49 | 2 | Genuine Time Machine capture with source/frame provenance | H | H | 02,12 | Low | Complete |
 | 50 | 0 | Reproducible host-model benchmark; distinguish rendering, interpretation and native execution | H | M | 01,02 | Medium | Complete |
-| 51 | 0 | Release-provenance manifest tying reviewed source, packaged output and commit | H | H | Existing releases | Medium | In progress: generator/checks ready; public release proof pending |
+| 51 | 0 | Release-provenance manifest tying reviewed source, packaged output and commit | H | H | Existing releases | Medium | Complete: v0.3 public bytes, checksums and commit verified |
 | 52 | 0 | Clean-checkout reproduction and platform-specific validation documentation | H | H | CI | Low | Open |
 | 53 | 3 | Real VGA bitmap experiment with manually authored pixel/instruction bytes | H | M | BIOS target | High | Open |
 | 54 | 3 | Tiny text-mode game with deterministic input and genuine QEMU recording | H | M | Shell keyboard helpers | High | Open |
@@ -115,7 +118,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 57 | 3 | Timer IRQ experiment with explicit PIC setup and deterministic QEMU assertions | H | M | 56 | High | Open |
 | 58 | 3 | Paging experiment with inspected page tables and deliberate page-fault evidence | H | L | 55,56 | High | Open |
 | 59 | 0 | QEMU runner resource/error-path checks and bounded process cleanup | H | H | Existing Guest harness | Medium | Open |
-| 60 | 2 | Accurate release/community draft showing actual new capabilities; no automatic posting | M | H | Verified release | Low | Open |
+| 60 | 2 | Accurate release/community draft showing actual new capabilities; no automatic posting | M | H | Verified release | Low | Complete: release published; community draft remains unposted |
 | 61 | 0 | Cancel delayed file imports/errors after a newer source choice or editor draft | H | H | CPU Lab import | Medium | Complete: race reproduced and checked in three browsers |
 
 Large tasks are divided into useful verified milestones. Native experiments only

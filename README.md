@@ -94,7 +94,7 @@ for exact evidence and remaining gates.
 | Mode-aware instruction inspection | ✅ Explicit 16/32/64 context, 66/REX fields and exact imm64; independent disassembly goldens and three-browser checks; simulation remains 16-bit |
 | CPU Lab program downloads and imports | ✅ Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks |
 | Binary and hexadecimal drafts | ✅ Literal byte views, explicit hex loading and comment preservation; all byte values and 1,000 seeded round trips pass; CLI .bits remains binary |
-| v0.3 release preparation and provenance | Prepared; exact-commit CI, immutable tag and public asset re-download remain publication gates |
+| [v0.3.0 release and provenance](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.3.0) | ✅ Exact-commit CI passed; all 14 public files re-downloaded anonymously, bytes/checksums and source/artifact provenance verified |
 | [v0.2.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0) | ✅ Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified |
 | Paging, exception/hardware interrupt handling and physical hardware | Future research; no working claim |
 

@@ -130,8 +130,8 @@
       "progress": "\u2705 Literal byte views, explicit hex loading and comment preservation; all byte values and 1,000 seeded round trips pass; CLI .bits remains binary"
     },
     {
-      "milestone": "v0.3 release preparation and provenance",
-      "progress": "Prepared; exact-commit CI, immutable tag and public asset re-download remain publication gates"
+      "milestone": "v0.3.0 release and provenance",
+      "progress": "\u2705 Exact-commit CI passed; all 14 public files re-downloaded anonymously, bytes/checksums and source/artifact provenance verified"
     },
     {
       "milestone": "v0.2.0 release",

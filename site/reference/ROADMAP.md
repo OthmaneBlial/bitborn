@@ -123,8 +123,12 @@ The v0.2 milestone is published and verified. The following research remains ope
 - [x] Prepare v0.3 version/notes and deterministic provenance tying the reviewed
   source commit, target source files, payloads, packaged outputs and release assets.
   Reject unexpected/aliased staging entries before writing.
-- [ ] Publish v0.3 after exact-commit CI; verify immutable tag and anonymously
-  re-download every public asset against prepared bytes and checksums.
+- [x] Publish [v0.3.0](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.3.0)
+  at immutable commit `8bc0797d6f8ef97126e0fcba652ed25a20b07fe6`, after
+  [exact-commit CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38301698299)
+  passed. All 14 public files were anonymously re-downloaded and match staged
+  bytes; all 13 checksum entries and commit/source/artifact provenance pass.
+  Seven BIOS images also match the immutable v0.2 downloads exactly.
 
 - [x] Synchronize valid binary drafts with a literal hexadecimal view; explicit
   hex loading replaces notation/comments and resets the model. All byte values,
