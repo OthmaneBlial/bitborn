@@ -86,6 +86,10 @@
       "progress": "\u2705 Exact recorded-state Back/Forward, forks and halt restoration pass model and three-browser checks"
     },
     {
+      "milestone": "Recorded execution timeline",
+      "progress": "\u2705 Select any recorded state; keyboard range controls and net RAM changes pass Chrome/Firefox/WebKit checks"
+    },
+    {
       "milestone": "Browser/CLI literal source parity",
       "progress": "\u2705 Seeded cases check identical bytes/error lines, Unicode line boundaries and initial UTF-8 BOM handling"
     },

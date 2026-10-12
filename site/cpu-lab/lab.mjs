@@ -1,7 +1,7 @@
 import {hex, decode, createState, logicalIP, flagsWord, physicalAddress} from '../simulator.mjs';
 import {parseBits} from '../binary.mjs';
 import {presets} from './presets.mjs';
-import {createHistory,recordStep,rewind,replay} from '../history.mjs';
+import {createHistory,recordStep,seek} from '../history.mjs';
 
 const $ = id => document.getElementById(id);
 const registers = ['AX','BX','CX','DX','SI','DI','BP','SP','CS','DS','ES','SS','IP','FLAGS'];
@@ -97,7 +97,7 @@ function renderTrace() {
   }
   const expected = before.ip + previous.size;
   const flow = transition === 'rewind' ? 'rewind' : transition === 'replay' ? 'recorded replay' : state.ip === expected && before.CS === state.CS ? 'sequential' : 'control transfer';
-  $('pointer-change').textContent = `${previous.location} → ${location(state)} · ${flow}${state.halted ? ' · halted' : ''}`;
+  $('pointer-change').textContent = `${location(before)} → ${location(state)} · ${flow}${state.halted ? ' · halted' : ''}`;
   const registerChanges = registers.filter(name => registerValue(state,name) !== registerValue(before,name)).map(name => `${name} ${hex(registerValue(before,name),4)} → ${hex(registerValue(state,name),4)}`);
   const flagChanges = flags.filter(([,key]) => state[key] !== before[key]).map(([name,key]) => `${name} ${before[key] == null ? '?' : Number(before[key])} → ${state[key] == null ? '?' : Number(state[key])}`);
   const memory = memoryChanges.map(change => `[${hex(change.offset,5)}] ${hex(change.before)} → ${hex(change.after)}`);
@@ -112,7 +112,7 @@ function renderMemory() {
     const cell = document.createElement('div'); cell.className = `stack-word${changedAddresses.has(lo) || changedAddresses.has(hi) ? ' changed' : ''}`;
     cell.dataset.stackAddress = hex(lo,5);
     const value = offset === 0xFFFF ? null : state.memory[lo] | (state.memory[hi] << 8);
-    cell.setAttribute('aria-label', `${word === 0 ? 'Top of stack. ' : ''}${hex(state.SS,4)}:${hex(offset,4)}: ${value === null ? 'word crosses the modeled segment limit' : `word ${hex(value,4)}; bytes ${hex(state.memory[lo])}, ${hex(state.memory[hi])}`}${changedAddresses.has(lo) || changedAddresses.has(hi) ? '; changed in the last step' : ''}`);
+    cell.setAttribute('aria-label', `${word === 0 ? 'Top of stack. ' : ''}${hex(state.SS,4)}:${hex(offset,4)}: ${value === null ? 'word crosses the modeled segment limit' : `word ${hex(value,4)}; bytes ${hex(state.memory[lo])}, ${hex(state.memory[hi])}`}${changedAddresses.has(lo) || changedAddresses.has(hi) ? '; changed since the previously displayed state' : ''}`);
     cell.innerHTML = `<span>${word === 0 ? '→ ' : '  '}${hex(offset,4)}</span><strong><span class="stack-byte${changedAddresses.has(lo) ? ' changed-bit' : ''}">${hex(state.memory[lo])}</span> <span class="stack-byte${changedAddresses.has(hi) ? ' changed-bit' : ''}">${value === null ? '—' : hex(state.memory[hi])}</span><em>${value === null ? 'limit' : hex(value,4)}</em></strong>`;
     stackRows.push(cell);
   }
@@ -124,11 +124,30 @@ function renderMemory() {
   for (let address = memoryStart; address < end; address++) {
     const cell = document.createElement('span'); cell.className = `memory-byte${address >= state.loadAddress && address < state.loadAddress + bytes.length ? ' program-byte' : ''}${instruction && address >= state.loadAddress + state.ip && address < state.loadAddress + state.ip + instruction.size ? ' current-byte' : ''}${changedAddresses.has(address) ? ' changed-bit' : ''}`;
     cell.dataset.address = hex(address,5); cell.textContent = hex(state.memory[address]);
-    cell.title = `Physical ${hex(address,5)}: ${hex(state.memory[address])}${changedAddresses.has(address) ? ' · changed in the last step' : ''}`;
+    cell.title = `Physical ${hex(address,5)}: ${hex(state.memory[address])}${changedAddresses.has(address) ? ' · changed since the previously displayed state' : ''}`;
     cell.setAttribute('aria-label',cell.title);
     memoryCells.push(cell);
   }
   $('memory').replaceChildren(...memoryCells); $('memory-range').textContent = `${hex(memoryStart,5)}–${hex(end-1,5)} / ${end-memoryStart} bytes`;
+}
+
+function renderTimeline() {
+  const total=history.frames.length, position=history.position;
+  $('timeline').max=String(total); $('timeline').value=String(position);
+  $('timeline').disabled=running || total===0;
+  const description=position ? `after ${history.frames[position-1].instruction.mnemonic}` : 'before the first instruction';
+  $('timeline').setAttribute('aria-valuetext',`Recorded state ${position} of ${total}, ${description}`);
+  $('timeline-value').textContent=`${position} / ${total} · ${description}`;
+  const start=Math.max(0,Math.min(position-4,total-8)), end=Math.min(total,start+8);
+  const rows=[];
+  for(let index=start;index<=end;index++) {
+    const row=document.createElement('li');
+    row.className=index===position ? 'selected' : index>position ? 'future' : '';
+    if(index===position)row.setAttribute('aria-current','step');
+    row.textContent=`${index} · ${index ? history.frames[index-1].instruction.mnemonic : 'Initial state'}`;
+    rows.push(row);
+  }
+  $('timeline-steps').replaceChildren(...rows);
 }
 
 function render() {
@@ -138,6 +157,7 @@ function render() {
   $('step').disabled = running || state.halted || failed; $('run').disabled = running || state.halted || failed; $('pause').disabled = !running;
   $('back').disabled = running || history.position===0; $('forward').disabled = running || history.position===history.frames.length;
   $('history-position').textContent = `${history.position} / ${history.frames.length} recorded`;
+  renderTimeline();
   document.querySelector('.control-panel').classList.toggle('is-running',running);
   $('byte-count').textContent = `${bytes.length} BYTES`; $('screen-output').textContent = state.output || '∅'; $('serial-output').textContent = state.serial || '∅';
 }
@@ -168,14 +188,20 @@ function performStep() {
 }
 
 function travel(direction) {
+  travelTo(history.position+(direction==='rewind'?-1:1));
+}
+
+function travelTo(position) {
   if (running) return;
-  const frame = direction==='rewind' ? rewind(history) : replay(history);
-  if (!frame) return;
+  if(position<0 || position>history.frames.length)return;
+  const restored=seek(history,position);
+  if (!restored) return;
+  const {frame,direction}=restored;
   clearTimeout(timer);timer=null;failed=false;stoppedAtBreakpoint=null;skipBreakpoint=null;
   transition=direction;
-  before=direction==='rewind' ? frame.after : frame.before;
+  before=restored.before;
   previous={...frame.instruction,offset:frame.before.ip,location:location(frame.before)};
-  memoryChanges=direction==='rewind' ? frame.memoryChanges.map(change=>({offset:change.offset,before:change.after,after:change.before})) : frame.memoryChanges;
+  memoryChanges=restored.memoryChanges;
   setStatus(`${direction==='rewind'?'Rewound':'Replayed'} ${frame.instruction.mnemonic}. Restored recorded state ${history.position}; no new instruction was executed.`);
   render();
 }
@@ -225,6 +251,7 @@ $('preset').addEventListener('change', () => {
 });
 $('step').addEventListener('click',performStep); $('run').addEventListener('click',run); $('pause').addEventListener('click',() => pause(`Paused at ${location(state)}. Last state change is shown below.`)); $('reset').addEventListener('click',reset);
 $('back').addEventListener('click',()=>travel('rewind'));$('forward').addEventListener('click',()=>travel('replay'));
+$('timeline').addEventListener('input',()=>travelTo(Number($('timeline').value)));
 $('speed').addEventListener('input',() => {
   $('speed-label').textContent = `${$('speed').value} steps/s`;
   if (running) {clearTimeout(timer); timer=setTimeout(tick,1000 / Number($('speed').value));}

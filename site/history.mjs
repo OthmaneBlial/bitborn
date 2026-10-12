@@ -33,3 +33,21 @@ export function replay(history) {
   Object.assign(history.state,frame.after);
   return frame;
 }
+
+export function seek(history, position) {
+  if (!Number.isInteger(position) || position < 0 || position > history.frames.length) throw new Error('Recorded state must be an integer within the timeline.');
+  if (position === history.position) return null;
+  const before = snapshot(history.state), changes = new Map();
+  const direction = position < history.position ? 'rewind' : 'replay';
+  let frame;
+  while (history.position !== position) {
+    frame = direction === 'rewind' ? rewind(history) : replay(history);
+    for (const change of frame.memoryChanges) {
+      const first = direction === 'rewind' ? change.after : change.before;
+      const last = direction === 'rewind' ? change.before : change.after;
+      const previous = changes.get(change.offset);
+      changes.set(change.offset, {offset:change.offset, before:previous ? previous.before : first, after:last});
+    }
+  }
+  return {before, frame, direction, memoryChanges:[...changes.values()].filter(change => change.before !== change.after)};
+}

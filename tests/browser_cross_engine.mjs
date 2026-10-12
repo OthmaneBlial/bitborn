@@ -96,6 +96,12 @@ try {
       await page.locator('#back').click();assert.equal(await page.locator('[data-address="00120"]').textContent(),'00');
       await page.locator('#forward').click();assert.equal(await page.locator('[data-address="00120"]').textContent(),'CD');
       assert.equal(await page.locator('#step-count').textContent(),'0005');
+      await page.locator('#timeline').focus();await page.keyboard.press('Home');
+      assert.equal(await page.locator('#step-count').textContent(),'0000');
+      assert.equal(await page.locator('[data-address="00120"]').textContent(),'00');
+      await page.keyboard.press('End');assert.equal(await page.locator('#step-count').textContent(),'0005');
+      assert.equal(await page.locator('[data-address="00120"]').textContent(),'CD');
+      assert.equal(await page.locator('#timeline').evaluate(input=>document.activeElement===input),true);
       await page.locator('#memory-address').fill('FFFFF'); await page.locator('#memory-form button').click();
       assert.equal(await page.locator('.memory-byte').count(),1);
       await page.locator('#memory-address').fill('100000'); await page.locator('#memory-form button').click();

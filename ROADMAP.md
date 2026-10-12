@@ -128,7 +128,9 @@ The v0.2 milestone is published and verified. The following research remains ope
   RAM, outputs, UART and halt state restore without executing another instruction.
   Stack/calls, output clearing, self-modification, A20, failures and the full boot
   have independent round-trip checks. Chrome, Firefox and WebKit controls pass.
-- [ ] Add direct recorded-timeline navigation and instruction-state inspection.
+- [x] Add direct recorded-timeline navigation with nearby instruction states,
+  native keyboard range controls and net register/RAM comparisons. Independent
+  state and full-memory oracles, 4,096-state bounds and three-browser checks pass.
 - [x] Check 81,691 modeled arithmetic/logical instructions against independent
   ripple-carry and parity oracles; seed 16-bit ADD/SUB/CMP, preserve CF for every
   INC/DEC register and exhaust all 8-bit TEST masks. IF/DF stay unchanged.

@@ -77,6 +77,11 @@ bounded 16-bit teaching model. The literal preset sources live in
 - Select **Stack, CALL & RET**. Step the first MOV and PUSH. AX holds `1234`,
   SP moves from `7C00` to `7BFE`, and the memory inspector shows `34 12` at
   physical addresses `7BFE` and `7BFF`. Continue to observe POP, CALL and RET.
+- Use the recorded timeline: Home restores the initial state and previously
+  written stack bytes; End restores the recorded final state, including HLT.
+  Arrow keys move one recorded state. Back/Forward work one state at a time.
+  Register bits and RAM highlights compare the displayed states. Step after a
+  rewind discards the old future; restoring history does not execute instructions.
 - Select **Arithmetic & flags**. Step the first MOV and ADD. `FFFF + 1` wraps
   AX to zero and sets CF and ZF. The following INC preserves carry.
 - Select **Follow a branch**. Set a breakpoint before the loop body, run, then

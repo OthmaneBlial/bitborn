@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Add a recorded execution timeline to the CPU Lab. Select any state without
+  executing instructions; show nearby recorded instructions and net register,
+  flag and RAM changes. Arrow/Home/End keyboard controls work in three browsers.
+
 - Add concise introductions in English, Simplified Chinese, Spanish, French,
   Japanese, Portuguese, German and Arabic; preserve shared literal examples and
   quickstart commands, with an English-source freshness manifest and link checks.

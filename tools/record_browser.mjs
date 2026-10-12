@@ -63,6 +63,16 @@ try {
     if(index===1||index===4){await page.locator('#stack').scrollIntoViewIfNeeded();await capture('Inspected actual model stack bytes written by PUSH or CALL.');}
   }
   assert.match(await page.locator('#status').textContent(),/HLT|halted/i);
+  await page.locator('#timeline').scrollIntoViewIfNeeded();
+  await page.locator('#timeline').focus();await page.keyboard.press('Home');
+  assert.equal(await page.locator('#step-count').textContent(),'0000');
+  await capture('Selected initial recorded state with Home; registers and stack RAM restored without executing instructions.');
+  await page.locator('#memory-address').fill('07BFE');await page.locator('#memory-form button').click();
+  assert.equal(await page.locator('[data-address="07BFE"]').textContent(),'00');
+  await page.locator('#memory').scrollIntoViewIfNeeded();await capture('Inspected previously written stack memory at 07BFE: undo restored 00.');
+  await page.locator('#timeline').scrollIntoViewIfNeeded();await page.locator('#timeline').focus();
+  await page.keyboard.press('End');assert.equal(await page.locator('#step-count').textContent(),'0008');
+  await capture('Selected final recorded state with End; exact registers, RAM and HLT restored through recorded replay.');
   await page.locator('#preset').selectOption('flags');
   await page.locator('#step').click();await page.locator('#step').click();
   await page.locator('#flags').scrollIntoViewIfNeeded();await capture('Arithmetic preset FFFF+1 wraps AX to zero and sets CF/ZF in the teaching model.');await encode();

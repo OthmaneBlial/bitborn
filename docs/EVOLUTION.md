@@ -28,7 +28,10 @@ executable instructions remain literal `.bits`; host tooling never assembles the
   introductions in eight languages with shared examples and an English-source
   freshness manifest. All 40 Python tests (one macOS skip) and site checks pass;
   detailed technical guides remain English.
-- Next: direct timeline navigation, localized introductory website pages and
+- Pushed introductions: `8d73fa5`; exact-commit CI and Pages passed. Completed
+  direct timeline selection, independent net-RAM/state oracles and keyboard
+  controls in Chrome/Firefox/WebKit, with a genuine Home/End restoration capture.
+- Next: localized introductory website pages and
   architecture-aware instruction inspection.
 - Risks: browser behavior is modeled, not native x86. Hardware, paging and general
   interrupt support require separate native targets and evidence.
@@ -52,7 +55,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 09 | 1 | Share bounded CPU Lab programs through validated URLs | H | M | 03,08 | Medium | Open |
 | 10 | 1 | Rewind branches and CALL/RET; verify stack and logical IP restoration | H | H | 02 | Medium | Complete |
 | 11 | 1 | Rewind self-modifying code; restore the fetched instruction bytes | H | H | 02 | Medium | Complete |
-| 12 | 1 | Visual execution timeline with keyboard selection and recorded-step replay | H | M | 02 | Medium | Open |
+| 12 | 1 | Visual execution timeline with keyboard selection and recorded-step replay | H | M | 02 | Medium | Complete |
 | 13 | 0 | Replace failed file writes atomically so existing packed outputs survive I/O errors | H | M | Existing CLI | Medium | Open |
 | 14 | 0 | Validate manifest types, output aliases and packaging options before writing | H | H | Existing manifest | Medium | Open |
 | 15 | 0 | Structured source diagnostics with stable error codes and source-line locations | H | M | 03 | Medium | Open |
@@ -89,7 +92,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 46 | 0 | SECURITY policy with scoped supported versions and verified private reporting | H | H | GitHub repository settings | Medium | Complete |
 | 47 | 2 | Contributor source map and focused per-component development commands | H | H | Existing CONTRIBUTING | Low | Complete |
 | 48 | 0 | Verify every generated documentation/source copy, including translation and trace fixtures | H | H | Site build | Low | Open |
-| 49 | 2 | Genuine Time Machine capture with source/frame provenance | H | H | 02,12 | Low | Open |
+| 49 | 2 | Genuine Time Machine capture with source/frame provenance | H | H | 02,12 | Low | Complete |
 | 50 | 0 | Reproducible host-model benchmark; distinguish rendering, interpretation and native execution | H | M | 01,02 | Medium | Open |
 | 51 | 0 | Release-provenance manifest tying reviewed source, packaged output and commit | H | H | Existing releases | Medium | Open |
 | 52 | 0 | Clean-checkout reproduction and platform-specific validation documentation | H | H | CI | Low | Open |

@@ -82,6 +82,7 @@ for exact evidence and remaining gates.
 | Packaging and boundary correctness | ✅ Source aliases/collisions/corrupt derived files rejected; 16-bit IP wrap tested |
 | CPU Lab memory-change journal | ✅ Full-memory oracle and Chrome checks pass; whole-RAM copying/scanning removed from each step |
 | Binary Time Machine | ✅ Exact recorded-state Back/Forward, forks and halt restoration pass model and three-browser checks |
+| Recorded execution timeline | ✅ Select any recorded state; keyboard range controls and net RAM changes pass Chrome/Firefox/WebKit checks |
 | Browser/CLI literal source parity | ✅ Seeded cases check identical bytes/error lines, Unicode line boundaries and initial UTF-8 BOM handling |
 | Arithmetic flag properties | ✅ Independent ripple-carry oracle, seeded 16-bit arithmetic and exhaustive 8-bit TEST masks; IF/DF and INC/DEC carry preserved |
 | Contributor policies and source map | ✅ Conduct contact and private GitHub vulnerability reporting available; focused setup/check commands documented |
@@ -201,6 +202,9 @@ pause, adjust speed, set breakpoints or inspect a bounded literal program.
 Back and Forward restore recorded registers, flags, memory, output and halt state
 without executing an instruction. New execution after rewinding replaces the
 abandoned future; Reset and loading a program clear history.
+The recorded timeline selects any state with a slider or Arrow/Home/End keys.
+Changed bits and RAM compare the state you left with the selected state, including
+multiple recorded instructions; revisiting states consumes no new execution steps.
 The [20 challenges](https://othmaneblial.github.io/bitborn/challenges/) provide
 four difficulty levels, hints, semantic goals, share links and progress stored
 only in your browser. Every reviewed solution also runs in QEMU; success is

@@ -28,12 +28,19 @@
     </section>
     <p id="status" class="status-line" role="status">Loading the lab…</p>
     <p class="history-note"><strong>Binary Time Machine</strong> · <span id="history-position">0 / 0 recorded</span>. Back/Forward restore exact recorded registers, flags, RAM and output. Step after rewinding replaces the future. Keys: B / F. Reset or loading a program clears history.</p>
+    <section class="panel timeline-panel" aria-labelledby="timeline-title">
+      <div class="panel-title"><h2 id="timeline-title">Recorded execution timeline</h2><span>RESTORE / INSPECT</span></div>
+      <label for="timeline">Recorded state <output id="timeline-value" for="timeline">0 / 0 · before the first instruction</output></label>
+      <input id="timeline" type="range" min="0" max="0" step="1" value="0" disabled aria-describedby="timeline-help">
+      <ol id="timeline-steps" aria-label="Nearby recorded instruction states"></ol>
+      <p id="timeline-help" class="panel-note">Select any recorded state. Arrow keys move one state; Home/End select the first/last. Highlighted changes compare the state you left with the one you selected. Restoring states never executes new instructions.</p>
+    </section>
     <div class="machine-layout">
       <section class="panel cpu-panel" aria-labelledby="registers-title">
         <div class="panel-title"><h2 id="registers-title">Register file</h2><span>16 BITS / EACH</span></div>
         <div id="registers" class="register-grid"></div>
         <div class="flag-heading"><h3>FLAGS</h3><span>1 set · 0 clear · ? undefined</span></div><div id="flags" class="flags-grid"></div>
-        <p class="bit-legend"><span class="legend-bit">1</span> Underlined bits changed in the last step. Bits are numbered 15 → 0.</p>
+        <p class="bit-legend"><span class="legend-bit">1</span> Underlined bits changed since the previously displayed state. Bits are numbered 15 → 0.</p>
       </section>
       <section class="panel program-panel" aria-labelledby="program-title">
         <div class="panel-title"><h2 id="program-title">Instruction path</h2><span id="byte-count">0 BYTES</span></div>
@@ -59,7 +66,7 @@
         <div class="panel-title"><h2 id="memory-title">Memory microscope</h2><span>1 MiB MODELED</span></div>
         <form id="memory-form" class="memory-form"><label for="memory-address">PHYSICAL HEX <input id="memory-address" value="07C00" maxlength="8" spellcheck="false" autocomplete="off" aria-describedby="memory-help"></label><button class="lab-button" type="submit">Inspect</button></form>
         <div class="memory-jumps"><button type="button" id="inspect-ds">DS:SI</button><button type="button" id="inspect-es">ES:DI</button><button type="button" id="inspect-stack">SS:SP</button><span id="memory-range">—</span></div>
-        <div id="memory" class="memory-grid" aria-label="Memory bytes"></div><p id="memory-help" class="panel-note">Enter 00000–FFFFF. Up to 64 bytes; underlined bytes changed in the last step.</p>
+        <div id="memory" class="memory-grid" aria-label="Memory bytes"></div><p id="memory-help" class="panel-note">Enter 00000–FFFFF. Up to 64 bytes; underlined bytes changed since the previously displayed state.</p>
       </section>
     </div>
     <div class="editor-layout">
