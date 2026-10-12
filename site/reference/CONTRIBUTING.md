@@ -36,7 +36,7 @@ macOS cannot natively run the Linux ELF examples; CI runs their native checks.
 | Shared browser CPU and history | `site/simulator.mjs`, `site/history.mjs` | `node tests/test_cpu.mjs` and `node tests/test_history.mjs` |
 | Parser syntax and diagnostics | `tools/bitborn.py`, `site/binary.mjs` | `python3 -m unittest tests.test_parser_properties` |
 | Builder and CPU Lab | `site/boot-builder/`, `site/cpu-lab/` | `node tests/browser_builder.mjs` or `node tests/browser_cpu_lab.mjs` |
-| Challenges | `challenges/`, `site/challenge-engine.mjs`, `site/challenges/` | `node tests/test_challenges.mjs` and `python3 -m unittest tests.test_challenges` |
+| Challenges | `challenges/`, `site/challenges/challenges.mjs` | `node tests/test_challenges.mjs` and `python3 -m unittest tests.test_challenges` |
 | Docs, routes and progress | `README.md`, `ROADMAP.md`, `docs/`, `tools/site_build.py` | `make site-test` |
 
 Run full relevant checks before sharing a change. Browser scripts serve their own
