@@ -8,7 +8,7 @@
   "presentationFps": 1,
   "alterations": "960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.",
   "sourceSha256": {
-    "tools/record_browser.mjs": "f4581f26a97f43a47921e788906c78595397e4b70d01034b8ea240c49ca7a437",
+    "tools/record_browser.mjs": "d7e79a7bf9e2d8ff60f63d149881bb7cf0566384d7083fd3f07f5a0df72a5c2c",
     "boot/boot.bits": "230bbafbfa02abd62dc964efbad02db0431f0efa263216bba02146cd164262b8",
     "site/elf.mjs": "552aabb816be8add70c470c951f0110697d491d0a0e926c3bd9e6001e623832b",
     "site/elf/index.html": "767e441bc2b8d9e29a626d264b2d437bce24c296196a5b37c33d09cf6f58f29b",
@@ -20,15 +20,18 @@
     "site/styles.css": "f255737251dfa8c6c0d133b70367b09578a5f0ebaa01a6d044c3902c555f6a38",
     "site/learn/routes.css": "f77ddb1b9b7187f92c69e594a8002543deed69c74d7954dfa670ef4bb85052d1",
     "site/app.js": "5ee86e439e83cdb24a8b80935904917b12f3eb7da304950fbb677ba5ee8e30f3",
-    "site/encoding.mjs": "67881d09e6fc7c688ffe73fa6be767c3950f191b1b85a6a9d19bc7dd79b6f708",
-    "site/encoding-presets.mjs": "b38092829cec5d78a0251e5f9b8305d03c528e31ec4843ee6b7fb482458870d5",
-    "site/playground/index.html": "2e633356a49fff9e93a6a77484f32fefd55d76c04ede43061e3bc00a6d5c8576",
+    "site/encoding.mjs": "0a94788e38a34d40e5cecb89cb5da2452d30898c78f832fdfbdc7279ad60c6a9",
+    "site/encoding-presets.mjs": "2751e4f62a9c61672b5fbb45d93439d05366b5859fab361abe59cbf4362f9ec1",
+    "site/playground/index.html": "4282e4f7b953a2bdaa37e3bb0eba89fc2ea6a52fd26a1de43186a04e11cc9623",
     "docs/instruction-encoding/fixtures/mov32.bits": "52504d7b850f70f6ac262d1d07308878d686c80f485b347490c62f854b86c2cd",
     "docs/instruction-encoding/fixtures/mov64.bits": "01bbd5025d57433cdaf764232ade240dad18fcf879a227f29e0e3b94ea3c3e6e",
     "docs/instruction-encoding/fixtures/mov-register.bits": "2162ffc63db3351e411a3d3dba923457f10ab5cfb6d7aebc27c6aafccf1a2938",
     "docs/instruction-encoding/fixtures/mov-register64.bits": "866d2abe79f9f63f363a68aeaadf407351e38ee0e7e81c69dc524934e237401f",
     "docs/instruction-encoding/fixtures/mov-byte.bits": "0b828951f81c1db36a02d15ef88bb59dd4836b5539fac99760fcb708933acf8c",
     "docs/instruction-encoding/fixtures/mov-byte-rex.bits": "1ecf5481962b6821fce3636e1d04ef4fe4701204089f3b5a7c7ef79e60fbeb64",
+    "docs/instruction-encoding/fixtures/mov-memory-bp.bits": "9b19ed6440db9978082044a2f56d5ca3c68cc21d85d6144c0420e2f65bf8f57a",
+    "docs/instruction-encoding/fixtures/mov-memory-absolute.bits": "5fe0ed6c40b68a3352e0d2c3752df56c2f1796e54c83aeddbb9ab05bd0fe36cf",
+    "docs/instruction-encoding/fixtures/mov-memory-pair.bits": "49b69c993003d1f73de1426bad8e6ed73ea76b1b1b1e03e2366d3294ced3002d",
     "site/simulator.mjs": "3f02ec0f61e9dc476d946e33d281227fa4fe06d1b0fd57d1a78d1af88ade2def",
     "site/binary.mjs": "afddfeb96e78242eb1b4a3f42236276605e3656ef7fc08362791520d79006ea9",
     "site/history.mjs": "45cbd1d494fe7b1f0867c1dc1978ebf2b1a0fce3599f1a704bff75dbe399e321",
@@ -69,10 +72,10 @@
     },
     {
       "file": "assets/encoding-demo.gif",
-      "sha256": "73f1fefb504ba6c88f1400aa59ea8e96d812cbeb3cfbd926603d6912f88ab6d4",
-      "capturedFrames": 13,
-      "encodedFrames": 13,
-      "durationSeconds": 13,
+      "sha256": "89076c1fd650b04bf95e18130ac0740ee1ba3f93ee4b62a40580a836de1273bd",
+      "capturedFrames": 17,
+      "encodedFrames": 17,
+      "durationSeconds": 17,
       "actions": [
         "Inspected the literal B8 fixture in 16-bit context: three bytes consumed for MOV AX,42.",
         "Selected explicit 32-bit context: the same B8 fixture consumes five bytes for MOV EAX,42; simulation is disabled.",
@@ -86,7 +89,11 @@
         "Simulated MOV BX,AX: the previously loaded 42 is copied into BX; this is model state, not native CPU execution.",
         "Without REX, register selector100 names the high byte AH.",
         "The literal 40 REX prefix remaps selector100 to SPL in 64-bit mode; no instruction executes.",
-        "Setting REX.W leaves the eight-bit MOV unchanged; the bit label identifies W as unused."
+        "Setting REX.W leaves the eight-bit MOV unchanged; the bit label identifies W as unused.",
+        "Inspected BP minus signed disp8: default SS is explained without reading registers or RAM. Memory execution is disabled.",
+        "Flipped only displacement sign bit7: FE (-2) becomes 7E (+126); BP still selects SS.",
+        "The mod00/rm110 exception selects an absolute little-endian offset in default DS, not BP.",
+        "Inspected BX+SI addressing in default DS; wider addressing and memory execution remain unavailable."
       ],
       "sourceFrameSha256": [
         "e16d732a09e354ba8fdf44e4f6b6c6da1225132230cd0280237455c05622a73f",
@@ -101,7 +108,11 @@
         "bf808669311bbd0ee1318ac0cffd7b047a5450164e3a7e71483b4978a0a5689e",
         "316d5b162f435844ad608c67322f82fbe0f7efad046b90bbbeb19434e710a893",
         "b64be386974fd35f3c9a9c933c829d079b84bceedad30d5b1891468861624922",
-        "79b80fb19886f7158c514b06cf75efe63f6e2e0383aebee607c8f3ee9e1a63aa"
+        "79b80fb19886f7158c514b06cf75efe63f6e2e0383aebee607c8f3ee9e1a63aa",
+        "67fe2efb4252705445a3c410ddc7419041f184eec48f98c1069d2f2c9199767f",
+        "0e2e6368817119c11f54dc3313f08d26722f665bb8a757dd8929d466b226505d",
+        "d50bfc0b2084e5281ecd031c760385d11950776965a70a24032239415aec9e8b",
+        "a2c712aedc438e89a1505449f2f76ed7ecc9f8dbb8c3ceb04c336671e66b0bd2"
       ]
     },
     {
@@ -127,7 +138,7 @@
     },
     {
       "file": "assets/cpu-lab-demo.gif",
-      "sha256": "ca6bf15dc7c0ca8405a0689b34caf5a19798b84d0cc503c66a4fb9f9bb933852",
+      "sha256": "72a01cdd7a9d194b620b35c5d659817b23be2e4c859b543f7156d5070644a9fa",
       "capturedFrames": 24,
       "encodedFrames": 24,
       "durationSeconds": 24,
@@ -172,10 +183,10 @@
         "2efb5ff6eaec7f08bf8c1134b1f5a85495f80e51e84baa11222a6cd3cc56b28b",
         "7bcefd9e48ef131fc54a35594a6ec284d9b909705ad442ea26cfc3ba12f9748c",
         "650122f5788e33f09a1b88270b335d0c6737dfc2e94c61f01c187348090dc1e2",
-        "0a32f651253b6e5d2482cd0f8554930a33ba2d4ca423f79b3f35ce9ab9e21d65",
+        "cb09c58a5293abf4df7e6f83f915431aab3e59df998ab21350e93522f723e9fc",
         "67d53c6c71582ae73822c42e0d5ae2a8a6023b27cf22de037af8c0b3e4fa93c4",
         "9c21a03c93c1e08e66e17454d4d700fff2189752ae86c1b5dc4bd5d15c1eff7c",
-        "ef79652074374d5bf83dcc9b16c07217f5242fab9f9d4403011c3642709dae04",
+        "9e6cff5db6ed59c54a41091871296ff07388b5784d5fa5bcd10d069b0216b056",
         "0bdbffd65ade2c80e9a60c04f019f0e3e9f2b67dd4ef8af9f43a5e96faada4b8",
         "588be8ff36bd291e7285b13386e80033cf4df29325a38ecf4ed2992cfe509cfa",
         "ad3996f7963cccf7144491fea5b81f93c5cbfa647f6941c5d22e98484448c928",

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Inspect 16-bit MOV memory address fields with symbolic bases, default DS/SS,
+  signed displacements and the absolute r/m6 exception. Add 5,888 bounded cases,
+  three disassembly goldens and a native DS/SS load probe. No memory execution,
+  wider addressing, segment/address overrides or SIB support is added.
+
 - Execute unprefixed register-direct byte/word MOV in the bounded model, preserving
   the other byte of aliased registers and every modeled flag. Add 2,048 independent
   byte-layout oracle cases, exact history checks and a native seven-copy/FLAGS probe.

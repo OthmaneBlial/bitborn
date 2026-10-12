@@ -130,6 +130,10 @@
       "progress": "\u2705 Unprefixed 8-/16-bit forms, aliased byte preservation and history; 2,048 independent oracle cases plus seven native QEMU copy/flag checks"
     },
     {
+      "milestone": "16-bit memory-address microscope",
+      "progress": "\u2705 ModR/M address fields, default DS/SS, signed displacements and absolute offsets; 5,888 cases and a native three-address probe; inspection-only"
+    },
+    {
       "milestone": "CPU Lab program downloads and imports",
       "progress": "\u2705 Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks"
     },

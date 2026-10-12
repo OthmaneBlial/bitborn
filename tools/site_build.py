@@ -28,7 +28,7 @@ def prepare():
                             'sha256': digest(data), 'payloadSize': len(data), 'elfSize': 120 + len(data)}
     (ROOT / 'site/optimization.json').write_text(json.dumps(comparison, indent=2) + '\n')
     encoding = {}
-    for name, filename in (('mov32', 'mov32.bits'), ('mov64', 'mov64.bits'), ('movRegister', 'mov-register.bits'), ('movRegister64', 'mov-register64.bits'), ('movByte', 'mov-byte.bits'), ('movByteRex', 'mov-byte-rex.bits')):
+    for name, filename in (('mov32', 'mov32.bits'), ('mov64', 'mov64.bits'), ('movRegister', 'mov-register.bits'), ('movRegister64', 'mov-register64.bits'), ('movByte', 'mov-byte.bits'), ('movByteRex', 'mov-byte-rex.bits'), ('movMemoryBP', 'mov-memory-bp.bits'), ('movMemoryAbsolute', 'mov-memory-absolute.bits'), ('movMemoryPair', 'mov-memory-pair.bits')):
         source = 'docs/instruction-encoding/fixtures/' + filename
         data, _ = read_bits(ROOT / source)
         encoding[name] = {'source': source, 'bytes': list(data), 'sha256': digest(data)}

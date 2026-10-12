@@ -1,0 +1,2 @@
+# Literal absolute offset; r/m=110 with mod=00 does not select BP.
+10001011 00010110 00100000 00000000 # instruction | MOV DX,[0020] | ModR/M 00 010 110 selects DX and an absolute little-endian disp16 in default DS.

@@ -1,0 +1,2 @@
+# Literal memory operand; inspected only. BP selects the default SS segment.
+10001011 01000110 11111110 # instruction | MOV AX,[BP-2] | ModR/M 01 000 110 selects AX and BP with a signed eight-bit displacement FE (-2).

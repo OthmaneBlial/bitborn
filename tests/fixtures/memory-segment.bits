@@ -1,0 +1,18 @@
+# Native default-segment probe; curated literal instructions, not arbitrary imported code.
+11111010 # instruction | CLI | Keep maskable interrupts disabled.
+11101010 00000110 01111100 00000000 00000000 # instruction | JMP 0000:7C06 | Normalize CS.
+10111000 00000000 00010000 # instruction | MOV AX,1000 | Prepare the data segment base.
+10001110 11011000 # instruction | MOV DS,AX | DS base becomes physical 10000.
+10111000 00000000 00100000 # instruction | MOV AX,2000 | Prepare a different stack segment base.
+10001110 11010000 # instruction | MOV SS,AX | SS base becomes physical 20000.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Initialize the stack offset in SS.
+11000111 00000110 00100000 00000000 00010001 00010001 # instruction | MOV word [DS:0020],1111 | Initialize physical 10020 with a distinct data-segment word.
+00110110 11000111 00000110 00100000 00000000 00100010 00100010 # instruction | MOV word [SS:0020],2222 | Literal SS override initializes physical 20020; override inspection is outside current scope.
+10111011 00100000 00000000 # instruction | MOV BX,0020 | Prepare a data-segment offset.
+10111101 00100010 00000000 # instruction | MOV BP,0022 | BP minus two reaches the same offset in SS.
+00110001 11110110 # instruction | XOR SI,SI | Make BX+SI equal 0020.
+10001011 01000110 11111110 # instruction | MOV AX,[BP-2] | The CPU selects SS and reads 2222 at physical 20020.
+10001011 00001000 # instruction | MOV CX,[BX+SI] | The CPU selects DS and reads 1111 at physical 10020.
+10001011 00010110 00100000 00000000 # instruction | MOV DX,[0020] | Absolute mod00/rm110 selects DS, reading 1111 rather than a BP-relative word.
+11110100 # instruction | HLT | Controlled halt at 7C31; next IP is 7C32.
+11101011 11111101 # instruction | JMP -3 | Return to HLT if execution resumes.

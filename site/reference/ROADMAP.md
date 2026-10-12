@@ -120,6 +120,12 @@ The v0.2 milestone is published and verified. The following research remains ope
 
 ## Evolution session
 
+- [x] Inspect 16-bit memory MOV address fields, BP-derived SS versus DS,
+  signed disp8/disp16 and absolute r/m6. 5,888 cases and three independent
+  disassembly goldens pass; a 52-byte native probe distinguishes DS/SS loads.
+  The browser model still rejects these ModR/M memory MOV forms; existing
+  absolute-offset and string memory operations are unchanged.
+
 - [x] Execute unprefixed register-direct 8-/16-bit MOV in the model: 2,048
   independent byte-layout cases, aliased bytes, preserved nullable flags and
   exact undo/replay. A 48-byte native fixture verifies seven copies, actual

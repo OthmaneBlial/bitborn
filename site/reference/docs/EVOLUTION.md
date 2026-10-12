@@ -92,7 +92,19 @@ All three browsers also verify modeled copies and preserved displayed flags;
 the CPU Lab rewinds/replays an aliased-byte copy. The full Python suite now has
 56 tests (one expected macOS native-Linux skip), and all site/module checks pass.
 Encoding/CPU recordings contain 13/24 actual frames, with current source/GIF
-hashes including the capture script. Publication of the execution milestone is pending.
+hashes including the capture script. Execution commit `2214a4e` passed exact CI
+`38310949876` and deployment `38311259747`; the public simulator, README, roadmap
+and native register-copy guide match committed bytes.
+16-bit memory MOV inspection now exposes the address table, default DS/SS,
+signed displacement extrema and absolute r/m6. 5,888 cases and three additional
+independent disassembly goldens pass; a 52-byte native probe verifies three
+default-segment loads. Execution of these ModR/M memory MOV forms and wider
+addressing remain outside scope; existing memory instructions are unchanged.
+All three browsers verify displacement sign-bit edits, DS/SS explanations,
+read-only state and narrow layouts. The full suite has 57 Python tests (one
+expected macOS native-Linux skip); all site/module checks pass. The encoding
+capture has 17 actual frames with current input/GIF hashes. Publication of this
+memory-address milestone is pending verification.
 Current local validation: 55 Python tests, one expected native-Linux skip on
 macOS, plus all site/module checks. Protected-fault commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -135,7 +147,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 15 | 0 | Structured source diagnostics with stable error codes and source-line locations | H | M | 03 | Medium | Open |
 | 16 | 1 | Address-reference inspector that checks literal pointers without resolving labels into code | H | M | Annotations | Medium | Open |
 | 17 | 1 | Register-to-register MOV encodings with independent ModR/M fixtures | H | M | 05 | Medium | Complete: scoped inspection, 9,728 combinations and 18 disassembly goldens |
-| 18 | 1 | Curated indirect memory operands with explicit segment-selection explanations | H | M | 17 | High | Open |
+| 18 | 1 | Curated indirect memory operands with explicit segment-selection explanations | H | M | 17 | High | Complete: 16-bit addressing inspection; default DS/SS verified natively; no memory execution |
 | 19 | 1 | Signed conditional branches and overflow examples with native QEMU proof | H | M | 04 | Medium | Open |
 | 20 | 1 | Carry-aware arithmetic examples and native/model differential checks | H | M | 04 | Medium | Open |
 | 21 | 1 | ELF anatomy viewer: headers, entry point, segment permissions and payload bytes | H | H | Existing ELF packaging | Medium | Complete: bounded ELF64 scope; no imported-code execution |

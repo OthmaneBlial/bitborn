@@ -59,5 +59,32 @@ export const encodingExamples = {
       224
     ],
     "sha256": "2e59cab963638e78c4301d3505941f91c87151a086622d6ce728583b2b4b7e6a"
+  },
+  "movMemoryBP": {
+    "source": "docs/instruction-encoding/fixtures/mov-memory-bp.bits",
+    "bytes": [
+      139,
+      70,
+      254
+    ],
+    "sha256": "84c92b37a5eac1d7611da5b7545b59eaac0459f90ed8ede56ebfcfe3fc21c087"
+  },
+  "movMemoryAbsolute": {
+    "source": "docs/instruction-encoding/fixtures/mov-memory-absolute.bits",
+    "bytes": [
+      139,
+      22,
+      32,
+      0
+    ],
+    "sha256": "fc2a3f909c52bbae3cd1c9cd818f633e2bd40f3f3850672d20bf93e9db2829e8"
+  },
+  "movMemoryPair": {
+    "source": "docs/instruction-encoding/fixtures/mov-memory-pair.bits",
+    "bytes": [
+      139,
+      8
+    ],
+    "sha256": "7f9512bb270838a37ba1a6f3d2abbc601fcab1a1efd5eaee660c3baf995ed7c4"
   }
 };

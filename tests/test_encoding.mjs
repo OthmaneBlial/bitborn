@@ -60,7 +60,7 @@ fixture([0x66,0x4C,0x88,0xE0],64,'MOV AL, R12B',4,8);
 fixture([0x41,0x8A,0xE0],64,'MOV SPL, R8B',3,8);
 for(const mode of [16,32,64])for(const opcode of [0x88,0x89,0x8A,0x8B]) {
   assert.throws(()=>inspectEncoding([opcode],mode),/ModR\/M byte is missing/);
-  for(let modrm=0;modrm<0xC0;modrm++)assert.throws(()=>inspectEncoding([opcode,modrm],mode),/Memory-form MOV/);
+  if(mode!==16)for(let modrm=0;modrm<0xC0;modrm++)assert.throws(()=>inspectEncoding([opcode,modrm],mode),/Memory-form MOV/);
 }
 const byteNames=['AL','CL','DL','BL','AH','CH','DH','BH'],rexByteNames=['AL','CL','DL','BL','SPL','BPL','SIL','DIL','R8B','R9B','R10B','R11B','R12B','R13B','R14B','R15B'];
 for(const mode of [16,32,64])for(const prefix of [[],[0x66]])for(const opcode of [0x88,0x89,0x8A,0x8B])for(let reg=0;reg<8;reg++)for(let rm=0;rm<8;rm++) {
@@ -85,4 +85,4 @@ for(const invalid of [[],[256],[-1],[1.5],[NaN],Array(65).fill(0),null,'bits'])a
 for(const invalid of [0,8,'16',128,null])assert.throws(()=>inspectEncoding([0x90],invalid),/explicit/);
 const complete=[0x49,0xB8,...Array(8).fill(255)];
 for(let size=1;size<complete.length;size++)assert.throws(()=>inspectEncoding(complete.slice(0,size),64),/Truncated/);
-console.log('Encoding checks passed: 9,728 register-direct MOV context/prefix/register combinations, byte/high-byte/REX names and direction/width roles; 18 independent disassembly goldens; existing immediate MOV, XOR, INC/DEC and strict scope checks. Inspection never executes target code.');
+console.log(`Encoding checks passed: 9,728 register-direct MOV context/prefix/register combinations, byte/high-byte/REX names and direction/width roles; ${golden.cases.length} independent disassembly goldens; existing immediate MOV, XOR, INC/DEC and strict scope checks. Inspection never executes target code.`);

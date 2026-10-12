@@ -67,7 +67,11 @@ labels reverse. Choose **40 88 E0 / REX byte names** in 64-bit context to inspec
 MOV AL,SPL; without REX, the **88 E0** fixture selects AH instead. REX.W does not
 widen a byte MOV. Unprefixed byte/word forms run in the 16-bit model: first execute
 MOV AX,42, then simulate **8B D8** to copy AX to BX without changing flags.
-Wider/prefixed forms remain inspection-only; memory addressing is rejected.
+Wider/prefixed execution remains unavailable; memory execution is rejected.
+Memory inspection is available in 16-bit context: **8B 46 FE / BP and SS** shows
+BP-2 selecting SS; flipping displacement bit7 changes it to BP+126. **8B 08**
+shows BX+SI selecting DS, and **8B 16 20 00** selects an absolute offset in DS
+rather than BP. These memory forms are read-only; the model does not execute them.
 
 ## 2. Change H to h by flipping one bit
 

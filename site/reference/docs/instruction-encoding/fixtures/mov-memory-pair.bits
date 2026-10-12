@@ -1,0 +1,2 @@
+# Literal base-plus-index memory operand using the default DS segment.
+10001011 00001000 # instruction | MOV CX,[BX+SI] | ModR/M 00 001 000 selects CX and the 16-bit BX+SI address form.

@@ -93,7 +93,16 @@ try {
   await page.locator('#instruction-select').selectOption('movByteRex');assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV AL, SPL');
   await capture('The literal 40 REX prefix remaps selector100 to SPL in 64-bit mode; no instruction executes.');
   await page.locator('[data-bit="0-3"]').click();assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV AL, SPL');
-  await capture('Setting REX.W leaves the eight-bit MOV unchanged; the bit label identifies W as unused.');await encode();
+  await capture('Setting REX.W leaves the eight-bit MOV unchanged; the bit label identifies W as unused.');
+  await page.locator('#instruction-select').selectOption('movMemoryBP');await page.locator('#decode-mode').selectOption('16');
+  assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV AX, [BP-2]');assert.equal(await page.locator('#execute-instruction').isDisabled(),true);
+  await capture('Inspected BP minus signed disp8: default SS is explained without reading registers or RAM. Memory execution is disabled.');
+  await page.locator('[data-bit="2-7"]').click();assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV AX, [BP+126]');
+  await capture('Flipped only displacement sign bit7: FE (-2) becomes 7E (+126); BP still selects SS.');
+  await page.locator('#instruction-select').selectOption('movMemoryAbsolute');assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV DX, [32]');
+  await capture('The mod00/rm110 exception selects an absolute little-endian offset in default DS, not BP.');
+  await page.locator('#instruction-select').selectOption('movMemoryPair');assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV CX, [BX+SI]');
+  await capture('Inspected BX+SI addressing in default DS; wider addressing and memory execution remain unavailable.');await encode();
 
   await begin('boot-builder');
   await page.goto(new URL('boot-builder/',base).href);
@@ -164,7 +173,7 @@ try {
   await capture('Held the solved challenge result and local progress count.');await encode();
   assert.deepEqual(errors,[]);
   const hashes={};
-  for(const source of ['tools/record_browser.mjs','boot/boot.bits','site/elf.mjs','site/elf/index.html','site/elf/app.mjs','site/elf/elf.css','site/elf/catalog.json','site/downloads/exit-code-small.elf','site/downloads/exit-code.elf','site/styles.css','site/learn/routes.css','site/app.js','site/encoding.mjs','site/encoding-presets.mjs','site/playground/index.html','docs/instruction-encoding/fixtures/mov32.bits','docs/instruction-encoding/fixtures/mov64.bits','docs/instruction-encoding/fixtures/mov-register.bits','docs/instruction-encoding/fixtures/mov-register64.bits','docs/instruction-encoding/fixtures/mov-byte.bits','docs/instruction-encoding/fixtures/mov-byte-rex.bits','site/simulator.mjs','site/binary.mjs','site/history.mjs','site/program-link.mjs','site/boot-builder/index.html','site/boot-builder/builder.css','site/boot-builder/model.mjs','site/boot-builder/app.mjs','site/cpu-lab/index.html','site/cpu-lab/lab.css','site/cpu-lab/lab.mjs','site/cpu-lab/presets.mjs','site/challenges/index.html','site/challenges/challenges.css','site/challenges/challenges.mjs','site/challenges/catalog.json','challenges/catalog.json']){
+  for(const source of ['tools/record_browser.mjs','boot/boot.bits','site/elf.mjs','site/elf/index.html','site/elf/app.mjs','site/elf/elf.css','site/elf/catalog.json','site/downloads/exit-code-small.elf','site/downloads/exit-code.elf','site/styles.css','site/learn/routes.css','site/app.js','site/encoding.mjs','site/encoding-presets.mjs','site/playground/index.html','docs/instruction-encoding/fixtures/mov32.bits','docs/instruction-encoding/fixtures/mov64.bits','docs/instruction-encoding/fixtures/mov-register.bits','docs/instruction-encoding/fixtures/mov-register64.bits','docs/instruction-encoding/fixtures/mov-byte.bits','docs/instruction-encoding/fixtures/mov-byte-rex.bits','docs/instruction-encoding/fixtures/mov-memory-bp.bits','docs/instruction-encoding/fixtures/mov-memory-absolute.bits','docs/instruction-encoding/fixtures/mov-memory-pair.bits','site/simulator.mjs','site/binary.mjs','site/history.mjs','site/program-link.mjs','site/boot-builder/index.html','site/boot-builder/builder.css','site/boot-builder/model.mjs','site/boot-builder/app.mjs','site/cpu-lab/index.html','site/cpu-lab/lab.css','site/cpu-lab/lab.mjs','site/cpu-lab/presets.mjs','site/challenges/index.html','site/challenges/challenges.css','site/challenges/challenges.mjs','site/challenges/catalog.json','challenges/catalog.json']){
     hashes[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');
   }
   const metadata={kind:'Actual browser screenshots of instruction inspection and bounded educational simulation; not native CPU or QEMU footage',browser:browser.version(),viewport:{width:1280,height:960},presentationFps:1,alterations:'960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.',sourceSha256:hashes,captures,reproduce:'make site-test && npm ci && npx playwright install chromium && npm run record:browser',requires:'ffmpeg and ffprobe; PLAYWRIGHT_CHROMIUM_EXECUTABLE may select an installed Chrome'};
