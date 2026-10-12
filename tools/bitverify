@@ -1,0 +1,3 @@
+#!/usr/bin/env python3
+from bitborn import main
+raise SystemExit(main("bitverify"))

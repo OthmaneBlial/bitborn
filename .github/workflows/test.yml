@@ -1,0 +1,24 @@
+name: Verify raw bits
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install QEMU
+        run: sudo apt-get update && sudo apt-get install -y qemu-system-x86
+      - name: Pack, verify and boot handwritten bytes
+        run: make test
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bitborn-images
+          path: build/

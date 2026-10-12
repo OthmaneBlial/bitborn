@@ -1,0 +1,3 @@
+[
+  {"source": "boot/boot.bits", "output": "boot.img", "size": 512, "bios": true, "sha256": "46f0cf66a237fdc51d033d3e0fc86a1c7d7691770a42049077cf470f660cbfc9"}
+]
