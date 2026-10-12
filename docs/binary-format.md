@@ -34,3 +34,16 @@ diagnostics across the Python and JavaScript parsers:
 ```sh
 python3 -m unittest tests.test_parser_properties -v
 ```
+
+## Publishing packed output
+
+`bitpack SOURCE OUTPUT` rejects paths that alias the source. It stages the
+complete bytes in the resolved output directory, flushes/syncs the staging file,
+then atomically replaces the output. Parsing, staging or rename failures preserve
+an existing output and remove the staging file. Existing non-file outputs are
+rejected before writing.
+
+An output symlink is retained and its resolved target is replaced; other hard-link
+entries retain their old inode/data. Existing basic read/write/execute mode bits
+are preserved; new outputs start private (`0600` on POSIX). This is file-replacement
+atomicity, not a guarantee of directory metadata durability after power loss.

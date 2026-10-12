@@ -40,6 +40,9 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 - Completed model benchmark: fixed reviewed boot, checked outputs, five warmups
   and 25 trials, source/environment hashes and a dated local sample; CI retains
   JSON without a timing threshold. Next: failed-write safety and opcode inspection.
+- Pushed benchmark: `771eed8`. Completed atomic packed-file replacement; injected
+  sync/rename failures preserve old/absent outputs, staging cleanup and link/mode
+  behavior are checked. Next: mode-aware opcode inspection and exact program export.
 - Risks: browser behavior is modeled, not native x86. Hardware, paging and general
   interrupt support require separate native targets and evidence.
 
@@ -63,7 +66,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 10 | 1 | Rewind branches and CALL/RET; verify stack and logical IP restoration | H | H | 02 | Medium | Complete |
 | 11 | 1 | Rewind self-modifying code; restore the fetched instruction bytes | H | H | 02 | Medium | Complete |
 | 12 | 1 | Visual execution timeline with keyboard selection and recorded-step replay | H | M | 02 | Medium | Complete |
-| 13 | 0 | Replace failed file writes atomically so existing packed outputs survive I/O errors | H | M | Existing CLI | Medium | Open |
+| 13 | 0 | Replace failed file writes atomically so existing packed outputs survive I/O errors | H | M | Existing CLI | Medium | Complete |
 | 14 | 0 | Validate manifest types, output aliases and packaging options before writing | H | H | Existing manifest | Medium | Open |
 | 15 | 0 | Structured source diagnostics with stable error codes and source-line locations | H | M | 03 | Medium | Open |
 | 16 | 1 | Address-reference inspector that checks literal pointers without resolving labels into code | H | M | Annotations | Medium | Open |

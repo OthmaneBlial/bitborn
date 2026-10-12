@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Stage and atomically replace `bitpack` outputs, preserving old files on injected
+  sync/rename failures and cleaning staging files. Keep output symlinks, isolate
+  other hard links, preserve existing basic modes, create private new files and
+  reject non-file destinations. Target bytes are unchanged.
+
 - Add a reproducible host-model benchmark for interpretation, history recording
   and full rewind/replay, with environment/source/workload hashes, semantic checks,
   retained CI JSON and an actual dated local sample. No native performance claim.

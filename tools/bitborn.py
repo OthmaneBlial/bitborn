@@ -3,11 +3,36 @@
 import argparse
 import hashlib
 import json
+import os
 import re
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+def atomic_write(output, data):
+    output = Path(output).resolve()
+    mode = None
+    if output.exists():
+        if not output.is_file():
+            raise ValueError('packed output must be a regular file')
+        mode = output.stat().st_mode & 0o777
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(dir=output.parent, prefix='.bitborn-', delete=False) as handle:
+            temporary = Path(handle.name)
+            handle.write(data)
+            handle.flush()
+            os.fsync(handle.fileno())
+        if mode is not None:
+            temporary.chmod(mode)
+        os.replace(temporary, output)
+        temporary = None
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
 
 
 def target_output_paths(target):
@@ -153,7 +178,7 @@ def main(command=None):
             source, output = Path(args[0]), Path(args[1])
             if source.resolve() == output.resolve() or output.exists() and source.samefile(output):
                 raise ValueError('cannot overwrite the literal input source; choose a different output file')
-            output.write_bytes(data)
+            atomic_write(output, data)
             print(f"{len(data)} bytes → {args[1]} · sha256 {digest(data)}")
         elif command == "bitinspect" and len(args) == 1:
             annotations = json.loads(parsed.annotations.read_text()) if parsed.annotations else []

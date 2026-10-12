@@ -90,6 +90,7 @@ for exact evidence and remaining gates.
 | Introductions in eight languages | ✅ Shared literal example/quickstart and English-source freshness checks; detailed guides remain in English |
 | Localized `.io` introductions | ✅ Source-generated pages, language links/SEO metadata, mobile and keyboard checks; Arabic prose and LTR code verified in three browsers |
 | Reproducible model benchmark | ✅ Fixed reviewed workload, source/environment hashes and measured distributions; no native x86 speed claim |
+| Atomic packed-file output | ✅ Injected sync/rename failures preserve previous files and clean staging; source aliases and non-file outputs rejected |
 | [v0.2.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0) | ✅ Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified |
 | Paging, exception/hardware interrupt handling and physical hardware | Future research; no working claim |
 

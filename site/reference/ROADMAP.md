@@ -120,6 +120,11 @@ The v0.2 milestone is published and verified. The following research remains ope
 
 ## Evolution session
 
+- [x] Publish packed output atomically; injected sync/rename failures preserve
+  existing bytes, leave absent outputs absent and clean temporary files. Source
+  aliases, symlink destinations, hard-link isolation, permissions and non-files
+  are checked. Canonical instruction bytes and packaged targets are unchanged.
+
 - [x] Add a reproducible Node model benchmark: fixed reviewed boot workload,
   semantic assertions, warmups/trials, environment and source hashes, measured
   median/p95 and retained CI evidence. No native/DOM speed claim or timing gate.

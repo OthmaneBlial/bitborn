@@ -2,8 +2,12 @@ import json
 import tempfile
 import subprocess
 import unittest
+import io
+import os
+from contextlib import redirect_stderr
+from unittest.mock import patch
 from pathlib import Path
-from tools.bitborn import ROOT, bitdiff, digest, inspect, read_bits, verify
+from tools.bitborn import ROOT, atomic_write, bitdiff, digest, inspect, main, read_bits, verify
 
 
 class ToolTests(unittest.TestCase):
@@ -47,6 +51,46 @@ class ToolTests(unittest.TestCase):
                 self.assertIn(b'cannot overwrite the literal input source', result.stderr)
                 self.assertEqual(source.read_text(), original)
                 self.assertEqual(output.read_text(), original)
+
+    def test_failed_io_preserves_output_and_cleans_staging(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            source, output = directory / 'input.bits', directory / 'out.bin'
+            source.write_text('10101010\n')
+            for stage in ('fsync', 'replace'):
+                for existing in (False, True):
+                    with self.subTest(stage=stage, existing=existing):
+                        if existing:
+                            output.write_bytes(b'previous complete file')
+                        else:
+                            output.unlink(missing_ok=True)
+                        error = io.StringIO()
+                        with patch('sys.argv', ['bitpack', str(source), str(output)]), patch(f'tools.bitborn.os.{stage}', side_effect=OSError('injected I/O failure')), redirect_stderr(error):
+                            self.assertEqual(main('bitpack'), 1)
+                        self.assertIn('injected I/O failure', error.getvalue())
+                        self.assertEqual(output.exists(), existing)
+                        if existing:
+                            self.assertEqual(output.read_bytes(), b'previous complete file')
+                        self.assertEqual(sorted(path.name for path in directory.iterdir()), ['input.bits', 'out.bin'] if existing else ['input.bits'])
+
+    def test_atomic_outputs_links_permissions_and_nonfiles(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            target, symlink, hardlink = [directory / name for name in ('target.bin', 'symbolic.bin', 'hard.bin')]
+            atomic_write(target, b'old')
+            if os.name == 'posix':
+                self.assertEqual(target.stat().st_mode & 0o777, 0o600)
+                target.chmod(0o754)
+            symlink.symlink_to(target)
+            hardlink.hardlink_to(target)
+            atomic_write(symlink, b'complete new bytes')
+            self.assertTrue(symlink.is_symlink())
+            self.assertEqual(target.read_bytes(), b'complete new bytes')
+            self.assertEqual(hardlink.read_bytes(), b'old', 'atomic replacement leaves other hard-linked entries intact')
+            if os.name == 'posix':
+                self.assertEqual(target.stat().st_mode & 0o777, 0o754)
+            with self.assertRaisesRegex(ValueError, 'regular file'):
+                atomic_write(directory, b'never written')
 
     def test_target_annotations_are_verified_separately(self):
         data, _ = read_bits(ROOT / "boot/boot.bits")
