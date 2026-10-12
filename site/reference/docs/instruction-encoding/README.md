@@ -6,6 +6,10 @@ in the selected execution mode; source comments and whitespace are absent.
 
 ## Immediate operands
 
+For comparison-driven control flow, follow the [signed versus unsigned branch
+lesson](../signed-comparisons.md). Its literal exercise shows how overflow changes
+the meaning of SF and why short JL/JG differ from unsigned JB/JA.
+
 ```text
 10111000 00101010 00000000 00000000 00000000
    B8       2A       00       00       00

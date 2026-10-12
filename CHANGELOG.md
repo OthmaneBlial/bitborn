@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Complete the model's sixteen unprefixed short Jcc conditions with JL/JGE/JLE/JG
+  and JA/JBE. Explain signed overflow versus unsigned carry, verify 131,072 flag/
+  rel8 combinations and 3,384 operand comparisons, and add a literal 95-byte
+  native/model/browser exercise with exact history restoration.
+
 - Make QEMU harness resources unwind on launch/connect/greeting failures, use
   file-backed stderr with bounded diagnostic excerpts, and apply absolute QMP
   deadlines/response bounds. Bound terminate/kill waits and verify actual

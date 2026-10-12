@@ -231,6 +231,11 @@ The v0.2 milestone is published and verified. The following research remains ope
   bound QMP event/partial-line replies and both process shutdown waits. Real
   child processes prove stderr pipe blockage is avoided and kill/reap works.
   Temporary logs remain uncapped; see [harness scope](docs/qemu-harness.md).
+- [x] Execute all sixteen short conditional branches, including signed
+  JL/JGE/JLE/JG and unsigned JA/JBE. Exhaust flag/displacement combinations,
+  independently compare signed/unsigned operands, check IP wrap and history,
+  and run the same 95-byte overflow/equality exercise in QEMU and the CPU Lab.
+  Near/prefixed/wider forms remain outside scope; see [lesson](docs/signed-comparisons.md).
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

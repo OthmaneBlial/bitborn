@@ -68,8 +68,11 @@ export function decode(bytes, offset = 0) {
   if (opcode === 0x84 && byte(1) === 0xC0) return instruction(2, 'TEST AL, AL', 'A bitwise AND updates ZF. AL itself is unchanged; ZF becomes 1 when AL is zero.', 'test');
   if (opcode === 0xA8) return instruction(2, `TEST AL, 0x${hex(byte(1))}`, 'Test the bits of AL against an 8-bit mask without changing AL. ZF reports whether any selected bit is set.', 'testImmediate', {value: byte(1)});
   if (opcode === 0xEA) return instruction(5, `JMP 0x${hex(word(3),4)}:0x${hex(word(1),4)}`, 'A far jump stores the little-endian offset first and the segment second. This boot image normalizes CS to zero.', 'farJump', {value: word(1), segment: word(3)});
-  const branches = {0xEB:'jmp',0x70:'jo',0x71:'jno',0x72:'jb',0x73:'jae',0x74:'jz',0x75:'jnz',0x78:'js',0x79:'jns',0x7A:'jp',0x7B:'jnp',0xE2:'loop'};
-  if (branches[opcode]) return instruction(2, `${branches[opcode].toUpperCase()} ${signed(byte(1)) >= 0 ? '+' : ''}${signed(byte(1))}`, 'The signed 8-bit displacement is measured from the end of this instruction.', branches[opcode], {displacement: signed(byte(1))});
+  const branches = {0xEB:'jmp',0x70:'jo',0x71:'jno',0x72:'jb',0x73:'jae',0x74:'jz',0x75:'jnz',0x76:'jbe',0x77:'ja',0x78:'js',0x79:'jns',0x7A:'jp',0x7B:'jnp',0x7C:'jl',0x7D:'jge',0x7E:'jle',0x7F:'jg',0xE2:'loop'};
+  if (branches[opcode]) {
+    const conditions={jbe:'Unsigned below or equal: CF or ZF is set.',ja:'Unsigned above: CF and ZF are clear.',jl:'Signed less: SF differs from OF.',jge:'Signed greater or equal: SF equals OF.',jle:'Signed less or equal: ZF is set or SF differs from OF.',jg:'Signed greater: ZF is clear and SF equals OF.'};
+    return instruction(2, `${branches[opcode].toUpperCase()} ${signed(byte(1)) >= 0 ? '+' : ''}${signed(byte(1))}`, `${conditions[branches[opcode]]?conditions[branches[opcode]]+' ':''}The signed 8-bit displacement is measured from the end of this instruction.`, branches[opcode], {displacement: signed(byte(1))});
+  }
   if (opcode === 0xE9 || opcode === 0xE8) {
     const displacement = word(1) > 32767 ? word(1) - 65536 : word(1);
     return instruction(3, `${opcode === 0xE8 ? 'CALL' : 'JMP'} ${displacement}`, 'A signed 16-bit displacement is relative to the next instruction. CALL first saves the logical return IP on SS:SP.', opcode === 0xE8 ? 'call' : 'jmp', {displacement});
@@ -187,6 +190,12 @@ export function step(bytes, state) {
     case 'jnz': if (!state.zf) branch(); break;
     case 'jb': if (state.cf) branch(); break;
     case 'jae': if (!state.cf) branch(); break;
+    case 'jbe': if (state.cf || state.zf) branch(); break;
+    case 'ja': if (!state.cf && !state.zf) branch(); break;
+    case 'jl': if (state.sf !== state.of) branch(); break;
+    case 'jge': if (state.sf === state.of) branch(); break;
+    case 'jle': if (state.zf || state.sf !== state.of) branch(); break;
+    case 'jg': if (!state.zf && state.sf === state.of) branch(); break;
     case 'jo': if (state.of) branch(); break;
     case 'jno': if (!state.of) branch(); break;
     case 'js': if (state.sf) branch(); break;

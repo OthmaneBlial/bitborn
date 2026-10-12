@@ -150,6 +150,10 @@
       "progress": "\u2705 Startup cleanup, absolute QMP deadlines and bounded termination/kill waits; real stderr-flood and termination-resistant child checks"
     },
     {
+      "milestone": "Signed and unsigned comparisons",
+      "progress": "\u2705 All 16 short Jcc conditions, 131,072 flag/displacement cases and 3,384 operand-order comparisons; exact 95-byte overflow exercise agrees with QEMU and rewinds/replays"
+    },
+    {
       "milestone": "CPU Lab program downloads and imports",
       "progress": "\u2705 Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks"
     },

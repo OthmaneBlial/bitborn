@@ -8,7 +8,7 @@
   "presentationFps": 1,
   "alterations": "960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.",
   "sourceSha256": {
-    "tools/record_browser.mjs": "f2e262c615934e500bcd644de34a923eaaf13458552894d01d8fb4c9bbc3b3a7",
+    "tools/record_browser.mjs": "b9c11eab4c74db3cd79cb20311ba4600c3d2fc172a75f8fe37ea8d90eae847e1",
     "boot/boot.bits": "230bbafbfa02abd62dc964efbad02db0431f0efa263216bba02146cd164262b8",
     "site/elf.mjs": "552aabb816be8add70c470c951f0110697d491d0a0e926c3bd9e6001e623832b",
     "site/elf/index.html": "767e441bc2b8d9e29a626d264b2d437bce24c296196a5b37c33d09cf6f58f29b",
@@ -40,7 +40,7 @@
     "docs/instruction-encoding/fixtures/mov-memory-positive.bits": "7d598be8c8bf024e8301fe40c688078139b9c8b61e5a8ceb23fb34b2722db31b",
     "docs/instruction-encoding/fixtures/mov32-next.bits": "246005943e5c9914c9b4f820829fa6dc851b173ffb6a59d702593c46d95b421a",
     "site/address16.mjs": "dd980d19e332cb5a30af20f60a0efb23bbfe527f784bc9699593d0607b0ef263",
-    "site/simulator.mjs": "0a03658351104eb798b1fa7224d71b01fd8e41aafa5f02126067b4e7421fe778",
+    "site/simulator.mjs": "6d90fcd75709f9e94a1887b6cd0fb92292c08f04cc5c4656fe4d23dfe5b2bee6",
     "site/binary.mjs": "e38a13d3f5233e416f07b8c779bc91f0252f235f8c7271800150bf3a11603e90",
     "site/history.mjs": "45cbd1d494fe7b1f0867c1dc1978ebf2b1a0fce3599f1a704bff75dbe399e321",
     "site/program-link.mjs": "df9a7ad9924dcd19b137407e62557c664b833b5e13a191e9b86b3ca964fe0b40",
@@ -48,7 +48,7 @@
     "site/boot-builder/builder.css": "2a5c2803c671e4fb33f55a200c16fc7d597127bf019a3c2b7b2f381417e51a4c",
     "site/boot-builder/model.mjs": "92a78eb396054298a2c170cd2a2fb770e7201b0478b6678321c000a46f3108f3",
     "site/boot-builder/app.mjs": "13f9234f36f0b6c166dd3ab9f16750ba680c8e3e7045d6c9bbc7e5a275fd1cb4",
-    "site/cpu-lab/index.html": "6701f38b508334121ab6d6301f7cd56025b8c10b1549b41b239a694a9d784a21",
+    "site/cpu-lab/index.html": "0916a78a4349c8551940aa26fc021745205b507f0f36d1ecf1113e7d4a986af2",
     "site/cpu-lab/lab.css": "75b4a3e46b60b395e6ed0cedf688d0a12cdd3e959934a9f40bce1273af771d68",
     "site/cpu-lab/lab.mjs": "3c19e6a63ec109b0f7f9202938ac93913b758033bab43282bc8b9ffb3af13d31",
     "site/cpu-lab/presets.mjs": "4d2faa963c57f1527e465241cf114d15fe42477cf54caec61f1f754592d66ffd",
@@ -58,7 +58,8 @@
     "site/challenges/challenges.css": "49eb44bbd41c5f154aa68bb7b7392b05e682766a714010d4cc15c98394362218",
     "site/challenges/challenges.mjs": "871be9c721a83d2066fe51b10f8df93c7e84de59ba04f52a18048d1cd1bdadba",
     "site/challenges/catalog.json": "2b51f2b288973f94c35510887c9ae1b011ff12137895d1220d723682782604aa",
-    "challenges/catalog.json": "81e9abfbf8fbe7c6c3709fe5bb483f87f4ee15bbba708dd96b59b948b2629b02"
+    "challenges/catalog.json": "81e9abfbf8fbe7c6c3709fe5bb483f87f4ee15bbba708dd96b59b948b2629b02",
+    "docs/instruction-encoding/fixtures/signed-branches.bits": "741ed929009fee99694a94c3726314529b761ec5f3ec85c4cd41ccfe66eea626"
   },
   "captures": [
     {
@@ -171,10 +172,10 @@
     },
     {
       "file": "assets/cpu-lab-demo.gif",
-      "sha256": "0a16a2dc4c24b2c01993854e0cc507c22df7e8e9885055812521a52d875d99a2",
-      "capturedFrames": 29,
-      "encodedFrames": 29,
-      "durationSeconds": 29,
+      "sha256": "2a5639d7691b309d9ad658b206e95a9ad4208f15d89ab544a1f7953d07d002c5",
+      "capturedFrames": 34,
+      "encodedFrames": 34,
+      "durationSeconds": 34,
       "actions": [
         "Loaded the literal stack/CALL/RET preset.",
         "Actual browser Step control 1; registers, flags and stack are model state.",
@@ -204,7 +205,12 @@
         "Modeled ModR/M word store writes11 11 to physical10030; exact changed bytes are journaled.",
         "Rewind restores both original zero RAM bytes without executing an instruction.",
         "Replay restores the exact word store and register/flag state.",
-        "A high-byte store and low-byte load produce DX1122 while preserving flags; the exercise halts after28 supported steps."
+        "A high-byte store and low-byte load produce DX1122 while preserving flags; the exercise halts after28 supported steps.",
+        "CMP -32768 with 1: SF0 and OF1 make signed less true despite the positive wrapped subtraction result.",
+        "JL follows SF versus OF and skips the sentinel write; unsigned below takes a different path.",
+        "CMP 32767 with -1: SF1 and OF1 mean signed greater, despite the negative wrapped result.",
+        "JG skips the second sentinel write; all branch instructions preserve the comparison flags.",
+        "The exact 95-byte exercise halts with all signed, unsigned and equality markers; independent QEMU checks verify the same literal program."
       ],
       "sourceFrameSha256": [
         "b3263079145cff60da711e705474390e16b6041e00be024924af40f41595221f",
@@ -220,22 +226,27 @@
         "0d96c463a58d3dba3419e0c3de524d3fb643aa4cfcbaf9eeb92620f4cbb2b718",
         "2efb5ff6eaec7f08bf8c1134b1f5a85495f80e51e84baa11222a6cd3cc56b28b",
         "c7609004a23037114f90025038531d159a9b66b3fdec60174846933c873a936c",
-        "447dbe335752388a3a9958e69f5b4cbb86558d70b8427e7e050c5be642f0ccfd",
-        "8fa6bcac06e65f41bcbe268cf8fc41f3f09900668567b981580211f0ae8af534",
+        "e3f66f319d12b0f1ab5a98e10c86562533fa303e8edd234b66243c6cc5cbe0ca",
+        "fcc888797096339859a99dcd3c40c122e3cea894a787632c3a6e98bcffd3abdd",
         "186fd98d70f0f05126b16d669e5c7e082a2f515c493ad620173729ef4756150d",
         "9c21a03c93c1e08e66e17454d4d700fff2189752ae86c1b5dc4bd5d15c1eff7c",
-        "66f1694c97fd5e9871004aa0afa665ce5f3f891f29c814f80bb0264610840dc2",
+        "ae622eef27bc077465271d1621d06a12f42f15dd31a6afe16fc26edadf7e2834",
         "0bdbffd65ade2c80e9a60c04f019f0e3e9f2b67dd4ef8af9f43a5e96faada4b8",
-        "29bc675ec35454d462bcc252d04bef23bf289273e83253d9a364dadd3c3ea617",
-        "a1cb307a9c7193fdd9be0462ab4601889dcc7248e8d71fbf4f6bd0e6520061f0",
-        "3ce84f72f27308ecc241943b10aa0b32ceab67e3844d458c466a6f6ac280e429",
-        "8a8c897ba0229a97da903a899aea6aff21f2f54c32454f5f4c471206346f32cf",
-        "c85ae252c15e1b27fca7fb529852bebe7b55761ff87e12c0ce89b5a7f805511a",
-        "e3bea6451f382ea3a30b7f1c9b252918151eb900baf4fefcf8c2d96c63bfe6e6",
+        "dee3b6f98f3036aedbd69cd00f6657074a427c60c13c4a0567fc4a18bbd01f3a",
+        "e3b21b7f5667d668458ae3a425b0388064f844d513bf505e654ca509c93d8545",
+        "a68694a8507fa5b26a4fe107077e68e4f68838dc0488306b6dd08c9ba86e764c",
+        "fa5b10c84677df361e6f237644758e8319c9337867335189a79311f859b71802",
+        "5be9b14e5159f36e79f34fc19a69bb8f48065c266fc1ac5c45fef593ba278f97",
+        "4764a961088258850cba12779a8b3ce6d999606b24bfc3a075ce9aac9862d672",
         "34d9b835db9fbd0c2c4f9d8041993c2cffb6ed188ff70dae0f49ad70433a8538",
         "807e88c0726098cb85287694a438233f67abef4b36a54ef297543ad6af45dedd",
         "3ca6e10b332096c2ebd059405228df3fa74d8da29b21541bf947f13ef05b603e",
-        "7945d3214903eabda297e84c130b320314cb55aad6805cfe8b5df310ed88a0b5"
+        "18b0fd48bac9e14f4b20ed630c403a8daf57dda13f5807cbd7447f7ea026792a",
+        "dd9e4dc9603458f5ba223bddb2ec65ce009f947f9bb0a19ca1b75bf6ad7d4c3f",
+        "3ce436fad1b54d2b4c3a0ba33453a488ef044b2881d6abcfd8a2c1040eaf5a1b",
+        "b04a383bfd8d739f35d9372ed6293e13a6484c9705fc22f923a7bc47a485feb4",
+        "d29e29ea81fc3556882312642176e2acc5f5c99653646ec04d0412a00155be77",
+        "326c695756c1107d679d3c1411dc60215534be817df4e65f3dfc1bec04752aa5"
       ]
     },
     {

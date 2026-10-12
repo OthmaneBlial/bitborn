@@ -158,7 +158,20 @@ children; both are reaped. Terminate/kill waits are each bounded to five seconds
 All 69 Python tests pass locally (one expected macOS native-Linux skip), including
 the native boot/fault/segment/memory probes, and all site/module checks pass.
 Temporary logs remain uncapped; this harness is for curated verification.
-Next: signed conditional branches and overflow examples with native/model proof.
+Harness commit `470fa50` passed CI `38319571404` and deployment `38319844653`.
+Its Pages mirror is `6aa899e`; the public parser, diagnostic guide and harness
+guide were anonymously fetched and match committed bytes.
+Signed and unsigned short branches now cover all sixteen Jcc conditions. An
+independent flags/displacement oracle checks 131,072 cases; 3,384 operand-order
+comparisons derive signed/unsigned relations without trusting model flags. The
+same manually authored 95-byte overflow/equality exercise runs in the model and
+QEMU, matching general/configured-segment words, IP and CMP-defined flags. Exact
+history rewind/replay preserves the source and both taken/fallthrough paths.
+The CPU Lab links its source and the recording adds five actual overflow frames;
+all six GIFs retain current source/frame/GIF hashes. Wider/prefixed/near Jcc
+variants remain outside scope. Full local validation passes 70 Python tests (one
+expected macOS native-Linux skip), all site/model modules, and Chromium, Firefox
+157 and WebKit 27.2 exercise checks. Next: carry-aware arithmetic and native/model proof.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -202,7 +215,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 16 | 1 | Address-reference inspector that checks literal pointers without resolving labels into code | H | M | Annotations | Medium | Open |
 | 17 | 1 | Register-to-register MOV encodings with independent ModR/M fixtures | H | M | 05 | Medium | Complete: scoped inspection, 9,728 combinations and 18 disassembly goldens |
 | 18 | 1 | Curated indirect memory operands with explicit segment-selection explanations | H | M | 17 | High | Complete: 16-bit addressing inspection; default DS/SS verified natively; no memory execution |
-| 19 | 1 | Signed conditional branches and overflow examples with native QEMU proof | H | M | 04 | Medium | Open |
+| 19 | 1 | Signed conditional branches and overflow examples with native QEMU proof | H | M | 04 | Medium | Complete: all short conditions, full rel8/flag oracle and identical 95-byte native/model exercise |
 | 20 | 1 | Carry-aware arithmetic examples and native/model differential checks | H | M | 04 | Medium | Open |
 | 21 | 1 | ELF anatomy viewer: headers, entry point, segment permissions and payload bytes | H | H | Existing ELF packaging | Medium | Complete: bounded ELF64 scope; no imported-code execution |
 | 22 | 1 | Explain Linux syscall encodings in 64-bit inspection mode without host execution | H | H | 05 | Medium | Open |

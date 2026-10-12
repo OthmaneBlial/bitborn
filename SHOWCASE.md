@@ -1,5 +1,14 @@
 # Make one bit count
 
+## See the sign flag disagree with signed ordering
+
+Open the [CPU Lab](https://othmaneblial.github.io/bitborn/cpu-lab/) and import its
+linked [95-byte comparison exercise](docs/instruction-encoding/fixtures/signed-branches.bits).
+After eleven steps, SF=0 but OF=1: JL correctly treats -32768 as less than 1.
+The second overflowing comparison has SF=1 and OF=1, so JG treats 32767 as greater
+than -1. Unsigned branches follow different paths. The same literal bytes pass
+native QEMU checks; the [lesson](docs/signed-comparisons.md) gives exact markers.
+
 ## Compare a flip with the field it changes
 
 ![Actual browser capture of the read-only bit diff](assets/bit-diff-demo.gif)
