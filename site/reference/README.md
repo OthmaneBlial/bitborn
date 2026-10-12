@@ -94,6 +94,7 @@ for exact evidence and remaining gates.
 | Mode-aware instruction inspection | ✅ Explicit 16/32/64 context, 66/REX fields and exact imm64; independent disassembly goldens and three-browser checks; simulation remains 16-bit |
 | CPU Lab program downloads and imports | ✅ Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks |
 | Binary and hexadecimal drafts | ✅ Literal byte views, explicit hex loading and comment preservation; all byte values and 1,000 seeded round trips pass; CLI .bits remains binary |
+| ELF anatomy explorer | ✅ Six checksummed files, exact entry/segment mapping, bounded local inspection and 2,000 seeded mutations; three-browser keyboard/mobile checks; no imported code execution |
 | [v0.3.0 release and provenance](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.3.0) | ✅ Exact-commit CI passed; all 14 public files re-downloaded anonymously, bytes/checksums and source/artifact provenance verified |
 | [v0.2.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0) | ✅ Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified |
 | Paging, exception/hardware interrupt handling and physical hardware | Future research; no working claim |
@@ -198,6 +199,13 @@ GDT and one software-interrupt gate, then verifies memory and interrupt return.
 Neither experiment supplies paging, general exception handling or a full OS.
 
 ## Explore and contribute
+
+The [ELF explorer](https://othmaneblial.github.io/bitborn/elf/) shows how the
+64-byte ELF header and 56-byte load header wrap unchanged instruction bytes.
+Select a field, inspect its little-endian bytes, or follow `400078` to file offset
+120. Import bounded ELF64 files for read-only inspection of segments, permissions,
+zero fill and entry mappings. See the [precise scope and reproduction](docs/elf-anatomy.md);
+the viewer does not execute imported programs or certify their safety.
 
 The [instruction playground](https://othmaneblial.github.io/bitborn/playground/)
 inspects selected encodings in an explicit 16-, 32- or 64-bit context. The same

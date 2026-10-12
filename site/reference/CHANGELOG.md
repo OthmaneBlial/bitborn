@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Add read-only ELF64 anatomy inspection: actual fields, segment permissions,
+  exact entry/file mapping and zero fill. Verify reviewed preset hashes; bound
+  imports and byte-map rendering, preserve prior files on errors, and add six
+  artifact checks, 2,000 seeded mutations and three-browser keyboard/mobile tests.
+
 ## 0.3.0 — 2026-10-12
 
 - Add a deterministic release-provenance manifest tying the exact source commit,

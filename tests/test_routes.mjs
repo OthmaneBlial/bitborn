@@ -4,7 +4,7 @@ import {dirname,resolve,join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)),'..');
-const routes = ['playground','examples','learn','architecture','roadmap'];
+const routes = ['playground','examples','learn','architecture','roadmap','elf'];
 const descriptions = [], titles = [];
 for (const route of routes) {
   const page = resolve(root,'site',route,'index.html'), html = readFileSync(page,'utf8');
@@ -75,4 +75,4 @@ for(const language of languages) {
 }
 assert.match(progress.updated,/^\d{4}-\d{2}-\d{2}$/);assert.ok(progress.milestones.length > 0);
 assert.ok(progress.milestones.every(item => typeof item.milestone === 'string' && typeof item.progress === 'string'));
-console.log('route checks passed: five portable dedicated routes, unique metadata, local source/tutorial/download links, fourteen real example sizes, generated repository progress data');
+console.log(`route checks passed: ${routes.length} portable routes, unique metadata, local source/tutorial/download links, fourteen real example sizes, generated repository progress data`);

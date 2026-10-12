@@ -120,6 +120,11 @@ The v0.2 milestone is published and verified. The following research remains ope
 
 ## Evolution session
 
+- [x] Add an ELF64 anatomy explorer with checksummed native examples, field/byte
+  selection, exact entry-to-file mapping, segments and zero-fill classification.
+  Six real artifacts, payload identity, 2,000 seeded mutations and three-browser
+  import, invalid-file, keyboard and mobile checks pass. Imported code never runs.
+
 - [x] Prepare v0.3 version/notes and deterministic provenance tying the reviewed
   source commit, target source files, payloads, packaged outputs and release assets.
   Reject unexpected/aliased staging entries before writing.

@@ -46,7 +46,9 @@ anonymously downloaded and match staged bytes, all 13 checksums pass, and source
 artifact provenance matches. All 55 native source files and seven BIOS images are
 identical to immutable v0.2. Staging rejects unknown files and aliases before writing.
 
-Next: ELF anatomy and a verified public release, then deeper native experiments.
+Completed next: read-only ELF64 anatomy, six actual artifacts/payloads, exact
+entry/segment mapping, 2,000 seeded mutations and three-browser import/mobile
+checks. Next: manifest validation and deeper native experiments.
 Risks: inspection supports a documented subset; execution remains the bounded
 16-bit model. Native-speaker review, hardware, paging and general interrupts
 require separate evidence. Detailed technical guides remain English.
@@ -79,7 +81,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 18 | 1 | Curated indirect memory operands with explicit segment-selection explanations | H | M | 17 | High | Open |
 | 19 | 1 | Signed conditional branches and overflow examples with native QEMU proof | H | M | 04 | Medium | Open |
 | 20 | 1 | Carry-aware arithmetic examples and native/model differential checks | H | M | 04 | Medium | Open |
-| 21 | 1 | ELF anatomy viewer: headers, entry point, segment permissions and payload bytes | H | H | Existing ELF packaging | Medium | Open |
+| 21 | 1 | ELF anatomy viewer: headers, entry point, segment permissions and payload bytes | H | H | Existing ELF packaging | Medium | Complete: bounded ELF64 scope; no imported-code execution |
 | 22 | 1 | Explain Linux syscall encodings in 64-bit inspection mode without host execution | H | H | 05 | Medium | Open |
 | 23 | 1 | Literal native self-modification experiment with controlled halt and RAM proof | H | M | Existing BIOS loader | Medium | Open |
 | 24 | 1 | Program gallery presets derived from canonical .bits instead of duplicated source | H | M | Site packaging | Medium | Open |

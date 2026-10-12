@@ -1,5 +1,19 @@
 # Make one bit count
 
+## Inspect the container around eight instruction bytes
+
+![Actual browser ELF field and entry-byte inspection; no target execution](assets/elf-demo.gif)
+
+Open the [ELF explorer](https://othmaneblial.github.io/bitborn/elf/). The reviewed
+eight-byte exit program has 120 header bytes followed by its unchanged payload.
+Select `PH0.p_flags` to highlight the RX permission bytes, then follow entry
+`400078` to file byte 120 (`6A`). Compare the original 12-byte payload: its ELF
+container has 132 bytes and the same entry mapping. Use arrows or Home/End to
+inspect bytes; no program is executed by this viewer.
+
+The [anatomy guide](docs/elf-anatomy.md) documents scope, checked malformed inputs
+and exact address mapping. Actual Linux execution remains separate CI evidence.
+
 These demonstrations are reproducible from the repository. Browser recordings
 show real interactions with the bounded JavaScript teaching model. QEMU captures
 show guest machine-code execution. Those are separate kinds of evidence.

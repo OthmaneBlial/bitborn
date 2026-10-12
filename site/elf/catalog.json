@@ -1,0 +1,32 @@
+[
+  {
+    "file": "exit-code.elf",
+    "source": "examples/exit-code/program.bits",
+    "sha256": "d93aa7e7fd49e17fb09ac7cd6b0cd0776dea9e40503595ae28b1abf7c71c48c7"
+  },
+  {
+    "file": "arithmetic.elf",
+    "source": "examples/arithmetic/program.bits",
+    "sha256": "dee003218a833b1be47cd1eff591740f8e9a84479c5127de88389694613d3fea"
+  },
+  {
+    "file": "print-text.elf",
+    "source": "examples/print-text/program.bits",
+    "sha256": "592a2cc092d3d32e73728800c1fedaa6192543e9ee1e7014a0b9db74d0ee735d"
+  },
+  {
+    "file": "loop-count.elf",
+    "source": "examples/loop-count/program.bits",
+    "sha256": "9f84a4059abce7984cd427f362112031e6ee62576c7b09416e29a42b92868c06"
+  },
+  {
+    "file": "compare-values.elf",
+    "source": "examples/compare-values/program.bits",
+    "sha256": "214907ed9b2e8ef5a39ad8647411fd5b062714eb8b9a72aa9d6b1456b0730527"
+  },
+  {
+    "file": "exit-code-small.elf",
+    "source": "examples/exit-code-small/program.bits",
+    "sha256": "3a0c6088c8b5f20c76f52de98abd9ce2259622420844ad05a37cb269670fe0fe"
+  }
+]

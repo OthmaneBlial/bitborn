@@ -9,7 +9,15 @@
   "alterations": "960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.",
   "sourceSha256": {
     "boot/boot.bits": "230bbafbfa02abd62dc964efbad02db0431f0efa263216bba02146cd164262b8",
+    "site/elf.mjs": "552aabb816be8add70c470c951f0110697d491d0a0e926c3bd9e6001e623832b",
+    "site/elf/index.html": "767e441bc2b8d9e29a626d264b2d437bce24c296196a5b37c33d09cf6f58f29b",
+    "site/elf/app.mjs": "1cf9398cc3475a99d526f61087a26a393f140396b28fe43b1408199cc6dd63ce",
+    "site/elf/elf.css": "9e572d6c519bfc1b8a5c68d89bda90e2d9ba8736a19dd5da682a26309bc0e166",
+    "site/elf/catalog.json": "fe549f3e5c2464c176e5169b88c69d9eb3f2003c2646f3508d22494f7da93ff9",
+    "site/downloads/exit-code-small.elf": "3a0c6088c8b5f20c76f52de98abd9ce2259622420844ad05a37cb269670fe0fe",
+    "site/downloads/exit-code.elf": "d93aa7e7fd49e17fb09ac7cd6b0cd0776dea9e40503595ae28b1abf7c71c48c7",
     "site/styles.css": "f255737251dfa8c6c0d133b70367b09578a5f0ebaa01a6d044c3902c555f6a38",
+    "site/learn/routes.css": "f77ddb1b9b7187f92c69e594a8002543deed69c74d7954dfa670ef4bb85052d1",
     "site/app.js": "5ee86e439e83cdb24a8b80935904917b12f3eb7da304950fbb677ba5ee8e30f3",
     "site/encoding.mjs": "ab77b9f5981353da316806df7890b40aca12cc589a995b53724498ea153f9e8b",
     "site/encoding-presets.mjs": "6714e7b8300776e32567cd564a9dd5a6d29004e315e9feb129382bfeff71077e",
@@ -34,6 +42,25 @@
     "challenges/catalog.json": "81e9abfbf8fbe7c6c3709fe5bb483f87f4ee15bbba708dd96b59b948b2629b02"
   },
   "captures": [
+    {
+      "file": "assets/elf-demo.gif",
+      "sha256": "ea9666c9df816c7372717952568d0d1b2ca5cbe6e29420958c0b26fb39afb5d2",
+      "capturedFrames": 4,
+      "encodedFrames": 4,
+      "durationSeconds": 4,
+      "actions": [
+        "Checksum-verified eight-byte exit ELF: declared 400078 maps to file offset120; inspection only.",
+        "Selected the program-header permission field: actual file bytes encode RX as 05.",
+        "Followed the declared entry to the actual first instruction byte 6A; no imported program executes.",
+        "Loaded the reviewed 12-byte baseline: container grows to132 bytes while the entry mapping stays at120."
+      ],
+      "sourceFrameSha256": [
+        "b3b0fe355cc4255f2eebad5cd7eaf07175aebb7df315c2694decffb0b3518416",
+        "ba95487c46d4cbc6d6978a8677f6d3887b645aca7ed7a019db28696f249f6573",
+        "8759baeb12df3704b3ada841c38bf5ef037d007f8703fdaa598d1d5523d197ad",
+        "dd99396b781c7b5341eb90f04483860a3ba3efffde58380bf8a077824eb93258"
+      ]
+    },
     {
       "file": "assets/encoding-demo.gif",
       "sha256": "e815896c4ca98fdcd23a75917057e323708b7a925222d857c6d16b432d34c2b2",

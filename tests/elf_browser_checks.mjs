@@ -1,0 +1,67 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+
+export async function checkELF(page,base) {
+  await page.goto(new URL('elf/',base).href);
+  await page.waitForFunction(()=>document.getElementById('elf-status').textContent.includes('structural inspection complete'));
+  assert.match(await page.locator('#elf-facts').textContent(),/128 file bytes/);
+  assert.match(await page.locator('#entry-mapping').textContent(),/0x00400078 → file offset 120/);
+  assert.equal(await page.locator('#elf-example option').count(),6);
+  await page.locator('[data-field="PH0.p_flags"]').click();
+  assert.equal(await page.locator('.elf-byte.selected').count(),4);
+  assert.equal(await page.locator('[data-file-offset="68"]').getAttribute('class'),'elf-byte header selected');
+  await page.locator('[data-file-offset="68"]').click();assert.match(await page.locator('#byte-detail').textContent(),/BITS 00000101/);
+  await page.locator('#show-entry').click();assert.equal(await page.evaluate(()=>document.activeElement.dataset.fileOffset),'120');
+  assert.equal(await page.locator('[data-file-offset="120"]').getAttribute('class'),'elf-byte selected entry');
+  assert.match(await page.locator('#byte-detail').textContent(),/HEX 6A/);
+  await page.keyboard.press('ArrowRight');assert.equal(await page.evaluate(()=>document.activeElement.dataset.fileOffset),'121');
+  await page.keyboard.press('Home');assert.equal(await page.evaluate(()=>document.activeElement.dataset.fileOffset),'0');
+  await page.keyboard.press('End');assert.equal(await page.evaluate(()=>document.activeElement.dataset.fileOffset),'127');
+  assert.equal(await page.locator('.elf-byte[tabindex="0"]').count(),1);
+  const before=await page.locator('#entry-mapping,#elf-facts,#elf-fields').allTextContents();
+  await page.locator('#elf-import').setInputFiles({name:'broken.elf',mimeType:'application/octet-stream',buffer:Buffer.alloc(64)});
+  await page.waitForFunction(()=>document.getElementById('elf-import').value==='');
+  assert.match(await page.locator('#elf-status').textContent(),/Missing ELF magic/);
+  assert.deepEqual(await page.locator('#entry-mapping,#elf-facts,#elf-fields').allTextContents(),before);
+  const original=readFileSync(new URL('../build/exit-code-small.elf',import.meta.url));
+  const high=Buffer.from(original);high.writeBigUInt64LE(0xFFFFFFFFFFFF0000n,80);high.writeBigUInt64LE(0xFFFFFFFFFFFF0078n,24);
+  await page.locator('#elf-import').setInputFiles({name:'<img src=x onerror=alert(1)>.elf',mimeType:'application/octet-stream',buffer:high});
+  await page.waitForFunction(()=>document.getElementById('entry-mapping').textContent.includes('FFFFFFFFFFFF0078'));
+  assert.match(await page.locator('#entry-mapping').textContent(),/file offset 120/);
+  assert.equal(await page.locator('#elf-status img').count(),0,'file names render as text');
+  assert.equal(await page.locator('#elf-source').isHidden(),true,'local imports do not claim canonical provenance');
+  await page.locator('#elf-import').setInputFiles({name:'oversized.elf',mimeType:'application/octet-stream',buffer:Buffer.alloc((1<<20)+1)});
+  await page.waitForFunction(()=>document.getElementById('elf-status').textContent.includes('at most 1 MiB'));
+  assert.match(await page.locator('#entry-mapping').textContent(),/FFFFFFFFFFFF0078/);
+  const zero=Buffer.from(original);zero.writeBigUInt64LE(160n,104);zero.writeBigUInt64LE(0x400081n,24);
+  await page.locator('#elf-import').setInputFiles({name:'zero-fill.elf',mimeType:'application/octet-stream',buffer:zero});
+  await page.waitForFunction(()=>document.getElementById('entry-mapping').textContent.includes('zero-filled'));
+  assert.equal(await page.locator('#show-entry').isDisabled(),true);
+  const large=Buffer.alloc(640);original.copy(large);large.writeBigUInt64LE(640n,96);large.writeBigUInt64LE(640n,104);large.writeBigUInt64LE(0x400238n,24);
+  await page.locator('#elf-import').setInputFiles({name:'windowed.elf',mimeType:'application/octet-stream',buffer:large});
+  await page.waitForFunction(()=>document.getElementById('elf-facts').textContent.includes('640 file bytes'));
+  await page.locator('#bytes-next').click();assert.match(await page.locator('#byte-range').textContent(),/256–511/);
+  assert.equal(await page.locator('.elf-byte').count(),256,'byte map remains bounded');
+  await page.locator('#bytes-next').click();assert.equal(await page.locator('.elf-byte').count(),128);
+  assert.equal(await page.locator('#bytes-next').isDisabled(),true);
+  await page.locator('#bytes-prev').click();assert.match(await page.locator('#byte-range').textContent(),/256–511/);
+  await page.locator('#show-entry').click();assert.match(await page.locator('#byte-range').textContent(),/512–639/);
+  await page.locator('#bytes-prev').click();assert.equal(await page.locator('.elf-byte[tabindex="0"]').count(),1,'paging away from the selected entry retains one keyboard target');
+  await page.locator('#elf-example').selectOption({label:'exit-code.elf'});
+  await page.waitForFunction(()=>document.getElementById('elf-facts').textContent.includes('132 file bytes'));
+  assert.equal(await page.locator('#elf-source').isVisible(),true);
+  const reviewedBefore=await page.locator('#entry-mapping,#elf-facts,#elf-fields').allTextContents();
+  const corrupted=Buffer.from(original);corrupted[120]^=1;
+  await page.route('**/downloads/exit-code-small.elf',route=>route.fulfill({status:200,body:corrupted}));
+  await page.locator('#elf-example').selectOption({label:'exit-code-small.elf'});
+  await page.waitForFunction(()=>document.getElementById('elf-status').textContent.includes('checksum mismatch'));
+  assert.deepEqual(await page.locator('#entry-mapping,#elf-facts,#elf-fields').allTextContents(),reviewedBefore,'checksum failure preserves the reviewed inspection');
+  await page.unroute('**/downloads/exit-code-small.elf');
+  await page.locator('#elf-example').selectOption({label:'exit-code.elf'});
+  await page.waitForFunction(()=>document.getElementById('elf-status').textContent.includes('structural inspection complete'));
+  for(const width of [1440,320]) {
+    await page.setViewportSize({width,height:1000});
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`ELF explorer fits ${width}px`);
+    if(width===320)assert.equal(await page.locator('.elf-byte').first().evaluate(node=>node.getBoundingClientRect().width>=24),true,'mobile byte targets are at least 24px wide');
+  }
+}

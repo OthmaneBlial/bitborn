@@ -47,6 +47,12 @@ def prepare():
         shutil.copyfile(binary, destination)
         checksums.append(f"{hashlib.sha256(binary.read_bytes()).hexdigest()}  {relative.as_posix()}")
     (downloads / "SHA256SUMS").write_text("\n".join(checksums) + "\n")
+    elf_catalog = []
+    for target in targets():
+        if target.get('environment') == 'linux-x86_64':
+            relative = Path(target['output']).with_suffix('.elf')
+            elf_catalog.append({'file': relative.as_posix(), 'source': target['source'], 'sha256': digest((downloads / relative).read_bytes())})
+    (ROOT / 'site/elf/catalog.json').write_text(json.dumps(elf_catalog, indent=2) + '\n')
     reference = ROOT / "site/reference"
     for folder in ("docs", "boot", 'challenges'):
         shutil.copytree(ROOT / folder, reference / folder, dirs_exist_ok=True)
