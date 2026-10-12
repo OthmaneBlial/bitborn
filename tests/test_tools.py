@@ -11,7 +11,9 @@ class ToolTests(unittest.TestCase):
             path = Path(tmp) / "source.bits"
             path.write_text("# comment\n 10111000\t00101010 # data | value | two bytes\n")
             self.assertEqual(read_bits(path)[0], bytes.fromhex("b8 2a"))
-            for invalid in ("2", "0000000", "000000000", "0xFA", "", "10101010 # wrong"):
+            path.write_text("10101010 # ordinary trailing comment\n")
+            self.assertEqual(read_bits(path)[0], b"\xaa")
+            for invalid in ("2", "0000000", "000000000", "0xFA", "", "10101010 # instruction | incomplete"):
                 path.write_text(invalid)
                 with self.assertRaises(ValueError):
                     read_bits(path)

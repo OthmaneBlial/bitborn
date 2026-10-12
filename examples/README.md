@@ -1,0 +1,25 @@
+# The handwritten examples gallery
+
+All payloads are literal `.bits`, never generated from Assembly. Each source line
+explains an opcode, operand or data range. `make build` writes the corresponding
+binary unchanged; Linux ELF headers and BIOS sector framing are host packaging.
+Every row below has a reproduction guide in its directory. The boot-sector
+example uses the canonical source in `boot/`, avoiding a second divergent copy.
+
+| Example | Environment | Expected behavior | Source / walkthrough |
+| --- | --- | --- | --- |
+| Return an exit code | Linux x86-64 | Exit 42 | [exit-code](exit-code/README.md) |
+| Arithmetic | Linux x86-64 | Multiply 6×7, exit 42 | [arithmetic](arithmetic/README.md) |
+| Print text | Linux x86-64 | Hello from raw bits!, exit 0 | [print-text](print-text/README.md) |
+| Loop and count | Linux x86-64 | Count five iterations, exit 5 | [loop-count](loop-count/README.md) |
+| Compare values | Linux x86-64 | Equal branch retains exit 42 | [compare-values](compare-values/README.md) |
+| Read keyboard input | x86 BIOS / QEMU | Wait for a key, echo to VGA/COM1 | [keyboard](keyboard/README.md) |
+| Display VGA characters | x86 BIOS / QEMU | Green B at first text cell | [vga](vga/README.md) |
+| Boot from one sector | x86 BIOS / QEMU | Full bitborn greeting, halt | [boot-sector](boot-sector/README.md) |
+| Interactive monitor | x86 BIOS / QEMU | Exact help/clear/about/reboot/peek commands | [monitor](monitor/README.md) |
+| Read additional sectors | x86 BIOS / QEMU | Sector 2 loaded! | [disk-read](disk-read/README.md) |
+
+Native Linux examples run in CI on Ubuntu x86-64; macOS does not execute them.
+BIOS examples run in QEMU TCG, including on Apple Silicon. All binary outputs
+are available in the release archive and website downloads. The separate loader
+is explained in [boot/loader.bits](../boot/loader.bits).

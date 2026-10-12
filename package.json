@@ -1,0 +1,11 @@
+{
+  "name": "bitborn-host-checks",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Development-only browser checks; target instructions are canonical .bits files",
+  "scripts": {
+    "test": "node tests/test_site.mjs",
+    "test:browser": "node tests/browser_site.mjs"
+  },
+  "devDependencies": {"playwright": "1.64.0"}
+}

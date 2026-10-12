@@ -10,8 +10,9 @@ from pathlib import Path
 
 
 class Guest:
-    def __init__(self, image):
+    def __init__(self, image, paused=False):
         self.image = Path(image).resolve()
+        self.paused = paused
 
     def __enter__(self):
         self.temp = tempfile.TemporaryDirectory(prefix="bitborn-")
@@ -23,7 +24,8 @@ class Guest:
             raise RuntimeError(f"{executable} is required; install QEMU")
         self.process = subprocess.Popen([executable, "-machine", "pc,accel=tcg", "-m", "16M", "-display", "none",
             "-drive", f"file={self.image},format=raw,if=floppy,readonly=on", "-boot", "a", "-serial", f"file:{self.serial}",
-            "-qmp", f"unix:{qmp},server=on,wait=off", "-no-reboot"], stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+            "-qmp", f"unix:{qmp},server=on,wait=off", "-no-reboot"] + (["-S"] if self.paused else []),
+            stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
         try:
             deadline = time.monotonic() + 15
             while not qmp.exists():

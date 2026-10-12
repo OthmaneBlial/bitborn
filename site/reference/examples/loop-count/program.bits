@@ -1,0 +1,7 @@
+10111111 00000000 00000000 00000000 00000000 # instruction | MOV EDI,0 | BF clears the accumulated count.
+10111001 00000101 00000000 00000000 00000000 # instruction | MOV ECX,5 | B9 = B8+ECX; five iterations.
+11111111 11000111 # instruction | INC EDI | FF /0; C7 selects register EDI. In 64-bit mode 47 would be a REX prefix, not INC.
+11111111 11001001 # instruction | DEC ECX | FF /1; C9 selects register ECX and sets ZF when count reaches zero.
+01110101 11111010 # instruction | JNZ offset 10 | 75 rel8; next offset 16 minus 6 = 10, the increment instruction.
+10111000 00111100 00000000 00000000 00000000 # instruction | MOV EAX,60 | B8 loads Linux exit syscall number.
+00001111 00000101 # instruction | SYSCALL | 0F 05 exits with the accumulated count, 5.

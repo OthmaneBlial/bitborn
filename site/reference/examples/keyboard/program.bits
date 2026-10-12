@@ -1,0 +1,48 @@
+# Standalone BIOS program. Host packaging adds non-executable zero fill and 55 AA.
+11111010 # instruction | CLI | FA disables interrupts while establishing a stack.
+11101010 00000110 01111100 00000000 00000000 # instruction | JMP 0000:7C06 | EA offset 7C06, segment 0000; normalize CS.
+00110001 11000000 # instruction | XOR AX,AX | 31 /r C0 clears AX.
+10001110 11011000 # instruction | MOV DS,AX | 8E D8 sets DS=0.
+10001110 11000000 # instruction | MOV ES,AX | 8E C0 sets ES=0.
+10001110 11010000 # instruction | MOV SS,AX | 8E D0 sets SS=0.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | BC imm16 sets stack below the boot sector.
+11111100 # instruction | CLD | FC sets forward string direction.
+11111011 # instruction | STI | FB enables BIOS keyboard interrupts.
+10111000 00000011 00000000 # instruction | MOV AX,0003 | B8 imm16 selects VGA text mode.
+11001101 00010000 # instruction | INT 10 | CD 10 initializes the display.
+10111010 11111001 00000011 # instruction | MOV DX,03F9 | BA selects COM1 interrupt-enable register.
+10110000 00000000 # instruction | MOV AL,00 | B0 imm8 disables UART interrupts.
+11101110 # instruction | OUT DX,AL | EE writes the UART register.
+10111010 11111011 00000011 # instruction | MOV DX,03FB | BA selects line-control register.
+10110000 10000000 # instruction | MOV AL,80 | B0 imm8 enables divisor-latch access.
+11101110 # instruction | OUT DX,AL | EE writes DLAB.
+10111010 11111000 00000011 # instruction | MOV DX,03F8 | BA selects divisor low byte.
+10110000 00000001 # instruction | MOV AL,01 | B0 imm8 sets 115200 baud divisor low byte.
+11101110 # instruction | OUT DX,AL | EE writes divisor low byte.
+01000010 # instruction | INC DX | 42 advances to divisor high-byte port.
+10110000 00000000 # instruction | MOV AL,00 | B0 clears divisor high byte.
+11101110 # instruction | OUT DX,AL | EE writes divisor high byte.
+10111010 11111011 00000011 # instruction | MOV DX,03FB | BA selects line-control register.
+10110000 00000011 # instruction | MOV AL,03 | B0 imm8 selects 8N1 and clears DLAB.
+11101110 # instruction | OUT DX,AL | EE configures UART framing.
+10111010 11111000 00000011 # instruction | MOV DX,03F8 | BA selects serial transmit register.
+10110000 00111110 # instruction | MOV AL,3E | B0 imm8 loads the ASCII ready marker, greater-than sign.
+11101110 # instruction | OUT DX,AL | EE sends readiness before blocking for a key.
+00110001 11000000 # instruction | XOR AX,AX | 31 C0 selects BIOS keyboard service zero.
+11001101 00010110 # instruction | INT 16 | CD 16 waits for one BIOS keyboard character, returned in AL.
+01010000 # instruction | PUSH AX | 50 preserves the returned character.
+10110100 00001110 # instruction | MOV AH,0E | B4 selects BIOS teletype.
+10111011 00000111 00000000 # instruction | MOV BX,0007 | BB selects VGA page zero, attribute seven.
+11001101 00010000 # instruction | INT 10 | CD 10 echoes the character on screen.
+01011000 # instruction | POP AX | 58 restores the character.
+01010000 # instruction | PUSH AX | 50 saves it during UART polling.
+10111010 11111101 00000011 # instruction | MOV DX,03FD | BA selects UART line-status register.
+11101100 # instruction | IN AL,DX | EC reads line status.
+10101000 00100000 # instruction | TEST AL,20 | A8 imm8 tests transmitter-ready bit.
+01110100 11111011 # instruction | JZ poll | 74 FB branches five bytes back to IN.
+01011000 # instruction | POP AX | 58 restores the keyboard byte.
+10111010 11111000 00000011 # instruction | MOV DX,03F8 | BA selects transmit register.
+11101110 # instruction | OUT DX,AL | EE echoes the keyboard byte to serial.
+11111010 # instruction | CLI | FA disables maskable interrupts for final halt.
+11110100 # instruction | HLT | F4 safely stops execution.
+11101011 11111101 # instruction | JMP halt | EB FD branches three bytes back to HLT if awakened.

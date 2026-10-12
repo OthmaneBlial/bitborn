@@ -1,0 +1,9 @@
+10111000 00000001 00000000 00000000 00000000 # instruction | MOV EAX,1 | B8 loads Linux x86-64 write syscall number.
+10111111 00000001 00000000 00000000 00000000 # instruction | MOV EDI,1 | BF selects stdout file descriptor.
+01001000 10001101 00110101 00010000 00000000 00000000 00000000 # instruction | LEA RSI,[RIP+16] | 48 is REX.W; 8D /r with ModR/M 35 is RIP-relative RSI; next offset 17 + 16 = data at 33.
+10111010 00010101 00000000 00000000 00000000 # instruction | MOV EDX,21 | BA loads exact ASCII message length.
+00001111 00000101 # instruction | SYSCALL | 0F 05 writes the message through the Linux kernel.
+10111000 00111100 00000000 00000000 00000000 # instruction | MOV EAX,60 | B8 loads Linux exit syscall number.
+00110001 11111111 # instruction | XOR EDI,EDI | 31 /r, ModR/M FF; clear exit status to zero.
+00001111 00000101 # instruction | SYSCALL | 0F 05 terminates the process.
+01001000 01100101 01101100 01101100 01101111 00100000 01100110 01110010 01101111 01101101 00100000 01110010 01100001 01110111 00100000 01100010 01101001 01110100 01110011 00100001 00001010 # data | Hello from raw bits! LF | Twenty-one literal ASCII bytes; the length excludes any terminator.

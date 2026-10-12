@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#080b09"/>
+  <path d="M0 70H1200M0 560H1200M68 0V630M1132 0V630" stroke="#263a2c"/>
+  <g fill="#71ff8b" font-family="monospace">
+    <text x="100" y="123" font-size="18" letter-spacing="4">HANDWRITTEN MACHINE CODE / X86</text>
+    <text x="92" y="290" font-size="154" font-weight="700" letter-spacing="-9">bitborn<tspan fill="#f0f5ef">.</tspan></text>
+    <text x="100" y="365" font-size="36" fill="#f0f5ef">Software born from raw bits.</text>
+    <text x="100" y="413" font-size="21" fill="#a0b7a5">No C. No Rust. No Assembly. No compiler.</text>
+    <text x="100" y="504" font-size="27">10111000 00101010 00000000 00000000 00000000</text>
+    <text x="100" y="592" font-size="17" fill="#a0b7a5">OTHMANEBLIAL / BITBORN</text>
+    <text x="879" y="592" font-size="17">JUST 0s AND 1s</text>
+  </g>
+  <g stroke="#71ff8b" fill="none" stroke-width="2">
+    <path d="M949 141H1094V316H949Z M924 164H949 M924 192H949 M924 220H949 M924 248H949 M924 276H949 M1094 164H1118 M1094 192H1118 M1094 220H1118 M1094 248H1118 M1094 276H1118"/>
+    <path d="M974 116V141 M1002 116V141 M1030 116V141 M1058 116V141 M974 316V341 M1002 316V341 M1030 316V341 M1058 316V341"/>
+  </g>
+  <text x="975" y="232" fill="#71ff8b" font-family="monospace" font-size="31">0 1</text>
+  <text x="980" y="267" fill="#a0b7a5" font-family="monospace" font-size="15">7C00</text>
+</svg>

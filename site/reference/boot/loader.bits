@@ -1,0 +1,29 @@
+# Shared two-sector BIOS loader for disk-read and monitor. Loaded at 0000:7C00.
+11111010 # instruction | CLI | FA masks interrupts until the stack is configured.
+11101010 00000110 01111100 00000000 00000000 # instruction | JMP 0000:7C06 | EA offset 7C06 followed by segment 0000 normalizes CS.
+00110001 11000000 # instruction | XOR AX,AX | 31 C0 sets AX=0.
+10001110 11011000 # instruction | MOV DS,AX | 8E D8 sets data segment zero.
+10001110 11000000 # instruction | MOV ES,AX | 8E C0 sets disk buffer segment zero.
+10001110 11010000 # instruction | MOV SS,AX | 8E D0 sets stack segment zero.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | BC sets a stack below the boot sector.
+11111100 # instruction | CLD | FC selects forward string traversal.
+11111011 # instruction | STI | FB enables BIOS interrupts after stack setup.
+10111011 00000000 01111110 # instruction | MOV BX,7E00 | BB selects ES:BX physical 7E00 as disk-read destination.
+10111000 00000010 00000010 # instruction | MOV AX,0202 | B8 loads AH=02 BIOS read sectors, AL=02 two sectors.
+10111001 00000010 00000000 # instruction | MOV CX,0002 | B9 selects cylinder 0, sector 2 (CHS sectors start at 1).
+00110000 11110110 # instruction | XOR DH,DH | 30 /r F6 clears head number; DL retains the BIOS boot drive.
+11001101 00010011 # instruction | INT 13 | CD 13 reads disk sectors 2 and 3 into 7E00 through 81FF.
+01110010 00000101 # instruction | JC disk_error | 72 rel8; next offset 34 + 5 = error path at 39, never execute failed reads.
+11101010 00000000 01111110 00000000 00000000 # instruction | JMP 0000:7E00 | EA far jump transfers execution to the successfully loaded second stage.
+10111110 00111100 01111100 # instruction | MOV SI,7C3C | BE loads the error string at sector offset 60.
+10101100 # instruction | LODSB | AC reads the next ASCII byte from DS:SI.
+10000100 11000000 # instruction | TEST AL,AL | 84 C0 tests for the NUL terminator.
+01110100 00001001 # instruction | JZ error_halt | 74 rel8; next offset 47 + 9 = halt at 56.
+10110100 00001110 # instruction | MOV AH,0E | B4 selects BIOS teletype output.
+10111011 00000111 00000000 # instruction | MOV BX,0007 | BB selects page zero and attribute seven.
+11001101 00010000 # instruction | INT 10 | CD 10 displays the disk failure message.
+11101011 11110010 # instruction | JMP error_print | EB rel8; next offset 56 minus 14 = LODSB at 42.
+11111010 # instruction | CLI | FA disables interrupts on fatal disk-read failure.
+11110100 # instruction | HLT | F4 stops rather than jumping into uninitialized memory.
+11101011 11111101 # instruction | JMP error_halt | EB FD returns to HLT if awakened.
+01000100 01101001 01110011 01101011 00100000 01110010 01100101 01100001 01100100 00100000 01100110 01100001 01101001 01101100 01100101 01100100 00001101 00001010 00000000 # data | Disk read failed CR LF NUL | Literal error text, zero terminated.

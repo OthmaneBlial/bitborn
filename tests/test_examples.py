@@ -1,7 +1,9 @@
 import platform
 import struct
 import subprocess
+import tempfile
 import unittest
+from pathlib import Path
 from tools.bitborn import ROOT, read_bits
 from tools.build import elf64
 from tests.qemu import Guest
@@ -39,3 +41,11 @@ class ExampleTests(unittest.TestCase):
                 self.assertEqual(result.returncode, status)
                 self.assertEqual(result.stdout, stdout)
                 self.assertEqual(result.stderr, b"")
+        # Change the comparison input, proving that the unequal control-flow path executes.
+        image = bytearray((ROOT / "build/compare-values.elf").read_bytes())
+        image[121] = 41
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "unequal.elf"
+            path.write_bytes(image)
+            path.chmod(0o755)
+            self.assertEqual(subprocess.run([str(path)], timeout=5).returncode, 1)

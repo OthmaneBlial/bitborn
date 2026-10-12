@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>bitborn — Software born from raw bits</title>
+  <meta name="description" content="A real 512-byte BIOS boot sector authored by hand as binary digits. Explore x86 encodings, flip bits, and follow the bytes with an interactive educational simulator.">
+  <meta name="theme-color" content="#080a08"><link rel="canonical" href="https://othmaneblial.github.io/bitborn/">
+  <meta property="og:type" content="website"><meta property="og:title" content="bitborn — Software born from raw bits"><meta property="og:description" content="No C. No Rust. No Assembly. No compiler. Just 0s and 1s."><meta property="og:url" content="https://othmaneblial.github.io/bitborn/"><meta property="og:image" content="https://othmaneblial.github.io/bitborn/assets/social-preview.png">
+  <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="bitborn — Software born from raw bits"><meta name="twitter:description" content="A bootable x86 experiment made from handwritten binary."><meta name="twitter:image" content="https://othmaneblial.github.io/bitborn/assets/social-preview.png">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"bitborn","description":"A bootable x86 system built from handwritten binary machine code.","codeRepository":"https://github.com/OthmaneBlial/bitborn","url":"https://othmaneblial.github.io/bitborn/","license":"https://opensource.org/license/mit","programmingLanguage":"Handwritten binary machine code","runtimePlatform":"x86 BIOS real mode"}</script>
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="header wrap">
+    <a class="brand" href="./" aria-label="bitborn home"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 3h6v10h10v6H11v8H5zm16 10h6v14h-6zM11 27h10v-6H11z"/></svg>bitborn<span class="version">v0.1</span></a>
+    <nav aria-label="Main"><a href="#playground">Playground</a><a href="docs.html">Documentation</a><a class="github-link" href="https://github.com/OthmaneBlial/bitborn">GitHub <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <main id="main">
+    <section class="hero wrap">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="status-dot"></span> HANDWRITTEN MACHINE CODE / X86 BIOS</p>
+        <h1>Software born<br>from <span>raw bits.</span></h1>
+        <p class="hero-subtitle">We skipped the programming language.<br>We skipped the assembler.<br>We wrote the machine code ourselves.</p>
+        <div class="actions"><a class="button primary" href="#playground">Touch the bits <span aria-hidden="true">↓</span></a><a class="button text-button" href="https://github.com/OthmaneBlial/bitborn/blob/main/boot/boot.bits">Read the source <span aria-hidden="true">↗</span></a></div>
+        <p class="hero-footnote">No C. No Rust. No Assembly. No compiler.<br><strong>Just 0s and 1s.</strong></p>
+      </div>
+      <div class="hero-instrument">
+        <div class="instrument-label"><span>BITBORN / BOOT TRANSCRIPT</span><span class="muted">01</span></div>
+        <div class="terminal" aria-label="Animated transcript of the boot message, not a running emulator">
+          <div class="terminal-bar"><span><i></i><i></i><i></i></span><span>BIOS · 16-BIT REAL MODE</span></div>
+          <pre id="terminal-output" aria-live="off">bitborn v0.1
+---------------------------
+NO ASSEMBLY.
+NO COMPILER.
+JUST BITS.
+
+Hello from raw machine code!
+
+512 bytes. 100% handwritten.</pre>
+          <div class="terminal-bottom"><span>ANIMATED TRANSCRIPT · NOT LIVE EXECUTION</span><button id="terminal-motion" class="small-button" aria-pressed="false">Pause</button></div>
+        </div>
+        <div class="boot-measure"><div><strong>512<span>B</span></strong><small>ONE SECTOR. EVERY BYTE EXPLAINED.</small></div><div class="signature-mark"><span>01010101</span><span>10101010</span><small>BOOT SIGNATURE / 55 AA</small></div></div>
+      </div>
+    </section>
+
+    <div class="binary-ticker" aria-hidden="true"><span>10111000 00101010 00000000 · 10101100 · 10000100 11000000 · 11001101 00010000 · 01010101 10101010 · </span><span>10111000 00101010 00000000 · 10101100 · 10000100 11000000 · 11001101 00010000 · 01010101 10101010 · </span></div>
+
+    <section class="section wrap" id="how-it-works">
+      <div class="section-heading"><p class="eyebrow">01 / REMOVE THE TRANSLATOR</p><h2>The CPU never<br>needed your language.</h2><p>Normally, source code becomes machine code through a compiler or assembler. Here, we start at the other end. The canonical source is the binary encoding itself.</p></div>
+      <div class="pipeline"><div><span>01</span><strong>Write the bits</strong><code>10111000 00101010 00000000</code><p>Three handwritten bytes. An opcode and a little-endian operand.</p></div><div><span>02</span><strong>Pack the bytes</strong><code>./tools/bitpack</code><p>Host-side Python turns each eight-digit group into one byte. No instruction translation.</p></div><div><span>03</span><strong>Boot the machine</strong><code>qemu-system-i386</code><p>BIOS loads the sector at 0x7C00. The x86 CPU executes the bytes.</p></div></div>
+    </section>
+
+    <section class="section playground-section" id="playground">
+      <div class="wrap">
+        <div class="section-heading horizontal"><div><p class="eyebrow">02 / INTERACTIVE BINARY PLAYGROUND</p><h2>One bit changes everything.</h2></div><p>Click a bit. Inspect the bytes. See what the instruction means. Mnemonics below explain encodings; they never generate the target program.</p></div>
+        <div class="playground panel">
+          <div class="panel-toolbar"><label for="instruction-select">ENCODING</label><select id="instruction-select"><option value="mov">MOV AX, 42</option><option value="add">ADD AX, 7</option><option value="cmp">CMP AX, 42</option><option value="inc">INC AX</option><option value="xor">XOR AX, AX</option><option value="nop">NOP</option></select><button id="reset-bits" class="small-button">Reset bits</button></div>
+          <p class="interaction-hint">CLICK ANY BIT TO FLIP IT · LEFTMOST BIT = MOST SIGNIFICANT</p>
+          <noscript><p class="noscript-note">The interactive instruments need JavaScript. The documentation and source remain available from the navigation above.</p></noscript>
+          <div id="bit-editor" class="bit-editor" aria-label="Editable instruction bytes"></div>
+          <div class="instruction-readout"><div><span class="meta-label">ASSEMBLY REPRESENTATION / EXPLANATION ONLY</span><strong id="decoded-instruction">MOV AX, 42</strong><p id="encoding-explanation"></p></div><div class="byte-value"><span class="meta-label">RAW BYTES</span><code id="byte-values">B8 2A 00</code></div></div>
+          <div class="simulator-bar"><div><span class="sim-label">EDUCATIONAL SIMULATION</span><p>16-bit registers. Limited instruction subset. No native execution.</p></div><button id="execute-instruction" class="button primary">Simulate instruction <span aria-hidden="true">→</span></button></div>
+          <div id="play-registers" class="registers" aria-live="polite"></div><p id="play-status" class="status-message" role="status">AX starts at zero. Reset the state to try again.</p><button id="reset-state" class="small-button">Reset CPU state</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section wrap" id="boot-explorer">
+      <div class="section-heading horizontal"><div><p class="eyebrow">03 / VISUAL BOOT EXPLORER</p><h2>512 bytes.<br>No hidden machinery.</h2></div><p>This map comes from the real boot image. Inspect every byte, find the instruction boundaries, and follow the output loop in a bounded teaching model.</p></div>
+      <div class="explorer-meta"><span>BOOT SECTOR / 0x7C00</span><div class="legend"><span class="instruction-key">Instruction</span><span class="data-key">Data</span><span>Padding</span><span class="signature-key">Signature</span></div></div>
+      <div class="boot-explorer"><div class="byte-map-panel"><div id="byte-map" class="byte-map" aria-label="All 512 bytes of the BIOS boot sector"></div><p class="matrix-note">OFFSET 0x000 → 0x1FF <span>CLICK OR USE ARROW KEYS</span></p><p id="boot-load-status" class="status-message" role="status">Loading the actual boot image…</p></div><aside class="byte-inspector panel"><span class="meta-label">SELECTED BYTE</span><strong id="selected-offset">0x000</strong><div class="selected-value"><code id="selected-binary">--------</code><span id="selected-hex">--</span></div><p id="selected-kind" class="eyebrow">INSTRUCTION</p><h3 id="selected-mnemonic">Loading…</h3><p id="selected-explanation">Annotations come from the handwritten source.</p><p id="selected-boundary" class="muted"></p></aside></div>
+      <div class="boot-stepper panel"><div class="panel-toolbar"><span>FOLLOW EXECUTION / EDUCATIONAL SIMULATION</span><div class="controls"><button id="boot-reset" class="small-button" disabled>Reset</button><button id="boot-run" class="small-button" disabled>Run 32 steps</button><button id="boot-step" class="button primary" disabled>Step →</button></div></div><div class="execution-view"><div><div id="boot-registers" class="registers"></div><p id="boot-step-status" class="status-message" role="status">The simulator models this program's instruction subset and teletype output. It does not run QEMU or emulate a complete BIOS.</p><ol id="boot-trace" class="trace" aria-label="Recent instruction trace"></ol></div><div class="simulation-output"><span class="meta-label">SIMULATED SCREEN OUTPUT</span><pre id="boot-output">Awaiting first instruction.</pre></div></div></div>
+      <p class="checksum">SOURCE IMAGE SHA-256 <code id="boot-checksum">loading…</code></p>
+    </section>
+
+    <section class="section demo-section" id="boot-demo"><div class="wrap demo-grid"><div><p class="eyebrow">04 / THE REAL MACHINE</p><h2>This one<br>actually boots.</h2><p>The browser examples above are teaching models. This capture comes from the handwritten boot image running in QEMU, using BIOS teletype output.</p><div class="actions"><a class="button primary" href="https://github.com/OthmaneBlial/bitborn/releases/tag/v0.1.0">Get the boot image ↗</a><button class="small-button" id="demo-motion" aria-pressed="false">Play boot recording</button></div><p><a href="downloads/boot.img" download>512-byte boot image ↓</a> · <a href="downloads/SHA256SUMS">SHA-256 checksums</a> · <a href="reference/boot/boot.bits">Canonical bits</a></p><p class="muted">x86 · legacy BIOS · 16-bit real mode<br>Educational experiment, not a production OS.</p></div><figure class="real-demo"><img id="demo-image" src="assets/boot.png" alt="Actual QEMU screen showing bitborn v0.1, NO ASSEMBLY, NO COMPILER, JUST BITS, Hello from raw machine code, and 512 bytes. 100% handwritten." width="640" height="480" loading="lazy"><figcaption>REAL QEMU CAPTURE · NOT A GENERATED MOCKUP</figcaption></figure></div></section>
+
+    <section class="section wrap" id="examples"><div class="section-heading horizontal"><div><p class="eyebrow">05 / THE EXAMPLES</p><h2>Small programs.<br>Big understanding.</h2></div><p>Each example has binary source, an execution environment, annotations, and a reproducible validation path. Open the source before changing a bit.</p></div><div class="examples-grid" id="examples-grid"></div><a class="inline-link" href="https://github.com/OthmaneBlial/bitborn/tree/main/examples">Explore the complete source collection →</a></section>
+
+    <section class="section wrap architecture-section" id="architecture"><div class="section-heading"><p class="eyebrow">06 / THE BOUNDARY MATTERS</p><h2>Handwritten target.<br>Ordinary host tools.</h2><p>The unusual part is the source of the executable instructions. Everything surrounding it stays practical, transparent, and reproducible.</p></div><div class="boundary"><div><span class="eyebrow">TARGET / RAW X86</span><h3>The bytes that execute</h3><ul><li>Manual eight-bit groups in <code>.bits</code> files</li><li>Opcode, operands, data, padding, signature</li><li>BIOS real mode, starting at 0x7C00</li><li>No assembler or compiler in the target path</li></ul></div><div><span class="eyebrow">HOST / PYTHON + JAVASCRIPT</span><h3>The tools that explain</h3><ul><li><code>bitpack</code> converts notation into bytes</li><li><code>bitinspect</code> shows boundaries and annotations</li><li><code>bitverify</code> checks the reproducible image</li><li><code>bitdiff</code> identifies individual changed bits</li></ul></div></div><a class="inline-link" href="docs.html#architecture">Read the architecture notes →</a></section>
+
+    <section class="section wrap" id="roadmap"><div class="section-heading horizontal"><div><p class="eyebrow">07 / KEEP GOING DOWN</p><h2>A small beginning.<br>A visible path.</h2></div><p>Every milestone must earn its place with real bytes, real execution, and explanations. The current source includes the boot sector and ten documented examples.</p></div><div class="roadmap"><div><span>01 / IMPLEMENTED</span><h3>One handwritten sector</h3><p>BIOS output, exact encodings, reproducible image, QEMU validation.</p></div><div><span>02 / EXAMPLES AVAILABLE</span><h3>Learn one mechanism</h3><p>Arithmetic, branching, keyboard, VGA, a three-sector monitor, and a BIOS disk read.</p></div><div><span>03 / FUTURE EXPERIMENTS</span><h3>Cross new boundaries</h3><p>Protected mode, interrupt handling, memory management, and executable loading.</p></div></div></section>
+
+    <section class="section wrap faq-section" id="faq"><div><p class="eyebrow">08 / QUESTIONS, ANSWERED</p><h2>Wait. Just bits?</h2></div><div class="faqs"><details><summary>Isn't all software eventually binary?</summary><p>Yes. The distinction is where it begins. In bitborn, instruction bytes are authored directly as literal binary digits using AI-assisted editing. A compiler or assembler never chooses the target instruction encodings.</p></details><details><summary>Does “no Assembly” mean no instruction names?</summary><p>No. Documentation uses mnemonics such as MOV to explain a byte sequence. They are explanatory labels, not target source passed to an assembler.</p></details><details><summary>Can I boot this on a modern computer?</summary><p>The tested environment is QEMU’s x86 machine with legacy BIOS. Native UEFI does not load this raw sector as an EFI executable. Use the documented emulator commands.</p></details><details><summary>Are the browser tools running the boot image?</summary><p>The browser tools decode bytes and simulate a bounded subset of 16-bit instructions. They are educational JavaScript, not native execution or a complete x86 emulator. The separate QEMU capture shows real boot execution.</p></details><details><summary>Why do this at all?</summary><p>To make the invisible visible. Instruction fields, byte order, relative branches, BIOS calls, and boot signatures become decisions you can inspect rather than details hidden by a toolchain.</p></details></div></section>
+
+    <section class="contribute wrap" id="contribute"><p class="eyebrow">OPEN SOURCE / MIT LICENSE</p><h2>The next byte<br>could be yours.</h2><p>Study an encoding. Improve an explanation. Add a verified experiment.<br>Make every bit count.</p><div class="actions"><a class="button primary" href="https://github.com/OthmaneBlial/bitborn">Open GitHub ↗</a><a class="button text-button" href="https://github.com/OthmaneBlial/bitborn/blob/main/CONTRIBUTING.md">Contributing guide →</a></div></section>
+  </main>
+  <footer class="footer wrap"><a class="brand" href="./">bitborn<span class="version">Just bits.</span></a><p>Authored as bits. Executed by machines.</p><div><a href="docs.html">Docs</a><a href="https://github.com/OthmaneBlial/bitborn/blob/main/LICENSE">MIT</a><a href="https://github.com/OthmaneBlial">OthmaneBlial ↗</a></div></footer>
+</body>
+</html>

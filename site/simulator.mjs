@@ -1,0 +1,125 @@
+// A bounded teaching model for the encodings used here; this is not an x86 emulator.
+const registers = ['AX', 'CX', 'DX', 'BX', 'SP', 'BP', 'SI', 'DI'];
+const signed = value => value < 128 ? value : value - 256;
+export const binary = value => value.toString(2).padStart(8, '0');
+export const hex = (value, width = 2) => value.toString(16).toUpperCase().padStart(width, '0');
+
+export function validateBootData(data) {
+  if (!Array.isArray(data.bytes) || data.bytes.length !== 512 || data.bytes.some(value => !Number.isInteger(value) || value < 0 || value > 255)) throw new Error('The boot explorer requires exactly 512 valid bytes.');
+  if (data.bytes[510] !== 0x55 || data.bytes[511] !== 0xAA) throw new Error('The boot image has no valid 55 AA signature.');
+  if (!Array.isArray(data.annotations)) throw new Error('Boot annotations are missing.');
+  let offset = 0;
+  for (const annotation of data.annotations) {
+    if (annotation.offset !== offset || !Number.isInteger(annotation.size) || annotation.size < 1 || !['instruction','data','padding','signature'].includes(annotation.kind) || typeof annotation.explanation !== 'string') throw new Error('Boot annotations must cover the image in order, without gaps or overlap.');
+    offset += annotation.size;
+  }
+  if (offset !== 512 || !/^[a-f0-9]{64}$/i.test(data.sha256)) throw new Error('Boot image metadata is incomplete.');
+  return data;
+}
+
+export function decode(bytes, offset = 0) {
+  const opcode = bytes[offset];
+  const byte = n => {
+    if (offset + n >= bytes.length) throw new Error('Truncated instruction: an operand byte is missing.');
+    return bytes[offset + n];
+  };
+  const word = n => byte(n) | (byte(n + 1) << 8);
+  const instruction = (size, mnemonic, explanation, operation, operands = {}) => ({
+    size, mnemonic, explanation, operation, ...operands,
+    fields: Array.from({length: size}, (_, i) => i === 0 ? 'opcode' : 'operand'),
+  });
+  if (opcode >= 0xB8 && opcode <= 0xBF) return instruction(3, `MOV ${registers[opcode - 0xB8]}, ${word(1)}`, 'The opcode chooses a 16-bit register. The next two bytes hold the immediate, least significant byte first.', 'mov16', {register: registers[opcode - 0xB8], value: word(1)});
+  if (opcode >= 0xB0 && opcode <= 0xB7) return instruction(2, `MOV ${['AL','CL','DL','BL','AH','CH','DH','BH'][opcode - 0xB0]}, ${byte(1)}`, 'The opcode chooses an 8-bit register; the following byte is the immediate.', 'mov8', {register: registers[(opcode - 0xB0) % 4], high: opcode >= 0xB4, value: byte(1)});
+  if ([0x05, 0x2D, 0x3D].includes(opcode)) return instruction(3, `${({5:'ADD',45:'SUB',61:'CMP'})[opcode]} AX, ${word(1)}`, 'A 16-bit immediate follows the opcode in little-endian order. CMP updates flags without changing AX.', ({5:'add',45:'sub',61:'cmp'})[opcode], {value: word(1)});
+  if (opcode >= 0x40 && opcode <= 0x4F) return instruction(1, `${opcode < 0x48 ? 'INC' : 'DEC'} ${registers[opcode % 8]}`, 'The register is encoded in the low three opcode bits. INC and DEC preserve the carry flag.', opcode < 0x48 ? 'inc' : 'dec', {register: registers[opcode % 8]});
+  if (opcode >= 0x50 && opcode <= 0x5F) return instruction(1, `${opcode < 0x58 ? 'PUSH' : 'POP'} ${registers[opcode % 8]}`, 'A 16-bit register is saved to or restored from SS:SP. The stack grows downward by two bytes.', opcode < 0x58 ? 'push' : 'pop', {register: registers[opcode % 8]});
+  if (opcode === 0x31 && byte(1) >= 0xC0) {
+    const destination = registers[byte(1) % 8], source = registers[(byte(1) >> 3) & 7];
+    const result = instruction(2, `XOR ${destination}, ${source}`, 'The ModR/M byte selects two registers. XOR of a register with itself produces zero.', 'xor', {register: destination, source});
+    result.fields[1] = 'ModR/M'; return result;
+  }
+  if (opcode === 0x8E && byte(1) >= 0xC0 && [0,2,3].includes((byte(1) >> 3) & 7)) {
+    const segment = ['ES','CS','SS','DS'][(byte(1) >> 3) & 7], source = registers[byte(1) % 8];
+    const result = instruction(2, `MOV ${segment}, ${source}`, 'The ModR/M byte selects a segment register and a 16-bit source register.', 'segment', {segment, source});
+    result.fields[1] = 'ModR/M'; return result;
+  }
+  if (opcode === 0x84 && byte(1) === 0xC0) return instruction(2, 'TEST AL, AL', 'A bitwise AND updates ZF. AL itself is unchanged; ZF becomes 1 when AL is zero.', 'test');
+  if (opcode === 0xA8) return instruction(2, `TEST AL, 0x${hex(byte(1))}`, 'Test the bits of AL against an 8-bit mask without changing AL. ZF reports whether any selected bit is set.', 'testImmediate', {value: byte(1)});
+  if (opcode === 0xEA) return instruction(5, `JMP 0x${hex(word(3),4)}:0x${hex(word(1),4)}`, 'A far jump stores the little-endian offset first and the segment second. This boot image normalizes CS to zero.', 'farJump', {value: word(1), segment: word(3)});
+  if ([0xEB, 0x74, 0x75, 0xE2].includes(opcode)) return instruction(2, `${({235:'JMP',116:'JZ',117:'JNZ',226:'LOOP'})[opcode]} ${signed(byte(1)) >= 0 ? '+' : ''}${signed(byte(1))}`, 'The signed 8-bit displacement is measured from the end of this instruction.', ({235:'jmp',116:'jz',117:'jnz',226:'loop'})[opcode], {displacement: signed(byte(1))});
+  if (opcode === 0xE9) {
+    const displacement = word(1) > 32767 ? word(1) - 65536 : word(1);
+    return instruction(3, `JMP ${displacement}`, 'A signed 16-bit displacement is relative to the next instruction.', 'jmp', {displacement});
+  }
+  if (opcode === 0xCD) return instruction(2, `INT 0x${hex(byte(1))}`, 'The immediate identifies a BIOS interrupt. This teaching model only represents teletype output and the explicitly described BIOS calls.', 'interrupt', {value: byte(1)});
+  if (opcode === 0xAC) return instruction(1, 'LODSB', 'Read the byte at DS:SI into AL, then advance SI when the direction flag is clear.', 'lodsb');
+  if (opcode === 0xEE) return instruction(1, 'OUT DX, AL', 'Write AL to the I/O port in DX. The model records COM1 data writes separately from screen output.', 'out');
+  if (opcode === 0xEC) return instruction(1, 'IN AL, DX', 'Read an I/O port. This bounded model only supplies the ready flag for the COM1 line-status register.', 'in');
+  if (opcode === 0xE6) return instruction(2, `OUT 0x${hex(byte(1))}, AL`, 'Write AL to the immediate I/O port. Port 0xE9 is a QEMU debug-console convention.', 'outImmediate', {value: byte(1)});
+  const simple = {0x90:['NOP','Do nothing.','nop'],0xFA:['CLI','Clear the interrupt-enable flag.','cli'],0xFB:['STI','Set the interrupt-enable flag.','sti'],0xFC:['CLD','Clear the direction flag so string reads advance.','cld'],0xF4:['HLT','Stop stepping. A real CPU can wake from HLT on an interrupt.','halt']};
+  if (simple[opcode]) return instruction(1, ...simple[opcode]);
+  throw new Error(`Encoding 0x${hex(opcode ?? 0)} is outside this limited simulator. No instruction was executed.`);
+}
+
+export function createState(bytes = []) {
+  const memory = new Uint8Array(1 << 20);
+  memory.set(bytes, 0x7C00);
+  return {AX:0,CX:0,DX:0,BX:0,SP:0,BP:0,SI:0,DI:0,DS:0,ES:0,SS:0,ip:0,zf:false,cf:false,df:false,interrupts:false,halted:false,steps:0,output:'',serial:'',uartDLAB:false,memory};
+}
+
+export function step(bytes, state) {
+  if (state.halted) return null;
+  if (state.steps >= 4096) throw new Error('The 4,096-step educational limit was reached. Reset to continue.');
+  if (state.ip < 0 || state.ip >= bytes.length) throw new Error('Instruction pointer left the loaded program.');
+  const instruction = decode(bytes, state.ip);
+  let next = state.ip + instruction.size;
+  const low = value => { state.AX = (state.AX & 0xFF00) | (value & 255); };
+  switch (instruction.operation) {
+    case 'mov16': state[instruction.register] = instruction.value; break;
+    case 'mov8': {
+      const current = state[instruction.register];
+      state[instruction.register] = instruction.high ? (current & 255) | (instruction.value << 8) : (current & 0xFF00) | instruction.value; break;
+    }
+    case 'segment': state[instruction.segment] = state[instruction.source]; break;
+    case 'xor': state[instruction.register] ^= state[instruction.source]; state.zf = state[instruction.register] === 0; state.cf = false; break;
+    case 'add': { const result = state.AX + instruction.value; state.AX = result & 65535; state.zf = state.AX === 0; state.cf = result > 65535; break; }
+    case 'sub': case 'cmp': { const result = (state.AX - instruction.value) & 65535; state.cf = state.AX < instruction.value; state.zf = result === 0; if (instruction.operation === 'sub') state.AX = result; break; }
+    case 'inc': case 'dec': state[instruction.register] = (state[instruction.register] + (instruction.operation === 'inc' ? 1 : -1)) & 65535; state.zf = state[instruction.register] === 0; break;
+    case 'push': {
+      state.SP = (state.SP - 2) & 65535;
+      const address = ((state.SS << 4) + state.SP) & 0xFFFFF;
+      state.memory[address] = state[instruction.register] & 255;
+      state.memory[(address + 1) & 0xFFFFF] = state[instruction.register] >> 8; break;
+    }
+    case 'pop': {
+      const address = ((state.SS << 4) + state.SP) & 0xFFFFF;
+      const value = state.memory[address] | (state.memory[(address + 1) & 0xFFFFF] << 8);
+      state.SP = (state.SP + 2) & 65535;
+      state[instruction.register] = value; break;
+    }
+    case 'test': state.zf = (state.AX & 255) === 0; state.cf = false; break;
+    case 'testImmediate': state.zf = (state.AX & instruction.value) === 0; state.cf = false; break;
+    case 'farJump': if (instruction.segment !== 0) throw new Error('Only segment-zero far jumps are modeled.'); next = instruction.value - 0x7C00; break;
+    case 'jmp': next += instruction.displacement; break;
+    case 'jz': if (state.zf) next += instruction.displacement; break;
+    case 'jnz': if (!state.zf) next += instruction.displacement; break;
+    case 'loop': state.CX = (state.CX - 1) & 65535; if (state.CX !== 0) next += instruction.displacement; break;
+    case 'lodsb': low(state.memory[((state.DS << 4) + state.SI) & 0xFFFFF]); state.SI = (state.SI + (state.df ? -1 : 1)) & 65535; break;
+    case 'cli': state.interrupts = false; break;
+    case 'sti': state.interrupts = true; break;
+    case 'cld': state.df = false; break;
+    case 'halt': state.halted = true; break;
+    case 'interrupt':
+      if (instruction.value === 0x10 && (state.AX >> 8) === 0x0E) state.output += String.fromCharCode(state.AX & 255);
+      else if (instruction.value === 0x10 && state.AX === 3) state.output = '';
+      else throw new Error(`INT 0x${hex(instruction.value)} with AH=0x${hex(state.AX >> 8)} needs BIOS services outside this model.`);
+      break;
+    case 'out': if (state.DX === 0x3FB) state.uartDLAB = Boolean(state.AX & 0x80); else if (state.DX === 0x3F8 && !state.uartDLAB) state.serial += String.fromCharCode(state.AX & 255); break;
+    case 'outImmediate': if (instruction.value === 0xE9) state.serial += String.fromCharCode(state.AX & 255); break;
+    case 'in': if (state.DX !== 0x3FD) throw new Error('Only COM1 line-status reads are modeled.'); low(0x20); break;
+    case 'nop': break;
+    default: throw new Error('Unsupported operation.');
+  }
+  state.ip = next; state.steps += 1;
+  return instruction;
+}

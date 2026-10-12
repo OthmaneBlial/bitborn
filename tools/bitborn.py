@@ -22,11 +22,12 @@ def read_bits(path):
             if not re.fullmatch(r"[01]{8}", token):
                 raise ValueError(f"{path}:{number}: expected eight binary digits, got {token!r}")
         parts = [part.strip() for part in comment.split("|")]
-        if comment and len(parts) != 3:
+        if "|" in comment and len(parts) != 3:
             raise ValueError(f"{path}:{number}: annotation must be kind | mnemonic | explanation")
-        annotations.append({"offset": len(data), "size": len(tokens), "kind": parts[0] if comment else "data",
-                            "mnemonic": parts[1] if comment else "unannotated bytes",
-                            "explanation": parts[2] if comment else "", "bits": " ".join(tokens)})
+        annotated = len(parts) == 3
+        annotations.append({"offset": len(data), "size": len(tokens), "kind": parts[0] if annotated else "data",
+                            "mnemonic": parts[1] if annotated else "unannotated bytes",
+                            "explanation": parts[2] if annotated else "", "bits": " ".join(tokens)})
         data.extend(int(token, 2) for token in tokens)
     if not data:
         raise ValueError(f"{path}: no bytes")
@@ -79,9 +80,9 @@ def verify(root=ROOT):
         binary = root / "build" / target["output"]
         if not binary.exists() or binary.read_bytes() != data:
             failures.append(f"{binary}: missing or different; run make build")
-    forbidden = {".s", ".asm", ".c", ".cpp", ".rs", ".zig", ".o", ".elf"}
+    allowed = {".bits", ".json", ".md"}
     for directory in (root / "boot", root / "examples"):
-        failures.extend(f"unauthorized target source: {p}" for p in directory.rglob("*") if p.suffix.lower() in forbidden)
+        failures.extend(f"unauthorized target file: {p}" for p in directory.rglob("*") if p.is_file() and p.suffix.lower() not in allowed)
     if failures:
         raise ValueError("\n".join(failures))
     return f"verified {len(manifest)} handwritten targets: sizes, signatures, annotations, hashes and packed bytes"

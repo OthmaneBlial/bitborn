@@ -1,0 +1,594 @@
+[
+  {
+    "offset": 0,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "CLI",
+    "explanation": "FA disables maskable interrupts during stack setup.",
+    "bits": "11111010"
+  },
+  {
+    "offset": 1,
+    "size": 5,
+    "kind": "instruction",
+    "mnemonic": "JMP 0000:7C06",
+    "explanation": "EA has a little-endian offset 7C06 followed by segment 0000; normalize CS.",
+    "bits": "11101010 00000110 01111100 00000000 00000000"
+  },
+  {
+    "offset": 6,
+    "size": 2,
+    "kind": "instruction",
+    "mnemonic": "XOR AX,AX",
+    "explanation": "31 /r; ModR/M C0 = register AX XOR register AX, producing zero.",
+    "bits": "00110001 11000000"
+  },
+  {
+    "offset": 8,
+    "size": 2,
+    "kind": "instruction",
+    "mnemonic": "MOV DS,AX",
+    "explanation": "8E /r; D8 selects DS and AX; data addresses use segment zero.",
+    "bits": "10001110 11011000"
+  },
+  {
+    "offset": 10,
+    "size": 2,
+    "kind": "instruction",
+    "mnemonic": "MOV ES,AX",
+    "explanation": "8E /r; C0 selects ES and AX.",
+    "bits": "10001110 11000000"
+  },
+  {
+    "offset": 12,
+    "size": 2,
+    "kind": "instruction",
+    "mnemonic": "MOV SS,AX",
+    "explanation": "8E /r; D0 selects SS and AX; stack segment becomes zero.",
+    "bits": "10001110 11010000"
+  },
+  {
+    "offset": 14,
+    "size": 3,
+    "kind": "instruction",
+    "mnemonic": "MOV SP,7C00",
+    "explanation": "BC = B8+SP; little-endian 7C00 places stack below the loaded sector.",
+    "bits": "10111100 00000000 01111100"
+  },
+  {
+    "offset": 17,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "CLD",
+    "explanation": "FC clears direction flag; LODSB advances SI.",
+    "bits": "11111100"
+  },
+  {
+    "offset": 18,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "STI",
+    "explanation": "FB enables BIOS keyboard/timer interrupts after stack is ready.",
+    "bits": "11111011"
+  },
+  {
+    "offset": 19,
+    "size": 3,
+    "kind": "instruction",
+    "mnemonic": "MOV AX,0003",
+    "explanation": "B8 loads AX with video mode 3.",
+    "bits": "10111000 00000011 00000000"
+  },
+  {
+    "offset": 22,
+    "size": 2,
+    "kind": "instruction",
+    "mnemonic": "INT 10",
+    "explanation": "CD imm8; BIOS video interrupt selects 80x25 text mode.",
+    "bits": "11001101 00010000"
+  },
+  {
+    "offset": 24,
+    "size": 3,
+    "kind": "instruction",
+    "mnemonic": "MOV DX,03F9",
+    "explanation": "BA loads COM1 interrupt-enable port.",
+    "bits": "10111010 11111001 00000011"
+  },
+  {
+    "offset": 27,
+    "size": 2,
+    "kind": "instruction",
+    "mnemonic": "MOV AL,00",
+    "explanation": "B0 loads an 8-bit zero to disable UART interrupts.",
+    "bits": "10110000 00000000"
+  },
+  {
+    "offset": 29,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "OUT DX,AL",
+    "explanation": "EE writes AL to the I/O port in DX.",
+    "bits": "11101110"
+  },
+  {
+    "offset": 30,
+    "size": 3,
+    "kind": "instruction",
+    "mnemonic": "MOV DX,03FB",
+    "explanation": "BA loads UART line-control port.",
+    "bits": "10111010 11111011 00000011"
+  },
+  {
+    "offset": 33,
+    "size": 2,
+    "kind": "instruction",
+    "mnemonic": "MOV AL,80",
+    "explanation": "B0 selects divisor-latch access (DLAB bit 7).",
+    "bits": "10110000 10000000"
+  },
+  {
+    "offset": 35,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "OUT DX,AL",
+    "explanation": "EE enables the baud divisor registers.",
+    "bits": "11101110"
+  },
+  {
+    "offset": 36,
+    "size": 3,
+    "kind": "instruction",
+    "mnemonic": "MOV DX,03F8",
+    "explanation": "BA loads divisor low-byte port.",
+    "bits": "10111010 11111000 00000011"
+  },
+  {
+    "offset": 39,
+    "size": 2,
+    "kind": "instruction",
+    "mnemonic": "MOV AL,01",
+    "explanation": "B0 loads divisor 1, giving 115200 baud on a standard 16550.",
+    "bits": "10110000 00000001"
+  },
+  {
+    "offset": 41,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "OUT DX,AL",
+    "explanation": "EE writes divisor low byte.",
+    "bits": "11101110"
+  },
+  {
+    "offset": 42,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "INC DX",
+    "explanation": "42 = 40+DX; selects divisor high-byte port.",
+    "bits": "01000010"
+  },
+  {
+    "offset": 43,
+    "size": 2,
+    "kind": "instruction",
+    "mnemonic": "MOV AL,00",
+    "explanation": "B0 clears divisor high byte.",
+    "bits": "10110000 00000000"
+  },
+  {
+    "offset": 45,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "OUT DX,AL",
+    "explanation": "EE writes divisor high byte.",
+    "bits": "11101110"
+  },
+  {
+    "offset": 46,
+    "size": 3,
+    "kind": "instruction",
+    "mnemonic": "MOV DX,03FB",
+    "explanation": "BA selects line-control port again.",
+    "bits": "10111010 11111011 00000011"
+  },
+  {
+    "offset": 49,
+    "size": 2,
+    "kind": "instruction",
+    "mnemonic": "MOV AL,03",
+    "explanation": "B0 selects 8 data bits, no parity, one stop bit; clears DLAB.",
+    "bits": "10110000 00000011"
+  },
+  {
+    "offset": 51,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "OUT DX,AL",
+    "explanation": "EE writes 8N1 UART configuration.",
+    "bits": "11101110"
+  },
+  {
+    "offset": 52,
+    "size": 3,
+    "kind": "instruction",
+    "mnemonic": "MOV SI,7C5B",
+    "explanation": "BE loads SI; message begins at sector offset 91, physical 7C5B.",
+    "bits": "10111110 01011011 01111100"
+  },
+  {
+    "offset": 55,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "LODSB",
+    "explanation": "AC loads DS:SI into AL and increments SI.",
+    "bits": "10101100"
+  },
+  {
+    "offset": 56,
+    "size": 2,
+    "kind": "instruction",
+    "mnemonic": "TEST AL,AL",
+    "explanation": "84 /r; C0 tests AL against itself and sets ZF at NUL.",
+    "bits": "10000100 11000000"
+  },
+  {
+    "offset": 58,
+    "size": 2,
+    "kind": "instruction",
+    "mnemonic": "JZ 7C57",
+    "explanation": "74 rel8; next offset 60 + 27 = 87, the halt path.",
+    "bits": "01110100 00011011"
+  },
+  {
+    "offset": 60,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "PUSH AX",
+    "explanation": "50 preserves the character across BIOS video output.",
+    "bits": "01010000"
+  },
+  {
+    "offset": 61,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "PUSH SI",
+    "explanation": "56 preserves the string pointer across BIOS video output.",
+    "bits": "01010110"
+  },
+  {
+    "offset": 62,
+    "size": 2,
+    "kind": "instruction",
+    "mnemonic": "MOV AH,0E",
+    "explanation": "B4 loads BIOS teletype service number.",
+    "bits": "10110100 00001110"
+  },
+  {
+    "offset": 64,
+    "size": 3,
+    "kind": "instruction",
+    "mnemonic": "MOV BX,0007",
+    "explanation": "BB selects display page zero and text attribute 07.",
+    "bits": "10111011 00000111 00000000"
+  },
+  {
+    "offset": 67,
+    "size": 2,
+    "kind": "instruction",
+    "mnemonic": "INT 10",
+    "explanation": "CD 10 emits the character on the VGA display.",
+    "bits": "11001101 00010000"
+  },
+  {
+    "offset": 69,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "POP SI",
+    "explanation": "5E restores the source pointer.",
+    "bits": "01011110"
+  },
+  {
+    "offset": 70,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "POP AX",
+    "explanation": "58 restores the character.",
+    "bits": "01011000"
+  },
+  {
+    "offset": 71,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "PUSH AX",
+    "explanation": "50 saves AL while polling the UART status.",
+    "bits": "01010000"
+  },
+  {
+    "offset": 72,
+    "size": 3,
+    "kind": "instruction",
+    "mnemonic": "MOV DX,03FD",
+    "explanation": "BA selects UART line-status register.",
+    "bits": "10111010 11111101 00000011"
+  },
+  {
+    "offset": 75,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "IN AL,DX",
+    "explanation": "EC reads UART status into AL.",
+    "bits": "11101100"
+  },
+  {
+    "offset": 76,
+    "size": 2,
+    "kind": "instruction",
+    "mnemonic": "TEST AL,20",
+    "explanation": "A8 imm8 checks transmitter holding register empty bit 5.",
+    "bits": "10101000 00100000"
+  },
+  {
+    "offset": 78,
+    "size": 2,
+    "kind": "instruction",
+    "mnemonic": "JZ 7C4B",
+    "explanation": "74 rel8; next offset 80 minus 5 = 75, poll until ready.",
+    "bits": "01110100 11111011"
+  },
+  {
+    "offset": 80,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "POP AX",
+    "explanation": "58 restores the character after status polling.",
+    "bits": "01011000"
+  },
+  {
+    "offset": 81,
+    "size": 3,
+    "kind": "instruction",
+    "mnemonic": "MOV DX,03F8",
+    "explanation": "BA selects COM1 transmit data register.",
+    "bits": "10111010 11111000 00000011"
+  },
+  {
+    "offset": 84,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "OUT DX,AL",
+    "explanation": "EE emits the same character to COM1 for machine-readable testing.",
+    "bits": "11101110"
+  },
+  {
+    "offset": 85,
+    "size": 2,
+    "kind": "instruction",
+    "mnemonic": "JMP 7C37",
+    "explanation": "EB rel8; next offset 87 minus 32 = 55, fetch the next character.",
+    "bits": "11101011 11100000"
+  },
+  {
+    "offset": 87,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "CLI",
+    "explanation": "FA prevents interrupts waking the final halt.",
+    "bits": "11111010"
+  },
+  {
+    "offset": 88,
+    "size": 1,
+    "kind": "instruction",
+    "mnemonic": "HLT",
+    "explanation": "F4 stops instruction execution until NMI/reset.",
+    "bits": "11110100"
+  },
+  {
+    "offset": 89,
+    "size": 2,
+    "kind": "instruction",
+    "mnemonic": "JMP 7C58",
+    "explanation": "EB rel8; next offset 91 minus 3 = 88, halt again if awakened.",
+    "bits": "11101011 11111101"
+  },
+  {
+    "offset": 91,
+    "size": 14,
+    "kind": "data",
+    "mnemonic": "bitborn v0.1 CR LF",
+    "explanation": "ASCII greeting; CR LF advances the VGA cursor and serial terminal.",
+    "bits": "01100010 01101001 01110100 01100010 01101111 01110010 01101110 00100000 01110110 00110000 00101110 00110001 00001101 00001010"
+  },
+  {
+    "offset": 105,
+    "size": 29,
+    "kind": "data",
+    "mnemonic": "separator CR LF",
+    "explanation": "27 literal ASCII hyphens followed by a line break.",
+    "bits": "00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00001101 00001010"
+  },
+  {
+    "offset": 134,
+    "size": 14,
+    "kind": "data",
+    "mnemonic": "NO ASSEMBLY. CR LF",
+    "explanation": "Literal ASCII message bytes.",
+    "bits": "01001110 01001111 00100000 01000001 01010011 01010011 01000101 01001101 01000010 01001100 01011001 00101110 00001101 00001010"
+  },
+  {
+    "offset": 148,
+    "size": 14,
+    "kind": "data",
+    "mnemonic": "NO COMPILER. CR LF",
+    "explanation": "Literal ASCII message bytes.",
+    "bits": "01001110 01001111 00100000 01000011 01001111 01001101 01010000 01001001 01001100 01000101 01010010 00101110 00001101 00001010"
+  },
+  {
+    "offset": 162,
+    "size": 14,
+    "kind": "data",
+    "mnemonic": "JUST BITS. CR LF CR LF",
+    "explanation": "Literal ASCII bytes and one empty line.",
+    "bits": "01001010 01010101 01010011 01010100 00100000 01000010 01001001 01010100 01010011 00101110 00001101 00001010 00001101 00001010"
+  },
+  {
+    "offset": 176,
+    "size": 32,
+    "kind": "data",
+    "mnemonic": "Hello from raw machine code! CR LF CR LF",
+    "explanation": "Literal ASCII greeting and one empty line.",
+    "bits": "01001000 01100101 01101100 01101100 01101111 00100000 01100110 01110010 01101111 01101101 00100000 01110010 01100001 01110111 00100000 01101101 01100001 01100011 01101000 01101001 01101110 01100101 00100000 01100011 01101111 01100100 01100101 00100001 00001101 00001010 00001101 00001010"
+  },
+  {
+    "offset": 208,
+    "size": 31,
+    "kind": "data",
+    "mnemonic": "512 bytes. 100% handwritten. CR LF NUL",
+    "explanation": "Literal ASCII final line; zero terminates the string.",
+    "bits": "00110101 00110001 00110010 00100000 01100010 01111001 01110100 01100101 01110011 00101110 00100000 00110001 00110000 00110000 00100101 00100000 01101000 01100001 01101110 01100100 01110111 01110010 01101001 01110100 01110100 01100101 01101110 00101110 00001101 00001010 00000000"
+  },
+  {
+    "offset": 239,
+    "size": 16,
+    "kind": "padding",
+    "mnemonic": "zero fill",
+    "explanation": "Sixteen unused bytes, never executed.",
+    "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+  },
+  {
+    "offset": 255,
+    "size": 16,
+    "kind": "padding",
+    "mnemonic": "zero fill",
+    "explanation": "Sixteen unused bytes, never executed.",
+    "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+  },
+  {
+    "offset": 271,
+    "size": 16,
+    "kind": "padding",
+    "mnemonic": "zero fill",
+    "explanation": "Sixteen unused bytes, never executed.",
+    "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+  },
+  {
+    "offset": 287,
+    "size": 16,
+    "kind": "padding",
+    "mnemonic": "zero fill",
+    "explanation": "Sixteen unused bytes, never executed.",
+    "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+  },
+  {
+    "offset": 303,
+    "size": 16,
+    "kind": "padding",
+    "mnemonic": "zero fill",
+    "explanation": "Sixteen unused bytes, never executed.",
+    "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+  },
+  {
+    "offset": 319,
+    "size": 16,
+    "kind": "padding",
+    "mnemonic": "zero fill",
+    "explanation": "Sixteen unused bytes, never executed.",
+    "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+  },
+  {
+    "offset": 335,
+    "size": 16,
+    "kind": "padding",
+    "mnemonic": "zero fill",
+    "explanation": "Sixteen unused bytes, never executed.",
+    "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+  },
+  {
+    "offset": 351,
+    "size": 16,
+    "kind": "padding",
+    "mnemonic": "zero fill",
+    "explanation": "Sixteen unused bytes, never executed.",
+    "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+  },
+  {
+    "offset": 367,
+    "size": 16,
+    "kind": "padding",
+    "mnemonic": "zero fill",
+    "explanation": "Sixteen unused bytes, never executed.",
+    "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+  },
+  {
+    "offset": 383,
+    "size": 16,
+    "kind": "padding",
+    "mnemonic": "zero fill",
+    "explanation": "Sixteen unused bytes, never executed.",
+    "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+  },
+  {
+    "offset": 399,
+    "size": 16,
+    "kind": "padding",
+    "mnemonic": "zero fill",
+    "explanation": "Sixteen unused bytes, never executed.",
+    "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+  },
+  {
+    "offset": 415,
+    "size": 16,
+    "kind": "padding",
+    "mnemonic": "zero fill",
+    "explanation": "Sixteen unused bytes, never executed.",
+    "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+  },
+  {
+    "offset": 431,
+    "size": 16,
+    "kind": "padding",
+    "mnemonic": "zero fill",
+    "explanation": "Sixteen unused bytes, never executed.",
+    "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+  },
+  {
+    "offset": 447,
+    "size": 16,
+    "kind": "padding",
+    "mnemonic": "zero fill",
+    "explanation": "Sixteen unused bytes, never executed.",
+    "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+  },
+  {
+    "offset": 463,
+    "size": 16,
+    "kind": "padding",
+    "mnemonic": "zero fill",
+    "explanation": "Sixteen unused bytes, never executed.",
+    "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+  },
+  {
+    "offset": 479,
+    "size": 16,
+    "kind": "padding",
+    "mnemonic": "zero fill",
+    "explanation": "Sixteen unused bytes, never executed.",
+    "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+  },
+  {
+    "offset": 495,
+    "size": 15,
+    "kind": "padding",
+    "mnemonic": "zero fill",
+    "explanation": "Fifteen bytes place the signature at offsets 510 and 511.",
+    "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+  },
+  {
+    "offset": 510,
+    "size": 2,
+    "kind": "signature",
+    "mnemonic": "BIOS boot signature",
+    "explanation": "Literal 55 AA bytes; the little-endian word is AA55. These are data, never instructions.",
+    "bits": "01010101 10101010"
+  }
+]

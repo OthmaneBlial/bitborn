@@ -1,0 +1,12 @@
+{
+  "kind": "actual QEMU VGA screendump sequence",
+  "captured_frames": 41,
+  "encoded_frames": 40,
+  "duration_seconds": 4.0,
+  "fps": 10,
+  "source": "boot/boot.bits",
+  "boot_sha256": "46f0cf66a237fdc51d033d3e0fc86a1c7d7691770a42049077cf470f660cbfc9",
+  "qemu": "QEMU emulator version 11.1.1",
+  "reproduce": "make build && python3 tools/record_boot.py",
+  "alterations": "palette encoding only; no overlays or invented output"
+}

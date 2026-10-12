@@ -14,10 +14,27 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
       - name: Install QEMU
         run: sudo apt-get update && sudo apt-get install -y qemu-system-x86
       - name: Pack, verify and boot handwritten bytes
         run: make test
+      - name: Website and documentation checks
+        run: make site-test
+      - name: Install browser test tools
+        run: npm ci && npx playwright install --with-deps chromium
+      - name: Real browser interactions and mobile layouts
+        run: npm run test:browser
+      - name: Clean source, deterministic artifacts
+        run: |
+          git diff --exit-code
+          find build -maxdepth 1 -type f \( -name '*.img' -o -name '*.bin' -o -name '*.elf' \) -print0 | sort -z | xargs -0 sha256sum > /tmp/first-build
+          make build
+          find build -maxdepth 1 -type f \( -name '*.img' -o -name '*.bin' -o -name '*.elf' \) -print0 | sort -z | xargs -0 sha256sum > /tmp/second-build
+          diff /tmp/first-build /tmp/second-build
       - uses: actions/upload-artifact@v4
         with:
           name: bitborn-images

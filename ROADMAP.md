@@ -25,10 +25,13 @@ an idea below is not an advertised feature.
 
 ## Publication gates in progress
 
-- [ ] Complete beginner tutorial, architecture guide and per-example walkthroughs.
-- [ ] Genuine QEMU screenshot and boot GIF.
-- [ ] Interactive browser bit editor and annotated 512-byte visual explorer.
-- [ ] Local and live website interaction, responsive and accessibility checks.
+- [x] Complete beginner tutorial, architecture guide and ten per-example walkthroughs
+  with complete per-byte tables.
+- [x] Genuine QEMU screenshot and boot GIF, with source checksum and capture provenance.
+- [x] Interactive browser bit editor and annotated 512-byte visual explorer.
+- [x] Local Chrome interactions, copy controls, reduced-motion setting, 1440/390/320px
+  layouts and keyboard navigation. Live validation remains a publication gate.
+- [ ] Live website interaction and deployed assets verified over HTTPS.
 - [ ] Official `https://othmaneblial.github.io/bitborn/` site and repository homepage.
 - [ ] Website/documentation CI and clean-checkout reproduction proof.
 - [ ] Public v0.1.0 release with images, source and SHA-256 checksums.
