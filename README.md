@@ -28,5 +28,24 @@ the encodings; it is never an input to a code generator.
 
 The source is 512 bytes when packed, with `55 AA` at offsets 510–511. Automated
 tests check instruction encodings, branch displacements, the reviewed SHA-256,
-and actual QEMU serial output. More examples and the interactive website follow
-this independently working boot milestone.
+and actual QEMU serial output.
+
+## Roadmap — current progress
+
+Updated **2026-10-12** with each verified milestone. See [ROADMAP.md](ROADMAP.md)
+for the evidence and remaining gates.
+
+| Milestone | Progress |
+| --- | --- |
+| 512-byte handwritten boot program and four byte tools | ✅ QEMU-tested, public |
+| Linux exit, arithmetic, text, loops and comparisons | ✅ Native execution passed in Linux CI |
+| BIOS keyboard and direct VGA memory writes | ✅ QEMU-tested |
+| Multi-sector disk loading and interactive monitor | ✅ QEMU-tested: help, clear, about, reboot, peek |
+| Interactive `.io` website and visual boot explorer | In progress |
+| Real boot recording, complete tutorials and v0.1.0 release | In progress |
+| Protected mode, interrupts and executable loading | Future research; no working claim |
+
+Run the monitor with `qemu-system-i386 -drive file=build/monitor.img,format=raw,if=floppy -boot a -serial stdio`.
+Type a command and Enter. Commands are exact lowercase words, input is bounded
+to 15 printable ASCII characters, Backspace edits the line, and `peek` reads the
+actual byte at physical address `7C00`. This is deliberately a small monitor.

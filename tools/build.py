@@ -18,6 +18,12 @@ def elf64(payload):
     return header + segment + payload
 
 
+def bios_sector(payload):
+    if len(payload) > 510:
+        raise ValueError("payload exceeds one boot sector")
+    return payload + bytes(510 - len(payload)) + b"\x55\xaa"
+
+
 def build():
     manifest = json.loads((ROOT / "targets.json").read_text())
     (ROOT / "build").mkdir(exist_ok=True)
@@ -30,6 +36,13 @@ def build():
             executable = output.with_suffix(".elf")
             executable.write_bytes(elf64(data))
             executable.chmod(0o755)
+        if target.get("bootable"):
+            output.with_suffix(".img").write_bytes(bios_sector(data))
+        if target.get("loader"):
+            loader, _ = read_bits(ROOT / target["loader"])
+            if len(data) > 1024:
+                raise ValueError("second stage exceeds the loader's two-sector read")
+            output.with_suffix(".img").write_bytes(bios_sector(loader) + data + bytes(1024 - len(data)))
         if target["source"] == "boot/boot.bits":
             (ROOT / "boot/annotations.json").write_text(json.dumps(annotations, indent=2) + "\n")
             (ROOT / "site").mkdir(exist_ok=True)

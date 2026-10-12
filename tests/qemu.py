@@ -83,6 +83,11 @@ class Guest:
     def screenshot(self, path):
         self.command("screendump", {"filename": str(Path(path).resolve())})
 
+    def memory(self, address, size):
+        path = self.directory / "memory.bin"
+        self.command("pmemsave", {"val": address, "size": size, "filename": str(path)})
+        return path.read_bytes()
+
     def __exit__(self, *args):
         if getattr(self, "process", None):
             self.process.terminate()

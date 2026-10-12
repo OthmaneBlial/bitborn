@@ -4,9 +4,23 @@ import subprocess
 import unittest
 from tools.bitborn import ROOT, read_bits
 from tools.build import elf64
+from tests.qemu import Guest
 
 
 class ExampleTests(unittest.TestCase):
+    def test_bios_keyboard(self):
+        with Guest(ROOT / "build/keyboard.img") as guest:
+            guest.wait_for(lambda data: data == b">")
+            guest.key("a")
+            self.assertEqual(guest.wait_for(lambda data: data == b">a"), b">a")
+
+    def test_direct_vga_memory_write(self):
+        with Guest(ROOT / "build/vga.img") as guest:
+            guest.wait_for(lambda _: "0x42 0x0a" in guest.hmp("xp /2bx 0xb8000"))
+            memory = guest.hmp("xp /2bx 0xb8000")
+            self.assertIn("0x42", memory)
+            self.assertIn("0x0a", memory)
+
     def test_elf_is_only_headers_plus_literal_payload(self):
         payload, _ = read_bits(ROOT / "examples/exit-code/program.bits")
         image = elf64(payload)

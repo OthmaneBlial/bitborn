@@ -1,0 +1,42 @@
+# Second stage, loaded at 0000:7E00 by boot/loader.bits.
+10111000 00000011 00000000 # instruction | MOV AX,0003 | B8 imm16 selects VGA text mode.
+11001101 00010000 # instruction | INT 10 | CD 10 clears and configures the screen.
+10111010 11111001 00000011 # instruction | MOV DX,03F9 | BA selects COM1 interrupt enable.
+10110000 00000000 # instruction | MOV AL,00 | B0 disables UART interrupts.
+11101110 # instruction | OUT DX,AL | EE writes the selected register.
+10111010 11111011 00000011 # instruction | MOV DX,03FB | BA selects UART line control.
+10110000 10000000 # instruction | MOV AL,80 | B0 enables baud divisor access.
+11101110 # instruction | OUT DX,AL | EE writes DLAB.
+10111010 11111000 00000011 # instruction | MOV DX,03F8 | BA selects divisor low byte.
+10110000 00000001 # instruction | MOV AL,01 | B0 sets divisor one for 115200 baud.
+11101110 # instruction | OUT DX,AL | EE writes divisor low byte.
+01000010 # instruction | INC DX | 42 advances to divisor high-byte port.
+10110000 00000000 # instruction | MOV AL,00 | B0 clears the divisor high byte.
+11101110 # instruction | OUT DX,AL | EE writes divisor high byte.
+10111010 11111011 00000011 # instruction | MOV DX,03FB | BA selects UART line control.
+10110000 00000011 # instruction | MOV AL,03 | B0 selects 8N1 and clears DLAB.
+11101110 # instruction | OUT DX,AL | EE configures serial framing.
+10111110 01001000 01111110 # instruction | MOV SI,7E48 | BE loads message pointer, second-stage offset 72.
+10101100 # instruction | LODSB | AC reads ASCII and advances SI.
+10000100 11000000 # instruction | TEST AL,AL | 84 C0 tests for NUL.
+01110100 00011011 # instruction | JZ halt | 74 rel8; next offset 41 + 27 = halt at 68.
+01010000 # instruction | PUSH AX | 50 preserves the character across BIOS output.
+01010110 # instruction | PUSH SI | 56 preserves the message pointer.
+10110100 00001110 # instruction | MOV AH,0E | B4 selects BIOS teletype.
+10111011 00000111 00000000 # instruction | MOV BX,0007 | BB selects page zero and attribute seven.
+11001101 00010000 # instruction | INT 10 | CD 10 prints the loaded disk-sector message.
+01011110 # instruction | POP SI | 5E restores SI.
+01011000 # instruction | POP AX | 58 restores the character.
+01010000 # instruction | PUSH AX | 50 preserves it during UART polling.
+10111010 11111101 00000011 # instruction | MOV DX,03FD | BA selects UART line status.
+11101100 # instruction | IN AL,DX | EC reads status.
+10101000 00100000 # instruction | TEST AL,20 | A8 checks transmitter-ready bit five.
+01110100 11111011 # instruction | JZ poll | 74 FB loops back to IN until ready.
+01011000 # instruction | POP AX | 58 restores the message byte.
+10111010 11111000 00000011 # instruction | MOV DX,03F8 | BA selects UART transmit register.
+11101110 # instruction | OUT DX,AL | EE prints the message on serial.
+11101011 11100000 # instruction | JMP print | EB E0 returns to LODSB, 32 bytes before the next instruction.
+11111010 # instruction | CLI | FA masks interrupts before final halt.
+11110100 # instruction | HLT | F4 stops the second stage.
+11101011 11111101 # instruction | JMP halt | EB FD returns to HLT if awakened.
+01010011 01100101 01100011 01110100 01101111 01110010 00100000 00110010 00100000 01101100 01101111 01100001 01100100 01100101 01100100 00100001 00001101 00001010 00000000 # data | Sector 2 loaded! CR LF NUL | Literal proof message executes only after the BIOS disk read succeeds.

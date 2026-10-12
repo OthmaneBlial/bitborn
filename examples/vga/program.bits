@@ -1,0 +1,17 @@
+11111010 # instruction | CLI | FA prevents interrupts during segment/stack initialization.
+11101010 00000110 01111100 00000000 00000000 # instruction | JMP 0000:7C06 | EA little-endian offset and segment normalize CS.
+00110001 11000000 # instruction | XOR AX,AX | 31 C0 clears AX.
+10001110 11011000 # instruction | MOV DS,AX | 8E D8 sets DS=0.
+10001110 11010000 # instruction | MOV SS,AX | 8E D0 sets SS=0.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | BC places stack below the boot image.
+11111100 # instruction | CLD | FC advances DI on STOSW.
+10111000 00000011 00000000 # instruction | MOV AX,0003 | B8 selects VGA text mode.
+11001101 00010000 # instruction | INT 10 | CD 10 establishes 80x25 VGA text mode.
+10111000 00000000 10111000 # instruction | MOV AX,B800 | B8 loads VGA text-memory segment.
+10001110 11000000 # instruction | MOV ES,AX | 8E C0 makes ES address physical B8000.
+00110001 11111111 # instruction | XOR DI,DI | 31 FF sets the first screen-cell offset to zero.
+10111000 01000010 00001010 # instruction | MOV AX,0A42 | B8 loads character B in AL and bright green attribute 0A in AH.
+10101011 # instruction | STOSW | AB writes AX to ES:DI, producing a real green VGA character.
+11111010 # instruction | CLI | FA disables interrupts before halting.
+11110100 # instruction | HLT | F4 stops execution after the visible write.
+11101011 11111101 # instruction | JMP halt | EB FD returns to HLT if awakened.
