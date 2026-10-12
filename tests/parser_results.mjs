@@ -6,6 +6,6 @@ for await (const chunk of process.stdin)input+=chunk;
 const cases=JSON.parse(input);
 const results=cases.map(source=>{
   try {return {bytes:[...parseBits(source)]};}
-  catch(error){return {error:true,line:Number(error.message.match(/^Line (\d+):/)?.[1])||null};}
+  catch(error){return {error:true,code:error.code,line:error.line,tokenIndex:error.tokenIndex};}
 });
 process.stdout.write(JSON.stringify(results));

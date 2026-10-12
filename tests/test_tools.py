@@ -7,10 +7,36 @@ import os
 from contextlib import redirect_stderr
 from unittest.mock import patch
 from pathlib import Path
-from tools.bitborn import ROOT, atomic_write, bitdiff, digest, inspect, main, read_bits, verify
+from tools.bitborn import ROOT, SourceError, atomic_write, bitdiff, digest, inspect, main, read_bits, verify
 
 
 class ToolTests(unittest.TestCase):
+    def test_structured_source_and_cli_errors_preserve_output(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, output = Path(tmp) / 'source.bits', Path(tmp) / 'out.bin'
+            output.write_bytes(b'original output')
+            for text, code, line, token_index in [
+                ('\ufeff# comment\r\n00000000\u00a000000000\tbad # ignored', 'INVALID_TOKEN', 2, 3),
+                ('# comments only', 'EMPTY_SOURCE', None, None),
+            ]:
+                source.write_text(text, encoding='utf-8')
+                with self.assertRaises(SourceError) as caught:
+                    read_bits(source)
+                self.assertIsInstance(caught.exception, ValueError)
+                self.assertEqual((caught.exception.code, caught.exception.line, caught.exception.token_index), (code, line, token_index))
+                result = subprocess.run([str(ROOT / 'tools/bitpack'), '--json-errors', str(source), str(output)], capture_output=True)
+                self.assertEqual(result.returncode, 1)
+                self.assertEqual(result.stdout, b'')
+                self.assertEqual(json.loads(result.stderr), {'command': 'bitpack', 'code': code, 'message': str(caught.exception), 'line': line, 'tokenIndex': token_index})
+                self.assertEqual(output.read_bytes(), b'original output')
+            source.write_text('00000000', encoding='utf-8')
+            result = subprocess.run([str(ROOT / 'tools/bitpack'), '--json-errors', str(source), str(source)], capture_output=True)
+            self.assertEqual(json.loads(result.stderr)['code'], 'TOOL_ERROR')
+            self.assertEqual(source.read_text(), '00000000')
+            result = subprocess.run([str(ROOT / 'tools/bitpack'), '--json-errors', str(source.with_name('missing.bits')), str(output)], capture_output=True)
+            self.assertEqual(json.loads(result.stderr)['code'], 'IO_ERROR')
+            self.assertEqual(output.read_bytes(), b'original output')
+
     def test_whitespace_comments_and_errors(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "source.bits"

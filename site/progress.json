@@ -142,6 +142,10 @@
       "progress": "\u2705 Exact offsets/bit flips, added/removed bytes and unchanged bytes with changed field roles; stops classification at scope errors; 500 seeded oracle comparisons; read-only"
     },
     {
+      "milestone": "Structured source diagnostics",
+      "progress": "\u2705 Stable codes and one-based line/token locations agree across Python/JS; optional CLI JSON errors preserve readable defaults and failed-write safety"
+    },
+    {
       "milestone": "CPU Lab program downloads and imports",
       "progress": "\u2705 Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks"
     },

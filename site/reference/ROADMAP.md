@@ -223,6 +223,10 @@ The v0.2 milestone is published and verified. The following research remains ope
 - [x] Align browser/CLI source parsing: accept only an initial UTF-8 BOM, use the
   same Unicode whitespace and line boundaries, and keep exact comment scope.
   658 seeded valid/invalid cases compare bytes and source-line diagnostics.
+- [x] Publish stable source diagnostic codes and one-based line/token locations
+  across Python and JavaScript, retaining readable errors and unchanged grammar.
+  CLI operational errors support optional JSON; parser parity, browser limits and
+  failed-write preservation are tested. See [diagnostics](docs/source-diagnostics.md).
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

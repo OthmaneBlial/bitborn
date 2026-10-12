@@ -138,9 +138,19 @@ Chromium, Firefox 157 and WebKit 27.2 all pass; 512-byte and 320px layouts are
 verified. The new read-only diff demo has six actual frames. All six browser GIFs
 have current source/frame/GIF hashes; full Python/site checks pass locally.
 The encoding fixture corpus now includes 28 independent NDISASM goldens.
-Publication of the bit-diff milestone is pending verification.
-Current local validation: 55 Python tests, one expected native-Linux skip on
-macOS, plus all site/module checks. Protected-fault commit `85ccc5d` passed CI
+Bit-diff commit `fa6a377` passed CI `38318473918` and deployment `38318785744`;
+the public homepage, diff route and comparison module match committed bytes.
+Its Pages mirror `3dabda6` preserves the exact `bitborn/` folder boundary.
+Structured parser diagnostics now preserve readable messages and existing error
+types while exposing stable codes and one-based line/token positions. The seeded
+658-case corpus compares byte results and structured rejection locations across
+Python/JS. Optional CLI JSON, notation-specific/browser bounds and preservation
+of output on parse failures are verified. Local full validation passes 59 Python
+tests (one expected macOS native-Linux skip) and all site/module checks; actual
+browser recordings were refreshed against current parser source hashes.
+Next: QEMU harness startup failures, bounded cleanup and resource ownership.
+Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
+skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
 match exact source bytes. Selector-fault commit `489cf88` passed CI `38306524717`.
 Regular-source preflight commit `8edbc4c` passed CI `38306711217`; deployment
@@ -178,7 +188,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 12 | 1 | Visual execution timeline with keyboard selection and recorded-step replay | H | M | 02 | Medium | Complete |
 | 13 | 0 | Replace failed file writes atomically so existing packed outputs survive I/O errors | H | M | Existing CLI | Medium | Complete |
 | 14 | 0 | Validate manifest types, output aliases and packaging options before writing | H | H | Existing manifest | Medium | Complete: all-source/package preflight; no multi-file I/O transaction |
-| 15 | 0 | Structured source diagnostics with stable error codes and source-line locations | H | M | 03 | Medium | Open |
+| 15 | 0 | Structured source diagnostics with stable error codes and source-line locations | H | M | 03 | Medium | Complete: shared codes/line/token positions, optional CLI JSON and failed-write proof |
 | 16 | 1 | Address-reference inspector that checks literal pointers without resolving labels into code | H | M | Annotations | Medium | Open |
 | 17 | 1 | Register-to-register MOV encodings with independent ModR/M fixtures | H | M | 05 | Medium | Complete: scoped inspection, 9,728 combinations and 18 disassembly goldens |
 | 18 | 1 | Curated indirect memory operands with explicit segment-selection explanations | H | M | 17 | High | Complete: 16-bit addressing inspection; default DS/SS verified natively; no memory execution |

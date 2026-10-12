@@ -153,6 +153,14 @@ def artifact_paths(root=ROOT):
     return sorted(paths)
 
 
+class SourceError(ValueError):
+    def __init__(self, message, code, line=None, token_index=None):
+        super().__init__(message)
+        self.code = code
+        self.line = line
+        self.token_index = token_index
+
+
 def read_bits(path):
     data = bytearray()
     annotations = []
@@ -161,9 +169,9 @@ def read_bits(path):
         tokens = source.split()
         if not tokens:
             continue
-        for token in tokens:
+        for token_index, token in enumerate(tokens, 1):
             if not re.fullmatch(r"[01]{8}", token):
-                raise ValueError(f"{path}:{number}: expected eight binary digits, got {token!r}")
+                raise SourceError(f"{path}:{number}: expected eight binary digits, got {token!r}", 'INVALID_TOKEN', number, token_index)
         parts = [part.strip() for part in comment.split("|")]
         annotated = len(parts) == 3 and parts[0] in {"instruction", "data", "padding", "signature"}
         annotations.append({"offset": len(data), "size": len(tokens), "kind": parts[0] if annotated else "data",
@@ -171,7 +179,7 @@ def read_bits(path):
                             "explanation": parts[2] if annotated else "", "bits": " ".join(tokens)})
         data.extend(int(token, 2) for token in tokens)
     if not data:
-        raise ValueError(f"{path}: no bytes")
+        raise SourceError(f"{path}: no bytes", 'EMPTY_SOURCE')
     return bytes(data), annotations
 
 
@@ -241,6 +249,7 @@ def main(command=None):
     parser.add_argument("--size", type=int)
     parser.add_argument("--sha256")
     parser.add_argument("--bios", action="store_true")
+    parser.add_argument("--json-errors", action="store_true", help="emit operational errors as JSON on stderr; usage errors remain argparse text")
     parsed = parser.parse_args()
     args = parsed.args
     try:
@@ -270,6 +279,11 @@ def main(command=None):
         else:
             parser.error(f"usage: {command} " + {"bitpack": "SOURCE OUTPUT", "bitinspect": "BINARY [--annotations JSON]", "bitdiff": "BEFORE AFTER", "bitverify": "[BINARY --size N --bios --sha256 HASH]"}[command])
     except (ValueError, OSError, json.JSONDecodeError) as error:
-        print(f"{command}: {error}", file=sys.stderr)
+        if parsed.json_errors:
+            diagnostic = {'command': command, 'code': getattr(error, 'code', 'IO_ERROR' if isinstance(error, OSError) else 'TOOL_ERROR'),
+                          'message': str(error), 'line': getattr(error, 'line', None), 'tokenIndex': getattr(error, 'token_index', None)}
+            print(json.dumps(diagnostic, ensure_ascii=True), file=sys.stderr)
+        else:
+            print(f"{command}: {error}", file=sys.stderr)
         return 1
     return 0

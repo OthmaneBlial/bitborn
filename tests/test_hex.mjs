@@ -1,5 +1,20 @@
 import assert from 'node:assert/strict';
-import {parseBits,formatBits,parseHex,formatHex} from '../site/binary.mjs';
+import {parseBits,formatBits,parseHex,formatHex,SourceDiagnosticError} from '../site/binary.mjs';
+
+for (const parse of [parseBits,parseHex]) {
+  const byte=parse===parseBits?'00000000':'00';
+  for (const [source,limit,code,line,tokenIndex] of [
+    [`# ignored\r\n${byte}\u00a0${byte}\tbad # more ignored`,512,'INVALID_TOKEN',2,3],
+    ['# comments only',512,'EMPTY_SOURCE',null,null],
+    [null,512,'SOURCE_TYPE',null,null],
+    [' '.repeat(65537),512,'SOURCE_TOO_LONG',null,null],
+    [byte,0,'INVALID_LIMIT',null,null],
+    [`${byte}\n${byte} ${byte}`,2,'BYTE_LIMIT',2,2],
+  ]) {
+    assert.throws(()=>parse(source,limit),error=>error instanceof Error && error instanceof SourceDiagnosticError &&
+      error.code===code && error.line===line && error.tokenIndex===tokenIndex);
+  }
+}
 
 const values=Uint8Array.from({length:256},(_,value)=>value);
 assert.deepEqual(parseHex(formatHex(values)),values);

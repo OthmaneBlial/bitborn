@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Add structured literal-source diagnostics with stable codes and one-based
+  line/token locations in Python and JavaScript. Preserve existing messages,
+  grammar and caller error types; expose optional CLI JSON operational errors.
+  Extend seeded cross-runtime parity and verify failed packing preserves output.
+
 - Add a read-only bit-diff workbench with exact positional changes, per-bit roles,
   explicit decoding modes and unchanged bytes whose instruction boundaries/roles
   changed. Separate additions/removals from bit flips, retain invalid-draft state,

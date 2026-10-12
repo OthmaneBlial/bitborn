@@ -1,12 +1,11 @@
 import json
 import random
-import re
 import shutil
 import subprocess
 import tempfile
 import unittest
 from pathlib import Path
-from tools.bitborn import ROOT, read_bits
+from tools.bitborn import ROOT, SourceError, read_bits
 
 
 def corpus():
@@ -45,10 +44,9 @@ class ParserPropertyTests(unittest.TestCase):
                     data,_=read_bits(source)
                     self.assertEqual(list(data),expected,repr(text[:80]))
                     results.append({'bytes':list(data)})
-                except ValueError as error:
+                except SourceError as error:
                     self.assertIsNone(expected,repr(text[:80]))
-                    match=re.search(r':(\d+): expected eight binary digits',str(error))
-                    results.append({'error':True,'line':int(match[1]) if match else None})
+                    results.append({'error':True,'code':error.code,'line':error.line,'tokenIndex':error.token_index})
         return results
 
     def test_seeded_literal_round_trips_and_rejections(self):
@@ -56,7 +54,7 @@ class ParserPropertyTests(unittest.TestCase):
         self.host_results(cases)
 
     @unittest.skipUnless(shutil.which('node'),'browser parser parity needs Node; required by make site-test/CI')
-    def test_browser_and_host_have_identical_bytes_and_error_lines(self):
+    def test_browser_and_host_have_identical_bytes_and_diagnostics(self):
         cases=corpus();host=self.host_results(cases)
         process=subprocess.run(['node',str(ROOT/'tests/parser_results.mjs')],input=json.dumps([source for source,_ in cases],ensure_ascii=False),text=True,capture_output=True,timeout=15,cwd=ROOT)
         self.assertEqual(process.returncode,0,process.stderr)
