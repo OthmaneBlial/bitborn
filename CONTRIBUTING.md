@@ -45,6 +45,7 @@ macOS cannot natively run the Linux ELF examples; CI runs their native checks.
 | [Signed/unsigned short branches](docs/signed-comparisons.md) | `site/simulator.mjs`, `docs/instruction-encoding/fixtures/signed-branches.bits` | `node tests/test_branches.mjs` and `python3 -m unittest tests.test_signed_branches` |
 | [Carry/borrow arithmetic](docs/carry-borrow.md) | `site/simulator.mjs`, `docs/instruction-encoding/fixtures/carry-borrow.bits` | `node tests/test_carry.mjs` and `python3 -m unittest tests.test_carry_native` |
 | [Canonical CPU presets](docs/cpu-lab/README.md) | `docs/cpu-lab/`, `tools/site_build.py`, `site/cpu-lab/presets.mjs` | `python3 -m unittest tests.test_preset_sources` and `node tests/test_cpu_lab.mjs` |
+| [Native self-modification](examples/self-modifying/README.md) | `examples/self-modifying/`, `tools/record_self_modifying.py` | `node tests/test_self_modifying.mjs` and `python3 -m unittest tests.test_self_modifying_native` |
 | Builder and CPU Lab | `site/boot-builder/`, `site/cpu-lab/` | `node tests/browser_builder.mjs` or `node tests/browser_cpu_lab.mjs` |
 | Challenges | `challenges/`, `site/challenges/challenges.mjs` | `node tests/test_challenges.mjs` and `python3 -m unittest tests.test_challenges` |
 | Docs, routes and progress | `README.md`, `ROADMAP.md`, `docs/`, `tools/site_build.py` | `make site-test` |

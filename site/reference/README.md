@@ -29,7 +29,7 @@ bitborn explores that question by encoding machine instructions directly as
 binary digits. Every opcode. Every operand. Every branch displacement. No
 assembler translates the target code: we author the bytes themselves.
 
-**A real 512-byte BIOS boot program, fourteen reviewed examples, four byte tools,
+**A real 512-byte BIOS boot program, fifteen reviewed examples, four byte tools,
 an editable boot builder, a visual CPU lab, and 20 binary challenges.** This is an educational experiment, not a
 production operating system.
 
@@ -102,6 +102,7 @@ for exact evidence and remaining gates.
 | [Signed and unsigned comparisons](docs/signed-comparisons.md) | ✅ All 16 short Jcc conditions, 131,072 flag/displacement cases and 3,384 operand-order comparisons; exact 95-byte overflow exercise agrees with QEMU and rewinds/replays |
 | [Carry and borrow arithmetic](docs/carry-borrow.md) | ✅ Byte/word ADC and SBB, 270,736 ripple-oracle cases and AH/IF/DF preservation; exact 81-byte multiword exercise plus eight native FLAGS samples |
 | [Canonical CPU teaching sources](docs/cpu-lab/README.md) | ✅ All six presets come from `.bits` files; editor/reference identity, original bytes, bounded build inputs and loaded-preset source links verified |
+| [Native one-bit self-modification](examples/self-modifying/README.md) | ✅ One writer bit changes one future operand bit and A→a; both literal controls match model/QEMU registers, code RAM, serial and VGA; actual native capture and immutable source/image checks |
 | CPU Lab program downloads and imports | ✅ Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks |
 | Share loaded CPU Lab programs | ✅ Versioned URL fragments preserve 1–512 loaded bytes and open paused; 1,000 seeded round trips, malformed-link preservation, history navigation and clipboard fallback verified in three browsers |
 | Binary and hexadecimal drafts | ✅ Literal byte views, explicit hex loading and comment preservation; all byte values and 1,000 seeded round trips pass; CLI .bits remains binary |
@@ -268,7 +269,7 @@ native browser code. `make site-test` verifies source hashes, execution and link
 [examples](https://othmaneblial.github.io/bitborn/examples/) and the
 [live roadmap](https://othmaneblial.github.io/bitborn/roadmap/) have dedicated pages.
 The roadmap and homepage progress feed are rebuilt from the table above.
-The website documentation links all fourteen current examples and the latest
+The website documentation links all fifteen current examples and the latest
 release. The original 512-byte boot message still reports v0.1; its exact bytes
 are preserved while v0.2 adds separate instruments and native targets.
 
@@ -312,8 +313,11 @@ behavior, not physical-hardware support. CI status is linked above.
 The [v0.2.0 exact-commit CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38223386652)
 and [tag CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38223865244)
 both passed all 37 Python tests, browser checks and artifact reproduction.
-All 135 live runtime files match local bytes, including all 86 curated downloads;
-the published interactions were repeated in Chrome.
+At the v0.2 checkpoint, all 135 live runtime files matched local bytes, including
+86 curated downloads; the published interactions were repeated in Chrome.
+The Unreleased build now has 56 reviewed targets and 88 derived artifacts, adding
+the native self-modifying raw payload/image. Later milestone evidence is recorded
+in [ROADMAP.md](ROADMAP.md); existing release downloads remain unchanged.
 
 ## FAQ and limits
 

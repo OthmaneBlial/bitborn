@@ -16,6 +16,7 @@ example uses the canonical source in `boot/`, avoiding a second divergent copy.
 | Compare values | Linux x86-64 | Equal branch retains exit 42 | [compare-values](compare-values/README.md) |
 | Read keyboard input | x86 BIOS / QEMU | Wait for a key, echo to VGA/COM1 | [keyboard](keyboard/README.md) |
 | Display VGA characters | x86 BIOS / QEMU | Green B at first text cell | [vga](vga/README.md) |
+| Modify a future instruction | x86 BIOS / QEMU | One writer bit changes A to a; exact code RAM, serial and VGA proof | [self-modifying](self-modifying/README.md) |
 | Boot from one sector | x86 BIOS / QEMU | Full bitborn greeting, halt | [boot-sector](boot-sector/README.md) |
 | Interactive monitor | x86 BIOS / QEMU | Exact help/clear/about/reboot/peek commands | [monitor](monitor/README.md) |
 | Read additional sectors | x86 BIOS / QEMU | Sector 2 loaded! | [disk-read](disk-read/README.md) |

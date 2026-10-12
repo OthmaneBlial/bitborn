@@ -85,7 +85,7 @@ helpers preserve registers needed by input, comparison and caller state.
 
 ## Linux executable examples
 
-Five payloads use x86-64 Linux syscalls, independent of BIOS. Python prepends a
+Six payloads use x86-64 Linux syscalls, independent of BIOS. Python prepends a
 120-byte ELF64 header/program-header pair. One load segment at `400000` is
 readable/executable and contains the bytes unchanged. Entry is `400078`.
 There is no linker, runtime library or dynamically generated instruction.

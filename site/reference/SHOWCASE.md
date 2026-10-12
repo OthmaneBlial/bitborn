@@ -1,5 +1,16 @@
 # Make one bit count
 
+## Let one instruction rewrite another
+
+![Actual first VGA cells from separate QEMU boots: A, then a](assets/self-modifying-demo.gif)
+
+The new [self-modification experiment](examples/self-modifying/README.md) starts
+with a literal `MOV AL,41`. An earlier store changes its live operand to `61`;
+the program jumps to it and prints `a`. A separate one-bit writer control prints
+`A`. QEMU verifies serial, VGA and exactly one changed code bit, while source and
+read-only image bytes stay intact. The GIF crops actual native cells from two
+boots; Back/Forward demonstrations belong to the separately labeled browser model.
+
 ## Follow carry into the next word
 
 Import the CPU Lab's [81-byte carry/borrow exercise](docs/instruction-encoding/fixtures/carry-borrow.bits).

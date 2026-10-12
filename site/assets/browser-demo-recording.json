@@ -8,7 +8,7 @@
   "presentationFps": 1,
   "alterations": "960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.",
   "sourceSha256": {
-    "tools/record_browser.mjs": "88f5ed74b56b74bfaabf9c43cbdfc1576a17ed45b34752d89d8cfb201483853a",
+    "tools/record_browser.mjs": "10f1b4f46d6bc749ca39e6891a283730a5bf79e752323bea956ed2381c72ff40",
     "boot/boot.bits": "230bbafbfa02abd62dc964efbad02db0431f0efa263216bba02146cd164262b8",
     "site/elf.mjs": "552aabb816be8add70c470c951f0110697d491d0a0e926c3bd9e6001e623832b",
     "site/elf/index.html": "767e441bc2b8d9e29a626d264b2d437bce24c296196a5b37c33d09cf6f58f29b",
@@ -22,10 +22,10 @@
     "site/app.js": "5ee86e439e83cdb24a8b80935904917b12f3eb7da304950fbb677ba5ee8e30f3",
     "site/bit-diff.mjs": "4ba0be7d157650d7cb338925ac0f9496992242f93b6f52b9e54775c17c2ce940",
     "site/bit-diff/index.html": "85d4abc7b728401799fe1c5f62169ee2ec225cebc9b4f27b83e731263bea044f",
-    "site/bit-diff/app.mjs": "ad1fa74bb5deb8e22d79acf02c4ffec8f0f25a8fdc90eb4cc0df4bcdeddf2688",
+    "site/bit-diff/app.mjs": "90f0c7a4cfdd373ba6d8d8430b20757f3652a376ee5e42912d6bdc7fefd21293",
     "site/bit-diff/diff.css": "aa0c4f672af2b9499586ffdce045e48d0cbb563af58971090d9903ddce990dca",
     "site/encoding.mjs": "d609909a5fd41ac29d31d3000848fc7b7f0c680d4f9b9c0774f5944c9af12611",
-    "site/encoding-presets.mjs": "0d6aecb39d7d124acfca40cfdbbb496a46b0a4f6bd0be718f8af38767d4e213a",
+    "site/encoding-presets.mjs": "d9d561298d641addde799cc619cbc92b979998b1b1bf7afba2da0ee66a22e7d9",
     "site/playground/index.html": "0f91b767d7090bed97877ca83ce324ab671b548f0f8dd64a4ecb0929eb13326d",
     "docs/instruction-encoding/fixtures/mov32.bits": "52504d7b850f70f6ac262d1d07308878d686c80f485b347490c62f854b86c2cd",
     "docs/instruction-encoding/fixtures/mov64.bits": "01bbd5025d57433cdaf764232ade240dad18fcf879a227f29e0e3b94ea3c3e6e",
@@ -48,7 +48,7 @@
     "site/boot-builder/builder.css": "2a5c2803c671e4fb33f55a200c16fc7d597127bf019a3c2b7b2f381417e51a4c",
     "site/boot-builder/model.mjs": "92a78eb396054298a2c170cd2a2fb770e7201b0478b6678321c000a46f3108f3",
     "site/boot-builder/app.mjs": "13f9234f36f0b6c166dd3ab9f16750ba680c8e3e7045d6c9bbc7e5a275fd1cb4",
-    "site/cpu-lab/index.html": "a1650cdf7a819fff545d4be65c1d1181001c6dd818b86b7630215f841505b597",
+    "site/cpu-lab/index.html": "fce290ba74ba7e29da5081a9b7f4051f4d4f0a9e97a6084fee01863bfade74db",
     "site/cpu-lab/lab.css": "75b4a3e46b60b395e6ed0cedf688d0a12cdd3e959934a9f40bce1273af771d68",
     "site/cpu-lab/lab.mjs": "426ce9f52c5f7616b9b744e75fa5d00788cb7b19c5a0edd815e7e35c7aeb55ba",
     "site/cpu-lab/presets.mjs": "9e04050a83206973122bd1f7feea2c58898a3521ff320efe4f5cfe979c71694b",
@@ -65,7 +65,9 @@
     "docs/cpu-lab/flags.bits": "7fa296726da00b753b7f2e958d0eaf9948ee187786db2b7496901ff1f538900b",
     "docs/cpu-lab/stack.bits": "0349c40285c3256c42b91b305358ee171f395c21f571c144b9ae692e59672325",
     "docs/cpu-lab/branch.bits": "b39899f28c893f1bad240dc4792c3d27debbc398c668a95cd267a1e03609cf00",
-    "docs/cpu-lab/memory.bits": "9f7924df120041ae9460e5c0cf9ed46bd4ca7317efaa297109a12cafc606e9ea"
+    "docs/cpu-lab/memory.bits": "9f7924df120041ae9460e5c0cf9ed46bd4ca7317efaa297109a12cafc606e9ea",
+    "examples/self-modifying/program.bits": "4c1a4a976a31f8d9b9ef2d87afce4d1b0515fcd41496e6a224e86235a77a5f67",
+    "examples/self-modifying/control.bits": "94376a7c9427fa7800e0f36e998966ba86f167df7377342207976b84f8b00f86"
   },
   "captures": [
     {
@@ -89,17 +91,18 @@
     },
     {
       "file": "assets/bit-diff-demo.gif",
-      "sha256": "09d985f4c6ef875889a7989a9d5f520875f48462f5fa1c90392c93775c5ded3b",
-      "capturedFrames": 6,
-      "encodedFrames": 6,
-      "durationSeconds": 6,
+      "sha256": "d727978cbdd17407e08761d65333ee5dc6eb28324140a3b8dff33b72d721872f",
+      "capturedFrames": 7,
+      "encodedFrames": 7,
+      "durationSeconds": 7,
       "actions": [
         "A one-bit MOV direction change modifies the opcode and reinterprets an unchanged ModR/M byte; counts keep those categories separate.",
         "Selected unchanged D8: its six source/destination selector-bit roles reverse although the raw byte does not change.",
         "Compared FE (-2) and7E (+126): only the displacement sign bit changes; default SS remains the same.",
         "Explicit32-bit context classifies a five-byte MOV immediate on both sides; comparison executes neither program.",
         "Switching to16-bit context consumes three bytes, then classification stops at the unsupported remaining byte without resynchronizing.",
-        "An added zero byte is missing on the before side; it counts as one addition and zero flipped shared bits."
+        "An added zero byte is missing on the before side; it counts as one addition and zero flipped shared bits.",
+        "The two literal self-modification programs differ only at source writer byte50, bit5: 41 becomes61. This workbench performs no execution; native effects are verified separately."
       ],
       "sourceFrameSha256": [
         "2cff10ccc05f896a5cea4819e982df75f53508922d1aeee6f7d8b2f59f96e048",
@@ -107,7 +110,8 @@
         "55c3e093de77f5ab3ebc12ab839d10d7ef76980dac579ba3815bd5a5171f2314",
         "16dbfd8195fd108e1c9d7596abfd1e03cf7275c78c23033d1b551ad20deb1153",
         "cbff0fabf8c3b659f429c0769927e6dea5f5ea859a1262c5f3c7172e4f2aab53",
-        "452cbfde562422f1e5ee211f7d5c2800ba87ddf331fb73e172e3853455ef0682"
+        "452cbfde562422f1e5ee211f7d5c2800ba87ddf331fb73e172e3853455ef0682",
+        "7958235dd44d77af9ffbb7bb52918fc1ae799a5ab0700f4fc65857876dbce9a3"
       ]
     },
     {
@@ -178,10 +182,10 @@
     },
     {
       "file": "assets/cpu-lab-demo.gif",
-      "sha256": "4f1d7256bba0a9f7680293b7ebff9f0b7cabdaa7b1272af55546f2b95ea04cd3",
-      "capturedFrames": 38,
-      "encodedFrames": 38,
-      "durationSeconds": 38,
+      "sha256": "8e818cf1714b68e9a7d425711a4dc9394144f075ec9d4cb7796592493bc52afa",
+      "capturedFrames": 42,
+      "encodedFrames": 42,
+      "durationSeconds": 42,
       "actions": [
         "Loaded the literal stack/CALL/RET preset.",
         "Actual browser Step control 1; registers, flags and stack are model state.",
@@ -220,7 +224,11 @@
         "ADC propagates a low-word carry through FFFF; the middle result is zero with outgoing CF1.",
         "The extension word consumes carry: DX:CX:BX becomes 0001:0000:0000 after FFFFFFFF plus one.",
         "SBB propagates borrow across three zero words: BP:DI:SI becomes FFFF:FFFF:FFFF with outgoing CF1.",
-        "Byte ADC/SBB preserve AH as AB; both exact AB00 results are stored in model RAM, and the 81-byte program halts after32 steps."
+        "Byte ADC/SBB preserve AH as AB; both exact AB00 results are stored in model RAM, and the 81-byte program halts after32 steps.",
+        "Before the self-write, the future MOV operand at07C3B contains literal41, uppercase A. This is model RAM.",
+        "The modeled byte store changes exactly bit5 of the future operand:41 becomes61, lowercase a.",
+        "After JMP, live instruction fetch reads61 and loads AL with lowercase a rather than the unchanged source-file operand41.",
+        "The39-step model emits a and writes61 0F to VGA RAM. Separate native QEMU boots verify the same program; this browser GIF is simulation."
       ],
       "sourceFrameSha256": [
         "b3263079145cff60da711e705474390e16b6041e00be024924af40f41595221f",
@@ -236,31 +244,35 @@
         "0d96c463a58d3dba3419e0c3de524d3fb643aa4cfcbaf9eeb92620f4cbb2b718",
         "2efb5ff6eaec7f08bf8c1134b1f5a85495f80e51e84baa11222a6cd3cc56b28b",
         "c2d400aff5c3ac14fca255582a77bcf192612c583f711ca5154aedb531542816",
-        "bc1da9581b1108ed29e8ee3412c6514247da679bc60f3a8546ffd881a5410c24",
-        "0bdf45e7a8b28a12f4366756e445e346c0b1a0000dbd1f6ee2c11862936d1853",
+        "82d092ca2e2c61cf9dcab2f26d5eada4bcb7cac3ff01edc48847b66ccf4af18b",
+        "9bbcc1d06ecc89164221d28a668f109f38ef9cccfce2e36cac5264b846a336e4",
         "05bc61d22963708c38971ad76b5ae624a29fdee5b4b1f22af4e84b88eb01fa25",
-        "41df7ddee1f9e490d6f98d9ab1aa5122705fbcd5406e6750a128b2262c132a9f",
-        "1bace1c69649cf23816b24fa4eb1fc11cb272c89f16de572a202a45725111615",
+        "11246b405b744a5ead64bc99eb8d8aaaef1bb88795ba4269a800591410e81ada",
+        "97ae1c5bbd1bf4c920d705e800a7f98fb8e394d378e519b68a9c678fe0879cd7",
         "0bdbffd65ade2c80e9a60c04f019f0e3e9f2b67dd4ef8af9f43a5e96faada4b8",
-        "0731846ca0baa8a99584fcb5502a4fdb7bf801b86897a557a6d8edbe4b2a68aa",
-        "1c81486b27d3cbd88692d1979dcbcbf88face0ba28356ac2f90fc4db73a69831",
-        "61e56d88dc0ae3e084e44a4d12ed344fd96c9071aa98f7c2292f50512b90744b",
-        "c93e9b940c0c5de2461f12ffb3d7d895d641c459ba567356c76b42f4a9b33595",
-        "50e3b1e598368dc474aceccaf5e5d5acbf1a469615b759595c9a9dcafca5cb21",
-        "8623bd1ea9ce69fb22d7a5f0b5207ce21168fb4cc1f01856354abd8b92eb7d46",
+        "7f82f7944631eca8aa5e65c2caa8610650c2cb567860b80394755ce3fecbee7f",
+        "1b31443176ac58f0b086a0b5ad45f9930100de41153fda7d8e26152b1937c81d",
+        "4a7788ffe614ab38d1ab8615088a7ceeb741b1c8df096f61469e6da3d30b6735",
+        "b6d573ac80d40bb4095fdfa477813bb0823b047a516416aa7f8ca01d50814e54",
+        "6afefa44be0b0dc79bb1f97c8ff64136d88a0d415a7ac47ece629ebcb1763487",
+        "866ec3ab9cc366aab5badf24964e7353800963868543d0db171a31756b2e6d48",
         "b4981e46bd667bcc8bbbf8fceae81f443ad5522ec8f7c14b08733c33daeb0f87",
         "807e88c0726098cb85287694a438233f67abef4b36a54ef297543ad6af45dedd",
         "3ca6e10b332096c2ebd059405228df3fa74d8da29b21541bf947f13ef05b603e",
-        "79292f8ff0e8f7840ea0ac9f385f48f10338b58c7e2b1d36246815c2a0a9cf66",
-        "03fe4eca11b479df6f52439eea89dba40efecececa2b5c0351aaf7adaa058d3e",
-        "29d6cf7955dcfd90d3b6927201dfb34909f80bb139b2e72c48a78743d0ed2e26",
-        "cee82c23bba643a677a59faa262a39b6856df3c1b3e6a02f7e5d5d5a7292ff4b",
-        "0b849670d5db29ee2cf5943bc46e0c3ed82b2136b5ed7d50f1424df2ae712668",
-        "a20dbfcc2040fd666f61ccfed62e65da76769dc3176018238e19291f73147593",
-        "96e478af593543f4ff8d8f150e6f136ab64abf26fdfc86801a73cae519e318a8",
-        "973855d0d230e83e21e0a2584ace0d53d2c7eef862846f7dbe9849f8238e691b",
-        "e8638fb228b4f1a3278971a48b7ac48f4d5a26f09f64d717030095108aa2817d",
-        "c7369b3fdc072a7b2118bddd337acc7b10db8a61736c7566965cd874b685efc9"
+        "9a73b601d3ffaa07e6ce183e3b29e93599dd8a502f681a07c19dc8fad58f8299",
+        "70dbf87364cd10db576b453e662c5699aa347341c0cd36544d694fafa1d0f0e9",
+        "f5bd428afca9256860506935f0bcb4480ce4890f7b704447778065fdc43a0aa3",
+        "7293c2f34184450f11c92d52aa7e9160eb964a96770ba43867cd643442bf449d",
+        "cf18beb820c7a811f867d81a7e21d1d581aa03923496534390e9466025126d3d",
+        "58da028d82a9aca1f409bbc5d283544759fd1db36502bb64cdd7a430eefa19af",
+        "9f3c9ce45824c31dd55c4f536c883e1fb4373fc7c69c0ac6930cd8cb8b7720f1",
+        "c1f2b109b53cbc642fb3ad20a710c8b66efec10d7658bccdc716279cf09824e9",
+        "5fce759694fbe494cb5c6b93eb3d4edbc26bf898e546718e22a06a496a1d952a",
+        "745474f8d64f208c6dfa30522d09be6c26d883c6ddf947eff202b02e86741793",
+        "82caebd55f8a631b5d11c718d5b1041cf4e7740222d1070e7cfee7dca1ab2e91",
+        "1e4b4be6675e80dc46c4d82aec3135323d38d969cfe6ede3c37da278ecdda193",
+        "42c9fb6039fec7a5abb206a9f7f28d5d34d26f8fb22c8291449e8c7d2b403c8b",
+        "a1bb558f27794a3db2f56f2379636cce32886fdcc4492c4b276d0f2a6f7d14f3"
       ]
     },
     {

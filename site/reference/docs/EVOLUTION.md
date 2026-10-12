@@ -204,6 +204,25 @@ states, byte goldens and three-browser links/loads pass; recording provenance
 includes every canonical preset source. All 76 Python tests pass locally (one
 expected macOS native-Linux skip), along with all site/model checks. Next: a native one-bit self-modification
 experiment with model/native RAM and output evidence.
+Canonical-source commit `c189504` passed CI `38322149937` and deployment
+`38322506173`; its Pages mirror is `bf7b4c7`. The existing native release
+artifacts remained unchanged during that preset-source migration.
+The new self-modification experiment has two manually authored 80-byte sources
+differing only at writer byte 50, bit 5. One guest changes future operand byte 59
+from 41 to 61, jumps and emits a; the control preserves 41 and emits A. Model and
+QEMU match all general/configured-segment words, defined flags, code RAM, serial
+and the VGA word; source and read-only disk images stay unchanged. Model history
+restores exact code/output/RAM state. Native capture uses actual first VGA cells
+from two separate boots, with full screenshots and source/image/frame/GIF hashes.
+The reviewed manifest now has 56 targets and 88 artifacts; the gallery has 15
+entries. The CPU Lab source download and bit-diff writer pair share those literal
+files. Browser recording has 42 CPU frames and seven diff frames, explicitly
+labeled as simulation/inspection. All 77 Python tests pass locally (one expected
+macOS native-Linux skip), all site/model checks pass, and Chromium/Firefox/WebKit
+verify live code writes, fresh fetch, output and exact undo/replay. Native GIF
+self-checks verify visible/different frames and duration; hardware/SMP cache and
+performance claims remain outside scope. Next: accessibility and precise
+instruction-field explanations for changed code and source links.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -251,7 +270,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 20 | 1 | Carry-aware arithmetic examples and native/model differential checks | H | M | 04 | Medium | Complete: byte/word immediate ADC/SBB, 270,736 ripple cases, same 81-byte native/model program and eight native FLAGS samples |
 | 21 | 1 | ELF anatomy viewer: headers, entry point, segment permissions and payload bytes | H | H | Existing ELF packaging | Medium | Complete: bounded ELF64 scope; no imported-code execution |
 | 22 | 1 | Explain Linux syscall encodings in 64-bit inspection mode without host execution | H | H | 05 | Medium | Open |
-| 23 | 1 | Literal native self-modification experiment with controlled halt and RAM proof | H | M | Existing BIOS loader | Medium | Open |
+| 23 | 1 | Literal native self-modification experiment with controlled halt and RAM proof | H | M | Existing BIOS loader | Medium | Complete: two literal 80-byte cases, one input/live operand bit, native/model state and serial/VGA proof; source/image unchanged |
 | 24 | 1 | Program gallery presets derived from canonical .bits instead of duplicated source | H | M | Site packaging | Medium | Complete: all six CPU presets from canonical files, exact source/byte identity and loaded-source downloads |
 | 25 | 2 | Progressive interactive byte-order lesson: one byte, one word, one branch | H | H | Existing playground | Low | Open |
 | 26 | 2 | Guided stack/calling-convention lesson with return-address inspection | H | H | 02,10 | Low | Open |

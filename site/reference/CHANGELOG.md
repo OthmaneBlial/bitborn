@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Add an 80-byte native self-modifying program: one writer bit changes one future
+  MOV operand bit, turning A into a on COM1 and VGA. A separate literal control,
+  full model/native state checks, live code RAM and unchanged disk/source proof
+  accompany actual two-boot native captures. Extend the gallery, CPU Lab source
+  downloads and read-only bit-diff preset. Current reviewed artifacts grow to 88;
+  existing release assets remain untouched.
+
 - Move the remaining five CPU Lab programs from inline JS into annotated canonical
   `.bits` files without changing their bytes. Generate all six preset texts with
   source paths, validate build limits/file boundaries, and expose source downloads

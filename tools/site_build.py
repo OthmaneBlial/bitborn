@@ -52,6 +52,10 @@ def prepare():
         source = 'docs/instruction-encoding/fixtures/' + filename
         data, _ = read_bits(ROOT / source)
         encoding[name] = {'source': source, 'bytes': list(data), 'sha256': digest(data)}
+    for name, filename in (('selfModifyingControl', 'control.bits'), ('selfModifyingProgram', 'program.bits')):
+        source = 'examples/self-modifying/' + filename
+        data, _ = read_bits(ROOT / source)
+        encoding[name] = {'source': source, 'bytes': list(data), 'sha256': digest(data)}
     (ROOT / 'site/encoding-presets.mjs').write_text('export const encodingExamples = ' + json.dumps(encoding, indent=2) + ';\n')
     (ROOT / 'site/cpu-lab/memory-program.mjs').write_text('export const programSources = ' + json.dumps(program_sources, indent=2) + ';\nexport const memoryProgramSource = programSources["memory-mov"].source;\n')
     downloads = ROOT / "site/downloads"

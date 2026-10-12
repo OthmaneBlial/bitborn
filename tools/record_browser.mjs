@@ -66,7 +66,8 @@ try {
   await page.locator('#diff-example').selectOption('immediate');await page.locator('.diff-scope').scrollIntoViewIfNeeded();await capture('Explicit32-bit context classifies a five-byte MOV immediate on both sides; comparison executes neither program.');
   await page.locator('#diff-mode').selectOption('16');assert.match(await page.locator('#before-classification').textContent(),/Stopped at offset 3/);await capture('Switching to16-bit context consumes three bytes, then classification stops at the unsupported remaining byte without resynchronizing.');
   await page.locator('#diff-format').selectOption('hex');await page.locator('#diff-before').fill('F4');await page.locator('#diff-after').fill('F4 00');
-  assert.equal(await page.locator('#added-count').textContent(),'1');assert.equal(await page.locator('#flipped-count').textContent(),'0');await page.locator('.diff-layout').scrollIntoViewIfNeeded();await capture('An added zero byte is missing on the before side; it counts as one addition and zero flipped shared bits.');await encode();
+  assert.equal(await page.locator('#added-count').textContent(),'1');assert.equal(await page.locator('#flipped-count').textContent(),'0');await page.locator('.diff-layout').scrollIntoViewIfNeeded();await capture('An added zero byte is missing on the before side; it counts as one addition and zero flipped shared bits.');
+  await page.locator('#diff-example').selectOption('selfmod');assert.equal(await page.locator('#flipped-count').textContent(),'1');assert.equal(await page.locator('.offset-row').getAttribute('data-offset'),'50');await page.locator('.diff-layout').scrollIntoViewIfNeeded();await capture('The two literal self-modification programs differ only at source writer byte50, bit5: 41 becomes61. This workbench performs no execution; native effects are verified separately.');await encode();
 
   await begin('encoding');
   await page.goto(new URL('playground/',base).href);
@@ -199,7 +200,13 @@ try {
   for(let index=0;index<9;index++)await page.locator('#step').click();
   assert.equal(await page.locator('[data-register="BP"] .register-value').textContent(),'FFFF');await page.locator('#registers').scrollIntoViewIfNeeded();await capture('SBB propagates borrow across three zero words: BP:DI:SI becomes FFFF:FFFF:FFFF with outgoing CF1.');
   await page.locator('#run').click();await page.waitForFunction(()=>document.getElementById('run-state').textContent==='HALTED');
-  assert.equal(await page.locator('[data-register="AX"] .register-value').textContent(),'AB00');await page.locator('#memory-address').fill('02000');await page.locator('#memory-form').evaluate(form=>form.requestSubmit());await page.locator('#memory').scrollIntoViewIfNeeded();await capture('Byte ADC/SBB preserve AH as AB; both exact AB00 results are stored in model RAM, and the 81-byte program halts after32 steps.');await encode();
+  assert.equal(await page.locator('[data-register="AX"] .register-value').textContent(),'AB00');await page.locator('#memory-address').fill('02000');await page.locator('#memory-form').evaluate(form=>form.requestSubmit());await page.locator('#memory').scrollIntoViewIfNeeded();await capture('Byte ADC/SBB preserve AH as AB; both exact AB00 results are stored in model RAM, and the 81-byte program halts after32 steps.');
+  await page.locator('#binary-editor').fill(await readFile(resolve(root,'examples/self-modifying/program.bits'),'utf8'));await page.locator('#load-program').click();
+  for(let index=0;index<26;index++)await page.locator('#step').click();
+  await page.locator('#memory-address').fill('07C3B');await page.locator('#memory-form').evaluate(form=>form.requestSubmit());assert.equal(await page.locator('[data-address="07C3B"]').textContent(),'41');await page.locator('#memory').scrollIntoViewIfNeeded();await capture('Before the self-write, the future MOV operand at07C3B contains literal41, uppercase A. This is model RAM.');
+  await page.locator('#step').click();assert.equal(await page.locator('[data-address="07C3B"]').textContent(),'61');await page.locator('#memory').scrollIntoViewIfNeeded();await capture('The modeled byte store changes exactly bit5 of the future operand:41 becomes61, lowercase a.');
+  await page.locator('#step').click();await page.locator('#step').click();assert.equal(await page.locator('[data-register="AX"] .register-value').textContent(),'0061');await page.locator('#registers').scrollIntoViewIfNeeded();await capture('After JMP, live instruction fetch reads61 and loads AL with lowercase a rather than the unchanged source-file operand41.');
+  await page.locator('#run').click();await page.waitForFunction(()=>document.getElementById('run-state').textContent==='HALTED');assert.equal(await page.locator('#serial-output').textContent(),'a');await page.locator('#serial-output').scrollIntoViewIfNeeded();await capture('The39-step model emits a and writes61 0F to VGA RAM. Separate native QEMU boots verify the same program; this browser GIF is simulation.');await encode();
 
   await begin('challenges');
   await page.goto(new URL('challenges/?id=repair-boot',base).href);
@@ -222,6 +229,7 @@ try {
   const carrySource='docs/instruction-encoding/fixtures/carry-borrow.bits';
   metadata.sourceSha256[carrySource]=createHash('sha256').update(await readFile(resolve(root,carrySource))).digest('hex');
   for(const preset of presets)metadata.sourceSha256[preset.sourcePath]=createHash('sha256').update(await readFile(resolve(root,preset.sourcePath))).digest('hex');
+  for(const name of ['program','control']) {const source=`examples/self-modifying/${name}.bits`;metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');}
   await writeFile(resolve(root,'assets/browser-demo-recording.json'),JSON.stringify(metadata,null,2)+'\n');
   console.log('Recorded six genuine browser GIFs with frame/source hashes and explicit inspection/simulation provenance.');
 } finally {await browser?.close();await new Promise(resolve=>server.close(resolve));}

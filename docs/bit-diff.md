@@ -56,3 +56,9 @@ immutable inputs. Browser checks exercise actual selectors, field/byte roles,
 keyboard rows, binary/hex conversion, preserved invalid drafts, safe text,
 512-byte boundaries and 320px layouts. Preset bytes come from canonical `.bits`
 fixtures through generated metadata, not from assembling instruction names.
+
+The self-writing-letter preset compares the two literal 80-byte native
+[self-modification sources](../examples/self-modifying/README.md). Only writer
+byte 50, bit 5 changes from 41 to 61. The future operand at byte 59 is identical
+in both source files; its runtime change is proven separately by the model/QEMU
+experiment. The diff workbench does not execute or infer that write.

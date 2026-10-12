@@ -31,7 +31,7 @@ for (const route of routes) {
 assert.equal(new Set(titles).size,routes.length,'unique route titles');
 assert.equal(new Set(descriptions).size,routes.length,'unique route descriptions');
 const examples = readFileSync(resolve(root,'site/examples/index.html'),'utf8');
-assert.equal([...examples.matchAll(/data-example="/g)].length,14);
+assert.equal([...examples.matchAll(/data-example="/g)].length,15);
 const targets = [
   ...JSON.parse(readFileSync(resolve(root,'targets.json'),'utf8')),
   ...JSON.parse(readFileSync(resolve(root,'examples/shell/targets.json'),'utf8')),
@@ -75,4 +75,4 @@ for(const language of languages) {
 }
 assert.match(progress.updated,/^\d{4}-\d{2}-\d{2}$/);assert.ok(progress.milestones.length > 0);
 assert.ok(progress.milestones.every(item => typeof item.milestone === 'string' && typeof item.progress === 'string'));
-console.log(`route checks passed: ${routes.length} portable routes, unique metadata, local source/tutorial/download links, fourteen real example sizes, generated repository progress data`);
+console.log(`route checks passed: ${routes.length} portable routes, unique metadata, local source/tutorial/download links, fifteen real example sizes, generated repository progress data`);

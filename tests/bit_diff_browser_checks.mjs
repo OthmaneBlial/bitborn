@@ -11,6 +11,12 @@ export async function checkBitDiff(page,base) {
   assert.match(await page.locator('#bit-roles').textContent(),/This byte is unchanged/);assert.match(await page.locator('#bit-roles').textContent(),/Destination register → Source register/);
   await page.keyboard.press('Home');assert.equal(await page.evaluate(()=>document.activeElement.dataset.offset),'0');
   assert.equal(await page.locator('.offset-row[tabindex="0"]').count(),1);
+  await page.locator('#diff-example').selectOption('selfmod');
+  assert.equal(await page.locator('#flipped-count').textContent(),'1');assert.equal(await page.locator('#reinterpreted-count').textContent(),'0');
+  assert.equal(await page.locator('.offset-row').count(),1);assert.equal(await page.locator('.offset-row').getAttribute('data-offset'),'50');
+  assert.match(await page.locator('#before-classification').textContent(),/80 bytes/);
+  assert.equal(await page.locator('#before-source').getAttribute('href'),'../reference/examples/self-modifying/control.bits');
+  assert.equal(await page.locator('#after-source').getAttribute('href'),'../reference/examples/self-modifying/program.bits');
   await page.locator('#diff-example').selectOption('signed');
   assert.match(await page.locator('#before-classification').textContent(),/MOV AX, \[BP-2\]/);
   assert.match(await page.locator('#after-classification').textContent(),/MOV AX, \[BP\+126\]/);

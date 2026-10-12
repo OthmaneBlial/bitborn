@@ -1,0 +1,40 @@
+11111010 # instruction | CLI | Control experiment: the same flow writes the original uppercase operand.
+11101010 00000110 01111100 00000000 00000000 # instruction | JMP 0000:7C06 | Normalize CS.
+10111000 00000011 00000000 # instruction | MOV AX,0003 | Standard 80-column text mode.
+11001101 00010000 # instruction | INT 10 | Clear the native text display.
+00110001 11000000 # instruction | XOR AX,AX | Prepare segment zero.
+10001110 11011000 # instruction | MOV DS,AX | Data segment zero.
+10001110 11010000 # instruction | MOV SS,AX | Stack segment zero.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Initialize SP.
+11111100 # instruction | CLD | Forward string stores.
+00110001 11001001 # instruction | XOR CX,CX | Define CX.
+00110001 11110110 # instruction | XOR SI,SI | Define SI.
+00110001 11101101 # instruction | XOR BP,BP | Define BP.
+10111010 11111011 00000011 # instruction | MOV DX,03FB | UART line-control register.
+10110000 10000000 # instruction | MOV AL,80 | Divisor latch enabled.
+11101110 # instruction | OUT DX,AL | Set DLAB.
+10111010 11111000 00000011 # instruction | MOV DX,03F8 | Divisor-low register.
+10110000 00000001 # instruction | MOV AL,01 | Divisor low byte one.
+11101110 # instruction | OUT DX,AL | Store low divisor.
+01000010 # instruction | INC DX | Divisor-high register.
+00110001 11000000 # instruction | XOR AX,AX | Divisor high byte zero.
+11101110 # instruction | OUT DX,AL | Store high divisor.
+10111010 11111011 00000011 # instruction | MOV DX,03FB | Return to line control.
+10110000 00000011 # instruction | MOV AL,03 | Eight data bits, no parity, one stop bit; clear DLAB.
+11101110 # instruction | OUT DX,AL | Configure character output.
+10110000 01000001 # instruction | MOV AL,41 | The only executable-byte difference from program.bits: writer bit 5 stays clear.
+10111011 00111011 01111100 # instruction | MOV BX,7C3B | Target the same literal MOV operand at source byte 59.
+10001000 00000111 # instruction | MOV [BX],AL | Store 41 over the existing 41; no code byte changes.
+11101011 00000000 # instruction | JMP +0 | Transfer control after the store.
+10110000 01000001 # instruction | MOV AL,41 | Live fetch still loads uppercase A.
+10111010 11111000 00000011 # instruction | MOV DX,03F8 | Character output register.
+11101110 # instruction | OUT DX,AL | Emit uppercase A.
+01010000 # instruction | PUSH AX | Preserve the character.
+10111000 00000000 10111000 # instruction | MOV AX,B800 | Color text framebuffer segment.
+10001110 11000000 # instruction | MOV ES,AX | Select physical B8000.
+01011000 # instruction | POP AX | Recover A.
+10110100 00001111 # instruction | MOV AH,0F | Bright-white-on-black attribute.
+10111111 00000000 00000000 # instruction | MOV DI,0000 | First text cell.
+10101011 # instruction | STOSW | Store 41 0F in VGA RAM.
+11110100 # instruction | HLT | Same halted next IP 7C4E.
+11101011 11111101 # instruction | JMP -3 | Return to HLT if resumed.

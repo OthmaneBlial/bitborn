@@ -1,0 +1,70 @@
+{
+  "kind": "Actual QEMU/SeaBIOS VGA cells from two separate curated boot runs; not native rewind or browser simulation",
+  "qemu": "QEMU emulator version 11.1.1",
+  "alterations": "First VGA text cell cropped, nearest-neighbor scaled to 288x512, then GIF palette encoding; no synthetic glyphs or overlays",
+  "presentationSecondsPerFrame": 2,
+  "writerSourceOffset": 50,
+  "runtimeOperandOffset": 59,
+  "changedBit": 5,
+  "captures": [
+    {
+      "source": "examples/self-modifying/control.bits",
+      "sourceSha256": "94376a7c9427fa7800e0f36e998966ba86f167df7377342207976b84f8b00f86",
+      "payloadSha256": "e64ced8a16771fce2f60aab5032857d452e79c265f79dffd72a967e2d98fe99a",
+      "imageSha256": "86bff528c76fb86aea3f5b5560320c88c548e43aa129809c973c7a2a94916b5d",
+      "serial": "A",
+      "vga": [
+        65,
+        15
+      ],
+      "originalOperand": 65,
+      "liveOperand": 65,
+      "screenshot": "assets/self-modifying-control.png",
+      "screenshotSha256": "1a614260e12324e84e0e5f7136190afe8de68f11b639980f6a8a82328e211874",
+      "ppmSha256": "440fa4e3a80a9cbdf7477c782c47036d3c1b29c20cb644742bb72e0626b7829e",
+      "dimensions": [
+        720,
+        400
+      ],
+      "crop": [
+        0,
+        0,
+        9,
+        16
+      ],
+      "frameSha256": "b97c2d2a4fb50cc449a84e0df512d893380eb025fc0f759f6b6e82092437d4bf"
+    },
+    {
+      "source": "examples/self-modifying/program.bits",
+      "sourceSha256": "4c1a4a976a31f8d9b9ef2d87afce4d1b0515fcd41496e6a224e86235a77a5f67",
+      "payloadSha256": "3525e89a45fa14f092153f1a337b82af0e51a2a8b8f0cc78d5dd74c9b29f16dc",
+      "imageSha256": "881b31b582012e012a28bd1687c35f5e66b6c88448f83313d875aae56c8d4a94",
+      "serial": "a",
+      "vga": [
+        97,
+        15
+      ],
+      "originalOperand": 65,
+      "liveOperand": 97,
+      "screenshot": "assets/self-modifying-program.png",
+      "screenshotSha256": "e91553e88c8f2e8c2d2e49edff37da88b1b36f747e6fc2c1363c0162d67943b8",
+      "ppmSha256": "c5f437a2b0f56cdb9a810ad79e327a54c2a9206d66dafe799567e94b8634e7f8",
+      "dimensions": [
+        720,
+        400
+      ],
+      "crop": [
+        0,
+        0,
+        9,
+        16
+      ],
+      "frameSha256": "76805eac10c0be8916c440ddedb18d0a2000f8f54991b1b9d56cebf44c1daf12"
+    }
+  ],
+  "gif": "assets/self-modifying-demo.gif",
+  "gifSha256": "25f9e0cac7c5209564c24bba97738882e315e37ed685bf7e02bc40d5fb4606f7",
+  "toolSha256": "abc92541f95f39c6a29047313c158f97c937d1adfcb3e692a18c27df6ee83c28",
+  "harnessSha256": "86308121d5afa2eaa92a88c0b4b2f24686bbf2b177c112965b4fc19c5eb99fa8",
+  "reproduce": "make build && python3 tools/record_self_modifying.py"
+}
