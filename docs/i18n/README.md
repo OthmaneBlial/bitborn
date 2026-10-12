@@ -20,3 +20,10 @@ them rather than duplicating volatile counts in each language. Preserve commands
 literal instruction bytes, support boundaries and the distinction between the
 teaching model and actual QEMU/native evidence. Arabic prose uses RTL containers;
 code blocks keep their LTR order.
+
+The website renders these files at `intro/<language>/` during `make site-test`.
+The small renderer supports H1/H2 headings, paragraphs, inline code, links and
+`text`/`sh` fenced blocks. It escapes code and rejects unsupported HTML; Arabic
+direction containers are represented by the page's `dir` and explicit LTR code.
+Language pages include canonical/alternate metadata and local source-document
+links. Keep the format simple rather than adding a Markdown dependency.

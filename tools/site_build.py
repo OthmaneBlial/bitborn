@@ -6,6 +6,7 @@ import re
 import shutil
 from pathlib import Path
 from bitborn import ROOT, artifact_paths, read_bits, digest, targets, verify
+from introduction_pages import build_introductions
 
 
 def prepare():
@@ -52,6 +53,7 @@ def prepare():
     for asset in (ROOT / "assets").iterdir():
         shutil.copyfile(asset, ROOT / "site/assets" / asset.name)
     shutil.copytree(ROOT / "assets", reference / "assets", dirs_exist_ok=True)
+    print(f"Localized introductions: {build_introductions(ROOT)} source-generated pages")
     print(f"Portable site: {len(checksums)} verified build artifacts, canonical sources, docs and assets")
 
 

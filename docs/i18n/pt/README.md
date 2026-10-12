@@ -50,7 +50,7 @@ Playwright; consulte o guia de contribuição.
 O repositório inclui programas BIOS, experimentos de teclado/VGA/disco, um shell
 interativo, um experimento separado de interrupção em modo protegido e exemplos
 ELF para Linux. O navegador usa um modelo educativo limitado a 1 MiB de memória
-e 4,096 passos, não uma CPU ou BIOS completa. Programas importados são interpretados,
+e 4.096 passos, não uma CPU ou BIOS completa. Programas importados são interpretados,
 nunca executados como código nativo do host. O suporte a hardware físico, UEFI ou
 um sistema de produção não foi comprovado. Use emuladores descartáveis para os
 experimentos nativos.

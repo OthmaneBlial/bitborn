@@ -31,8 +31,11 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 - Pushed introductions: `8d73fa5`; exact-commit CI and Pages passed. Completed
   direct timeline selection, independent net-RAM/state oracles and keyboard
   controls in Chrome/Firefox/WebKit, with a genuine Home/End restoration capture.
-- Next: localized introductory website pages and
-  architecture-aware instruction inspection.
+- Pushed timeline: `634f036`; exact-commit CI and Pages passed. Completed eight
+  source-generated introduction routes with metadata and three-browser desktop,
+  320px, keyboard and Arabic RTL/LTR-code checks. Documentation copies are checked
+  byte-for-byte, including translations and their freshness manifest.
+- Next: reproducible model benchmarks and architecture-aware instruction inspection.
 - Risks: browser behavior is modeled, not native x86. Hardware, paging and general
   interrupt support require separate native targets and evidence.
 
@@ -81,9 +84,9 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 35 | 2 | Japanese README/introduction and working command/link checks | H | H | 31 | Medium | Complete |
 | 36 | 2 | Portuguese README/introduction and working command/link checks | H | H | 31 | Medium | Complete |
 | 37 | 2 | German README/introduction and working command/link checks | H | H | 31 | Medium | Complete |
-| 38 | 2 | Arabic README/introduction; preserve left-to-right code and verify RTL layout | H | M | 31 | Medium | In progress: docs added; browser layout pending |
+| 38 | 2 | Arabic README/introduction; preserve left-to-right code and verify RTL layout | H | M | 31 | Medium | Complete |
 | 39 | 0 | Translation freshness manifest with explicit source revisions and consistency checks | H | H | 31–38 | Medium | Complete |
-| 40 | 2 | Localized introductory site routes with lang/dir/canonical/hreflang metadata | H | M | 31–39 | Medium | Open |
+| 40 | 2 | Localized introductory site routes with lang/dir/canonical/hreflang metadata | H | M | 31–39 | Medium | Complete |
 | 41 | 2 | Print-friendly lessons with readable code and source attribution | M | H | 25–27 | Low | Open |
 | 42 | 0 | Keyboard accessibility regression for timeline, imports, controls and error focus | H | H | 12 | Low | Open |
 | 43 | 0 | Contrast and narrow-screen checks for changed-bit and flag indicators | H | H | Existing CSS | Low | Open |
@@ -91,7 +94,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 45 | 2 | CODE_OF_CONDUCT with real, usable reporting paths | H | H | Maintainer/profile evidence | Low | Complete |
 | 46 | 0 | SECURITY policy with scoped supported versions and verified private reporting | H | H | GitHub repository settings | Medium | Complete |
 | 47 | 2 | Contributor source map and focused per-component development commands | H | H | Existing CONTRIBUTING | Low | Complete |
-| 48 | 0 | Verify every generated documentation/source copy, including translation and trace fixtures | H | H | Site build | Low | Open |
+| 48 | 0 | Verify every generated documentation/source copy, including translation and trace fixtures | H | H | Site build | Low | Complete |
 | 49 | 2 | Genuine Time Machine capture with source/frame provenance | H | H | 02,12 | Low | Complete |
 | 50 | 0 | Reproducible host-model benchmark; distinguish rendering, interpretation and native execution | H | M | 01,02 | Medium | Open |
 | 51 | 0 | Release-provenance manifest tying reviewed source, packaged output and commit | H | H | Existing releases | Medium | Open |

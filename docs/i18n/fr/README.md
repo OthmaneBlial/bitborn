@@ -50,7 +50,7 @@ guide de contribution.
 
 Le dépôt contient des programmes BIOS, des expériences clavier/VGA/disque, un shell
 interactif, une expérience distincte d'interruption en mode protégé et des exemples
-ELF Linux. Le navigateur utilise un modèle pédagogique limité à 1 MiB et 4,096 pas,
+ELF Linux. Le navigateur utilise un modèle pédagogique limité à 1 MiB et 4 096 pas,
 pas un CPU ou un BIOS complet. Les programmes importés sont interprétés, jamais
 exécutés comme code natif de l'hôte. La compatibilité avec le matériel physique,
 UEFI ou un système de production n'est pas établie. Utilisez des émulateurs jetables

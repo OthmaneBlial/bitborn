@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bitborn — برمجيات من البتّات الخام</title><meta name="description" content="اكتب البايتات الفعلية لبرنامج x86 باستخدام الأصفار والآحاد. تُكتب تعليمات Bitborn يدويًا في ملفات .bits؛ فلا يختار مُجمِّع أو مُصرِّف رموز العمليات أو المعاملات أو إزاحات القفز. أسماء التعليمات في التعليقات تشرح البايتات ولا تولّدها. تحزم أ">
+<link rel="canonical" href="https://othmaneblial.github.io/bitborn/intro/ar/"><link rel="alternate" hreflang="en" href="https://othmaneblial.github.io/bitborn/intro/en/">
+<link rel="alternate" hreflang="zh-CN" href="https://othmaneblial.github.io/bitborn/intro/zh-CN/">
+<link rel="alternate" hreflang="es" href="https://othmaneblial.github.io/bitborn/intro/es/">
+<link rel="alternate" hreflang="fr" href="https://othmaneblial.github.io/bitborn/intro/fr/">
+<link rel="alternate" hreflang="ja" href="https://othmaneblial.github.io/bitborn/intro/ja/">
+<link rel="alternate" hreflang="pt" href="https://othmaneblial.github.io/bitborn/intro/pt/">
+<link rel="alternate" hreflang="de" href="https://othmaneblial.github.io/bitborn/intro/de/">
+<link rel="alternate" hreflang="ar" href="https://othmaneblial.github.io/bitborn/intro/ar/">
+<link rel="alternate" hreflang="x-default" href="https://othmaneblial.github.io/bitborn/intro/en/">
+<meta property="og:type" content="article"><meta property="og:title" content="bitborn — برمجيات من البتّات الخام"><meta property="og:description" content="اكتب البايتات الفعلية لبرنامج x86 باستخدام الأصفار والآحاد. تُكتب تعليمات Bitborn يدويًا في ملفات .bits؛ فلا يختار مُجمِّع أو مُصرِّف رموز العمليات أو المعاملات أو إزاحات القفز. أسماء التعليمات في التعليقات تشرح البايتات ولا تولّدها. تحزم أ"><meta property="og:url" content="https://othmaneblial.github.io/bitborn/intro/ar/"><meta property="og:image" content="https://othmaneblial.github.io/bitborn/assets/social-preview.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#080a08">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../intro.css">
+</head>
+<body>
+<a class="skip-link" href="#main">انتقل إلى المحتوى</a>
+<header class="intro-header"><a class="brand" href="../../" dir="ltr">bitborn ↗</a><nav aria-label="Languages"><a href="../en/" lang="en" dir="ltr">English</a>
+<a href="../zh-CN/" lang="zh-CN" dir="ltr">简体中文</a>
+<a href="../es/" lang="es" dir="ltr">Español</a>
+<a href="../fr/" lang="fr" dir="ltr">Français</a>
+<a href="../ja/" lang="ja" dir="ltr">日本語</a>
+<a href="../pt/" lang="pt" dir="ltr">Português</a>
+<a href="../de/" lang="de" dir="ltr">Deutsch</a>
+<a href="../ar/" lang="ar" dir="rtl" aria-current="page">العربية</a></nav></header>
+<main class="intro-article" id="main" tabindex="-1"><h1>bitborn — برمجيات من البتّات الخام</h1>
+<p><a href="https://othmaneblial.github.io/bitborn/">جرّب الموقع</a> · <a href="../../reference/README.md">README الكامل</a> · <a href="../../reference/docs/i18n/README.md">اللغات</a></p>
+<p>اكتب البايتات الفعلية لبرنامج x86 باستخدام الأصفار والآحاد. تُكتب تعليمات Bitborn يدويًا في ملفات <code dir="ltr">.bits</code>؛ فلا يختار مُجمِّع أو مُصرِّف رموز العمليات أو المعاملات أو إزاحات القفز. أسماء التعليمات في التعليقات تشرح البايتات ولا تولّدها. تحزم أدوات Python البايتات وتضيف ترويسات الملفات أو بنية القطاعات، ويشغّل JavaScript الموقع التعليمي.</p>
+<h2>اقرأ تعليمتك الأولى</h2>
+<pre dir="ltr"><code>10111000 00101010 00000000</code></pre>
+<p>عندما يكون حجم المعامل 16 بتًا، تعني هذه البايتات الثلاثة <code dir="ltr">MOV AX,42</code>. يختار <code dir="ltr">B8</code> المسجّل، وتمثّل <code dir="ltr">2A 00</code> العدد 42 بدءًا بالبايت الأقل أهمية. وضع التنفيذ مهم: مع حجم معامل يبلغ 32 بتًا، يحتاج <code dir="ltr">B8</code> إلى أربعة بايتات للقيمة الفورية بدلًا من اثنين. ينفّذ مختبر المعالج في المتصفح مجموعة موثّقة محدودة من تعليمات 16 بتًا فقط.</p>
+<h2>جرّبه بنفسك</h2>
+<p>افتح <a href="https://othmaneblial.github.io/bitborn/cpu-lab/">مختبر المعالج</a> لتنفيذ البرنامج خطوة بخطوة وفحص المسجّلات والأعلام والمكدّس والذاكرة، أو لاستعادة الحالات المسجّلة باستخدام Back وForward. يتيح <a href="https://othmaneblial.github.io/bitborn/boot-builder/">محرّر قطاع الإقلاع</a> تعديل صورة كاملة بحجم 512 بايتًا وتصديرها. تعلّمك التحديات تعديل البايتات الفعلية، وتبقى بيانات تقدّمك في متصفحك.</p>
+<p>لبناء برامج الإقلاع الحقيقية واختبارها، تحتاج إلى Python 3.10+ وMake وQEMU. على macOS استخدم <code dir="ltr">brew install qemu</code>؛ وعلى Ubuntu استخدم <code dir="ltr">sudo apt-get install python3 make qemu-system-x86</code>.</p>
+<pre dir="ltr"><code>git clone https://github.com/OthmaneBlial/bitborn.git
+cd bitborn
+make test
+make run</code></pre>
+<p>يتحقق <code dir="ltr">make test</code> من البايتات المراجَعة وسلوك الآلة الافتراضية في QEMU دون واجهة رسومية. ويفتح <code dir="ltr">make run</code> صورة إقلاع BIOS. تعمل أمثلة BIOS في QEMU على Apple Silicon، أما أمثلة ELF الأصلية فتحتاج إلى Linux x86-64. تحتاج اختبارات تطوير المتصفح أيضًا إلى Node.js وPlaywright؛ راجع دليل المساهمة.</p>
+<h2>النطاق والتقدّم</h2>
+<p>يضم المستودع برامج BIOS وتجارب لوحة المفاتيح وVGA والقرص، وصدفة تفاعلية، وتجربة منفصلة للمقاطعات في الوضع المحمي، وأمثلة ELF لنظام Linux. المتصفح نموذج تعليمي محدود بذاكرة 1 MiB وبحدّ 4096 خطوة، وليس معالجًا أو BIOS كاملًا. تُفسَّر البرامج المستوردة ولا تُنفَّذ بوصفها شيفرة أصلية على الجهاز المضيف. لم يُثبت دعم الأجهزة الفعلية أو UEFI أو أنظمة التشغيل المخصّصة للإنتاج. استخدم بيئات محاكاة يمكن التخلص منها لإجراء التجارب الأصلية.</p>
+<p><a href="../../reference/ROADMAP.md">خارطة الطريق والأدلة</a> · <a href="https://othmaneblial.github.io/bitborn/roadmap/">تقدّم الموقع</a> · <a href="../../reference/CHANGELOG.md">سجلّ التغييرات</a></p>
+<p>ابدأ بـ<a href="../../reference/docs/tutorials/from-bits-to-boot.md">الدليل التمهيدي</a> و<a href="../../reference/docs/architecture/README.md">دليل البنية</a>. التزم بـ<a href="../../reference/CONTRIBUTING.md">قواعد المساهمة</a> و<a href="../../reference/CODE_OF_CONDUCT.md">مدوّنة السلوك</a>. أبلغ عن الثغرات <a href="../../reference/SECURITY.md">بشكل خاص</a>. تستخدم الشيفرة والوثائق <a href="../../reference/LICENSE">رخصة MIT</a>. المقدّمة الإنجليزية هي مرجع الترجمة؛ وما زالت الأدلة التقنية التفصيلية باللغة الإنجليزية.</p></main>
+<footer class="intro-footer"><a href="../../reference/docs/i18n/ar/README.md">العربية · .md</a><a href="https://github.com/OthmaneBlial/bitborn">GitHub ↗</a></footer>
+</body>
+</html>

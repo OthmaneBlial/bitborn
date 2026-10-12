@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bitborn — du logiciel à partir de bits bruts</title><meta name="description" content="Écrivez les octets réels d&#x27;un programme x86 avec des 0 et des 1. Les instructions de Bitborn sont écrites à la main dans des fichiers .bits : aucun assembleur ni compilateur ne choisit les opcodes, opérandes ou déplacements de saut. Les nom">
+<link rel="canonical" href="https://othmaneblial.github.io/bitborn/intro/fr/"><link rel="alternate" hreflang="en" href="https://othmaneblial.github.io/bitborn/intro/en/">
+<link rel="alternate" hreflang="zh-CN" href="https://othmaneblial.github.io/bitborn/intro/zh-CN/">
+<link rel="alternate" hreflang="es" href="https://othmaneblial.github.io/bitborn/intro/es/">
+<link rel="alternate" hreflang="fr" href="https://othmaneblial.github.io/bitborn/intro/fr/">
+<link rel="alternate" hreflang="ja" href="https://othmaneblial.github.io/bitborn/intro/ja/">
+<link rel="alternate" hreflang="pt" href="https://othmaneblial.github.io/bitborn/intro/pt/">
+<link rel="alternate" hreflang="de" href="https://othmaneblial.github.io/bitborn/intro/de/">
+<link rel="alternate" hreflang="ar" href="https://othmaneblial.github.io/bitborn/intro/ar/">
+<link rel="alternate" hreflang="x-default" href="https://othmaneblial.github.io/bitborn/intro/en/">
+<meta property="og:type" content="article"><meta property="og:title" content="bitborn — du logiciel à partir de bits bruts"><meta property="og:description" content="Écrivez les octets réels d&#x27;un programme x86 avec des 0 et des 1. Les instructions de Bitborn sont écrites à la main dans des fichiers .bits : aucun assembleur ni compilateur ne choisit les opcodes, opérandes ou déplacements de saut. Les nom"><meta property="og:url" content="https://othmaneblial.github.io/bitborn/intro/fr/"><meta property="og:image" content="https://othmaneblial.github.io/bitborn/assets/social-preview.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#080a08">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../intro.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Aller au contenu</a>
+<header class="intro-header"><a class="brand" href="../../" dir="ltr">bitborn ↗</a><nav aria-label="Languages"><a href="../en/" lang="en" dir="ltr">English</a>
+<a href="../zh-CN/" lang="zh-CN" dir="ltr">简体中文</a>
+<a href="../es/" lang="es" dir="ltr">Español</a>
+<a href="../fr/" lang="fr" dir="ltr" aria-current="page">Français</a>
+<a href="../ja/" lang="ja" dir="ltr">日本語</a>
+<a href="../pt/" lang="pt" dir="ltr">Português</a>
+<a href="../de/" lang="de" dir="ltr">Deutsch</a>
+<a href="../ar/" lang="ar" dir="rtl">العربية</a></nav></header>
+<main class="intro-article" id="main" tabindex="-1"><h1>bitborn — du logiciel à partir de bits bruts</h1>
+<p><a href="https://othmaneblial.github.io/bitborn/">Essayer le site</a> · <a href="../../reference/README.md">README complet</a> · <a href="../../reference/docs/i18n/README.md">Langues</a></p>
+<p>Écrivez les octets réels d&#x27;un programme x86 avec des 0 et des 1. Les instructions de Bitborn sont écrites à la main dans des fichiers <code dir="ltr">.bits</code> : aucun assembleur ni compilateur ne choisit les opcodes, opérandes ou déplacements de saut. Les noms d&#x27;instructions dans les commentaires expliquent les octets sans les générer. Python empaquette les octets et ajoute les en-têtes ou la structure des secteurs. JavaScript fait fonctionner le site pédagogique.</p>
+<h2>Lire votre première instruction</h2>
+<pre dir="ltr"><code>10111000 00101010 00000000</code></pre>
+<p>Avec des opérandes de 16 bits, ces trois octets signifient <code dir="ltr">MOV AX,42</code>. <code dir="ltr">B8</code> sélectionne le registre ; <code dir="ltr">2A 00</code> représente 42, octet de poids faible d&#x27;abord. Le mode d&#x27;exécution compte : avec des opérandes de 32 bits, <code dir="ltr">B8</code> attend quatre octets de valeur immédiate au lieu de deux. Le CPU Lab du navigateur exécute uniquement son sous-ensemble documenté de 16 bits.</p>
+<h2>Essayer</h2>
+<p>Le <a href="https://othmaneblial.github.io/bitborn/cpu-lab/">CPU Lab</a> permet d&#x27;avancer pas à pas, d&#x27;inspecter registres, indicateurs, pile et mémoire, puis de restaurer les états enregistrés avec Back et Forward. Le <a href="https://othmaneblial.github.io/bitborn/boot-builder/">constructeur de secteur d&#x27;amorçage</a> permet de modifier et d&#x27;exporter une image complète de 512 octets. Les défis enseignent la modification des octets ; votre progression reste dans le navigateur.</p>
+<p>Pour construire et tester les vrais programmes d&#x27;amorçage, installez Python 3.10+, Make et QEMU. Sur macOS : <code dir="ltr">brew install qemu</code>. Sur Ubuntu : <code dir="ltr">sudo apt-get install python3 make qemu-system-x86</code>.</p>
+<pre dir="ltr"><code>git clone https://github.com/OthmaneBlial/bitborn.git
+cd bitborn
+make test
+make run</code></pre>
+<p><code dir="ltr">make test</code> vérifie les octets relus et le comportement de la machine virtuelle dans QEMU sans interface graphique. <code dir="ltr">make run</code> ouvre l&#x27;image BIOS. Les exemples BIOS fonctionnent dans QEMU sur Apple Silicon ; les ELF natifs nécessitent Linux x86-64. Les tests du navigateur demandent aussi Node.js et Playwright : voir le guide de contribution.</p>
+<h2>Périmètre et progression</h2>
+<p>Le dépôt contient des programmes BIOS, des expériences clavier/VGA/disque, un shell interactif, une expérience distincte d&#x27;interruption en mode protégé et des exemples ELF Linux. Le navigateur utilise un modèle pédagogique limité à 1 MiB et 4 096 pas, pas un CPU ou un BIOS complet. Les programmes importés sont interprétés, jamais exécutés comme code natif de l&#x27;hôte. La compatibilité avec le matériel physique, UEFI ou un système de production n&#x27;est pas établie. Utilisez des émulateurs jetables pour les expériences natives.</p>
+<p><a href="../../reference/ROADMAP.md">Feuille de route et preuves</a> · <a href="https://othmaneblial.github.io/bitborn/roadmap/">Progression du site</a> · <a href="../../reference/CHANGELOG.md">Journal des changements</a></p>
+<p>Commencez par le <a href="../../reference/docs/tutorials/from-bits-to-boot.md">tutoriel</a> et le <a href="../../reference/docs/architecture/README.md">guide d&#x27;architecture</a>. Respectez les <a href="../../reference/CONTRIBUTING.md">règles de contribution</a> et le <a href="../../reference/CODE_OF_CONDUCT.md">code de conduite</a>. Signalez les vulnérabilités <a href="../../reference/SECURITY.md">en privé</a>. Code et documentation sont sous <a href="../../reference/LICENSE">licence MIT</a>. L&#x27;introduction anglaise sert de source à cette traduction ; les guides techniques détaillés restent en anglais.</p></main>
+<footer class="intro-footer"><a href="../../reference/docs/i18n/fr/README.md">Français · .md</a><a href="https://github.com/OthmaneBlial/bitborn">GitHub ↗</a></footer>
+</body>
+</html>

@@ -106,6 +106,10 @@
       "progress": "\u2705 Shared literal example/quickstart and English-source freshness checks; detailed guides remain in English"
     },
     {
+      "milestone": "Localized `.io` introductions",
+      "progress": "\u2705 Source-generated pages, language links/SEO metadata, mobile and keyboard checks; Arabic prose and LTR code verified in three browsers"
+    },
+    {
       "milestone": "v0.2.0 release",
       "progress": "\u2705 Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified"
     },

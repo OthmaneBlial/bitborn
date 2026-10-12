@@ -20,6 +20,7 @@ Introductions: [English](docs/i18n/en/README.md) · [简体中文](docs/i18n/zh-
 [日本語](docs/i18n/ja/README.md) · [Português](docs/i18n/pt/README.md) ·
 [Deutsch](docs/i18n/de/README.md) · [العربية](docs/i18n/ar/README.md).
 These cover the same example, quickstart and boundaries; detailed guides remain in English.
+Read them as [localized website pages](https://othmaneblial.github.io/bitborn/intro/en/).
 
 What if you could build a real bootable computer program without writing a
 single instruction in a programming language?
@@ -87,6 +88,7 @@ for exact evidence and remaining gates.
 | Arithmetic flag properties | ✅ Independent ripple-carry oracle, seeded 16-bit arithmetic and exhaustive 8-bit TEST masks; IF/DF and INC/DEC carry preserved |
 | Contributor policies and source map | ✅ Conduct contact and private GitHub vulnerability reporting available; focused setup/check commands documented |
 | Introductions in eight languages | ✅ Shared literal example/quickstart and English-source freshness checks; detailed guides remain in English |
+| Localized `.io` introductions | ✅ Source-generated pages, language links/SEO metadata, mobile and keyboard checks; Arabic prose and LTR code verified in three browsers |
 | [v0.2.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0) | ✅ Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified |
 | Paging, exception/hardware interrupt handling and physical hardware | Future research; no working claim |
 

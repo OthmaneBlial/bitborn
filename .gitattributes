@@ -1,0 +1,2 @@
+# Translation revision hashes use canonical UTF-8 files with LF line endings.
+docs/i18n/** text eol=lf

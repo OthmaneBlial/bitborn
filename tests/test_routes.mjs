@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {readFileSync,existsSync,statSync} from 'node:fs';
+import {readFileSync,existsSync,statSync,readdirSync} from 'node:fs';
 import {dirname,resolve,join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
@@ -45,6 +45,33 @@ for (const [,slug,size] of examples.matchAll(/data-example="([^"]+)"[^]*?<span>(
 const progress = JSON.parse(readFileSync(resolve(root,'site/progress.json'),'utf8'));
 for (const name of ['README.md','ROADMAP.md','CONTRIBUTING.md','CODE_OF_CONDUCT.md','SECURITY.md','CHANGELOG.md','LICENSE','targets.json','SHOWCASE.md','GOOD_FIRST_ISSUES.md']) {
   assert.deepEqual(readFileSync(resolve(root,name)),readFileSync(resolve(root,'site/reference',name)),`${name} published reference matches canonical source`);
+}
+function checkCopies(directory) {
+  for(const entry of readdirSync(resolve(root,directory),{withFileTypes:true})) {
+    const source=join(directory,entry.name);
+    if(entry.isDirectory())checkCopies(source);
+    else assert.deepEqual(readFileSync(resolve(root,source)),readFileSync(resolve(root,'site/reference',source)),`${source} published reference matches canonical source`);
+  }
+}
+checkCopies('docs');
+for(const folder of new Set(['boot','challenges','assets','examples/boot-sector',...targets.filter(target=>target.source.startsWith('examples/')).map(target=>dirname(target.source))]))checkCopies(folder);
+assert.deepEqual(readFileSync(resolve(root,'examples/README.md')),readFileSync(resolve(root,'site/reference/examples/README.md')));
+for(const name of readdirSync(resolve(root,'assets')))assert.deepEqual(readFileSync(resolve(root,'assets',name)),readFileSync(resolve(root,'site/assets',name)),`${name} live asset copy matches canonical source`);
+const languages=JSON.parse(readFileSync(resolve(root,'docs/i18n/manifest.json'),'utf8')).languages;
+for(const language of languages) {
+  const page=resolve(root,'site/intro',language.tag,'index.html'),html=readFileSync(page,'utf8');
+  assert.ok(html.includes(`<html lang="${language.tag}" dir="${language.direction}">`));
+  assert.ok(html.includes(`rel="canonical" href="https://othmaneblial.github.io/bitborn/intro/${language.tag}/"`));
+  assert.equal([...html.matchAll(/<h1\b/g)].length,1);
+  assert.equal([...html.matchAll(/hreflang="/g)].length,9);
+  for(const item of languages)assert.ok(html.includes(`hreflang="${item.tag}"`));
+  for(const [,url] of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
+    if(/^(https?:|#)/.test(url))continue;
+    const target=resolve(dirname(page),url);
+    assert.ok(existsSync(target),`${language.tag} local link: ${url}`);
+    if(statSync(target).isDirectory())assert.ok(existsSync(join(target,'index.html')));
+  }
+  assert.ok(readFileSync(resolve(root,'site/sitemap.xml'),'utf8').includes(`/intro/${language.tag}/`));
 }
 assert.match(progress.updated,/^\d{4}-\d{2}-\d{2}$/);assert.ok(progress.milestones.length > 0);
 assert.ok(progress.milestones.every(item => typeof item.milestone === 'string' && typeof item.progress === 'string'));

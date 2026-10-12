@@ -52,7 +52,7 @@ Näheres steht im Beitragsleitfaden.
 Das Repository enthält BIOS-Bootprogramme, Tastatur-/VGA-/Diskettenexperimente,
 eine interaktive Shell, ein separates Interrupt-Experiment im Protected Mode
 und Linux-ELF-Beispiele. Der Browser verwendet ein Lernmodell mit 1 MiB Speicher
-und einem Limit von 4,096 Schritten, keine vollständige CPU oder BIOS-Implementierung.
+und einem Limit von 4.096 Schritten, keine vollständige CPU oder BIOS-Implementierung.
 Importierte Programme werden interpretiert und niemals als nativer Hostcode
 ausgeführt. Unterstützung für echte Hardware, UEFI oder ein Produktionssystem
 ist nicht nachgewiesen. Nutze für native Experimente verwerfbare Emulatorumgebungen.

@@ -142,6 +142,9 @@ The v0.2 milestone is published and verified. The following research remains ope
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review
   remains welcome; detailed guides and interactive controls currently use English.
+- [x] Publish source-generated introductory routes for all eight languages, with
+  canonical/hreflang metadata and sitemap entries. Desktop/320px and keyboard
+  navigation pass in Chrome/Firefox/WebKit; Arabic prose stays RTL and code LTR.
 - [x] Add contributor conduct/security policies with usable reporting contacts;
   verify GitHub private reporting is enabled. Document setup and a focused source
   map, and check canonical policy/reference copies during website validation.

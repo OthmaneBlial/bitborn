@@ -51,7 +51,7 @@ Consulta la guía de contribución.
 El repositorio incluye programas de arranque BIOS, experimentos de teclado/VGA/disco,
 una shell interactiva, un experimento separado de interrupciones en modo protegido
 y ejemplos ELF para Linux. El navegador usa un modelo educativo limitado a 1 MiB
-de memoria y 4,096 pasos, no una CPU o BIOS completa. Los programas importados se
+de memoria y 4096 pasos, no una CPU o BIOS completa. Los programas importados se
 interpretan; no se ejecutan como código nativo del anfitrión. No se ha establecido
 compatibilidad con hardware físico, UEFI ni sistemas operativos de producción.
 Usa emuladores desechables para los experimentos nativos.

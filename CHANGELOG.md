@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Render all eight maintained introductions as localized website pages with
+  language navigation, canonical/hreflang metadata, sitemap entries, escaped
+  literal code and Arabic RTL layout. Three-browser mobile/keyboard checks and
+  canonical documentation-copy checks run in CI.
+
 - Add a recorded execution timeline to the CPU Lab. Select any state without
   executing instructions; show nearby recorded instructions and net register,
   flag and RAM changes. Arrow/Home/End keyboard controls work in three browsers.

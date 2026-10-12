@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja" dir="ltr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bitborn — 生のビットからソフトウェアを作る</title><meta name="description" content="x86 プログラムの実際のバイトを、0 と 1 で直接書きます。Bitborn の命令は .bits ファイルに手書きされており、アセンブラやコンパイラがオペコード、 オペランド、分岐の変位を生成することはありません。コメント内の命令名はバイトの 説明です。Python ツールはバイトをまとめ、ファイルヘッダーやセクターの構造を 加えます。学習用サイトは JavaScript で動きます。">
+<link rel="canonical" href="https://othmaneblial.github.io/bitborn/intro/ja/"><link rel="alternate" hreflang="en" href="https://othmaneblial.github.io/bitborn/intro/en/">
+<link rel="alternate" hreflang="zh-CN" href="https://othmaneblial.github.io/bitborn/intro/zh-CN/">
+<link rel="alternate" hreflang="es" href="https://othmaneblial.github.io/bitborn/intro/es/">
+<link rel="alternate" hreflang="fr" href="https://othmaneblial.github.io/bitborn/intro/fr/">
+<link rel="alternate" hreflang="ja" href="https://othmaneblial.github.io/bitborn/intro/ja/">
+<link rel="alternate" hreflang="pt" href="https://othmaneblial.github.io/bitborn/intro/pt/">
+<link rel="alternate" hreflang="de" href="https://othmaneblial.github.io/bitborn/intro/de/">
+<link rel="alternate" hreflang="ar" href="https://othmaneblial.github.io/bitborn/intro/ar/">
+<link rel="alternate" hreflang="x-default" href="https://othmaneblial.github.io/bitborn/intro/en/">
+<meta property="og:type" content="article"><meta property="og:title" content="bitborn — 生のビットからソフトウェアを作る"><meta property="og:description" content="x86 プログラムの実際のバイトを、0 と 1 で直接書きます。Bitborn の命令は .bits ファイルに手書きされており、アセンブラやコンパイラがオペコード、 オペランド、分岐の変位を生成することはありません。コメント内の命令名はバイトの 説明です。Python ツールはバイトをまとめ、ファイルヘッダーやセクターの構造を 加えます。学習用サイトは JavaScript で動きます。"><meta property="og:url" content="https://othmaneblial.github.io/bitborn/intro/ja/"><meta property="og:image" content="https://othmaneblial.github.io/bitborn/assets/social-preview.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#080a08">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../intro.css">
+</head>
+<body>
+<a class="skip-link" href="#main">本文へ移動</a>
+<header class="intro-header"><a class="brand" href="../../" dir="ltr">bitborn ↗</a><nav aria-label="Languages"><a href="../en/" lang="en" dir="ltr">English</a>
+<a href="../zh-CN/" lang="zh-CN" dir="ltr">简体中文</a>
+<a href="../es/" lang="es" dir="ltr">Español</a>
+<a href="../fr/" lang="fr" dir="ltr">Français</a>
+<a href="../ja/" lang="ja" dir="ltr" aria-current="page">日本語</a>
+<a href="../pt/" lang="pt" dir="ltr">Português</a>
+<a href="../de/" lang="de" dir="ltr">Deutsch</a>
+<a href="../ar/" lang="ar" dir="rtl">العربية</a></nav></header>
+<main class="intro-article" id="main" tabindex="-1"><h1>bitborn — 生のビットからソフトウェアを作る</h1>
+<p><a href="https://othmaneblial.github.io/bitborn/">サイトで試す</a> · <a href="../../reference/README.md">詳しい README</a> · <a href="../../reference/docs/i18n/README.md">言語</a></p>
+<p>x86 プログラムの実際のバイトを、0 と 1 で直接書きます。Bitborn の命令は <code dir="ltr">.bits</code> ファイルに手書きされており、アセンブラやコンパイラがオペコード、 オペランド、分岐の変位を生成することはありません。コメント内の命令名はバイトの 説明です。Python ツールはバイトをまとめ、ファイルヘッダーやセクターの構造を 加えます。学習用サイトは JavaScript で動きます。</p>
+<h2>最初の命令を読む</h2>
+<pre dir="ltr"><code>10111000 00101010 00000000</code></pre>
+<p>オペランドサイズが 16 ビットの場合、この 3 バイトは <code dir="ltr">MOV AX,42</code> を表します。 <code dir="ltr">B8</code> がレジスターを選び、<code dir="ltr">2A 00</code> が下位バイトから順に 42 を格納します。 実行モードが重要です。オペランドサイズが 32 ビットなら、<code dir="ltr">B8</code> の後には即値の バイトが 2 個ではなく 4 個必要です。ブラウザーの CPU Lab が実行するのは、 文書に記載された 16 ビット命令の一部だけです。</p>
+<h2>試してみる</h2>
+<p><a href="https://othmaneblial.github.io/bitborn/cpu-lab/">CPU Lab</a> では、命令を 1 ステップずつ 実行し、レジスター、フラグ、スタック、メモリーを確認できます。Back と Forward で記録済みの状態を復元できます。<a href="https://othmaneblial.github.io/bitborn/boot-builder/">ブートセクターの編集ツール</a> では、512 バイトの完全なイメージを編集して書き出せます。チャレンジでは実際の バイトを変更しながら学びます。進捗はブラウザー内に保存されます。</p>
+<p>実際のブートプログラムを作成・検証するには Python 3.10+、Make、QEMU が必要です。 macOS では <code dir="ltr">brew install qemu</code>、Ubuntu では <code dir="ltr">sudo apt-get install python3 make qemu-system-x86</code> を実行します。</p>
+<pre dir="ltr"><code>git clone https://github.com/OthmaneBlial/bitborn.git
+cd bitborn
+make test
+make run</code></pre>
+<p><code dir="ltr">make test</code> は確認済みのバイトと、画面を開かずに動かす QEMU 内での振る舞いを 検証します。<code dir="ltr">make run</code> は BIOS ブートイメージを起動します。BIOS の例は Apple Silicon 上でも QEMU で動作します。ネイティブ ELF の例には Linux x86-64 が必要です。 ブラウザーの開発用テストには Node.js と Playwright も必要です。貢献ガイドをご覧ください。</p>
+<h2>対象範囲と進捗</h2>
+<p>BIOS ブートプログラム、キーボード・VGA・ディスクの実験、対話型シェル、独立した プロテクトモードの割り込み実験、Linux ELF の例を収録しています。ブラウザーは 1 MiB のメモリーと 4,096 ステップに制限された学習用モデルであり、完全な CPU や BIOS ではありません。読み込んだプログラムを解釈し、ホストのネイティブコードとして 実行することはありません。実機、UEFI、本番用 OS の対応は確認されていません。 ネイティブ実験には使い捨てのエミュレーター環境を使用してください。</p>
+<p><a href="../../reference/ROADMAP.md">ロードマップと検証記録</a> · <a href="https://othmaneblial.github.io/bitborn/roadmap/">サイトの進捗</a> · <a href="../../reference/CHANGELOG.md">変更履歴</a></p>
+<p><a href="../../reference/docs/tutorials/from-bits-to-boot.md">入門チュートリアル</a>と<a href="../../reference/docs/architecture/README.md">アーキテクチャガイド</a> から始められます。<a href="../../reference/CONTRIBUTING.md">貢献ルール</a>と<a href="../../reference/CODE_OF_CONDUCT.md">行動規範</a> を守ってください。脆弱性は<a href="../../reference/SECURITY.md">非公開で報告</a>してください。 コードと文書は <a href="../../reference/LICENSE">MIT ライセンス</a>です。英語の紹介文を翻訳の基準とし、 詳しい技術ガイドは現在も英語で提供しています。</p></main>
+<footer class="intro-footer"><a href="../../reference/docs/i18n/ja/README.md">日本語 · .md</a><a href="https://github.com/OthmaneBlial/bitborn">GitHub ↗</a></footer>
+</body>
+</html>
