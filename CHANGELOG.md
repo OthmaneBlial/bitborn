@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Make QEMU harness resources unwind on launch/connect/greeting failures, use
+  file-backed stderr with bounded diagnostic excerpts, and apply absolute QMP
+  deadlines/response bounds. Bound terminate/kill waits and verify actual
+  stderr-flood and termination-resistant child cleanup alongside protocol faults.
+
 - Add structured literal-source diagnostics with stable codes and one-based
   line/token locations in Python and JavaScript. Preserve existing messages,
   grammar and caller error types; expose optional CLI JSON operational errors.

@@ -148,7 +148,17 @@ Python/JS. Optional CLI JSON, notation-specific/browser bounds and preservation
 of output on parse failures are verified. Local full validation passes 59 Python
 tests (one expected macOS native-Linux skip) and all site/module checks; actual
 browser recordings were refreshed against current parser source hashes.
-Next: QEMU harness startup failures, bounded cleanup and resource ownership.
+Diagnostics commit `8c90d86` passed exact CI `38319202525`; its Pages mirror is
+`227c51c`. Anonymous live-file propagation is checked separately from the push.
+The native harness now owns startup resources through an `ExitStack`, keeps
+stderr out of a blocking pipe, bounds diagnostic excerpts and QMP response lines,
+and applies absolute command deadlines even with events or fragmented replies.
+Ten focused cases include real stderr-flood and termination-resistant host test
+children; both are reaped. Terminate/kill waits are each bounded to five seconds.
+All 69 Python tests pass locally (one expected macOS native-Linux skip), including
+the native boot/fault/segment/memory probes, and all site/module checks pass.
+Temporary logs remain uncapped; this harness is for curated verification.
+Next: signed conditional branches and overflow examples with native/model proof.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -232,7 +242,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 56 | 3 | Protected-mode exception handlers with controlled fault injection | H | M | IDT target | High | Partial: native #UD and selector #GP/error-code fixtures; general dispatch open |
 | 57 | 3 | Timer IRQ experiment with explicit PIC setup and deterministic QEMU assertions | H | M | 56 | High | Open |
 | 58 | 3 | Paging experiment with inspected page tables and deliberate page-fault evidence | H | L | 55,56 | High | Open |
-| 59 | 0 | QEMU runner resource/error-path checks and bounded process cleanup | H | H | Existing Guest harness | Medium | Open |
+| 59 | 0 | QEMU runner resource/error-path checks and bounded process cleanup | H | H | Existing Guest harness | Medium | Complete: resource unwind, QMP bounds/deadlines and actual child kill/reap; disk quotas remain outside scope |
 | 60 | 2 | Accurate release/community draft showing actual new capabilities; no automatic posting | M | H | Verified release | Low | Complete: release published; community draft remains unposted |
 | 61 | 0 | Cancel delayed file imports/errors after a newer source choice or editor draft | H | H | CPU Lab import | Medium | Complete: race reproduced and checked in three browsers |
 | 62 | 1 | Execute unprefixed 16-bit ModR/M memory MOV using one shared address decoder and native/journal/boundary proof | H | M | 18,01,02 | High | Complete: 2,304 cases and identical model/native 71-byte exercise |

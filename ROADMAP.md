@@ -227,6 +227,10 @@ The v0.2 milestone is published and verified. The following research remains ope
   across Python and JavaScript, retaining readable errors and unchanged grammar.
   CLI operational errors support optional JSON; parser parity, browser limits and
   failed-write preservation are tested. See [diagnostics](docs/source-diagnostics.md).
+- [x] Verify native harness resource ownership on startup/protocol failures;
+  bound QMP event/partial-line replies and both process shutdown waits. Real
+  child processes prove stderr pipe blockage is avoided and kill/reap works.
+  Temporary logs remain uncapped; see [harness scope](docs/qemu-harness.md).
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

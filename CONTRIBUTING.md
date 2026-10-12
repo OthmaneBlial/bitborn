@@ -41,6 +41,7 @@ macOS cannot natively run the Linux ELF examples; CI runs their native checks.
 | Mode-aware program differences | `site/bit-diff.mjs`, `site/bit-diff/` | `node tests/test_bit_diff.mjs` and `node tests/browser_bit_diff.mjs` |
 | ELF anatomy | `site/elf.mjs`, `site/elf/` | `node tests/test_elf.mjs` and `node tests/browser_elf.mjs` |
 | Parser syntax and [diagnostics](docs/source-diagnostics.md) | `tools/bitborn.py`, `site/binary.mjs` | `python3 -m unittest tests.test_parser_properties tests.test_tools` and `node tests/test_hex.mjs` |
+| [Native harness failure paths](docs/qemu-harness.md) | `tests/qemu.py`, `tests/test_qemu_harness.py` | `python3 -m unittest tests.test_qemu_harness` and `make test` |
 | Builder and CPU Lab | `site/boot-builder/`, `site/cpu-lab/` | `node tests/browser_builder.mjs` or `node tests/browser_cpu_lab.mjs` |
 | Challenges | `challenges/`, `site/challenges/challenges.mjs` | `node tests/test_challenges.mjs` and `python3 -m unittest tests.test_challenges` |
 | Docs, routes and progress | `README.md`, `ROADMAP.md`, `docs/`, `tools/site_build.py` | `make site-test` |

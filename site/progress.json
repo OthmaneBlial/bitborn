@@ -146,6 +146,10 @@
       "progress": "\u2705 Stable codes and one-based line/token locations agree across Python/JS; optional CLI JSON errors preserve readable defaults and failed-write safety"
     },
     {
+      "milestone": "Native harness failure paths",
+      "progress": "\u2705 Startup cleanup, absolute QMP deadlines and bounded termination/kill waits; real stderr-flood and termination-resistant child checks"
+    },
+    {
       "milestone": "CPU Lab program downloads and imports",
       "progress": "\u2705 Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks"
     },
