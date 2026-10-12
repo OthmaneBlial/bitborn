@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Add a reproducible host-model benchmark for interpretation, history recording
+  and full rewind/replay, with environment/source/workload hashes, semantic checks,
+  retained CI JSON and an actual dated local sample. No native performance claim.
+
 - Render all eight maintained introductions as localized website pages with
   language navigation, canonical/hreflang metadata, sitemap entries, escaped
   literal code and Arabic RTL layout. Three-browser mobile/keyboard checks and

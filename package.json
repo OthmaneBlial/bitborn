@@ -7,6 +7,7 @@
     "test": "node tests/test_site.mjs && node tests/test_cpu.mjs && node tests/test_flags_properties.mjs && node tests/test_memory_changes.mjs && node tests/test_history.mjs && node tests/test_builder.mjs && node tests/test_cpu_lab.mjs && node tests/test_challenges.mjs && node tests/test_routes.mjs",
     "test:browser": "node tests/browser_site.mjs && node tests/browser_builder.mjs && node tests/browser_cpu_lab.mjs && node tests/browser_challenges.mjs && node tests/browser_routes.mjs && node tests/browser_introductions.mjs",
     "record:browser": "node tools/record_browser.mjs",
+    "benchmark": "node tools/benchmark_model.mjs",
     "test:cross-browser": "node tests/browser_cross_engine.mjs"
   },
   "devDependencies": {"playwright": "1.64.0"}

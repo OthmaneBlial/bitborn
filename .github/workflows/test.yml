@@ -34,11 +34,17 @@ jobs:
         run: python3 tools/verify_browser_export.py
       - name: Clean source, deterministic artifacts
         run: |
+          node tools/benchmark_model.mjs > /tmp/bitborn-model-benchmark.json
           git diff --exit-code
           python3 -c 'import json; from tools.bitborn import ROOT,artifact_paths,digest; print(json.dumps({str(p):digest((ROOT/"build"/p).read_bytes()) for p in artifact_paths()},sort_keys=True))' > /tmp/first-build
           make build
           python3 -c 'import json; from tools.bitborn import ROOT,artifact_paths,digest; print(json.dumps({str(p):digest((ROOT/"build"/p).read_bytes()) for p in artifact_paths()},sort_keys=True))' > /tmp/second-build
           diff /tmp/first-build /tmp/second-build
+      - name: Preserve environment-specific model benchmark evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: bitborn-model-benchmark
+          path: /tmp/bitborn-model-benchmark.json
       - uses: actions/upload-artifact@v4
         with:
           name: bitborn-images

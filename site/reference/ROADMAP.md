@@ -120,6 +120,10 @@ The v0.2 milestone is published and verified. The following research remains ope
 
 ## Evolution session
 
+- [x] Add a reproducible Node model benchmark: fixed reviewed boot workload,
+  semantic assertions, warmups/trials, environment and source hashes, measured
+  median/p95 and retained CI evidence. No native/DOM speed claim or timing gate.
+
 - [x] Replace whole-memory copies/scans during CPU Lab stepping with actual
   write journals. An independent full-memory oracle checks every step of the
   2,825-step boot, five presets, unchanged writes, stack/calls, A20 wrapping and

@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "measuredAt": "2026-10-12T18:40:11.695Z",
+  "modelBaseCommit": "1628dda3bb3df460c186d8891bdde9f3489fe5ab",
+  "environment": {"node":"v25.9.0","platform":"darwin","architecture":"arm64","osRelease":"25.6.0","cpu":"Apple M2"},
+  "workload": {"source":"boot/boot.bits","sha256":"46f0cf66a237fdc51d033d3e0fc86a1c7d7691770a42049077cf470f660cbfc9","bytes":512,"expectedSteps":2825,"warmups":5,"trials":25},
+  "timing": "Monotonic wall time; excludes initial state/RAM allocation and loading, includes interpretation and per-frame history allocation. No DOM, I/O or native x86 timing.",
+  "sources": {
+    "tools/benchmark_model.mjs": "67ef0a5b89a2ad9ce6bb5443b2aacde3a4412409d93c3e710384115b0e048f4c",
+    "site/simulator.mjs": "0fdb791271021e5b16b3da27cb0d47283cc64e0f1c400be41c1b7535a7d62a98",
+    "site/history.mjs": "45cbd1d494fe7b1f0867c1dc1978ebf2b1a0fce3599f1a704bff75dbe399e321",
+    "site/boot.json": "f82181b09636a2c37a7692baaa5c3878dff0b122564788218a66364001f74699",
+    "boot/boot.bits": "230bbafbfa02abd62dc964efbad02db0431f0efa263216bba02146cd164262b8",
+    "targets.json": "e2ec59de235de234886d70b719a1c5440e5d6380c775dc9d84c5c34588191225"
+  },
+  "measurements": [
+    {"mode":"execute","executedInstructions":2825,"restoredStates":0,"medianMs":2.493,"p95Ms":2.697,"minMs":2.108,"maxMs":3.292},
+    {"mode":"record","executedInstructions":2825,"restoredStates":0,"medianMs":6.735,"p95Ms":7.551,"minMs":6.299,"maxMs":7.879},
+    {"mode":"record-rewind-replay","executedInstructions":2825,"restoredStates":5650,"medianMs":9.169,"p95Ms":9.778,"minMs":8.879,"maxMs":9.969}
+  ]
+}

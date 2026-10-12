@@ -89,6 +89,7 @@ for exact evidence and remaining gates.
 | Contributor policies and source map | ✅ Conduct contact and private GitHub vulnerability reporting available; focused setup/check commands documented |
 | Introductions in eight languages | ✅ Shared literal example/quickstart and English-source freshness checks; detailed guides remain in English |
 | Localized `.io` introductions | ✅ Source-generated pages, language links/SEO metadata, mobile and keyboard checks; Arabic prose and LTR code verified in three browsers |
+| Reproducible model benchmark | ✅ Fixed reviewed workload, source/environment hashes and measured distributions; no native x86 speed claim |
 | [v0.2.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0) | ✅ Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified |
 | Paging, exception/hardware interrupt handling and physical hardware | Future research; no working claim |
 
@@ -243,6 +244,9 @@ python3 -m http.server 8000 --directory site
 
 The [evolution backlog](docs/EVOLUTION.md) records the next engineering,
 interactive, documentation and research tasks with dependencies and risk.
+Run `npm run benchmark` after `make site` for [reproducible host-model measurements](docs/benchmarks.md).
+The report separates interpretation, history recording and state restoration;
+it excludes DOM rendering and native CPU timing.
 
 ## What the tests establish
 

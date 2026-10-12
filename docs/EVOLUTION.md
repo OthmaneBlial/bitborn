@@ -35,7 +35,11 @@ executable instructions remain literal `.bits`; host tooling never assembles the
   source-generated introduction routes with metadata and three-browser desktop,
   320px, keyboard and Arabic RTL/LTR-code checks. Documentation copies are checked
   byte-for-byte, including translations and their freshness manifest.
-- Next: reproducible model benchmarks and architecture-aware instruction inspection.
+- Pushed localized pages: `1628dda`; exact-commit CI/Pages passed. Anonymous live
+  English/Arabic pages, history module and progress match local bytes exactly.
+- Completed model benchmark: fixed reviewed boot, checked outputs, five warmups
+  and 25 trials, source/environment hashes and a dated local sample; CI retains
+  JSON without a timing threshold. Next: failed-write safety and opcode inspection.
 - Risks: browser behavior is modeled, not native x86. Hardware, paging and general
   interrupt support require separate native targets and evidence.
 
@@ -96,7 +100,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 47 | 2 | Contributor source map and focused per-component development commands | H | H | Existing CONTRIBUTING | Low | Complete |
 | 48 | 0 | Verify every generated documentation/source copy, including translation and trace fixtures | H | H | Site build | Low | Complete |
 | 49 | 2 | Genuine Time Machine capture with source/frame provenance | H | H | 02,12 | Low | Complete |
-| 50 | 0 | Reproducible host-model benchmark; distinguish rendering, interpretation and native execution | H | M | 01,02 | Medium | Open |
+| 50 | 0 | Reproducible host-model benchmark; distinguish rendering, interpretation and native execution | H | M | 01,02 | Medium | Complete |
 | 51 | 0 | Release-provenance manifest tying reviewed source, packaged output and commit | H | H | Existing releases | Medium | Open |
 | 52 | 0 | Clean-checkout reproduction and platform-specific validation documentation | H | H | CI | Low | Open |
 | 53 | 3 | Real VGA bitmap experiment with manually authored pixel/instruction bytes | H | M | BIOS target | High | Open |
