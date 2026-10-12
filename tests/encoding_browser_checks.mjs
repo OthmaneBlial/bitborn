@@ -26,9 +26,32 @@ export async function checkEncoding(page) {
     assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV EAX, 4294967295');
     assert.match(await page.locator('#encoding-explanation').textContent(),/consumes 6 of the 10/);
     assert.equal(await page.locator('#play-registers').textContent(),initial,'read-only inspection never changes simulated state');
+    await page.locator('#instruction-select').selectOption('movRegister');
+    await page.locator('#decode-mode').selectOption('16');
+    assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV AX, BX');
+    assert.equal(await page.locator('#execute-instruction').isDisabled(),true,'new register-direct inspection adds no execution support');
+    assert.match(await page.locator('[data-bit="0-1"]').getAttribute('aria-label'),/Direction/);
+    assert.match(await page.locator('[data-bit="1-0"]').getAttribute('aria-label'),/Destination register/);
+    await page.locator('[data-bit="0-1"]').press('Space');
+    assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV BX, AX');
+    assert.match(await page.locator('[data-bit="1-0"]').getAttribute('aria-label'),/Source register/);
+    await page.locator('#decode-mode').selectOption('32');
+    assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV EBX, EAX');
+    await page.locator('#instruction-select').selectOption('movRegister64');await page.locator('#decode-mode').selectOption('64');
+    assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV R8, RBX');
+    await page.locator('[data-bit="0-2"]').click();
+    assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV R8, R11');
+    await page.locator('#instruction-select').selectOption('movByte');
+    assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV AL, AH');
+    await page.locator('#instruction-select').selectOption('movByteRex');
+    assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV AL, SPL');
+    await page.locator('[data-bit="0-3"]').click();
+    assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV AL, SPL','REX.W does not widen byte MOV');
+    assert.match(await page.locator('[data-bit="0-3"]').getAttribute('aria-label'),/unused by byte MOV/);
+    assert.equal(await page.locator('#play-registers').textContent(),initial);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`wide instruction inspection fits ${width}px`);
   }
-  await page.locator('#decode-mode').selectOption('16');await page.locator('#reset-bits').click();
+  await page.locator('#instruction-select').selectOption('mov64');await page.locator('#decode-mode').selectOption('16');await page.locator('#reset-bits').click();
   assert.equal(await page.locator('#decoded-instruction').textContent(),'DEC CX');
   await page.locator('#instruction-select').selectOption('mov');
 }

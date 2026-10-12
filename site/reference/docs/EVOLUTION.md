@@ -72,7 +72,15 @@ The new module passes all byte values and 1,000 seeded round trips. CPU browser
 checks pass Chromium, Firefox 157 and WebKit 27.2, including 320px controls; the
 recaptured CPU demo has 20 actual frames with current source/frame/GIF hashes.
 The full 55-test Python suite and all site checks pass locally (one expected
-native-Linux skip on macOS). Publication of this link milestone is not yet verified.
+native-Linux skip on macOS). Program-link commit `8bbacf0` passed exact CI
+`38308109352` and deployment `38308406221`; its public module, CPU HTML and app
+match committed bytes. Register-direct MOV inspection now covers direction/width,
+8/16/32/64 operands, REX extensions and high-byte remapping: 9,728 combinations
+and 18 independent NDISASM goldens pass. Native payloads remain unchanged.
+Chromium, Firefox 157 and WebKit 27.2 verify direction-bit edits, REX register
+extensions, high-byte names, read-only state and 320px layout. The encoding demo
+has 12 actual frames; source/frame/GIF hashes match current files. Local full
+Python/site checks pass; publication of this MOV milestone remains to be verified.
 Current local validation: 55 Python tests, one expected native-Linux skip on
 macOS, plus all site/module checks. Protected-fault commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -114,7 +122,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 14 | 0 | Validate manifest types, output aliases and packaging options before writing | H | H | Existing manifest | Medium | Complete: all-source/package preflight; no multi-file I/O transaction |
 | 15 | 0 | Structured source diagnostics with stable error codes and source-line locations | H | M | 03 | Medium | Open |
 | 16 | 1 | Address-reference inspector that checks literal pointers without resolving labels into code | H | M | Annotations | Medium | Open |
-| 17 | 1 | Register-to-register MOV encodings with independent ModR/M fixtures | H | M | 05 | Medium | Open |
+| 17 | 1 | Register-to-register MOV encodings with independent ModR/M fixtures | H | M | 05 | Medium | Complete: scoped inspection, 9,728 combinations and 18 disassembly goldens |
 | 18 | 1 | Curated indirect memory operands with explicit segment-selection explanations | H | M | 17 | High | Open |
 | 19 | 1 | Signed conditional branches and overflow examples with native QEMU proof | H | M | 04 | Medium | Open |
 | 20 | 1 | Carry-aware arithmetic examples and native/model differential checks | H | M | 04 | Medium | Open |

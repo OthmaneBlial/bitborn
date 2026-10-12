@@ -1,0 +1,2 @@
+# Literal high-byte register source without a REX prefix.
+10001000 11100000 # instruction | MOV AL,AH | Opcode 88 copies eight bits; reg field 100 identifies AH without REX, while r/m 000 identifies AL.

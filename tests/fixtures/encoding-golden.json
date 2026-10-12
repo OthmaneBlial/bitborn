@@ -8,6 +8,18 @@
     {"source":"mov32","mode":64,"size":5,"disassembly":"mov eax,0x2a"},
     {"source":"mov64","mode":16,"size":1,"disassembly":"dec cx"},
     {"source":"mov64","mode":32,"size":1,"disassembly":"dec ecx"},
-    {"source":"mov64","mode":64,"size":10,"disassembly":"mov r8,0xffffffffffffffff"}
+    {"source":"mov64","mode":64,"size":10,"disassembly":"mov r8,0xffffffffffffffff"},
+    {"source":"movRegister","mode":16,"size":2,"disassembly":"mov ax,bx"},
+    {"source":"movRegister","mode":32,"size":2,"disassembly":"mov eax,ebx"},
+    {"source":"movRegister","mode":64,"size":2,"disassembly":"mov eax,ebx"},
+    {"source":"movRegister64","mode":16,"size":1,"disassembly":"dec cx"},
+    {"source":"movRegister64","mode":32,"size":1,"disassembly":"dec ecx"},
+    {"source":"movRegister64","mode":64,"size":3,"disassembly":"mov r8,rbx"},
+    {"source":"movByte","mode":16,"size":2,"disassembly":"mov al,ah"},
+    {"source":"movByte","mode":32,"size":2,"disassembly":"mov al,ah"},
+    {"source":"movByte","mode":64,"size":2,"disassembly":"mov al,ah"},
+    {"source":"movByteRex","mode":16,"size":1,"disassembly":"inc ax"},
+    {"source":"movByteRex","mode":32,"size":1,"disassembly":"inc eax"},
+    {"source":"movByteRex","mode":64,"size":3,"disassembly":"mov al,spl"}
   ]
 }

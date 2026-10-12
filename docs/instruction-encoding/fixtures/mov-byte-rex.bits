@@ -1,0 +1,2 @@
+# Literal byte-register remapping from the presence of a REX prefix.
+01000000 10001000 11100000 # instruction | MOV AL,SPL | The 40 REX prefix changes reg selector 100 from AH to SPL in 64-bit context; operand width remains eight.

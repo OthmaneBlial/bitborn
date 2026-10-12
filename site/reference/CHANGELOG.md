@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Inspect register-direct MOV direction/width and ModR/M register fields in
+  explicit 16/32/64 contexts, including independent REX.R/B extensions, AH versus
+  SPL and byte forms that ignore 66/REX.W operand sizing. Add four literal fixtures
+  and 18 independent disassembly goldens; no memory-form or execution support.
+
 - Share exact loaded CPU Lab bytes through bounded, versioned URL fragments.
   Shared programs open paused in the model; malformed links preserve state.
   Comments, pending drafts, runtime memory and history are excluded. A selectable

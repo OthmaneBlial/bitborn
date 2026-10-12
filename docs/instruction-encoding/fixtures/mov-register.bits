@@ -1,0 +1,2 @@
+# Literal register-to-register MOV. Direction-bit editing reverses the copy.
+10001001 11011000 # instruction | MOV AX,BX | Opcode 89 has direction zero; ModR/M 11 011 000 selects BX as source and AX as destination in 16-bit mode.

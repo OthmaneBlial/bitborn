@@ -3,6 +3,7 @@ import {decode,hex} from './simulator.mjs';
 
 const registers=['AX','CX','DX','BX','SP','BP','SI','DI'];
 const registerName=(index,width)=>index<8 ? (width===16?'':width===32?'E':'R')+registers[index] : `R${index}${width===16?'W':width===32?'D':''}`;
+const byteRegisterName=(index,rex)=>index>=8?`R${index}B`:rex!==null&&index>=4?['SPL','BPL','SIL','DIL'][index-4]:['AL','CL','DL','BL','AH','CH','DH','BH'][index];
 const bitNames=name=>Array(8).fill(name);
 
 export function inspectEncoding(bytes,mode=16) {
@@ -34,6 +35,26 @@ export function inspectEncoding(bytes,mode=16) {
     if(rex!==null){bitFields[override?1:0][1]='X: unused by this MOV';bitFields[override?1:0][2]='R: unused by this MOV';}
     const effect=mode===64?(width===32?'Writing this 32-bit register clears its upper 32 bits.':width===16?'Writing 16 bits preserves the upper register bits.':'The full 64-bit register is written.'):'MOV copies the immediate bit pattern without changing flags.';
     return finish(offset+1+count,`MOV ${register}, ${value}`,`Context ${mode}; operand width ${width}. Opcode bits 2–0 select ${register}${rex!==null&&(rex&1)?' with REX.B extending the selector':''}. The ${count} immediate bytes are little-endian. ${effect}`,{register,value});
+  }
+  if(opcode>=0x88&&opcode<=0x8B) {
+    const modrm=bytes[offset+1];
+    if(modrm===undefined)throw new Error('Truncated MOV: a ModR/M byte is missing.');
+    if(modrm<0xC0)throw new Error('Memory-form MOV is outside this inspector. No addressing mode was guessed.');
+    const operandWidth=opcode&1?width:8,direction=Boolean(opcode&2);
+    const regIndex=((modrm>>3)&7)+(rex!==null&&(rex&4)?8:0),rmIndex=(modrm&7)+(rex!==null&&(rex&1)?8:0);
+    const name=index=>operandWidth===8?byteRegisterName(index,rex):registerName(index,operandWidth);
+    const destination=name(direction?regIndex:rmIndex),source=name(direction?rmIndex:regIndex);
+    const regRole=direction?'Destination register':'Source register',rmRole=direction?'Source register':'Destination register';
+    fields.push('opcode: direction + width','ModR/M');
+    bitFields.push(['Width: byte or default operand','Direction: reg or r/m destination',...Array(6).fill('MOV opcode')],[rmRole,rmRole,rmRole,regRole,regRole,regRole,'Register-direct mode','Register-direct mode']);
+    if(rex!==null) {
+      const roles=bitFields[override?1:0];roles[0]='B: r/m register extension';roles[1]='X: unused by register-direct MOV';roles[2]='R: reg register extension';
+      if(operandWidth===8)roles[3]='W: unused by byte MOV';
+    }
+    if(override&&operandWidth===8){fields[0]='ignored operand-size prefix';bitFields[0]=bitNames('Operand-size prefix: unused by byte MOV');}
+    const effect=mode===64&&operandWidth===32?' Writing a 32-bit destination clears its upper 32 bits.':operandWidth<32?' Other destination register bits are preserved.':'';
+    const byteRule=operandWidth===8&&mode===64?' Any REX prefix replaces AH/CH/DH/BH selectors with SPL/BPL/SIL/DIL; REX.W and 66 do not widen a byte MOV.':'';
+    return finish(offset+2,`MOV ${destination}, ${source}`,`Context ${mode}; operand width ${operandWidth}. ModR/M mode is 11 (register-direct). Direction bit ${Number(direction)} makes the ${direction?'reg':'r/m'} field the destination; the other is the source. MOV leaves flags unchanged.${effect}${byteRule}`,{width:operandWidth,register:destination,source});
   }
   if(opcode===0x31) {
     const modrm=bytes[offset+1];

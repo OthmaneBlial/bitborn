@@ -1,0 +1,2 @@
+# Literal REX.W+B register-direct MOV; inspected only in the selected context.
+01001001 10001001 11011000 # instruction | MOV R8,RBX | REX.W selects 64 bits, B extends r/m to R8, and reg field 011 selects RBX.

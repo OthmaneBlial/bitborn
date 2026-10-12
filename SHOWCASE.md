@@ -61,6 +61,12 @@ make build
 python3 tools/record_boot.py
 ```
 
+In the instruction playground, choose **89 D8 / register direction** in 16-bit
+context. Flip opcode bit 1: MOV AX,BX becomes MOV BX,AX, and the ModR/M role
+labels reverse. Choose **40 88 E0 / REX byte names** in 64-bit context to inspect
+MOV AL,SPL; without REX, the **88 E0** fixture selects AH instead. REX.W does not
+widen a byte MOV. These new forms are inspection-only; simulation is disabled.
+
 ## 2. Change H to h by flipping one bit
 
 ![Real browser capture of the Boot Sector Builder](assets/boot-builder-demo.gif)

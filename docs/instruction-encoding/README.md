@@ -45,6 +45,19 @@ AX, destination AX. `8E D8` selects a segment-register MOV, with `11 | 011 | 000
 meaning register addressing, DS, AX. These fields change with the opcode; a bit
 position has no universal meaning across all instructions.
 
+The playground also inspects register-direct MOV opcodes `88`, `89`, `8A`, `8B`.
+For `89 D8`, ModR/M is `11 | 011 | 000`: source BX, destination AX in 16-bit
+context. Flip opcode direction bit 1 to get `8B D8` and reverse the copy. Wider
+contexts and 66/REX.W select 16/32/64 bits for 89/8B; 88/8A always copy eight bits.
+REX.R extends the reg selector, while REX.B extends r/m. Memory forms are rejected.
+
+Byte registers expose a separate rule: `88 E0` is MOV AL,AH without REX; adding
+the literal `40` prefix selects SPL in 64-bit mode. Any REX prefix remaps selectors
+4–7 from AH/CH/DH/BH to SPL/BPL/SIL/DIL. REX.W does not widen a byte MOV, and the
+66 prefix has no operand-size effect on it. MOV leaves arithmetic flags unchanged;
+a 32-bit destination in 64-bit mode clears its upper 32 bits. These additions are
+inspection-only; the existing bounded simulator does not execute 88/89/8A/8B.
+
 ## Signed relative branches
 
 In the boot output loop, `74 1B` at offset 58 means jump when ZF=1. The CPU adds

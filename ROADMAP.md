@@ -120,6 +120,11 @@ The v0.2 milestone is published and verified. The following research remains ope
 
 ## Evolution session
 
+- [x] Inspect register-direct MOV 88/89/8A/8B with direction/width bit roles,
+  ModR/M selectors, 66/REX precedence and high-byte/REX byte-register names.
+  9,728 register/context/prefix combinations and 18 independent NDISASM goldens
+  pass. Memory forms and execution of these new forms remain outside scope.
+
 - [x] Share 1–512 loaded CPU Lab bytes through strict versioned URL fragments.
   Links open paused and omit drafts/comments/history; malformed links keep state.
   Exact round trips, self-modification, navigation, clipboard fallback, 320px
