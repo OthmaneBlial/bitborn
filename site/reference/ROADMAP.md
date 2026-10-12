@@ -236,6 +236,10 @@ The v0.2 milestone is published and verified. The following research remains ope
   independently compare signed/unsigned operands, check IP wrap and history,
   and run the same 95-byte overflow/equality exercise in QEMU and the CPU Lab.
   Near/prefixed/wider forms remain outside scope; see [lesson](docs/signed-comparisons.md).
+- [x] Add byte/word immediate ADC/SBB with incoming carry/borrow, complete status
+  flags and byte alias preservation. Exhaust byte operands, seed boundary words,
+  and compare the same 81-byte multiword exercise with QEMU. Eight additional
+  native FLAGS samples have an independent integer oracle. See [lesson](docs/carry-borrow.md).
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

@@ -1,5 +1,14 @@
 # Make one bit count
 
+## Follow carry into the next word
+
+Import the CPU Lab's [81-byte carry/borrow exercise](docs/instruction-encoding/fixtures/carry-borrow.bits).
+Watch `FFFFFFFF + 1` become DX:CX:BX=`0001:0000:0000`, then watch SBB propagate
+borrow through three zero words. Byte ADC/SBB preserve AH=`AB`; the stored RAM
+words are exactly `00 AB 00 AB`. The refreshed CPU GIF captures these actual
+model states, and QEMU executes the same literal bytes. The [lesson](docs/carry-borrow.md)
+explains incoming/outgoing CF, signed overflow and exact Back/Forward behavior.
+
 ## See the sign flag disagree with signed ordering
 
 Open the [CPU Lab](https://othmaneblial.github.io/bitborn/cpu-lab/) and import its

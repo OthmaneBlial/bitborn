@@ -52,6 +52,10 @@ export function decode(bytes, offset = 0) {
     result.fields[1]='ModR/M';return result;
   }
   if ([0x05, 0x2D, 0x3D].includes(opcode)) return instruction(3, `${({5:'ADD',45:'SUB',61:'CMP'})[opcode]} AX, ${word(1)}`, 'A 16-bit immediate follows the opcode in little-endian order. CMP updates flags without changing AX.', ({5:'add',45:'sub',61:'cmp'})[opcode], {value: word(1)});
+  if ([0x14,0x15,0x1C,0x1D].includes(opcode)) {
+    const subtract=Boolean(opcode&8),width=opcode&1?16:8,value=width===16?word(1):byte(1),name=subtract?'SBB':'ADC';
+    return instruction(width===16?3:2,`${name} ${width===16?'AX':'AL'}, ${value}`,`${name} ${subtract?'subtracts the immediate and incoming CF borrow from':'adds the immediate and incoming CF carry to'} ${width===16?'AX':'AL'}. CF reports outgoing ${subtract?'borrow':'carry'}; OF reports signed overflow. ${width===8?'AH is preserved. ':''}All arithmetic status flags are updated.`,subtract?'sbb':'adc',{width,value});
+  }
   if (opcode >= 0x40 && opcode <= 0x4F) return instruction(1, `${opcode < 0x48 ? 'INC' : 'DEC'} ${registers[opcode % 8]}`, 'The register is encoded in the low three opcode bits. INC and DEC preserve the carry flag.', opcode < 0x48 ? 'inc' : 'dec', {register: registers[opcode % 8]});
   if (opcode >= 0x50 && opcode <= 0x5F) return instruction(1, `${opcode < 0x58 ? 'PUSH' : 'POP'} ${registers[opcode % 8]}`, 'A 16-bit register is saved to or restored from SS:SP. The stack grows downward by two bytes.', opcode < 0x58 ? 'push' : 'pop', {register: registers[opcode % 8]});
   if (opcode === 0x68 || opcode === 0x6A) return instruction(opcode === 0x68 ? 3 : 2, `PUSH ${opcode === 0x68 ? word(1) : signed(byte(1))}`, 'A word is pushed onto SS:SP. An 8-bit immediate is sign-extended to a 16-bit word.', 'pushImmediate', {value: opcode === 0x68 ? word(1) : signed(byte(1)) & 65535});
@@ -110,12 +114,12 @@ function resultFlags(state, result, width) {
   state.pf = parity === 0;
 }
 
-function arithmeticFlags(state, left, right, subtract) {
-  const result = (subtract ? left - right : left + right) & 65535;
-  state.cf = subtract ? left < right : left + right > 65535;
-  state.of = Boolean((subtract ? (left ^ right) : ~(left ^ right)) & (left ^ result) & 0x8000);
+function arithmeticFlags(state, left, right, subtract, carry = 0, width = 16) {
+  const mask=(1<<width)-1,full=subtract?left-right-carry:left+right+carry,result=full&mask;
+  state.cf = subtract ? full < 0 : full > mask;
+  state.of = Boolean((subtract ? (left ^ right) : ~(left ^ right)) & (left ^ result) & (1<<(width-1)));
   state.af = Boolean((left ^ right ^ result) & 16);
-  resultFlags(state, result, 16);
+  resultFlags(state, result, width);
   return result;
 }
 
@@ -175,6 +179,11 @@ export function step(bytes, state) {
     case 'segment': state[instruction.segment] = state[instruction.source]; break;
     case 'xor': state[instruction.register] ^= state[instruction.source]; logicFlags(state[instruction.register], 16); break;
     case 'add': state.AX = arithmeticFlags(state, state.AX, instruction.value, false); break;
+    case 'adc': case 'sbb': {
+      const result=arithmeticFlags(state,instruction.width===8?state.AX&255:state.AX,instruction.value,instruction.operation==='sbb',Number(state.cf),instruction.width);
+      if(instruction.width===8)low(result);else state.AX=result;
+      break;
+    }
     case 'sub': case 'cmp': { const result = arithmeticFlags(state, state.AX, instruction.value, true); if (instruction.operation === 'sub') state.AX = result; break; }
     case 'inc': case 'dec': { const carry = state.cf; state[instruction.register] = arithmeticFlags(state, state[instruction.register], 1, instruction.operation === 'dec'); state.cf = carry; break; }
     case 'push': push(state[instruction.register]); break;

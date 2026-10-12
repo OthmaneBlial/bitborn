@@ -190,7 +190,16 @@ try {
   assert.equal(await page.locator('[data-flag="SF"] strong').textContent(),'1');assert.equal(await page.locator('[data-flag="OF"] strong').textContent(),'1');await page.locator('#flags').scrollIntoViewIfNeeded();await capture('CMP 32767 with -1: SF1 and OF1 mean signed greater, despite the negative wrapped result.');
   await page.locator('#step').click();await page.locator('#registers').scrollIntoViewIfNeeded();await capture('JG skips the second sentinel write; all branch instructions preserve the comparison flags.');
   await page.locator('#run').click();await page.waitForFunction(()=>document.getElementById('run-state').textContent==='HALTED');
-  assert.equal(await page.locator('[data-register="BX"] .register-value').textContent(),'0000');await page.locator('#registers').scrollIntoViewIfNeeded();await capture('The exact 95-byte exercise halts with all signed, unsigned and equality markers; independent QEMU checks verify the same literal program.');await encode();
+  assert.equal(await page.locator('[data-register="BX"] .register-value').textContent(),'0000');await page.locator('#registers').scrollIntoViewIfNeeded();await capture('The exact 95-byte exercise halts with all signed, unsigned and equality markers; independent QEMU checks verify the same literal program.');
+  await page.locator('#binary-editor').fill(await readFile(resolve(root,'docs/instruction-encoding/fixtures/carry-borrow.bits'),'utf8'));await page.locator('#load-program').click();
+  for(let index=0;index<12;index++)await page.locator('#step').click();
+  assert.equal(await page.locator('[data-register="AX"] .register-value').textContent(),'0000');assert.equal(await page.locator('[data-flag="CF"] strong').textContent(),'1');await page.locator('#registers').scrollIntoViewIfNeeded();await capture('ADC propagates a low-word carry through FFFF; the middle result is zero with outgoing CF1.');
+  for(let index=0;index<4;index++)await page.locator('#step').click();
+  assert.equal(await page.locator('[data-register="DX"] .register-value').textContent(),'0001');await page.locator('#registers').scrollIntoViewIfNeeded();await capture('The extension word consumes carry: DX:CX:BX becomes 0001:0000:0000 after FFFFFFFF plus one.');
+  for(let index=0;index<9;index++)await page.locator('#step').click();
+  assert.equal(await page.locator('[data-register="BP"] .register-value').textContent(),'FFFF');await page.locator('#registers').scrollIntoViewIfNeeded();await capture('SBB propagates borrow across three zero words: BP:DI:SI becomes FFFF:FFFF:FFFF with outgoing CF1.');
+  await page.locator('#run').click();await page.waitForFunction(()=>document.getElementById('run-state').textContent==='HALTED');
+  assert.equal(await page.locator('[data-register="AX"] .register-value').textContent(),'AB00');await page.locator('#memory-address').fill('02000');await page.locator('#memory-form').evaluate(form=>form.requestSubmit());await page.locator('#memory').scrollIntoViewIfNeeded();await capture('Byte ADC/SBB preserve AH as AB; both exact AB00 results are stored in model RAM, and the 81-byte program halts after32 steps.');await encode();
 
   await begin('challenges');
   await page.goto(new URL('challenges/?id=repair-boot',base).href);
@@ -210,6 +219,8 @@ try {
   const metadata={kind:'Actual browser screenshots of instruction inspection and bounded educational simulation; not native CPU or QEMU footage',browser:browser.version(),viewport:{width:1280,height:960},presentationFps:1,alterations:'960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.',sourceSha256:hashes,captures,reproduce:'make site-test && npm ci && npx playwright install chromium && npm run record:browser',requires:'ffmpeg and ffprobe; PLAYWRIGHT_CHROMIUM_EXECUTABLE may select an installed Chrome'};
   const branchSource='docs/instruction-encoding/fixtures/signed-branches.bits';
   metadata.sourceSha256[branchSource]=createHash('sha256').update(await readFile(resolve(root,branchSource))).digest('hex');
+  const carrySource='docs/instruction-encoding/fixtures/carry-borrow.bits';
+  metadata.sourceSha256[carrySource]=createHash('sha256').update(await readFile(resolve(root,carrySource))).digest('hex');
   await writeFile(resolve(root,'assets/browser-demo-recording.json'),JSON.stringify(metadata,null,2)+'\n');
   console.log('Recorded six genuine browser GIFs with frame/source hashes and explicit inspection/simulation provenance.');
 } finally {await browser?.close();await new Promise(resolve=>server.close(resolve));}

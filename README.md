@@ -100,6 +100,7 @@ for exact evidence and remaining gates.
 | [Structured source diagnostics](docs/source-diagnostics.md) | ✅ Stable codes and one-based line/token locations agree across Python/JS; optional CLI JSON errors preserve readable defaults and failed-write safety |
 | [Native harness failure paths](docs/qemu-harness.md) | ✅ Startup cleanup, absolute QMP deadlines and bounded termination/kill waits; real stderr-flood and termination-resistant child checks |
 | [Signed and unsigned comparisons](docs/signed-comparisons.md) | ✅ All 16 short Jcc conditions, 131,072 flag/displacement cases and 3,384 operand-order comparisons; exact 95-byte overflow exercise agrees with QEMU and rewinds/replays |
+| [Carry and borrow arithmetic](docs/carry-borrow.md) | ✅ Byte/word ADC and SBB, 270,736 ripple-oracle cases and AH/IF/DF preservation; exact 81-byte multiword exercise plus eight native FLAGS samples |
 | CPU Lab program downloads and imports | ✅ Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks |
 | Share loaded CPU Lab programs | ✅ Versioned URL fragments preserve 1–512 loaded bytes and open paused; 1,000 seeded round trips, malformed-link preservation, history navigation and clipboard fallback verified in three browsers |
 | Binary and hexadecimal drafts | ✅ Literal byte views, explicit hex loading and comment preservation; all byte values and 1,000 seeded round trips pass; CLI .bits remains binary |

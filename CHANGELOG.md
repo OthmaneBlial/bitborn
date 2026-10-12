@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Execute unprefixed immediate ADC/SBB on AL and AX with incoming CF, exact
+  outgoing carry/borrow and arithmetic status flags. Preserve AH/IF/DF, check
+  270,736 independent ripple cases, and add the same 81-byte native/model/browser
+  multiword exercise plus eight independently verified native FLAGS samples.
+
 - Complete the model's sixteen unprefixed short Jcc conditions with JL/JGE/JLE/JG
   and JA/JBE. Explain signed overflow versus unsigned carry, verify 131,072 flag/
   rel8 combinations and 3,384 operand comparisons, and add a literal 95-byte

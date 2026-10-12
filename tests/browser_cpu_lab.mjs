@@ -9,6 +9,7 @@ import {checkProgramLinks} from './program_link_browser_checks.mjs';
 import {checkRegisterMOV} from './register_mov_browser_checks.mjs';
 import {checkMemoryMOV} from './memory_mov_browser_checks.mjs';
 import {checkSignedBranches} from './signed_branches_browser_checks.mjs';
+import {checkCarry} from './carry_browser_checks.mjs';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE ? pathToFileURL(resolve(process.env.PLAYWRIGHT_MODULE)).href : 'playwright');
@@ -131,7 +132,7 @@ try {
   await page.locator('#memory-address').fill('00120'); await page.locator('#memory-form button').click();
   assert.equal(await page.locator('[data-address="00120"]').textContent(),'CD'); assert.equal(await page.locator('[data-address="00121"]').textContent(),'AB');
   assert.equal(await page.locator('.memory-byte.changed-bit').count(),2);
-  await checkProgramDownloads(page);await checkHexDrafts(page);await checkRegisterMOV(page);await checkMemoryMOV(page);await checkSignedBranches(page);await checkProgramLinks(page);await page.locator('#preset').selectOption('memory');
+  await checkProgramDownloads(page);await checkHexDrafts(page);await checkRegisterMOV(page);await checkMemoryMOV(page);await checkSignedBranches(page);await checkCarry(page);await checkProgramLinks(page);await page.locator('#preset').selectOption('memory');
   for(let index=0;index<5;index++)await page.locator('#step').click();
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),true,'desktop overflow');
   await mkdir(resolve(root,'build'),{recursive:true}); await page.screenshot({path:resolve(root,'build/cpu-lab-desktop.png'),fullPage:true});

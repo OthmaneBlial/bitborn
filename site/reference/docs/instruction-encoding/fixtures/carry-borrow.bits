@@ -1,0 +1,33 @@
+11111010 # instruction | CLI | Keep native interrupts disabled.
+11101010 00000110 01111100 00000000 00000000 # instruction | JMP 0000:7C06 | Normalize CS.
+00110001 11000000 # instruction | XOR AX,AX | Prepare segment zero.
+10001110 11010000 # instruction | MOV SS,AX | Initialize the stack segment.
+10001110 11011000 # instruction | MOV DS,AX | Initialize the data segment.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Initialize SP.
+11111100 # instruction | CLD | Make the native direction flag known.
+10111000 11111111 11111111 # instruction | MOV AX,FFFF | Low word of FFFFFFFF.
+00000101 00000001 00000000 # instruction | ADD AX,0001 | Low-word result zero with outgoing carry.
+10001001 11000011 # instruction | MOV BX,AX | Save low word; MOV preserves carry.
+10111000 11111111 11111111 # instruction | MOV AX,FFFF | High word; carry remains set.
+00010101 00000000 00000000 # instruction | ADC AX,0000 | High word plus carry wraps to zero with carry still set.
+10001001 11000001 # instruction | MOV CX,AX | Save high word.
+10111000 00000000 00000000 # instruction | MOV AX,0000 | Prepare an extension word while preserving carry.
+00010101 00000000 00000000 # instruction | ADC AX,0000 | Extension becomes one and clears carry.
+10001001 11000010 # instruction | MOV DX,AX | DX:CX:BX is 0001:0000:0000.
+10111000 00000000 00000000 # instruction | MOV AX,0000 | Low word of an all-zero value.
+00101101 00000001 00000000 # instruction | SUB AX,0001 | Low-word subtraction creates borrow and FFFF.
+10001001 11000110 # instruction | MOV SI,AX | Save the low-word result without consuming borrow.
+10111000 00000000 00000000 # instruction | MOV AX,0000 | Prepare the next word; borrow survives MOV.
+00011101 00000000 00000000 # instruction | SBB AX,0000 | Subtract the incoming borrow, producing FFFF with borrow.
+10001001 11000111 # instruction | MOV DI,AX | Save the middle word.
+10111000 00000000 00000000 # instruction | MOV AX,0000 | Prepare the final extension word.
+00011101 00000000 00000000 # instruction | SBB AX,0000 | Borrow propagates into the final FFFF word.
+10001001 11000101 # instruction | MOV BP,AX | BP:DI:SI is FFFF:FFFF:FFFF.
+10111000 11111111 10101011 # instruction | MOV AX,ABFF | A distinct AH proves byte alias preservation.
+11111001 # instruction | STC | Supply the incoming byte carry.
+00010100 00000000 # instruction | ADC AL,00 | FF plus carry wraps AL to zero; AH stays AB and CF remains set.
+10100011 00000000 00100000 # instruction | MOV [2000],AX | Save AB00 at DS:2000.
+00011100 11111111 # instruction | SBB AL,FF | 00 minus FF minus borrow wraps to zero with outgoing borrow; AH stays AB.
+10100011 00000010 00100000 # instruction | MOV [2002],AX | Save AB00 at DS:2002; flags are unchanged.
+11110100 # instruction | HLT | Expected halted next IP is 7C4F.
+11101011 11111101 # instruction | JMP -3 | Return to HLT if resumed.

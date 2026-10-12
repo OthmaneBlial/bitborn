@@ -13,6 +13,7 @@ import {checkProgramLinks} from './program_link_browser_checks.mjs';
 import {checkRegisterMOV} from './register_mov_browser_checks.mjs';
 import {checkMemoryMOV} from './memory_mov_browser_checks.mjs';
 import {checkSignedBranches} from './signed_branches_browser_checks.mjs';
+import {checkCarry} from './carry_browser_checks.mjs';
 import {checkELF} from './elf_browser_checks.mjs';
 import {checkBitDiff} from './bit_diff_browser_checks.mjs';
 
@@ -180,6 +181,7 @@ try {
       await checkRegisterMOV(page);
       await checkMemoryMOV(page);
       await checkSignedBranches(page);
+      await checkCarry(page);
       await checkProgramLinks(page);
       await checkELF(page,base);
       await checkBitDiff(page,base);

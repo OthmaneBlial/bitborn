@@ -1,0 +1,67 @@
+11111010 # instruction | CLI | Keep hardware interrupts disabled during flag sampling.
+11101010 00000110 01111100 00000000 00000000 # instruction | JMP 0000:7C06 | Normalize CS.
+00110001 11000000 # instruction | XOR AX,AX | Prepare segment zero.
+10001110 11010000 # instruction | MOV SS,AX | Initialize the native sampling stack.
+10001110 11011000 # instruction | MOV DS,AX | Set DS to zero.
+10001110 11000000 # instruction | MOV ES,AX | STOSW samples use ES zero.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Initialize SP.
+11111100 # instruction | CLD | Advance DI after each sample word.
+10111111 00000000 00100000 # instruction | MOV DI,2000 | Output eight result/FLAGS pairs at physical 2000.
+10111000 11111111 01111111 # instruction | MOV AX,7FFF | Word signed-positive boundary.
+11111001 # instruction | STC | Incoming carry one.
+00010101 00000000 00000000 # instruction | ADC AX,0000 | Produce 8000 with signed overflow and half carry.
+10101011 # instruction | STOSW | Record the result while preserving flags.
+10011100 # instruction | PUSHF | Native-only flag sampling; the model does not execute PUSHF.
+01011000 # instruction | POP AX | Fetch actual sampled native FLAGS.
+10101011 # instruction | STOSW | Record FLAGS.
+10111000 11111111 11111111 # instruction | MOV AX,FFFF | Word unsigned boundary.
+11111000 # instruction | CLC | Incoming carry zero.
+00010101 11111111 11111111 # instruction | ADC AX,FFFF | Produce FFFE with carry and odd low-byte parity.
+10101011 # instruction | STOSW | Record result.
+10011100 # instruction | PUSHF | Sample actual FLAGS.
+01011000 # instruction | POP AX | Fetch FLAGS.
+10101011 # instruction | STOSW | Record FLAGS.
+10111000 00000000 10000000 # instruction | MOV AX,8000 | Word signed-negative boundary.
+11111001 # instruction | STC | Incoming borrow one.
+00011101 11111111 01111111 # instruction | SBB AX,7FFF | Produce zero with signed overflow but no unsigned borrow.
+10101011 # instruction | STOSW | Record result.
+10011100 # instruction | PUSHF | Sample actual FLAGS.
+01011000 # instruction | POP AX | Fetch FLAGS.
+10101011 # instruction | STOSW | Record FLAGS.
+10111000 00000000 00000000 # instruction | MOV AX,0000 | Zero word.
+11111001 # instruction | STC | Incoming borrow one.
+00011101 11111111 11111111 # instruction | SBB AX,FFFF | Immediate plus borrow reaches 10000; result zero still has borrow.
+10101011 # instruction | STOSW | Record result.
+10011100 # instruction | PUSHF | Sample actual FLAGS.
+01011000 # instruction | POP AX | Fetch FLAGS.
+10101011 # instruction | STOSW | Record FLAGS.
+10111000 01111111 10101011 # instruction | MOV AX,AB7F | Distinct AH and signed-byte boundary.
+11111001 # instruction | STC | Incoming byte carry one.
+00010100 00000000 # instruction | ADC AL,00 | Produce AB80; AH is preserved and byte signed overflow is set.
+10101011 # instruction | STOSW | Record full AX including preserved AH.
+10011100 # instruction | PUSHF | Sample byte-operation FLAGS.
+01011000 # instruction | POP AX | Fetch FLAGS.
+10101011 # instruction | STOSW | Record FLAGS.
+10111000 11111111 10101011 # instruction | MOV AX,ABFF | Byte unsigned boundary.
+11111000 # instruction | CLC | Incoming byte carry zero.
+00010100 11111111 # instruction | ADC AL,FF | Produce ABFE with unsigned carry.
+10101011 # instruction | STOSW | Record full AX.
+10011100 # instruction | PUSHF | Sample FLAGS.
+01011000 # instruction | POP AX | Fetch FLAGS.
+10101011 # instruction | STOSW | Record FLAGS.
+10111000 10000000 10101011 # instruction | MOV AX,AB80 | Byte signed-negative boundary.
+11111001 # instruction | STC | Incoming byte borrow one.
+00011100 01111111 # instruction | SBB AL,7F | Produce AB00 with signed overflow and no unsigned borrow.
+10101011 # instruction | STOSW | Record full AX.
+10011100 # instruction | PUSHF | Sample FLAGS.
+01011000 # instruction | POP AX | Fetch FLAGS.
+10101011 # instruction | STOSW | Record FLAGS.
+10111000 00000000 10101011 # instruction | MOV AX,AB00 | Zero AL with a distinct AH.
+11111000 # instruction | CLC | Incoming byte borrow zero.
+00011100 11111111 # instruction | SBB AL,FF | Produce AB01 with unsigned borrow.
+10101011 # instruction | STOSW | Record full AX.
+10011100 # instruction | PUSHF | Sample FLAGS.
+01011000 # instruction | POP AX | Fetch FLAGS.
+10101011 # instruction | STOSW | Record FLAGS.
+11110100 # instruction | HLT | Halt after eight complete result/FLAGS pairs.
+11101011 11111101 # instruction | JMP -3 | Return to HLT if resumed.

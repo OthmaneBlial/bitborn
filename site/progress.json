@@ -154,6 +154,10 @@
       "progress": "\u2705 All 16 short Jcc conditions, 131,072 flag/displacement cases and 3,384 operand-order comparisons; exact 95-byte overflow exercise agrees with QEMU and rewinds/replays"
     },
     {
+      "milestone": "Carry and borrow arithmetic",
+      "progress": "\u2705 Byte/word ADC and SBB, 270,736 ripple-oracle cases and AH/IF/DF preservation; exact 81-byte multiword exercise plus eight native FLAGS samples"
+    },
+    {
       "milestone": "CPU Lab program downloads and imports",
       "progress": "\u2705 Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks"
     },

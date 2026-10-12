@@ -9,6 +9,8 @@ in the selected execution mode; source comments and whitespace are absent.
 For comparison-driven control flow, follow the [signed versus unsigned branch
 lesson](../signed-comparisons.md). Its literal exercise shows how overflow changes
 the meaning of SF and why short JL/JG differ from unsigned JB/JA.
+The [carry/borrow lesson](../carry-borrow.md) adds immediate byte/word ADC/SBB
+and a literal multiword example; MOV preserves CF between arithmetic steps.
 
 ```text
 10111000 00101010 00000000 00000000 00000000

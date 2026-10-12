@@ -172,6 +172,22 @@ all six GIFs retain current source/frame/GIF hashes. Wider/prefixed/near Jcc
 variants remain outside scope. Full local validation passes 70 Python tests (one
 expected macOS native-Linux skip), all site/model modules, and Chromium, Firefox
 157 and WebKit 27.2 exercise checks. Next: carry-aware arithmetic and native/model proof.
+Short-branch commit `dd917f5` passed CI `38320194131` and deployment `38320535844`.
+Its Pages mirror is `37302bd`; the public simulator, CPU Lab, lesson and literal
+exercise were anonymously fetched and match that exact committed milestone.
+Byte/word immediate ADC/SBB now consume incoming CF without prematurely wrapping
+the immediate plus borrow. Shared arithmetic flag handling retains existing
+ADD/SUB/CMP/INC/DEC behavior. An independent ripple oracle checks 270,736 cases,
+including all byte operands and both incoming bits; AH/IF/DF are preserved.
+The same manually authored 81-byte program propagates carry/borrow across words,
+stores byte-alias results, and matches QEMU general/configured-segment words,
+IP, RAM and modeled flags. A separate native-only source uses PUSHF for eight
+result/FLAGS pairs checked by an independent integer oracle; model PUSHF support
+is not claimed. Local full validation passes 72 Python tests (one expected macOS
+native-Linux skip), all site/model modules and Chromium/Firefox157/WebKit27.2
+exercise checks. The CPU recording has 38 actual frames, including four new
+carry/borrow states, with all six GIF/source hashes verified. Next: canonical
+sources for every CPU teaching preset.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -216,7 +232,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 17 | 1 | Register-to-register MOV encodings with independent ModR/M fixtures | H | M | 05 | Medium | Complete: scoped inspection, 9,728 combinations and 18 disassembly goldens |
 | 18 | 1 | Curated indirect memory operands with explicit segment-selection explanations | H | M | 17 | High | Complete: 16-bit addressing inspection; default DS/SS verified natively; no memory execution |
 | 19 | 1 | Signed conditional branches and overflow examples with native QEMU proof | H | M | 04 | Medium | Complete: all short conditions, full rel8/flag oracle and identical 95-byte native/model exercise |
-| 20 | 1 | Carry-aware arithmetic examples and native/model differential checks | H | M | 04 | Medium | Open |
+| 20 | 1 | Carry-aware arithmetic examples and native/model differential checks | H | M | 04 | Medium | Complete: byte/word immediate ADC/SBB, 270,736 ripple cases, same 81-byte native/model program and eight native FLAGS samples |
 | 21 | 1 | ELF anatomy viewer: headers, entry point, segment permissions and payload bytes | H | H | Existing ELF packaging | Medium | Complete: bounded ELF64 scope; no imported-code execution |
 | 22 | 1 | Explain Linux syscall encodings in 64-bit inspection mode without host execution | H | H | 05 | Medium | Open |
 | 23 | 1 | Literal native self-modification experiment with controlled halt and RAM proof | H | M | Existing BIOS loader | Medium | Open |
