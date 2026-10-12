@@ -97,6 +97,7 @@ for exact evidence and remaining gates.
 | ELF anatomy explorer | ✅ Six checksummed files, exact entry/segment mapping, bounded local inspection and 2,000 seeded mutations; three-browser keyboard/mobile checks; no imported code execution |
 | Reviewed build preflight | ✅ Manifest types/options, source/output aliases and every payload/package checked before writes; malformed later targets preserve previous artifacts |
 | [Native divide-fault research](docs/architecture/divide-fault.md) | ✅ 70 literal bytes: real-mode #DE frame, divisor repair and same-instruction retry checked in QEMU; unrepaired divisor faults repeatedly |
+| [Protected-mode fault research](docs/architecture/protected-fault.md) | ✅ 200 literal bytes: actual UD2/#UD gate, saved EIP adjustment, IRETD and CPU-managed descriptor accessed bits checked in QEMU; one controlled fault only |
 | [v0.3.0 release and provenance](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.3.0) | ✅ Exact-commit CI passed; all 14 public files re-downloaded anonymously, bytes/checksums and source/artifact provenance verified |
 | [v0.2.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0) | ✅ Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified |
 | Paging, exception/hardware interrupt handling and physical hardware | Future research; no working claim |

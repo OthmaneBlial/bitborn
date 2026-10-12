@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Add a curated 200-byte protected-mode UD2/#UD research probe with native gate,
+  saved-frame, known-length EIP adjustment and IRETD evidence. Tests verify the
+  CPU-set descriptor accessed bit while preserving all literal instruction bytes.
+  General exception dispatch and hardware interrupts remain outside its scope.
+
 - Add a curated 70-byte native divide-error probe with exact exception-frame,
   repaired-instruction retry and unrepaired repeated-fault QEMU checks. This is
   real-mode research; protected-mode fault handling and release assets are unchanged.

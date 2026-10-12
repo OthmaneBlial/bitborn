@@ -120,6 +120,11 @@ The v0.2 milestone is published and verified. The following research remains ope
 
 ## Evolution session
 
+- [x] Verify one controlled protected-mode UD2/#UD in a separate 200-byte literal
+  research fixture: exact vector-six gate/frame, original EIP, saved-EIP adjustment,
+  IRETD, restored stack, flat selectors and descriptor accessed-bit behavior.
+  General dispatch, error-code exceptions and hardware IRQs remain unfinished.
+
 - [x] Verify a handwritten 70-byte real-mode divide-fault probe in QEMU: actual
   saved fault IP/frame, repaired divisors 1/2, restored stack and repeated faults
   without repair. This does not complete protected-mode exception handling.

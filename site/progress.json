@@ -142,6 +142,10 @@
       "progress": "\u2705 70 literal bytes: real-mode #DE frame, divisor repair and same-instruction retry checked in QEMU; unrepaired divisor faults repeatedly"
     },
     {
+      "milestone": "Protected-mode fault research",
+      "progress": "\u2705 200 literal bytes: actual UD2/#UD gate, saved EIP adjustment, IRETD and CPU-managed descriptor accessed bits checked in QEMU; one controlled fault only"
+    },
+    {
       "milestone": "v0.3.0 release and provenance",
       "progress": "\u2705 Exact-commit CI passed; all 14 public files re-downloaded anonymously, bytes/checksums and source/artifact provenance verified"
     },
