@@ -23,7 +23,7 @@ an idea below is not an advertised feature.
   keyboard input, Backspace, unknown-command rejection. `peek` is an actual
   memory load, including an alternate-address execution test.
 
-## Publication gates in progress
+## Publication gates complete
 
 - [x] Complete beginner tutorial, architecture guide and ten per-example walkthroughs
   with complete per-byte tables.
@@ -38,7 +38,14 @@ an idea below is not an advertised feature.
 - [x] Website/documentation/browser CI and clean-checkout reproduction proof:
   [ede398e verification](https://github.com/OthmaneBlial/bitborn/actions/runs/38212231354)
   and [successful deployment](https://github.com/OthmaneBlial/bitborn/actions/runs/38212311862).
-- [ ] Public v0.1.0 release with images, source and SHA-256 checksums.
+- [x] Public [v0.1.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.1.0)
+  at immutable commit `d2c0434c186c33c8a70f3bf8c708c4983522f4cd`, after its
+  [exact-commit CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38212701098) passed.
+  All eight public files were re-downloaded and matched the prepared artifacts;
+  all seven checksummed images/archives passed SHA-256 verification.
+
+The v0.1 foundation is complete. Future experiments below remain open research,
+not release requirements or advertised capabilities.
 
 ## Future experiments
 

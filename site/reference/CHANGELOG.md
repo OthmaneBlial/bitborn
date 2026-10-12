@@ -14,4 +14,5 @@
 - Published interactive website with editable instruction fields, all 512
   annotated boot bytes, bounded boot simulation and responsive keyboard controls.
 - Verified CI, automatic Pages deployment, repository topics and social preview.
-  The release publication gate remains tracked in ROADMAP.md.
+- Public v0.1.0 release with five independently bootable images, full image/source
+  archives and externally re-downloaded SHA-256-verified artifacts.

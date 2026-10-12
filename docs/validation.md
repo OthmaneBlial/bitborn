@@ -1,0 +1,34 @@
+# v0.1 foundation: acceptance evidence
+
+Verified on **2026-10-12**. These records separate target execution, browser
+simulation, live publication and hardware limitations.
+
+| Requirement | Authoritative evidence |
+| --- | --- |
+| Exact public source repository and main branch | [OthmaneBlial/bitborn](https://github.com/OthmaneBlial/bitborn), GitHub API visibility PUBLIC/default main |
+| Canonical handwritten instruction bytes, no target assembler/compiler | boot/boot.bits, boot/loader.bits, examples/*/program.bits; literal byte parser; transparent AI-assisted authorship note |
+| Functional 512-byte BIOS image | Known byte/branch/signature tests plus QEMU VGA/serial greeting and guest HLT state |
+| Reproduction from a clean source copy | Source archive extracted independently; make test and make site-test passed, boot.img matched byte-for-byte |
+| Four documented host tools | Syntax/comment/error, inspection, reviewed size/hash/signature and bit-diff checks in tests/test_tools.py |
+| Ten real examples with source/binary/explanations | examples/ guides and complete byte tables; unchanged payloads, framed images and ELF files available in release archive/site downloads |
+| Real BIOS keyboard/VGA/disk/monitor behavior | QEMU key injection, actual VGA/disk memory, exact command tests, Backspace/bounds, reboot, alternate memory operand and forced BIOS disk error |
+| Native Linux behavior | Ubuntu x86-64 CI executes all five ELF examples, including alternate comparison input |
+| Professional README/docs and visible roadmap | Root README.md, ROADMAP.md, architecture/tutorial/encoding guides, live website link and real QEMU captures |
+| Description, topics, homepage and social preview | GitHub API confirms specified description, fifteen topics, live homepage and custom open-graph image |
+| Interactive website and accessible mobile controls | Static decoder/stack/flags/bounds tests and real Chrome bit-editing, all512 bytes, keyboard navigation, boot stepping, clipboard, 1440/390/320px and reduced motion checks |
+| Live deployment/assets | HTTPS200 for landing/docs/scripts/styles/data/images/downloads; representative live files equal local bytes; browser test repeated against live URL |
+| CI and deployment automation | [Verify raw bits](https://github.com/OthmaneBlial/bitborn/actions/workflows/test.yml) and [Deploy website](https://github.com/OthmaneBlial/bitborn/actions/workflows/pages.yml) |
+| Actual public release | [v0.1.0](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.1.0), non-draft/non-prerelease, eight uploaded artifacts, anonymous downloads, checksums and immutable annotated tag |
+| All milestones pushed directly to main | Ordinary fast-forward main pushes; no PR/feature branches or rewritten tags |
+
+The release commit is `d2c0434c186c33c8a70f3bf8c708c4983522f4cd`;
+[CI on that exact commit](https://github.com/OthmaneBlial/bitborn/actions/runs/38212701098)
+passed all 18 Python tests, actual Linux/QEMU execution, real browser checks and
+source/build reproducibility. Local macOS ARM64 runs the BIOS targets with TCG;
+the native Linux test is explicitly skipped there and required in Linux CI.
+
+No physical hardware, native UEFI, protected mode, complete emulator, production
+OS, indexing result or performance benchmark is claimed. The browser model is
+bounded and educational. A SHA-256 digest proves identity, not human authorship.
+No language registry package was published; images/source are the intended
+artifacts for this project. The central Pages mirror changes only `bitborn/`.

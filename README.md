@@ -8,6 +8,7 @@
 
 [![Verify raw bits](https://github.com/OthmaneBlial/bitborn/actions/workflows/test.yml/badge.svg)](https://github.com/OthmaneBlial/bitborn/actions/workflows/test.yml)
 [![Deploy website](https://github.com/OthmaneBlial/bitborn/actions/workflows/pages.yml/badge.svg)](https://github.com/OthmaneBlial/bitborn/actions/workflows/pages.yml)
+[![Latest release](https://img.shields.io/github/v/release/OthmaneBlial/bitborn)](https://github.com/OthmaneBlial/bitborn/releases/latest)
 [![MIT license](https://img.shields.io/badge/license-MIT-71ff8b)](LICENSE)
 
 **[Explore the live website →](https://othmaneblial.github.io/bitborn/)** ·
@@ -61,7 +62,7 @@ for exact evidence and remaining gates.
 | Ten example guides and complete byte tables | ✅ Documented, with actual execution checks |
 | Real boot screenshot/GIF and architecture tutorial | ✅ Captured from QEMU and reproducible |
 | Interactive `.io` website and mobile browser checks | ✅ Live; HTTPS assets and Chrome interactions verified |
-| Public v0.1.0 images, source and checksums | Release gate in progress |
+| Public v0.1.0 images, source and checksums | ✅ Published; downloaded artifacts and checksums verified |
 | Protected mode, interrupts and executable loading | Future research; no working claim |
 
 ## From text bits to CPU instructions
@@ -162,7 +163,8 @@ python3 -m http.server 8000 --directory site
 ```
 
 [Beginner tutorial](docs/tutorials/from-bits-to-boot.md) · [Contributing](CONTRIBUTING.md) ·
-[Changelog](CHANGELOG.md) · [Roadmap](ROADMAP.md)
+[Changelog](CHANGELOG.md) · [Roadmap](ROADMAP.md) ·
+[v0.1.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.1.0)
 
 ## What the tests establish
 
