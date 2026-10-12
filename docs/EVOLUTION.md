@@ -62,6 +62,14 @@ accessed bits (`85ccc5d`, 53 Python tests, one expected macOS skip). A separate
 256-byte selector #GP fixture verifies the CPU-pushed error code, unchanged DS,
 four-doubleword frame and error-code removal before IRETD. Next: bounded general
 dispatch; skipping two specific known instructions is not general recovery.
+Source directories and FIFOs are now rejected before opening data, preventing
+named-pipe stalls in build preflight.
+Current local validation: 55 Python tests, one expected native-Linux skip on
+macOS, plus all site/module checks. Protected-fault commit `85ccc5d` passed CI
+`38306047118` and deployment `38306395884`; public progress, README and its guide
+match exact source bytes. Selector-fault commit `489cf88` is pushed; its CI and
+live deployment remain pending verification. The six native ELF payloads and
+seven BIOS images have not changed; these exception fixtures are research tests.
 Risks: inspection supports a documented subset; execution remains the bounded
 16-bit model. Native-speaker review, hardware, paging and general interrupts
 require separate evidence. Detailed technical guides remain English.

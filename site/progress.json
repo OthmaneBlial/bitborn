@@ -135,7 +135,7 @@
     },
     {
       "milestone": "Reviewed build preflight",
-      "progress": "\u2705 Manifest types/options, source/output aliases and every payload/package checked before writes; malformed later targets preserve previous artifacts"
+      "progress": "\u2705 Manifest types/options, regular source files, source/output aliases and every payload/package checked before writes; malformed later targets preserve previous artifacts"
     },
     {
       "milestone": "Native divide-fault research",

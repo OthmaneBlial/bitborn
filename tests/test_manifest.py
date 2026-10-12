@@ -83,3 +83,16 @@ class ManifestTests(unittest.TestCase):
                 with patch.object(build,'ROOT',root), self.assertRaises(ValueError): build.build()
                 self.assertEqual(previous.read_bytes(),b'previous')
                 self.assertFalse((root/'build/b.bin').exists())
+
+    def test_source_directory_and_fifo_fail_without_opening_them(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); source = root/'a.bits'
+            good = {'source':'a.bits','output':'a.bin','size':1,'sha256':digest(b'\xf4')}
+            (root/'targets.json').write_text(json.dumps([good]))
+            for kind in ('directory','fifo'):
+                if kind == 'directory': source.mkdir()
+                else: os.mkfifo(source)
+                with self.subTest(kind=kind), patch.object(build,'ROOT',root), self.assertRaisesRegex(ValueError,'sources must be regular files'):
+                    build.build()
+                self.assertFalse((root/'build').exists())
+                source.rmdir() if kind == 'directory' else source.unlink()

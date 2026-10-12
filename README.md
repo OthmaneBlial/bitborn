@@ -95,7 +95,7 @@ for exact evidence and remaining gates.
 | CPU Lab program downloads and imports | ✅ Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks |
 | Binary and hexadecimal drafts | ✅ Literal byte views, explicit hex loading and comment preservation; all byte values and 1,000 seeded round trips pass; CLI .bits remains binary |
 | ELF anatomy explorer | ✅ Six checksummed files, exact entry/segment mapping, bounded local inspection and 2,000 seeded mutations; three-browser keyboard/mobile checks; no imported code execution |
-| Reviewed build preflight | ✅ Manifest types/options, source/output aliases and every payload/package checked before writes; malformed later targets preserve previous artifacts |
+| Reviewed build preflight | ✅ Manifest types/options, regular source files, source/output aliases and every payload/package checked before writes; malformed later targets preserve previous artifacts |
 | [Native divide-fault research](docs/architecture/divide-fault.md) | ✅ 70 literal bytes: real-mode #DE frame, divisor repair and same-instruction retry checked in QEMU; unrepaired divisor faults repeatedly |
 | [Protected-mode fault research](docs/architecture/protected-fault.md) | ✅ 200 literal bytes: actual UD2/#UD gate, saved EIP adjustment, IRETD and CPU-managed descriptor accessed bits checked in QEMU; one controlled fault only |
 | [Native selector error-code research](docs/architecture/selector-fault.md) | ✅ 256 literal bytes: #GP selector code, extra frame doubleword, preserved DS and correct IRETD stack cleanup checked in QEMU; one invalid load only |

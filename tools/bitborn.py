@@ -112,6 +112,8 @@ def targets(root=ROOT):
     source_paths = [(root / name).resolve() for name in sources]
     if any(not source.is_relative_to(root) for source in source_paths):
         raise ValueError('Reviewed sources must resolve inside the project')
+    if any(source.exists() and not source.is_file() for source in source_paths):
+        raise ValueError('Reviewed sources must be regular files')
     source_inodes = {(stat.st_dev, stat.st_ino) for source in source_paths if source.exists() for stat in [source.stat()]}
     build_root = (root / 'build').resolve()
     if not build_root.is_relative_to(root):

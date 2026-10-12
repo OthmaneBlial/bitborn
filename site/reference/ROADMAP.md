@@ -134,7 +134,7 @@ The v0.2 milestone is published and verified. The following research remains ope
   without repair. This does not complete protected-mode exception handling.
 
 - [x] Validate manifest types, canonical paths, packaging combinations and reviewed
-  references; reject symlink/hard-link output aliases. Check all source hashes,
+  references; reject source directories/pipes and symlink/hard-link output aliases. Check all source hashes,
   sizes and derived packages before writing; invalid later targets preserve outputs.
 
 - [x] Add an ELF64 anatomy explorer with checksummed native examples, field/byte

@@ -53,7 +53,8 @@ program and the other source field. No parser selects an opcode from a mnemonic.
 `make build` validates every manifest before opening outputs: required types,
 reviewed hashes/sizes, canonical relative paths, known packaging options, loader
 references and contiguous disk payloads. Resolved paths must stay in the project
-and build directory; output symlinks/hard links cannot alias source files or other
+and build directory; existing sources must be regular files, rejecting directories
+and named pipes before they can be opened. Output symlinks/hard links cannot alias source files or other
 outputs. Existing output directories are rejected. All literal sources and
 derived packages are checked before the first output write, so a bad later target
 keeps earlier artifacts intact. This preflight is not a multi-file transaction

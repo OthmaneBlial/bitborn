@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Reject source directories and named pipes during manifest preflight before
+  opening source data or creating build output; a FIFO cannot stall the packer.
+
 - Add a curated 256-byte protected-mode invalid-selector #GP probe verifying the
   CPU-pushed error-code doubleword, preserved DS and correct stack cleanup before
   IRETD. This handles one known invalid load, not general exception recovery.
