@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Reject malformed manifests, conflicting packaging options and resolved output
+  aliases before writing; preflight every literal source and derived package so a
+  bad later target preserves previous build artifacts. I/O errors and concurrent
+  filesystem changes remain outside multi-file transactional guarantees.
+
 - Add read-only ELF64 anatomy inspection: actual fields, segment permissions,
   exact entry/file mapping and zero fill. Verify reviewed preset hashes; bound
   imports and byte-map rendering, preserve prior files on errors, and add six

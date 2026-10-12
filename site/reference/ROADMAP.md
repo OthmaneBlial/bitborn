@@ -120,6 +120,10 @@ The v0.2 milestone is published and verified. The following research remains ope
 
 ## Evolution session
 
+- [x] Validate manifest types, canonical paths, packaging combinations and reviewed
+  references; reject symlink/hard-link output aliases. Check all source hashes,
+  sizes and derived packages before writing; invalid later targets preserve outputs.
+
 - [x] Add an ELF64 anatomy explorer with checksummed native examples, field/byte
   selection, exact entry-to-file mapping, segments and zero-fill classification.
   Six real artifacts, payload identity, 2,000 seeded mutations and three-browser

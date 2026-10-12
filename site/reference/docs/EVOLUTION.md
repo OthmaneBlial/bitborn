@@ -48,7 +48,10 @@ identical to immutable v0.2. Staging rejects unknown files and aliases before wr
 
 Completed next: read-only ELF64 anatomy, six actual artifacts/payloads, exact
 entry/segment mapping, 2,000 seeded mutations and three-browser import/mobile
-checks. Next: manifest validation and deeper native experiments.
+checks. Manifest validation now checks types/options, references and resolved
+output aliases, and preflights every source/package before writes. The ELF
+milestone is committed as `c9c0bf4`; its website mirror is `12d91b7` (deployment
+verification pending). Next: deeper native experiments.
 Risks: inspection supports a documented subset; execution remains the bounded
 16-bit model. Native-speaker review, hardware, paging and general interrupts
 require separate evidence. Detailed technical guides remain English.
@@ -74,7 +77,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 11 | 1 | Rewind self-modifying code; restore the fetched instruction bytes | H | H | 02 | Medium | Complete |
 | 12 | 1 | Visual execution timeline with keyboard selection and recorded-step replay | H | M | 02 | Medium | Complete |
 | 13 | 0 | Replace failed file writes atomically so existing packed outputs survive I/O errors | H | M | Existing CLI | Medium | Complete |
-| 14 | 0 | Validate manifest types, output aliases and packaging options before writing | H | H | Existing manifest | Medium | Open |
+| 14 | 0 | Validate manifest types, output aliases and packaging options before writing | H | H | Existing manifest | Medium | Complete: all-source/package preflight; no multi-file I/O transaction |
 | 15 | 0 | Structured source diagnostics with stable error codes and source-line locations | H | M | 03 | Medium | Open |
 | 16 | 1 | Address-reference inspector that checks literal pointers without resolving labels into code | H | M | Annotations | Medium | Open |
 | 17 | 1 | Register-to-register MOV encodings with independent ModR/M fixtures | H | M | 05 | Medium | Open |

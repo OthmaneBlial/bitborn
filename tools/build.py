@@ -65,11 +65,16 @@ def package_target(target, data, root=ROOT, manifest=None):
 
 
 def build():
-    manifest = targets()
-    (ROOT / 'build').mkdir(exist_ok=True)
+    manifest = targets(ROOT)
+    prepared = []
     for target in manifest:
         data, annotations = read_bits(ROOT / target['source'])
-        for relative, contents in package_target(target, data, ROOT, manifest).items():
+        if len(data) != target['size'] or digest(data) != target['sha256']:
+            raise ValueError(f"{target['source']}: literal bytes differ from reviewed size or SHA-256")
+        prepared.append((target, data, annotations, package_target(target, data, ROOT, manifest)))
+    (ROOT / 'build').mkdir(exist_ok=True)
+    for target, data, annotations, packaged in prepared:
+        for relative, contents in packaged.items():
             output = ROOT / 'build' / relative
             output.parent.mkdir(parents=True, exist_ok=True)
             output.write_bytes(contents)

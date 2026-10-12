@@ -41,7 +41,7 @@ class ReleaseTests(unittest.TestCase):
             (root / 'boot/boot.bits').write_bytes(source)
             (root / 'build/boot.img').write_bytes(payload)
             (root / 'build/unreviewed.bin').write_bytes(b'not reviewed')
-            (root / 'targets.json').write_text(json.dumps([{'source':'boot/boot.bits','output':'boot.img','sha256':digest(payload)}]))
+            (root / 'targets.json').write_text(json.dumps([{'source':'boot/boot.bits','output':'boot.img','size':1,'sha256':digest(payload)}]))
             (root / 'release/source.tar.gz').write_bytes(b'fixed source archive')
             (root / 'release/SHA256SUMS').write_bytes(b'not self-hashed')
             (root / 'release/release-provenance.json').write_bytes(b'previous manifest')
@@ -59,14 +59,14 @@ class ReleaseTests(unittest.TestCase):
             (root / 'build').mkdir()
             (root / 'build/unreviewed.img').write_bytes(b'untrusted test download')
             (root / 'targets.json').write_text(json.dumps([
-                {'source':'boot/boot.bits','output':'boot.img'},
-                {'source':'examples/exit-code/program.bits','output':'exit.bin','environment':'linux-x86_64'},
-                {'source':'boot/loader.bits','output':'loader.bin'},
-                {'source':'examples/monitor/program.bits','output':'monitor.bin','loader':'boot/loader.bits'},
+                {'source':'boot/boot.bits','output':'boot.img','size':512,'sha256':digest(bytes(512))},
+                {'source':'examples/exit-code/program.bits','output':'exit.bin','size':1,'sha256':digest(b'x'),'environment':'linux-x86_64'},
+                {'source':'boot/loader.bits','output':'loader.bin','size':1,'sha256':digest(b'x')},
+                {'source':'examples/monitor/program.bits','output':'monitor.bin','size':1,'sha256':digest(b'x'),'loader':'boot/loader.bits'},
             ]))
             self.assertEqual([str(path) for path in artifact_paths(root)],['boot.img','exit.bin','exit.elf','monitor.bin','monitor.img'])
-            (root / 'targets.json').write_text(json.dumps([{'source':'x.bits','output':'../outside.img'}]))
-            with self.assertRaisesRegex(ValueError,'inside the project'):
+            (root / 'targets.json').write_text(json.dumps([{'source':'x.bits','output':'../outside.img','size':1,'sha256':digest(b'x')}]))
+            with self.assertRaisesRegex(ValueError,'relative project paths'):
                 artifact_paths(root)
 
     def test_deterministic_archive_and_executable_mode(self):

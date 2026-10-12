@@ -52,23 +52,92 @@ def target_output_paths(target):
 
 
 def targets(root=ROOT):
-    manifest = json.loads((root / 'targets.json').read_text())
-    for relative in ('challenges/targets.json', 'examples/shell/targets.json'):
+    root = Path(root).resolve()
+    manifest = []
+    for relative in ('targets.json', 'challenges/targets.json', 'examples/shell/targets.json'):
         extra = root / relative
-        if extra.exists():
-            manifest += json.loads(extra.read_text())
+        if relative == 'targets.json' or extra.exists():
+            entries = json.loads(extra.read_text())
+            if not isinstance(entries, list):
+                raise ValueError(f'{relative}: reviewed targets must be a JSON list')
+            manifest.extend(entries)
+    required = {'source', 'output', 'size', 'sha256'}
+    optional = {'name', 'architecture', 'environment', 'bios', 'bootable', 'loader', 'disk_payloads'}
+    def path(name):
+        if not isinstance(name, str) or not name or '\\' in name or any(ord(c) < 32 for c in name) or Path(name).is_absolute() or any(part in ('', '.', '..') for part in name.split('/')):
+            raise ValueError('Reviewed target paths must be canonical relative project paths')
+    for target in manifest:
+        if not isinstance(target, dict) or not required <= target.keys() or target.keys() - required - optional:
+            raise ValueError('Reviewed target needs source, output, size and sha256; unknown fields are rejected')
+        path(target['source']); path(target['output'])
+        if not target['source'].endswith('.bits') or type(target['size']) is not int or target['size'] <= 0 or not isinstance(target['sha256'], str) or not re.fullmatch(r'[a-f0-9]{64}', target['sha256']):
+            raise ValueError('Reviewed target needs a .bits source, positive integer size and lowercase SHA-256')
+        for key in ('bios', 'bootable'):
+            if key in target and type(target[key]) is not bool:
+                raise ValueError(f'{key} must be a JSON boolean')
+        for key in ('name', 'architecture'):
+            if key in target and (not isinstance(target[key], str) or not target[key]):
+                raise ValueError(f'{key} must be a nonempty string')
+        if 'environment' in target and target['environment'] not in ('linux-x86_64', 'bios-real-mode'):
+            raise ValueError('Unsupported target environment')
+        if 'loader' in target:
+            path(target['loader'])
+        if target.get('bios') and target['size'] != 512:
+            raise ValueError('Complete BIOS targets must declare 512 bytes')
+        if target.get('environment') == 'linux-x86_64' and (target.get('bios') or target.get('bootable') or 'loader' in target):
+            raise ValueError('Linux ELF and BIOS packaging options cannot be combined')
+        if 'loader' in target and (target.get('bios') or target.get('bootable')):
+            raise ValueError('Second-stage loader and boot-sector packaging cannot be combined')
+        if 'disk_payloads' in target:
+            payloads = target['disk_payloads']
+            if 'loader' not in target or not isinstance(payloads, list):
+                raise ValueError('Disk payloads need a loader and a JSON list')
+            sector = 4
+            for payload in payloads:
+                if not isinstance(payload, dict) or not {'source', 'sectors', 'first_sector'} <= payload.keys() or payload.keys() - {'source', 'sectors', 'first_sector', 'load_address'}:
+                    raise ValueError('Invalid disk payload fields')
+                path(payload['source'])
+                if type(payload['sectors']) is not int or not 1 <= payload['sectors'] <= 18 or type(payload['first_sector']) is not int or payload['first_sector'] != sector:
+                    raise ValueError('Disk payloads need bounded integer sectors and contiguous layout')
+                if 'load_address' in payload and (type(payload['load_address']) is not int or not 0 <= payload['load_address'] < 1 << 20):
+                    raise ValueError('Disk load address must be a real-mode integer address')
+                sector += payload['sectors']
     sources, outputs = [target['source'] for target in manifest], [target['output'] for target in manifest]
     if len(set(sources)) != len(sources) or len(set(outputs)) != len(outputs):
         raise ValueError('Reviewed targets must have unique sources and outputs')
-    for name in sources + outputs:
-        if Path(name).is_absolute() or '..' in Path(name).parts:
-            raise ValueError('Reviewed target paths must stay inside the project')
+    for target in manifest:
+        references = ([target['loader']] if 'loader' in target else []) + [item['source'] for item in target.get('disk_payloads', [])]
+        if any(source not in sources for source in references):
+            raise ValueError('Loader and disk payload sources must be reviewed targets')
+    source_paths = [(root / name).resolve() for name in sources]
+    if any(not source.is_relative_to(root) for source in source_paths):
+        raise ValueError('Reviewed sources must resolve inside the project')
+    source_inodes = {(stat.st_dev, stat.st_ino) for source in source_paths if source.exists() for stat in [source.stat()]}
+    build_root = (root / 'build').resolve()
+    if not build_root.is_relative_to(root):
+        raise ValueError('Build directory must resolve inside the project')
     emitted = set()
     for target in manifest:
         paths = target_output_paths(target)
         if emitted & paths:
             raise ValueError('Reviewed targets have colliding raw or packaged output paths')
         emitted |= paths
+    resolved, inodes = set(), set()
+    for output in emitted:
+        destination = (build_root / output).resolve()
+        if not destination.is_relative_to(build_root) or destination in resolved or destination in source_paths:
+            raise ValueError('Reviewed outputs must not escape build, alias sources or alias each other')
+        if destination.exists() and not destination.is_file():
+            raise ValueError('Reviewed outputs must be regular files')
+        if destination.exists():
+            stat = destination.stat()
+            inode = (stat.st_dev, stat.st_ino)
+            if inode in source_inodes:
+                raise ValueError('Reviewed outputs must not alias sources')
+            if inode in inodes:
+                raise ValueError('Reviewed outputs must not alias each other')
+            inodes.add(inode)
+        resolved.add(destination)
     return manifest
 
 

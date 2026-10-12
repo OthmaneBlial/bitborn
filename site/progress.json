@@ -134,6 +134,10 @@
       "progress": "\u2705 Six checksummed files, exact entry/segment mapping, bounded local inspection and 2,000 seeded mutations; three-browser keyboard/mobile checks; no imported code execution"
     },
     {
+      "milestone": "Reviewed build preflight",
+      "progress": "\u2705 Manifest types/options, source/output aliases and every payload/package checked before writes; malformed later targets preserve previous artifacts"
+    },
+    {
       "milestone": "v0.3.0 release and provenance",
       "progress": "\u2705 Exact-commit CI passed; all 14 public files re-downloaded anonymously, bytes/checksums and source/artifact provenance verified"
     },

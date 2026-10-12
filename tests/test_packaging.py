@@ -30,11 +30,11 @@ class PackagingTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             for packaging, suffix in [({'environment':'linux-x86_64'},'.elf'), ({'bootable':True},'.img')]:
-                manifest = [{'source':'a.bits','output':'same.bin',**packaging}, {'source':'b.bits','output':'same'+suffix}]
+                manifest = [{'source':'a.bits','output':'same.bin','size':1,'sha256':digest(b'x'),**packaging}, {'source':'b.bits','output':'same'+suffix,'size':1,'sha256':digest(b'x')}]
                 (root / 'targets.json').write_text(json.dumps(manifest))
                 with self.assertRaisesRegex(ValueError,'colliding'):
                     targets(root)
-            (root / 'targets.json').write_text(json.dumps([{'source':'boot.bits','output':'boot.img','bios':True,'bootable':True}]))
+            (root / 'targets.json').write_text(json.dumps([{'source':'boot.bits','output':'boot.img','size':512,'sha256':digest(bytes(512)),'bios':True,'bootable':True}]))
             self.assertEqual(len(targets(root)),1)
 
     def test_disk_layout_and_reviewed_payload_limits(self):
