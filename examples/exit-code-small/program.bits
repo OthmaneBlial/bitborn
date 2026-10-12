@@ -1,0 +1,6 @@
+# Linux x86-64; all eight executable bytes are authored literally here.
+01101010 00111100 # instruction | PUSH 60 | 6A sign-extends the immediate to a 64-bit stack word.
+01011000 # instruction | POP RAX | 58 moves that stack word into the syscall-number register.
+01101010 00101010 # instruction | PUSH 42 | Push the desired exit status as a 64-bit word.
+01011111 # instruction | POP RDI | 5F restores the stack pointer and sets the first syscall argument.
+00001111 00000101 # instruction | SYSCALL | 0F 05 enters the Linux kernel; syscall 60 exits with status 42.

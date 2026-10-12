@@ -1,0 +1,9 @@
+# Canonical starting puzzle: every executable byte is a literal binary token.
+11111010 # instruction | CLI | Keep interrupts masked while using the stack.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Use the loader's segment-zero stack below 7C00.
+10111000 00110100 00010010 # instruction | MOV AX,1234 | Initialize the value being transferred.
+10111011 00000000 00000000 # instruction | MOV BX,0 | Initialize the intended destination.
+10111001 00000000 00000000 # instruction | MOV CX,0 | Initialize the accidentally selected destination.
+01010000 # instruction | PUSH AX | Store low byte 34 at 7BFE and high byte 12 at 7BFF.
+01011001 # instruction | POP CX | 59 selects CX, the wrong destination.
+11110100 # instruction | HLT | Stop with the stack balanced but BX unchanged.

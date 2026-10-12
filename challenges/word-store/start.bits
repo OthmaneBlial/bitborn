@@ -1,0 +1,5 @@
+# Canonical starting puzzle: every executable byte is a literal binary token.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 00110100 00010010 # instruction | MOV AX,1234 | Initialize the word to store.
+10100010 00000000 00000110 # instruction | MOV [0600],AL | A2 stores only the low byte, leaving the second byte unwritten.
+11110100 # instruction | HLT | Stop after the partial store.

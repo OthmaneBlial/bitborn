@@ -1,0 +1,5307 @@
+[
+  {
+    "id": "return-42",
+    "title": "Make AX hold 42",
+    "difficulty": "beginner",
+    "path": "01 · Registers & bytes",
+    "summary": "Start with one instruction and find the operand hiding beside its opcode.",
+    "goal": "Halt with AX = 42.",
+    "goals": {
+      "registers": {
+        "AX": 42
+      }
+    },
+    "editableOffsets": [
+      2,
+      3
+    ],
+    "maxChangedBits": 8,
+    "hints": [
+      "The first byte B8 selects AX. Leave that opcode alone.",
+      "The next two bytes form the immediate value, low byte first.",
+      "42 in decimal is 00101010 in eight binary digits."
+    ],
+    "explanation": "MOV does not calculate: it copies the immediate into AX. The low operand byte changes from 41 to 42 while the high byte stays zero.",
+    "visual": "B8 → register AX · 2A 00 → value 002A",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/return-42/start.bits",
+    "solution": "challenges/return-42/solution.bits",
+    "startBytes": [
+      250,
+      184,
+      41,
+      0,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Mask interrupts so the final halt stays stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,41",
+        "explanation": "B8 chooses AX; 29 00 is the little-endian immediate 41.",
+        "bits": "10111000 00101001 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with the current register value.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Mask interrupts so the final halt stays stopped.\n10111000 00101001 00000000 # instruction | MOV AX,41 | B8 chooses AX; 29 00 is the little-endian immediate 41.\n11110100 # instruction | HLT | Stop with the current register value.\n",
+    "startSha256": "51667a2e3651539c0361a54912989cb8882f71f39efcb64b569b2d5099c74aab",
+    "solutionBytes": [
+      250,
+      184,
+      42,
+      0,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Mask interrupts so the final halt stays stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,42",
+        "explanation": "B8 chooses AX; 2A 00 is the little-endian immediate 42.",
+        "bits": "10111000 00101010 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with AX equal to 42.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Mask interrupts so the final halt stays stopped.\n10111000 00101010 00000000 # instruction | MOV AX,42 | B8 chooses AX; 2A 00 is the little-endian immediate 42.\n11110100 # instruction | HLT | Stop with AX equal to 42.\n",
+    "solutionSha256": "c580524b53ad1a9be116f15dbdfa741d167b3323317766841364f7e72967b1fa"
+  },
+  {
+    "id": "little-endian",
+    "title": "Untangle the byte order",
+    "difficulty": "beginner",
+    "path": "01 · Registers & bytes",
+    "summary": "Two correct-looking bytes form the wrong word.",
+    "goal": "Halt with AX = 0x1234 (4660).",
+    "goals": {
+      "registers": {
+        "AX": 4660
+      }
+    },
+    "editableOffsets": [
+      2,
+      3
+    ],
+    "maxChangedBits": 8,
+    "hints": [
+      "A 16-bit immediate occupies two bytes.",
+      "The first operand contributes bits 0–7; the second contributes bits 8–15.",
+      "Write 34 first, then 12: 00110100 00010010."
+    ],
+    "explanation": "Little-endian storage puts the least significant byte at the lower address. The bit order inside each byte does not reverse.",
+    "visual": "memory order: 34 → 12 · numeric word: 12 | 34",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/little-endian/start.bits",
+    "solution": "challenges/little-endian/solution.bits",
+    "startBytes": [
+      250,
+      184,
+      18,
+      52,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,3412",
+        "explanation": "The byte order is 12 34, so the word is 3412 rather than 1234.",
+        "bits": "10111000 00010010 00110100"
+      },
+      {
+        "offset": 4,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop and inspect AX.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 00010010 00110100 # instruction | MOV AX,3412 | The byte order is 12 34, so the word is 3412 rather than 1234.\n11110100 # instruction | HLT | Stop and inspect AX.\n",
+    "startSha256": "2efc7e8eab58a480f1c2f1e3eb02f423b145f2016abd56cfc7dd56d95198eeb4",
+    "solutionBytes": [
+      250,
+      184,
+      52,
+      18,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,1234",
+        "explanation": "The low byte 34 precedes the high byte 12.",
+        "bits": "10111000 00110100 00010010"
+      },
+      {
+        "offset": 4,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with the requested word.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 00110100 00010010 # instruction | MOV AX,1234 | The low byte 34 precedes the high byte 12.\n11110100 # instruction | HLT | Stop with the requested word.\n",
+    "solutionSha256": "dd49609a90f26a67404a2367e24fe0e531df49e9c8e8499b771380dd44918592"
+  },
+  {
+    "id": "choose-register",
+    "title": "Choose the destination",
+    "difficulty": "beginner",
+    "path": "01 · Registers & bytes",
+    "summary": "The value is right. The three register-selector bits are wrong.",
+    "goal": "Halt with BX = 42 and CX = 0.",
+    "goals": {
+      "registers": {
+        "BX": 42,
+        "CX": 0
+      }
+    },
+    "editableOffsets": [
+      7
+    ],
+    "maxChangedBits": 3,
+    "hints": [
+      "B8 through BF are MOV immediate encodings for eight 16-bit registers.",
+      "The register order is AX, CX, DX, BX, SP, BP, SI, DI.",
+      "B9 is CX; BB (10111011) is BX."
+    ],
+    "explanation": "The low three opcode bits carry the register index. Changing one selector bit sends the same immediate to BX instead of CX.",
+    "visual": "10111[001] CX → 10111[011] BX",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/choose-register/start.bits",
+    "solution": "challenges/choose-register/solution.bits",
+    "startBytes": [
+      250,
+      187,
+      0,
+      0,
+      185,
+      0,
+      0,
+      185,
+      42,
+      0,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,0",
+        "explanation": "Initialize BX independently of the BIOS loader.",
+        "bits": "10111011 00000000 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV CX,0",
+        "explanation": "Initialize CX so the wrong destination is observable.",
+        "bits": "10111001 00000000 00000000"
+      },
+      {
+        "offset": 7,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV CX,42",
+        "explanation": "B9 selects CX; the immediate itself is already correct.",
+        "bits": "10111001 00101010 00000000"
+      },
+      {
+        "offset": 10,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop after writing the wrong register.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111011 00000000 00000000 # instruction | MOV BX,0 | Initialize BX independently of the BIOS loader.\n10111001 00000000 00000000 # instruction | MOV CX,0 | Initialize CX so the wrong destination is observable.\n10111001 00101010 00000000 # instruction | MOV CX,42 | B9 selects CX; the immediate itself is already correct.\n11110100 # instruction | HLT | Stop after writing the wrong register.\n",
+    "startSha256": "69ae7f40d92c98df8bdeb916286fd08d1c19d21226cd753ddad0277374bce113",
+    "solutionBytes": [
+      250,
+      187,
+      0,
+      0,
+      185,
+      0,
+      0,
+      187,
+      42,
+      0,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,0",
+        "explanation": "Initialize BX independently of the BIOS loader.",
+        "bits": "10111011 00000000 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV CX,0",
+        "explanation": "Initialize CX so it must remain zero.",
+        "bits": "10111001 00000000 00000000"
+      },
+      {
+        "offset": 7,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,42",
+        "explanation": "BB equals B8 plus register index three, selecting BX.",
+        "bits": "10111011 00101010 00000000"
+      },
+      {
+        "offset": 10,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with BX=42 and CX=0.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111011 00000000 00000000 # instruction | MOV BX,0 | Initialize BX independently of the BIOS loader.\n10111001 00000000 00000000 # instruction | MOV CX,0 | Initialize CX so it must remain zero.\n10111011 00101010 00000000 # instruction | MOV BX,42 | BB equals B8 plus register index three, selecting BX.\n11110100 # instruction | HLT | Stop with BX=42 and CX=0.\n",
+    "solutionSha256": "8449a037aa435f82abdde432c8a71dd270723ff9432d304418cccb8c8bf98e18"
+  },
+  {
+    "id": "high-low",
+    "title": "Split a register in half",
+    "difficulty": "beginner",
+    "path": "01 · Registers & bytes",
+    "summary": "AH and AL are separately addressable halves of AX.",
+    "goal": "Halt with AX = 0x0E42.",
+    "goals": {
+      "registers": {
+        "AX": 3650
+      }
+    },
+    "editableOffsets": [
+      5,
+      7
+    ],
+    "maxChangedBits": 8,
+    "hints": [
+      "AH occupies bits 8–15. AL occupies bits 0–7.",
+      "The desired high byte is 0E; the desired low byte is 42.",
+      "Swap the operand bytes, preserving both opcodes B4 and B0."
+    ],
+    "explanation": "MOV AH changes only the upper half; MOV AL changes only the lower half. This layout also prepares AH=0E and AL=B for BIOS teletype output.",
+    "visual": "AX: [ AH 00001110 ][ AL 01000010 ]",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/high-low/start.bits",
+    "solution": "challenges/high-low/solution.bits",
+    "startBytes": [
+      250,
+      184,
+      0,
+      0,
+      180,
+      66,
+      176,
+      14,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,0",
+        "explanation": "Initialize both halves of AX.",
+        "bits": "10111000 00000000 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AH,42",
+        "explanation": "AH is the high byte; 42 here is hexadecimal 42, ASCII B.",
+        "bits": "10110100 01000010"
+      },
+      {
+        "offset": 6,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AL,0E",
+        "explanation": "AL is the low byte; the two operands are exchanged.",
+        "bits": "10110000 00001110"
+      },
+      {
+        "offset": 8,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with AX=420E.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 00000000 00000000 # instruction | MOV AX,0 | Initialize both halves of AX.\n10110100 01000010 # instruction | MOV AH,42 | AH is the high byte; 42 here is hexadecimal 42, ASCII B.\n10110000 00001110 # instruction | MOV AL,0E | AL is the low byte; the two operands are exchanged.\n11110100 # instruction | HLT | Stop with AX=420E.\n",
+    "startSha256": "b5362a6bb3ad169a646b8bfd9dfb06edc003545401bb61fb74e1368242c6753e",
+    "solutionBytes": [
+      250,
+      184,
+      0,
+      0,
+      180,
+      14,
+      176,
+      66,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,0",
+        "explanation": "Initialize both halves of AX.",
+        "bits": "10111000 00000000 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AH,0E",
+        "explanation": "B4 selects AH, the upper eight bits of AX.",
+        "bits": "10110100 00001110"
+      },
+      {
+        "offset": 6,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AL,42",
+        "explanation": "B0 selects AL, the lower eight bits; 42 is ASCII B.",
+        "bits": "10110000 01000010"
+      },
+      {
+        "offset": 8,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with AX=0E42.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 00000000 00000000 # instruction | MOV AX,0 | Initialize both halves of AX.\n10110100 00001110 # instruction | MOV AH,0E | B4 selects AH, the upper eight bits of AX.\n10110000 01000010 # instruction | MOV AL,42 | B0 selects AL, the lower eight bits; 42 is ASCII B.\n11110100 # instruction | HLT | Stop with AX=0E42.\n",
+    "solutionSha256": "85a272e64e9559c769f4d91e08575f8b61cc5a48c32c6b71895dcffb6dcaef0a"
+  },
+  {
+    "id": "print-character",
+    "title": "Put B on the screen",
+    "difficulty": "beginner",
+    "path": "01 · Registers & bytes",
+    "summary": "A real BIOS software interrupt turns an ASCII operand into a visible character.",
+    "goal": "Halt after printing exactly B.",
+    "goals": {
+      "output": "B"
+    },
+    "editableOffsets": [
+      12
+    ],
+    "maxChangedBits": 3,
+    "hints": [
+      "INT 10 with AH=0E prints the character stored in AL.",
+      "The MOV AL instruction starts at byte 11. Its operand is byte 12.",
+      "ASCII B is hexadecimal 42, binary 01000010."
+    ],
+    "explanation": "The instruction stream chooses BIOS text mode, selects page zero, loads a teletype character and calls INT 10. The teaching model records B; the QEMU test checks the actual VGA character byte.",
+    "visual": "AL = 42 → INT 10 / AH 0E → screen B",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/print-character/start.bits",
+    "solution": "challenges/print-character/solution.bits",
+    "startBytes": [
+      250,
+      184,
+      3,
+      0,
+      205,
+      16,
+      187,
+      7,
+      0,
+      180,
+      14,
+      176,
+      65,
+      205,
+      16,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Mask interrupts while retaining software BIOS calls.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,0003",
+        "explanation": "Select BIOS text mode 3 to clear the screen.",
+        "bits": "10111000 00000011 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "INT 10",
+        "explanation": "Invoke the video BIOS using AX=0003.",
+        "bits": "11001101 00010000"
+      },
+      {
+        "offset": 6,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,0007",
+        "explanation": "Select page zero and attribute seven.",
+        "bits": "10111011 00000111 00000000"
+      },
+      {
+        "offset": 9,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AH,0E",
+        "explanation": "Select BIOS teletype service.",
+        "bits": "10110100 00001110"
+      },
+      {
+        "offset": 11,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AL,41",
+        "explanation": "Load ASCII A, the wrong output character.",
+        "bits": "10110000 01000001"
+      },
+      {
+        "offset": 13,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "INT 10",
+        "explanation": "Print AL using AH=0E.",
+        "bits": "11001101 00010000"
+      },
+      {
+        "offset": 15,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop after printing one character.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Mask interrupts while retaining software BIOS calls.\n10111000 00000011 00000000 # instruction | MOV AX,0003 | Select BIOS text mode 3 to clear the screen.\n11001101 00010000 # instruction | INT 10 | Invoke the video BIOS using AX=0003.\n10111011 00000111 00000000 # instruction | MOV BX,0007 | Select page zero and attribute seven.\n10110100 00001110 # instruction | MOV AH,0E | Select BIOS teletype service.\n10110000 01000001 # instruction | MOV AL,41 | Load ASCII A, the wrong output character.\n11001101 00010000 # instruction | INT 10 | Print AL using AH=0E.\n11110100 # instruction | HLT | Stop after printing one character.\n",
+    "startSha256": "14a9df0cc3fdfc01acda1d1e5c2ecd76905b1192f8614688328f81e5fc67a3bb",
+    "solutionBytes": [
+      250,
+      184,
+      3,
+      0,
+      205,
+      16,
+      187,
+      7,
+      0,
+      180,
+      14,
+      176,
+      66,
+      205,
+      16,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Mask interrupts while retaining software BIOS calls.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,0003",
+        "explanation": "Select BIOS text mode 3 to clear the screen.",
+        "bits": "10111000 00000011 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "INT 10",
+        "explanation": "Invoke the video BIOS using AX=0003.",
+        "bits": "11001101 00010000"
+      },
+      {
+        "offset": 6,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,0007",
+        "explanation": "Select page zero and attribute seven.",
+        "bits": "10111011 00000111 00000000"
+      },
+      {
+        "offset": 9,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AH,0E",
+        "explanation": "Select BIOS teletype service.",
+        "bits": "10110100 00001110"
+      },
+      {
+        "offset": 11,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AL,42",
+        "explanation": "Load ASCII B, decimal 66.",
+        "bits": "10110000 01000010"
+      },
+      {
+        "offset": 13,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "INT 10",
+        "explanation": "Print AL using AH=0E.",
+        "bits": "11001101 00010000"
+      },
+      {
+        "offset": 15,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop after the visible B.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Mask interrupts while retaining software BIOS calls.\n10111000 00000011 00000000 # instruction | MOV AX,0003 | Select BIOS text mode 3 to clear the screen.\n11001101 00010000 # instruction | INT 10 | Invoke the video BIOS using AX=0003.\n10111011 00000111 00000000 # instruction | MOV BX,0007 | Select page zero and attribute seven.\n10110100 00001110 # instruction | MOV AH,0E | Select BIOS teletype service.\n10110000 01000010 # instruction | MOV AL,42 | Load ASCII B, decimal 66.\n11001101 00010000 # instruction | INT 10 | Print AL using AH=0E.\n11110100 # instruction | HLT | Stop after the visible B.\n",
+    "solutionSha256": "fc7388fb81b6282420b69ced1cf1f37f1e9f84a0f33307f95ca63daa3a739b0a"
+  },
+  {
+    "id": "addition",
+    "title": "Balance the sum",
+    "difficulty": "intermediate",
+    "path": "02 · Arithmetic & control flow",
+    "summary": "Keep the arithmetic instruction and fix its input. Multiple correct immediate pairs are accepted.",
+    "goal": "Halt with AX = 42 and CF = 0.",
+    "goals": {
+      "registers": {
+        "AX": 42
+      },
+      "flags": {
+        "cf": false
+      }
+    },
+    "editableOffsets": [
+      2,
+      3,
+      5,
+      6
+    ],
+    "maxChangedBits": 12,
+    "hints": [
+      "The starting program computes 35 + 6 = 41.",
+      "ADD AX has opcode 05 followed by a little-endian immediate.",
+      "One solution changes the addend from 6 to 7; another uses 34 + 8."
+    ],
+    "explanation": "Validation checks the computed result rather than matching a secret answer. Different allowed immediate pairs are valid when their sum reaches 42 without unsigned carry.",
+    "visual": "AX 0023 + immediate 0007 → AX 002A",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/addition/start.bits",
+    "solution": "challenges/addition/solution.bits",
+    "startBytes": [
+      250,
+      184,
+      35,
+      0,
+      5,
+      6,
+      0,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,35",
+        "explanation": "Start from decimal 35.",
+        "bits": "10111000 00100011 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "ADD AX,6",
+        "explanation": "05 adds a little-endian immediate; this produces only 41.",
+        "bits": "00000101 00000110 00000000"
+      },
+      {
+        "offset": 7,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop after the arithmetic.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 00100011 00000000 # instruction | MOV AX,35 | Start from decimal 35.\n00000101 00000110 00000000 # instruction | ADD AX,6 | 05 adds a little-endian immediate; this produces only 41.\n11110100 # instruction | HLT | Stop after the arithmetic.\n",
+    "startSha256": "cf041388e232c03e42a53f6d274ced49e7d7c3e7286e2af583865ee6133b49d4",
+    "solutionBytes": [
+      250,
+      184,
+      35,
+      0,
+      5,
+      7,
+      0,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,35",
+        "explanation": "Start from decimal 35.",
+        "bits": "10111000 00100011 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "ADD AX,7",
+        "explanation": "23 plus 07 in hexadecimal is 2A, decimal 42.",
+        "bits": "00000101 00000111 00000000"
+      },
+      {
+        "offset": 7,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with AX=42.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 00100011 00000000 # instruction | MOV AX,35 | Start from decimal 35.\n00000101 00000111 00000000 # instruction | ADD AX,7 | 23 plus 07 in hexadecimal is 2A, decimal 42.\n11110100 # instruction | HLT | Stop with AX=42.\n",
+    "solutionSha256": "65c8867201f29daa89c6b1bc5c052a584df9d63daf5b3f5bf8285fe476c18764"
+  },
+  {
+    "id": "borrow",
+    "title": "Borrow below zero",
+    "difficulty": "intermediate",
+    "path": "02 · Arithmetic & control flow",
+    "summary": "Unsigned subtraction can wrap even when the stored result looks large.",
+    "goal": "Halt with AX = 0xFFFF, CF = 1 and ZF = 0.",
+    "goals": {
+      "registers": {
+        "AX": 65535
+      },
+      "flags": {
+        "cf": true,
+        "zf": false
+      }
+    },
+    "editableOffsets": [
+      2,
+      3
+    ],
+    "maxChangedBits": 8,
+    "hints": [
+      "The SUB immediate is already one. Change the initial AX value.",
+      "CF reports an unsigned borrow for SUB. ZF reports a zero result.",
+      "Start from zero: 0 − 1 wraps to FFFF."
+    ],
+    "explanation": "Sixteen result bits cannot store negative one as an unsigned value. They wrap to FFFF; CF records the borrow separately. ZF stays clear because FFFF is not zero.",
+    "visual": "0000 − 0001 → FFFF · CF 1 · ZF 0",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/borrow/start.bits",
+    "solution": "challenges/borrow/solution.bits",
+    "startBytes": [
+      250,
+      184,
+      1,
+      0,
+      45,
+      1,
+      0,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,1",
+        "explanation": "One minus one cannot demonstrate unsigned borrow.",
+        "bits": "10111000 00000001 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "SUB AX,1",
+        "explanation": "2D subtracts one and updates arithmetic flags.",
+        "bits": "00101101 00000001 00000000"
+      },
+      {
+        "offset": 7,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with AX=0 and CF clear.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 00000001 00000000 # instruction | MOV AX,1 | One minus one cannot demonstrate unsigned borrow.\n00101101 00000001 00000000 # instruction | SUB AX,1 | 2D subtracts one and updates arithmetic flags.\n11110100 # instruction | HLT | Stop with AX=0 and CF clear.\n",
+    "startSha256": "7b996a20704eb116811f6ea18af899b570b8a89e929df59dff7b08f2febb5585",
+    "solutionBytes": [
+      250,
+      184,
+      0,
+      0,
+      45,
+      1,
+      0,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,0",
+        "explanation": "Start at the unsigned lower boundary.",
+        "bits": "10111000 00000000 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "SUB AX,1",
+        "explanation": "Zero minus one wraps to FFFF and sets the borrow flag CF.",
+        "bits": "00101101 00000001 00000000"
+      },
+      {
+        "offset": 7,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with AX=FFFF, CF=1 and ZF=0.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 00000000 00000000 # instruction | MOV AX,0 | Start at the unsigned lower boundary.\n00101101 00000001 00000000 # instruction | SUB AX,1 | Zero minus one wraps to FFFF and sets the borrow flag CF.\n11110100 # instruction | HLT | Stop with AX=FFFF, CF=1 and ZF=0.\n",
+    "solutionSha256": "e798500ca7a75c42d43716602ccd09704693bf12eeacffdaf320273c63ee66c4"
+  },
+  {
+    "id": "equality",
+    "title": "Make the comparison equal",
+    "difficulty": "intermediate",
+    "path": "02 · Arithmetic & control flow",
+    "summary": "CMP updates flags without overwriting its input.",
+    "goal": "Halt with AX = 42, BX = 0 and ZF = 1.",
+    "goals": {
+      "registers": {
+        "AX": 42,
+        "BX": 0
+      },
+      "flags": {
+        "zf": true
+      }
+    },
+    "editableOffsets": [
+      8,
+      9
+    ],
+    "maxChangedBits": 8,
+    "hints": [
+      "The failure assignment is MOV BX,1. A JZ can skip it.",
+      "JZ checks ZF, which the immediately preceding CMP sets.",
+      "Compare AX with 42 by writing 2A 00 in the CMP operand."
+    ],
+    "explanation": "CMP performs a subtraction only to set flags. Equal values set ZF, so JZ takes its +3 displacement from the end of the jump to HLT. AX remains 42.",
+    "visual": "CMP at 07 → JZ at 0A → next 0C + 03 = HLT 0F",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/equality/start.bits",
+    "solution": "challenges/equality/solution.bits",
+    "startBytes": [
+      250,
+      184,
+      42,
+      0,
+      187,
+      0,
+      0,
+      61,
+      41,
+      0,
+      116,
+      3,
+      187,
+      1,
+      0,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,42",
+        "explanation": "Establish the value to compare.",
+        "bits": "10111000 00101010 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,0",
+        "explanation": "Zero is the success marker.",
+        "bits": "10111011 00000000 00000000"
+      },
+      {
+        "offset": 7,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "CMP AX,41",
+        "explanation": "CMP sets flags but leaves AX unchanged; this is unequal.",
+        "bits": "00111101 00101001 00000000"
+      },
+      {
+        "offset": 10,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "JZ +3",
+        "explanation": "Jump over the three-byte failure assignment only when ZF is set.",
+        "bits": "01110100 00000011"
+      },
+      {
+        "offset": 12,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,1",
+        "explanation": "This fall-through path marks failure.",
+        "bits": "10111011 00000001 00000000"
+      },
+      {
+        "offset": 15,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop at offset 15.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 00101010 00000000 # instruction | MOV AX,42 | Establish the value to compare.\n10111011 00000000 00000000 # instruction | MOV BX,0 | Zero is the success marker.\n00111101 00101001 00000000 # instruction | CMP AX,41 | CMP sets flags but leaves AX unchanged; this is unequal.\n01110100 00000011 # instruction | JZ +3 | Jump over the three-byte failure assignment only when ZF is set.\n10111011 00000001 00000000 # instruction | MOV BX,1 | This fall-through path marks failure.\n11110100 # instruction | HLT | Stop at offset 15.\n",
+    "startSha256": "e72778ba97a70a22eee52ce2ddeada69d4710a0bf07e27ed059974e106c4c618",
+    "solutionBytes": [
+      250,
+      184,
+      42,
+      0,
+      187,
+      0,
+      0,
+      61,
+      42,
+      0,
+      116,
+      3,
+      187,
+      1,
+      0,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,42",
+        "explanation": "Establish the value to compare.",
+        "bits": "10111000 00101010 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,0",
+        "explanation": "Zero is the success marker.",
+        "bits": "10111011 00000000 00000000"
+      },
+      {
+        "offset": 7,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "CMP AX,42",
+        "explanation": "Equal operands set ZF without changing AX.",
+        "bits": "00111101 00101010 00000000"
+      },
+      {
+        "offset": 10,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "JZ +3",
+        "explanation": "The next offset is 12; adding three lands on HLT at 15.",
+        "bits": "01110100 00000011"
+      },
+      {
+        "offset": 12,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,1",
+        "explanation": "The successful branch skips this assignment.",
+        "bits": "10111011 00000001 00000000"
+      },
+      {
+        "offset": 15,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with BX=0 and ZF=1.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 00101010 00000000 # instruction | MOV AX,42 | Establish the value to compare.\n10111011 00000000 00000000 # instruction | MOV BX,0 | Zero is the success marker.\n00111101 00101010 00000000 # instruction | CMP AX,42 | Equal operands set ZF without changing AX.\n01110100 00000011 # instruction | JZ +3 | The next offset is 12; adding three lands on HLT at 15.\n10111011 00000001 00000000 # instruction | MOV BX,1 | The successful branch skips this assignment.\n11110100 # instruction | HLT | Stop with BX=0 and ZF=1.\n",
+    "solutionSha256": "508af60814b02076b566ee0270cef5bbf45dee907016d08cf98ae9aa8641d843"
+  },
+  {
+    "id": "escape-loop",
+    "title": "Escape the infinite jump",
+    "difficulty": "intermediate",
+    "path": "02 · Arithmetic & control flow",
+    "summary": "A negative displacement sends the instruction pointer back to the same opcode.",
+    "goal": "Reach HLT within 96 model steps.",
+    "goals": {},
+    "editableOffsets": [
+      2
+    ],
+    "maxChangedBits": 8,
+    "hints": [
+      "EB is a short unconditional jump. Its operand is a signed eight-bit displacement.",
+      "FE represents −2, measured from the end of the two-byte instruction.",
+      "A displacement of zero lands on the next instruction, HLT."
+    ],
+    "explanation": "The starting jump ends at offset 3, then subtracts two to return to offset 1. Changing FE to 00 breaks that cycle. The bounded validator rejects the endless starting loop.",
+    "visual": "start: 01 → 03 − 02 → 01 · fix: 01 → 03 + 00 → HLT",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/escape-loop/start.bits",
+    "solution": "challenges/escape-loop/solution.bits",
+    "startBytes": [
+      250,
+      235,
+      254,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Mask interrupts before the control-flow puzzle.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "JMP -2",
+        "explanation": "The next offset is 3; minus two returns to this JMP at 1 forever.",
+        "bits": "11101011 11111110"
+      },
+      {
+        "offset": 3,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "This instruction is unreachable in the starting program.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Mask interrupts before the control-flow puzzle.\n11101011 11111110 # instruction | JMP -2 | The next offset is 3; minus two returns to this JMP at 1 forever.\n11110100 # instruction | HLT | This instruction is unreachable in the starting program.\n",
+    "startSha256": "96d3dc53c3f829d795a2e89e75ad1f078bc8c4945b398cc512643e25cb9d2b59",
+    "solutionBytes": [
+      250,
+      235,
+      0,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Mask interrupts before the control-flow puzzle.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "JMP +0",
+        "explanation": "A zero displacement lands at the next instruction, offset 3.",
+        "bits": "11101011 00000000"
+      },
+      {
+        "offset": 3,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Execution now reaches the halt.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Mask interrupts before the control-flow puzzle.\n11101011 00000000 # instruction | JMP +0 | A zero displacement lands at the next instruction, offset 3.\n11110100 # instruction | HLT | Execution now reaches the halt.\n",
+    "solutionSha256": "e17420decc423b7fab899d2c28726f59faf2fc311a027a701723282808fc3371"
+  },
+  {
+    "id": "count-loop",
+    "title": "Count five iterations",
+    "difficulty": "intermediate",
+    "path": "02 · Arithmetic & control flow",
+    "summary": "LOOP decrements CX and branches until it becomes zero.",
+    "goal": "Halt with AX = 5 and CX = 0.",
+    "goals": {
+      "registers": {
+        "AX": 5,
+        "CX": 0
+      }
+    },
+    "editableOffsets": [
+      5,
+      6
+    ],
+    "maxChangedBits": 8,
+    "hints": [
+      "The loop body is the one-byte INC AX instruction.",
+      "LOOP consumes CX, not AX, as its counter.",
+      "Set the MOV CX immediate to 05 00."
+    ],
+    "explanation": "CX starts at five. Each iteration increments AX once and LOOP decrements CX once. The −3 displacement returns to INC until CX reaches zero.",
+    "visual": "CX 5 → 4 → 3 → 2 → 1 → 0 · AX 0 → 1 → 2 → 3 → 4 → 5",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/count-loop/start.bits",
+    "solution": "challenges/count-loop/solution.bits",
+    "startBytes": [
+      250,
+      184,
+      0,
+      0,
+      185,
+      4,
+      0,
+      64,
+      226,
+      253,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,0",
+        "explanation": "Initialize the count result.",
+        "bits": "10111000 00000000 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV CX,4",
+        "explanation": "LOOP uses CX, but this bound is one too small.",
+        "bits": "10111001 00000100 00000000"
+      },
+      {
+        "offset": 7,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "INC AX",
+        "explanation": "Count one executed body.",
+        "bits": "01000000"
+      },
+      {
+        "offset": 8,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "LOOP -3",
+        "explanation": "Decrement CX and branch from next offset 10 to INC at 7 if nonzero.",
+        "bits": "11100010 11111101"
+      },
+      {
+        "offset": 10,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop after four increments.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 00000000 00000000 # instruction | MOV AX,0 | Initialize the count result.\n10111001 00000100 00000000 # instruction | MOV CX,4 | LOOP uses CX, but this bound is one too small.\n01000000 # instruction | INC AX | Count one executed body.\n11100010 11111101 # instruction | LOOP -3 | Decrement CX and branch from next offset 10 to INC at 7 if nonzero.\n11110100 # instruction | HLT | Stop after four increments.\n",
+    "startSha256": "3c716325ae9ff08a9bfb8b7b3f586467ddffa57d81477b64523222d6cba26786",
+    "solutionBytes": [
+      250,
+      184,
+      0,
+      0,
+      185,
+      5,
+      0,
+      64,
+      226,
+      253,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,0",
+        "explanation": "Initialize the count result.",
+        "bits": "10111000 00000000 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV CX,5",
+        "explanation": "Run the loop body five times.",
+        "bits": "10111001 00000101 00000000"
+      },
+      {
+        "offset": 7,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "INC AX",
+        "explanation": "Count one executed body.",
+        "bits": "01000000"
+      },
+      {
+        "offset": 8,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "LOOP -3",
+        "explanation": "CX becomes zero after the fifth body; then fall through to HLT.",
+        "bits": "11100010 11111101"
+      },
+      {
+        "offset": 10,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with AX=5 and CX=0.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 00000000 00000000 # instruction | MOV AX,0 | Initialize the count result.\n10111001 00000101 00000000 # instruction | MOV CX,5 | Run the loop body five times.\n01000000 # instruction | INC AX | Count one executed body.\n11100010 11111101 # instruction | LOOP -3 | CX becomes zero after the fifth body; then fall through to HLT.\n11110100 # instruction | HLT | Stop with AX=5 and CX=0.\n",
+    "solutionSha256": "a773fddc55d706044b4695b521fd5f1543a86d2ec747a79b826a475d0fd5edc4"
+  },
+  {
+    "id": "stack-transfer",
+    "title": "Move through the stack",
+    "difficulty": "advanced",
+    "path": "03 · Stack & flags",
+    "summary": "PUSH and POP preserve a word while the stack grows down.",
+    "goal": "Halt with BX = 0x1234, CX = 0 and SP = 0x7C00.",
+    "goals": {
+      "registers": {
+        "BX": 4660,
+        "CX": 0,
+        "SP": 31744
+      },
+      "memory": [
+        {
+          "address": 31742,
+          "bytes": [
+            52,
+            18
+          ]
+        }
+      ]
+    },
+    "editableOffsets": [
+      14
+    ],
+    "maxChangedBits": 3,
+    "hints": [
+      "PUSH AX already saves the correct word. The wrong POP register loses the transfer.",
+      "POP register uses opcodes 58 through 5F, with the same register index order as MOV.",
+      "Change 59 (POP CX) to 5B (POP BX)."
+    ],
+    "explanation": "PUSH decrements SP by two, writes 34 12, and POP reads that word before restoring SP. Popping does not erase the old stack bytes; the memory goal makes that visible.",
+    "visual": "SP 7C00 → PUSH → 7BFE [34 12] → POP → 7C00",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/stack-transfer/start.bits",
+    "solution": "challenges/stack-transfer/solution.bits",
+    "startBytes": [
+      250,
+      188,
+      0,
+      124,
+      184,
+      52,
+      18,
+      187,
+      0,
+      0,
+      185,
+      0,
+      0,
+      80,
+      89,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep interrupts masked while using the stack.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV SP,7C00",
+        "explanation": "Use the loader's segment-zero stack below 7C00.",
+        "bits": "10111100 00000000 01111100"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,1234",
+        "explanation": "Initialize the value being transferred.",
+        "bits": "10111000 00110100 00010010"
+      },
+      {
+        "offset": 7,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,0",
+        "explanation": "Initialize the intended destination.",
+        "bits": "10111011 00000000 00000000"
+      },
+      {
+        "offset": 10,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV CX,0",
+        "explanation": "Initialize the accidentally selected destination.",
+        "bits": "10111001 00000000 00000000"
+      },
+      {
+        "offset": 13,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "PUSH AX",
+        "explanation": "Store low byte 34 at 7BFE and high byte 12 at 7BFF.",
+        "bits": "01010000"
+      },
+      {
+        "offset": 14,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "POP CX",
+        "explanation": "59 selects CX, the wrong destination.",
+        "bits": "01011001"
+      },
+      {
+        "offset": 15,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with the stack balanced but BX unchanged.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Keep interrupts masked while using the stack.\n10111100 00000000 01111100 # instruction | MOV SP,7C00 | Use the loader's segment-zero stack below 7C00.\n10111000 00110100 00010010 # instruction | MOV AX,1234 | Initialize the value being transferred.\n10111011 00000000 00000000 # instruction | MOV BX,0 | Initialize the intended destination.\n10111001 00000000 00000000 # instruction | MOV CX,0 | Initialize the accidentally selected destination.\n01010000 # instruction | PUSH AX | Store low byte 34 at 7BFE and high byte 12 at 7BFF.\n01011001 # instruction | POP CX | 59 selects CX, the wrong destination.\n11110100 # instruction | HLT | Stop with the stack balanced but BX unchanged.\n",
+    "startSha256": "8a0b27bb19d67d552e74c1902ebe9b7d863c70d5f2124d5a2b194e1b0274e227",
+    "solutionBytes": [
+      250,
+      188,
+      0,
+      124,
+      184,
+      52,
+      18,
+      187,
+      0,
+      0,
+      185,
+      0,
+      0,
+      80,
+      91,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep interrupts masked while using the stack.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV SP,7C00",
+        "explanation": "Use the loader's segment-zero stack below 7C00.",
+        "bits": "10111100 00000000 01111100"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,1234",
+        "explanation": "Initialize the value being transferred.",
+        "bits": "10111000 00110100 00010010"
+      },
+      {
+        "offset": 7,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,0",
+        "explanation": "Initialize the intended destination.",
+        "bits": "10111011 00000000 00000000"
+      },
+      {
+        "offset": 10,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV CX,0",
+        "explanation": "CX must remain unchanged.",
+        "bits": "10111001 00000000 00000000"
+      },
+      {
+        "offset": 13,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "PUSH AX",
+        "explanation": "SP decreases by two before storing the little-endian word.",
+        "bits": "01010000"
+      },
+      {
+        "offset": 14,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "POP BX",
+        "explanation": "5B selects BX; restore 1234 and increase SP by two.",
+        "bits": "01011011"
+      },
+      {
+        "offset": 15,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with BX=1234, CX=0 and SP=7C00.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Keep interrupts masked while using the stack.\n10111100 00000000 01111100 # instruction | MOV SP,7C00 | Use the loader's segment-zero stack below 7C00.\n10111000 00110100 00010010 # instruction | MOV AX,1234 | Initialize the value being transferred.\n10111011 00000000 00000000 # instruction | MOV BX,0 | Initialize the intended destination.\n10111001 00000000 00000000 # instruction | MOV CX,0 | CX must remain unchanged.\n01010000 # instruction | PUSH AX | SP decreases by two before storing the little-endian word.\n01011011 # instruction | POP BX | 5B selects BX; restore 1234 and increase SP by two.\n11110100 # instruction | HLT | Stop with BX=1234, CX=0 and SP=7C00.\n",
+    "solutionSha256": "d3bbaed384b208b4798aef12328994808562f521371e9c62c9aabe0ca9666f16"
+  },
+  {
+    "id": "stack-order",
+    "title": "Respect last in, first out",
+    "difficulty": "advanced",
+    "path": "03 · Stack & flags",
+    "summary": "Two saved values must come back in the reverse order.",
+    "goal": "Halt with CX = 0x2222, DX = 0x1111 and a balanced stack.",
+    "goals": {
+      "registers": {
+        "CX": 8738,
+        "DX": 4369,
+        "SP": 31744
+      }
+    },
+    "editableOffsets": [
+      18,
+      19
+    ],
+    "maxChangedBits": 4,
+    "hints": [
+      "The second PUSH places 2222 on top of 1111.",
+      "The first POP must consume 2222 into CX; the second must consume 1111 into DX.",
+      "Use POP CX (59) followed by POP DX (5A)."
+    ],
+    "explanation": "A stack is last in, first out. Neither memory nor values need changing; selecting the correct two POP destinations preserves order and restores SP.",
+    "visual": "top 7BFC [2222] → CX · below 7BFE [1111] → DX",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/stack-order/start.bits",
+    "solution": "challenges/stack-order/solution.bits",
+    "startBytes": [
+      250,
+      188,
+      0,
+      124,
+      184,
+      17,
+      17,
+      187,
+      34,
+      34,
+      185,
+      0,
+      0,
+      186,
+      0,
+      0,
+      80,
+      83,
+      90,
+      89,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep interrupts masked while using the stack.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV SP,7C00",
+        "explanation": "Set a known empty stack.",
+        "bits": "10111100 00000000 01111100"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,1111",
+        "explanation": "First value to push.",
+        "bits": "10111000 00010001 00010001"
+      },
+      {
+        "offset": 7,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,2222",
+        "explanation": "Second value to push.",
+        "bits": "10111011 00100010 00100010"
+      },
+      {
+        "offset": 10,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV CX,0",
+        "explanation": "Initialize the first requested result.",
+        "bits": "10111001 00000000 00000000"
+      },
+      {
+        "offset": 13,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV DX,0",
+        "explanation": "Initialize the second requested result.",
+        "bits": "10111010 00000000 00000000"
+      },
+      {
+        "offset": 16,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "PUSH AX",
+        "explanation": "Push 1111 first.",
+        "bits": "01010000"
+      },
+      {
+        "offset": 17,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "PUSH BX",
+        "explanation": "Push 2222 on top of 1111.",
+        "bits": "01010011"
+      },
+      {
+        "offset": 18,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "POP DX",
+        "explanation": "The top word goes to the wrong result register.",
+        "bits": "01011010"
+      },
+      {
+        "offset": 19,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "POP CX",
+        "explanation": "The bottom word also goes to the wrong result register.",
+        "bits": "01011001"
+      },
+      {
+        "offset": 20,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with the result order reversed.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Keep interrupts masked while using the stack.\n10111100 00000000 01111100 # instruction | MOV SP,7C00 | Set a known empty stack.\n10111000 00010001 00010001 # instruction | MOV AX,1111 | First value to push.\n10111011 00100010 00100010 # instruction | MOV BX,2222 | Second value to push.\n10111001 00000000 00000000 # instruction | MOV CX,0 | Initialize the first requested result.\n10111010 00000000 00000000 # instruction | MOV DX,0 | Initialize the second requested result.\n01010000 # instruction | PUSH AX | Push 1111 first.\n01010011 # instruction | PUSH BX | Push 2222 on top of 1111.\n01011010 # instruction | POP DX | The top word goes to the wrong result register.\n01011001 # instruction | POP CX | The bottom word also goes to the wrong result register.\n11110100 # instruction | HLT | Stop with the result order reversed.\n",
+    "startSha256": "92a06a1f44a19973a3dfbbc0f98a0667a33eefd2c4a8294533f82ecdeba30e93",
+    "solutionBytes": [
+      250,
+      188,
+      0,
+      124,
+      184,
+      17,
+      17,
+      187,
+      34,
+      34,
+      185,
+      0,
+      0,
+      186,
+      0,
+      0,
+      80,
+      83,
+      89,
+      90,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep interrupts masked while using the stack.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV SP,7C00",
+        "explanation": "Set a known empty stack.",
+        "bits": "10111100 00000000 01111100"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,1111",
+        "explanation": "First value to push.",
+        "bits": "10111000 00010001 00010001"
+      },
+      {
+        "offset": 7,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,2222",
+        "explanation": "Second value to push.",
+        "bits": "10111011 00100010 00100010"
+      },
+      {
+        "offset": 10,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV CX,0",
+        "explanation": "Initialize the first requested result.",
+        "bits": "10111001 00000000 00000000"
+      },
+      {
+        "offset": 13,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV DX,0",
+        "explanation": "Initialize the second requested result.",
+        "bits": "10111010 00000000 00000000"
+      },
+      {
+        "offset": 16,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "PUSH AX",
+        "explanation": "Push 1111 first, storing it below the initial SP.",
+        "bits": "01010000"
+      },
+      {
+        "offset": 17,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "PUSH BX",
+        "explanation": "Push 2222 last, so it must be popped first.",
+        "bits": "01010011"
+      },
+      {
+        "offset": 18,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "POP CX",
+        "explanation": "CX receives the most recently pushed word, 2222.",
+        "bits": "01011001"
+      },
+      {
+        "offset": 19,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "POP DX",
+        "explanation": "DX receives the earlier word, 1111; SP is balanced.",
+        "bits": "01011010"
+      },
+      {
+        "offset": 20,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop after the last-in-first-out transfer.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Keep interrupts masked while using the stack.\n10111100 00000000 01111100 # instruction | MOV SP,7C00 | Set a known empty stack.\n10111000 00010001 00010001 # instruction | MOV AX,1111 | First value to push.\n10111011 00100010 00100010 # instruction | MOV BX,2222 | Second value to push.\n10111001 00000000 00000000 # instruction | MOV CX,0 | Initialize the first requested result.\n10111010 00000000 00000000 # instruction | MOV DX,0 | Initialize the second requested result.\n01010000 # instruction | PUSH AX | Push 1111 first, storing it below the initial SP.\n01010011 # instruction | PUSH BX | Push 2222 last, so it must be popped first.\n01011001 # instruction | POP CX | CX receives the most recently pushed word, 2222.\n01011010 # instruction | POP DX | DX receives the earlier word, 1111; SP is balanced.\n11110100 # instruction | HLT | Stop after the last-in-first-out transfer.\n",
+    "solutionSha256": "89930e29724466c411ff2df84ecc86ea9f5eb7384bef0551f13744bf9e20af26"
+  },
+  {
+    "id": "carry-branch",
+    "title": "Branch on unsigned carry",
+    "difficulty": "advanced",
+    "path": "03 · Stack & flags",
+    "summary": "Carry and zero can both be set by the same addition.",
+    "goal": "Halt with AX = 0, BX = 0, CF = 1 and ZF = 1.",
+    "goals": {
+      "registers": {
+        "AX": 0,
+        "BX": 0
+      },
+      "flags": {
+        "cf": true,
+        "zf": true
+      }
+    },
+    "editableOffsets": [
+      10
+    ],
+    "maxChangedBits": 1,
+    "hints": [
+      "FFFF + 1 makes a 17-bit sum; the stored word is zero.",
+      "JAE branches when CF is clear. JB branches when CF is set.",
+      "Change opcode 73 to 72. Their low bit is the only difference."
+    ],
+    "explanation": "Unsigned carry is separate from the result being zero. JB sees CF=1 and skips MOV BX,1. This puzzle changes exactly one bit without touching the branch displacement.",
+    "visual": "FFFF + 0001 → 1 | 0000 · CF 1 → JB taken",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/carry-branch/start.bits",
+    "solution": "challenges/carry-branch/solution.bits",
+    "startBytes": [
+      250,
+      187,
+      0,
+      0,
+      184,
+      255,
+      255,
+      5,
+      1,
+      0,
+      115,
+      3,
+      187,
+      1,
+      0,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,0",
+        "explanation": "Initialize the success marker.",
+        "bits": "10111011 00000000 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,FFFF",
+        "explanation": "Start at the unsigned upper boundary.",
+        "bits": "10111000 11111111 11111111"
+      },
+      {
+        "offset": 7,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "ADD AX,1",
+        "explanation": "The result wraps to zero, setting both CF and ZF.",
+        "bits": "00000101 00000001 00000000"
+      },
+      {
+        "offset": 10,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "JAE +3",
+        "explanation": "JAE tests CF=0, so this branch fails despite ZF=1.",
+        "bits": "01110011 00000011"
+      },
+      {
+        "offset": 12,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,1",
+        "explanation": "Mark the unwanted fall-through path.",
+        "bits": "10111011 00000001 00000000"
+      },
+      {
+        "offset": 15,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with BX=1.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111011 00000000 00000000 # instruction | MOV BX,0 | Initialize the success marker.\n10111000 11111111 11111111 # instruction | MOV AX,FFFF | Start at the unsigned upper boundary.\n00000101 00000001 00000000 # instruction | ADD AX,1 | The result wraps to zero, setting both CF and ZF.\n01110011 00000011 # instruction | JAE +3 | JAE tests CF=0, so this branch fails despite ZF=1.\n10111011 00000001 00000000 # instruction | MOV BX,1 | Mark the unwanted fall-through path.\n11110100 # instruction | HLT | Stop with BX=1.\n",
+    "startSha256": "ad1c3c840cf7e0dc9512666b24eb0790787aad5c72d2b0aa476bcc9cc57533f2",
+    "solutionBytes": [
+      250,
+      187,
+      0,
+      0,
+      184,
+      255,
+      255,
+      5,
+      1,
+      0,
+      114,
+      3,
+      187,
+      1,
+      0,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,0",
+        "explanation": "Initialize the success marker.",
+        "bits": "10111011 00000000 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,FFFF",
+        "explanation": "Start at the unsigned upper boundary.",
+        "bits": "10111000 11111111 11111111"
+      },
+      {
+        "offset": 7,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "ADD AX,1",
+        "explanation": "The 17th result bit becomes CF and the truncated word sets ZF.",
+        "bits": "00000101 00000001 00000000"
+      },
+      {
+        "offset": 10,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "JB +3",
+        "explanation": "JB tests CF=1; next offset 12 plus three skips the failure assignment.",
+        "bits": "01110010 00000011"
+      },
+      {
+        "offset": 12,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,1",
+        "explanation": "The successful carry branch skips this assignment.",
+        "bits": "10111011 00000001 00000000"
+      },
+      {
+        "offset": 15,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with AX=0, BX=0, CF=1 and ZF=1.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111011 00000000 00000000 # instruction | MOV BX,0 | Initialize the success marker.\n10111000 11111111 11111111 # instruction | MOV AX,FFFF | Start at the unsigned upper boundary.\n00000101 00000001 00000000 # instruction | ADD AX,1 | The 17th result bit becomes CF and the truncated word sets ZF.\n01110010 00000011 # instruction | JB +3 | JB tests CF=1; next offset 12 plus three skips the failure assignment.\n10111011 00000001 00000000 # instruction | MOV BX,1 | The successful carry branch skips this assignment.\n11110100 # instruction | HLT | Stop with AX=0, BX=0, CF=1 and ZF=1.\n",
+    "solutionSha256": "5bf02283611cd65026f03c8aa8c9d0b5143c2f77d46cbdf11e777242ca8cb74e"
+  },
+  {
+    "id": "signed-overflow",
+    "title": "Cross the signed boundary",
+    "difficulty": "advanced",
+    "path": "03 · Stack & flags",
+    "summary": "The same sixteen bits can be interpreted as unsigned or signed.",
+    "goal": "Halt with AX = 0x8000, SF = 1, OF = 1 and CF = 0.",
+    "goals": {
+      "registers": {
+        "AX": 32768
+      },
+      "flags": {
+        "sf": true,
+        "of": true,
+        "cf": false
+      }
+    },
+    "editableOffsets": [
+      2,
+      3
+    ],
+    "maxChangedBits": 1,
+    "hints": [
+      "The largest signed positive 16-bit integer is 32767, hexadecimal 7FFF.",
+      "Adding one to 7FFF flips the sign bit without producing unsigned carry.",
+      "Change the low immediate byte FE to FF."
+    ],
+    "explanation": "A positive plus positive producing a negative signed result sets OF. The word 8000 is unsigned 32768 but signed −32768. CF remains zero because the unsigned sum fits in sixteen bits.",
+    "visual": "signed: +32767 + 1 → −32768 · unsigned: 32767 + 1 → 32768",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/signed-overflow/start.bits",
+    "solution": "challenges/signed-overflow/solution.bits",
+    "startBytes": [
+      250,
+      184,
+      254,
+      127,
+      5,
+      1,
+      0,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,7FFE",
+        "explanation": "This positive signed value is one below the boundary case.",
+        "bits": "10111000 11111110 01111111"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "ADD AX,1",
+        "explanation": "The result 7FFF is still positive and sets no signed overflow.",
+        "bits": "00000101 00000001 00000000"
+      },
+      {
+        "offset": 7,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop before the requested sign transition.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 11111110 01111111 # instruction | MOV AX,7FFE | This positive signed value is one below the boundary case.\n00000101 00000001 00000000 # instruction | ADD AX,1 | The result 7FFF is still positive and sets no signed overflow.\n11110100 # instruction | HLT | Stop before the requested sign transition.\n",
+    "startSha256": "dea26d5b5445b3a08a59d7b20548973b58a4f69fed231c1a1669cb4c9b892120",
+    "solutionBytes": [
+      250,
+      184,
+      255,
+      127,
+      5,
+      1,
+      0,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,7FFF",
+        "explanation": "32767 is the largest positive signed 16-bit integer.",
+        "bits": "10111000 11111111 01111111"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "ADD AX,1",
+        "explanation": "The result 8000 has SF=1 and OF=1 while unsigned CF remains zero.",
+        "bits": "00000101 00000001 00000000"
+      },
+      {
+        "offset": 7,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop at the signed boundary with AX=8000.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 11111111 01111111 # instruction | MOV AX,7FFF | 32767 is the largest positive signed 16-bit integer.\n00000101 00000001 00000000 # instruction | ADD AX,1 | The result 8000 has SF=1 and OF=1 while unsigned CF remains zero.\n11110100 # instruction | HLT | Stop at the signed boundary with AX=8000.\n",
+    "solutionSha256": "39efd34ec5ed14511e778ed2d6f3e1fc363d3254c7d69e5f0e0c134e605d2f4a"
+  },
+  {
+    "id": "byte-load",
+    "title": "Read one byte, not two",
+    "difficulty": "advanced",
+    "path": "03 · Stack & flags",
+    "summary": "An adjacent sentinel exposes a mistaken operand width.",
+    "goal": "Halt with AX = 0x0042 while preserving the data bytes.",
+    "goals": {
+      "registers": {
+        "AX": 66
+      },
+      "memory": [
+        {
+          "address": 32264,
+          "bytes": [
+            66,
+            127
+          ]
+        }
+      ]
+    },
+    "editableOffsets": [
+      4
+    ],
+    "maxChangedBits": 1,
+    "hints": [
+      "The address operand already points to physical 7E08 in segment zero.",
+      "A1 loads a word into AX. A0 loads a byte into AL and preserves AH.",
+      "Change A1 to A0; AX was initialized to zero first."
+    ],
+    "explanation": "The two opcodes share the same moffs16 address encoding but select different data widths. Reading one byte avoids importing the sentinel 7F into AH.",
+    "visual": "DS:7E08 [42][7F] · A0 reads [42] · A1 reads [42 7F]",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/byte-load/start.bits",
+    "solution": "challenges/byte-load/solution.bits",
+    "startBytes": [
+      250,
+      184,
+      0,
+      0,
+      161,
+      8,
+      126,
+      244,
+      66,
+      127
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,0",
+        "explanation": "Initialize AH so a byte load can leave it at zero.",
+        "bits": "10111000 00000000 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,[7E08]",
+        "explanation": "A1 loads a full word, accidentally including the sentinel high byte.",
+        "bits": "10100001 00001000 01111110"
+      },
+      {
+        "offset": 7,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop before the literal data so it is never executed.",
+        "bits": "11110100"
+      },
+      {
+        "offset": 8,
+        "size": 2,
+        "kind": "data",
+        "mnemonic": "B and sentinel",
+        "explanation": "Physical 7E08 stores 42; 7E09 stores 7F to expose an unwanted word read.",
+        "bits": "01000010 01111111"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 00000000 00000000 # instruction | MOV AX,0 | Initialize AH so a byte load can leave it at zero.\n10100001 00001000 01111110 # instruction | MOV AX,[7E08] | A1 loads a full word, accidentally including the sentinel high byte.\n11110100 # instruction | HLT | Stop before the literal data so it is never executed.\n01000010 01111111 # data | B and sentinel | Physical 7E08 stores 42; 7E09 stores 7F to expose an unwanted word read.\n",
+    "startSha256": "795882b000aebb0349da6a68d643e6d267fff6111ac39d4df9fac687180cbfc4",
+    "solutionBytes": [
+      250,
+      184,
+      0,
+      0,
+      160,
+      8,
+      126,
+      244,
+      66,
+      127
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,0",
+        "explanation": "Initialize AH so a byte load leaves it at zero.",
+        "bits": "10111000 00000000 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AL,[7E08]",
+        "explanation": "A0 reads one byte from DS:7E08 into AL, preserving AH.",
+        "bits": "10100000 00001000 01111110"
+      },
+      {
+        "offset": 7,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop before the literal data so it is never executed.",
+        "bits": "11110100"
+      },
+      {
+        "offset": 8,
+        "size": 2,
+        "kind": "data",
+        "mnemonic": "B and sentinel",
+        "explanation": "42 is the intended byte; the adjacent sentinel must not become AH.",
+        "bits": "01000010 01111111"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 00000000 00000000 # instruction | MOV AX,0 | Initialize AH so a byte load leaves it at zero.\n10100000 00001000 01111110 # instruction | MOV AL,[7E08] | A0 reads one byte from DS:7E08 into AL, preserving AH.\n11110100 # instruction | HLT | Stop before the literal data so it is never executed.\n01000010 01111111 # data | B and sentinel | 42 is the intended byte; the adjacent sentinel must not become AH.\n",
+    "solutionSha256": "3daa1d8a1966defdce77d5af08cb07f330ee8f6278bdfd9503586077cb793fef"
+  },
+  {
+    "id": "word-store",
+    "title": "Store the whole word",
+    "difficulty": "expert",
+    "path": "04 · Memory & boot architecture",
+    "summary": "The low byte arrives, but a word-sized result needs two bytes.",
+    "goal": "Halt after storing 0x1234 as bytes 34 12 at physical 0x0600.",
+    "goals": {
+      "registers": {
+        "AX": 4660
+      },
+      "memory": [
+        {
+          "address": 1536,
+          "bytes": [
+            52,
+            18
+          ]
+        }
+      ]
+    },
+    "editableOffsets": [
+      4
+    ],
+    "maxChangedBits": 1,
+    "hints": [
+      "The destination address operand 00 06 is already correct.",
+      "A2 stores AL. A3 stores the whole AX register.",
+      "Change A2 to A3 by flipping the low opcode bit."
+    ],
+    "explanation": "A word store writes the low byte at the destination and the high byte at the next address. Segment zero makes DS:0600 equal to physical 0600.",
+    "visual": "AX [12 | 34] → DS:0600 [34] [12]",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/word-store/start.bits",
+    "solution": "challenges/word-store/solution.bits",
+    "startBytes": [
+      250,
+      184,
+      52,
+      18,
+      162,
+      0,
+      6,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,1234",
+        "explanation": "Initialize the word to store.",
+        "bits": "10111000 00110100 00010010"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV [0600],AL",
+        "explanation": "A2 stores only the low byte, leaving the second byte unwritten.",
+        "bits": "10100010 00000000 00000110"
+      },
+      {
+        "offset": 7,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop after the partial store.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 00110100 00010010 # instruction | MOV AX,1234 | Initialize the word to store.\n10100010 00000000 00000110 # instruction | MOV [0600],AL | A2 stores only the low byte, leaving the second byte unwritten.\n11110100 # instruction | HLT | Stop after the partial store.\n",
+    "startSha256": "778c1c4c4ac95751d7cfeb24aceabd755078b8433c6153b4d7a0bf030b311d87",
+    "solutionBytes": [
+      250,
+      184,
+      52,
+      18,
+      163,
+      0,
+      6,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,1234",
+        "explanation": "Initialize the word to store.",
+        "bits": "10111000 00110100 00010010"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV [0600],AX",
+        "explanation": "A3 stores low byte 34 at DS:0600 and high byte 12 at DS:0601.",
+        "bits": "10100011 00000000 00000110"
+      },
+      {
+        "offset": 7,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop after the complete little-endian store.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 00110100 00010010 # instruction | MOV AX,1234 | Initialize the word to store.\n10100011 00000000 00000110 # instruction | MOV [0600],AX | A3 stores low byte 34 at DS:0600 and high byte 12 at DS:0601.\n11110100 # instruction | HLT | Stop after the complete little-endian store.\n",
+    "solutionSha256": "be767d33a45a48123da0c18db735aa37598f9a824de47253b82ad2bb241efffc"
+  },
+  {
+    "id": "direction-flag",
+    "title": "Write backwards on purpose",
+    "difficulty": "expert",
+    "path": "04 · Memory & boot architecture",
+    "summary": "String stores change DI automatically according to the direction flag.",
+    "goal": "Halt with memory 0x0600..0x0601 spelling AB, DI = 0x05FF and DF clear.",
+    "goals": {
+      "registers": {
+        "DI": 1535
+      },
+      "flags": {
+        "df": false
+      },
+      "memory": [
+        {
+          "address": 1536,
+          "bytes": [
+            65,
+            66
+          ]
+        }
+      ]
+    },
+    "editableOffsets": [
+      7
+    ],
+    "maxChangedBits": 1,
+    "hints": [
+      "The first store begins at 0601 and writes B. The next store must move left to 0600.",
+      "CLD increments string pointers; STD decrements them.",
+      "Change FC to FD at offset 7. Keep the final CLD."
+    ],
+    "explanation": "STD selects decreasing offsets. Each STOSB writes AL before moving DI. Two stores produce AB in ascending memory order, then CLD restores the conventional direction.",
+    "visual": "DI 0601 → store B → 0600 → store A → 05FF",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/direction-flag/start.bits",
+    "solution": "challenges/direction-flag/solution.bits",
+    "startBytes": [
+      250,
+      184,
+      66,
+      0,
+      191,
+      1,
+      6,
+      252,
+      170,
+      176,
+      65,
+      170,
+      252,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,0042",
+        "explanation": "Initialize AL to ASCII B.",
+        "bits": "10111000 01000010 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV DI,0601",
+        "explanation": "Begin at the right-hand byte of the destination.",
+        "bits": "10111111 00000001 00000110"
+      },
+      {
+        "offset": 7,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLD",
+        "explanation": "The wrong direction makes DI increase instead of decrease.",
+        "bits": "11111100"
+      },
+      {
+        "offset": 8,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "STOSB",
+        "explanation": "Store B through ES:DI and advance DI to 0602.",
+        "bits": "10101010"
+      },
+      {
+        "offset": 9,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AL,41",
+        "explanation": "Prepare ASCII A.",
+        "bits": "10110000 01000001"
+      },
+      {
+        "offset": 11,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "STOSB",
+        "explanation": "Store A to the right of B, rather than to its left.",
+        "bits": "10101010"
+      },
+      {
+        "offset": 12,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLD",
+        "explanation": "Restore the conventional forward direction.",
+        "bits": "11111100"
+      },
+      {
+        "offset": 13,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop after the incorrect traversal.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 01000010 00000000 # instruction | MOV AX,0042 | Initialize AL to ASCII B.\n10111111 00000001 00000110 # instruction | MOV DI,0601 | Begin at the right-hand byte of the destination.\n11111100 # instruction | CLD | The wrong direction makes DI increase instead of decrease.\n10101010 # instruction | STOSB | Store B through ES:DI and advance DI to 0602.\n10110000 01000001 # instruction | MOV AL,41 | Prepare ASCII A.\n10101010 # instruction | STOSB | Store A to the right of B, rather than to its left.\n11111100 # instruction | CLD | Restore the conventional forward direction.\n11110100 # instruction | HLT | Stop after the incorrect traversal.\n",
+    "startSha256": "8307cddafbb19b8d2c48b770966f27236d3ab090a65490ee2ee10abc6cd1def8",
+    "solutionBytes": [
+      250,
+      184,
+      66,
+      0,
+      191,
+      1,
+      6,
+      253,
+      170,
+      176,
+      65,
+      170,
+      252,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,0042",
+        "explanation": "Initialize AL to ASCII B.",
+        "bits": "10111000 01000010 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV DI,0601",
+        "explanation": "Begin at the right-hand byte of the destination.",
+        "bits": "10111111 00000001 00000110"
+      },
+      {
+        "offset": 7,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "STD",
+        "explanation": "Set DF so string stores move toward lower offsets.",
+        "bits": "11111101"
+      },
+      {
+        "offset": 8,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "STOSB",
+        "explanation": "Store B at ES:0601, then decrement DI to 0600.",
+        "bits": "10101010"
+      },
+      {
+        "offset": 9,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AL,41",
+        "explanation": "Prepare ASCII A.",
+        "bits": "10110000 01000001"
+      },
+      {
+        "offset": 11,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "STOSB",
+        "explanation": "Store A at ES:0600, then decrement DI to 05FF.",
+        "bits": "10101010"
+      },
+      {
+        "offset": 12,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLD",
+        "explanation": "Restore the forward direction before halting.",
+        "bits": "11111100"
+      },
+      {
+        "offset": 13,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with memory 0600..0601 spelling AB.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 01000010 00000000 # instruction | MOV AX,0042 | Initialize AL to ASCII B.\n10111111 00000001 00000110 # instruction | MOV DI,0601 | Begin at the right-hand byte of the destination.\n11111101 # instruction | STD | Set DF so string stores move toward lower offsets.\n10101010 # instruction | STOSB | Store B at ES:0601, then decrement DI to 0600.\n10110000 01000001 # instruction | MOV AL,41 | Prepare ASCII A.\n10101010 # instruction | STOSB | Store A at ES:0600, then decrement DI to 05FF.\n11111100 # instruction | CLD | Restore the forward direction before halting.\n11110100 # instruction | HLT | Stop with memory 0600..0601 spelling AB.\n",
+    "solutionSha256": "eb6331495958135a61787b868bf53109a04169d34fe5fd187b5a119eec7a89bb"
+  },
+  {
+    "id": "call-return",
+    "title": "Find the helper and return",
+    "difficulty": "expert",
+    "path": "04 · Memory & boot architecture",
+    "summary": "CALL saves a real return address; RET must restore it.",
+    "goal": "Halt with AX = 42 and SP = 0x7C00.",
+    "goals": {
+      "registers": {
+        "AX": 42,
+        "SP": 31744
+      },
+      "memory": [
+        {
+          "address": 31742,
+          "bytes": [
+            10,
+            126
+          ]
+        }
+      ]
+    },
+    "editableOffsets": [
+      8,
+      9
+    ],
+    "maxChangedBits": 8,
+    "hints": [
+      "A near CALL uses a signed 16-bit displacement measured from its end.",
+      "CALL ends at offset 10. The helper INC AX starts at offset 11.",
+      "Use displacement 01 00. RET returns to logical IP 7E0A."
+    ],
+    "explanation": "CALL pushes the logical return IP, not the model array offset. The helper increments AX and RET pops 7E0A. The memory check also verifies the actual stored return word.",
+    "visual": "CALL 07 → push 7E0A → helper 0B → RET → HLT 0A",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/call-return/start.bits",
+    "solution": "challenges/call-return/solution.bits",
+    "startBytes": [
+      250,
+      184,
+      41,
+      0,
+      188,
+      0,
+      124,
+      232,
+      0,
+      0,
+      244,
+      64,
+      195
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep interrupts masked while using the call stack.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,41",
+        "explanation": "Initialize the value for the helper to increment.",
+        "bits": "10111000 00101001 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV SP,7C00",
+        "explanation": "Set the call stack below the loader.",
+        "bits": "10111100 00000000 01111100"
+      },
+      {
+        "offset": 7,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "CALL +0",
+        "explanation": "This pushes return IP 7E0A but calls HLT instead of the helper.",
+        "bits": "11101000 00000000 00000000"
+      },
+      {
+        "offset": 10,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "The broken call arrives here without incrementing or returning.",
+        "bits": "11110100"
+      },
+      {
+        "offset": 11,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "INC AX",
+        "explanation": "The intended helper starts at offset 11.",
+        "bits": "01000000"
+      },
+      {
+        "offset": 12,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "RET",
+        "explanation": "Pop the near return IP from the stack.",
+        "bits": "11000011"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Keep interrupts masked while using the call stack.\n10111000 00101001 00000000 # instruction | MOV AX,41 | Initialize the value for the helper to increment.\n10111100 00000000 01111100 # instruction | MOV SP,7C00 | Set the call stack below the loader.\n11101000 00000000 00000000 # instruction | CALL +0 | This pushes return IP 7E0A but calls HLT instead of the helper.\n11110100 # instruction | HLT | The broken call arrives here without incrementing or returning.\n01000000 # instruction | INC AX | The intended helper starts at offset 11.\n11000011 # instruction | RET | Pop the near return IP from the stack.\n",
+    "startSha256": "aac350a379376c290b9f07c7f0f4ce6d2ce1b555f690663f58d8fba30875b678",
+    "solutionBytes": [
+      250,
+      184,
+      41,
+      0,
+      188,
+      0,
+      124,
+      232,
+      1,
+      0,
+      244,
+      64,
+      195
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep interrupts masked while using the call stack.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,41",
+        "explanation": "Initialize the value for the helper to increment.",
+        "bits": "10111000 00101001 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV SP,7C00",
+        "explanation": "Set the call stack below the loader.",
+        "bits": "10111100 00000000 01111100"
+      },
+      {
+        "offset": 7,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "CALL +1",
+        "explanation": "Push return IP 7E0A; next offset 10 plus one enters the helper at 11.",
+        "bits": "11101000 00000001 00000000"
+      },
+      {
+        "offset": 10,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "RET returns here with AX=42 and a balanced SP.",
+        "bits": "11110100"
+      },
+      {
+        "offset": 11,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "INC AX",
+        "explanation": "The helper adds one to AX.",
+        "bits": "01000000"
+      },
+      {
+        "offset": 12,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "RET",
+        "explanation": "Restore IP 7E0A and increase SP by two.",
+        "bits": "11000011"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Keep interrupts masked while using the call stack.\n10111000 00101001 00000000 # instruction | MOV AX,41 | Initialize the value for the helper to increment.\n10111100 00000000 01111100 # instruction | MOV SP,7C00 | Set the call stack below the loader.\n11101000 00000001 00000000 # instruction | CALL +1 | Push return IP 7E0A; next offset 10 plus one enters the helper at 11.\n11110100 # instruction | HLT | RET returns here with AX=42 and a balanced SP.\n01000000 # instruction | INC AX | The helper adds one to AX.\n11000011 # instruction | RET | Restore IP 7E0A and increase SP by two.\n",
+    "solutionSha256": "5f02612d7cb7a8255fd63f5b1cd5283af080fee012c356d9ce070e03c0dd19de"
+  },
+  {
+    "id": "segmented-store",
+    "title": "Combine segment and offset",
+    "difficulty": "expert",
+    "path": "04 · Memory & boot architecture",
+    "summary": "A segment register supplies an address base, not a raw byte address.",
+    "goal": "Halt with bytes 42 0A at physical 0x10010, ES = 0x1000 and DI = 0x0012.",
+    "goals": {
+      "registers": {
+        "ES": 4096,
+        "DI": 18
+      },
+      "memory": [
+        {
+          "address": 65552,
+          "bytes": [
+            66,
+            10
+          ]
+        }
+      ]
+    },
+    "editableOffsets": [
+      2,
+      3
+    ],
+    "maxChangedBits": 1,
+    "hints": [
+      "STOSW writes through ES:DI, and the MOV ES instruction already exists.",
+      "Physical address is segment × 16 + offset.",
+      "Set the first MOV AX to 1000: low byte 00, high byte 10."
+    ],
+    "explanation": "Real-mode segments overlap. ES=1000 contributes base 10000; adding DI=0010 selects 10010. STOSW writes a little-endian word and advances DI by two.",
+    "visual": "1000 × 10 + 0010 = physical 10010 · [42 0A]",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/segmented-store/start.bits",
+    "solution": "challenges/segmented-store/solution.bits",
+    "startBytes": [
+      250,
+      184,
+      0,
+      0,
+      142,
+      192,
+      184,
+      66,
+      10,
+      191,
+      16,
+      0,
+      252,
+      171,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,0000",
+        "explanation": "The wrong segment base directs the write into low memory.",
+        "bits": "10111000 00000000 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV ES,AX",
+        "explanation": "Set the extra segment used by STOSW.",
+        "bits": "10001110 11000000"
+      },
+      {
+        "offset": 6,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,0A42",
+        "explanation": "A VGA-style word contains ASCII B and attribute 0A.",
+        "bits": "10111000 01000010 00001010"
+      },
+      {
+        "offset": 9,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV DI,0010",
+        "explanation": "Set the offset within the chosen segment.",
+        "bits": "10111111 00010000 00000000"
+      },
+      {
+        "offset": 12,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLD",
+        "explanation": "Advance DI after the word store.",
+        "bits": "11111100"
+      },
+      {
+        "offset": 13,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "STOSW",
+        "explanation": "Store AX through ES:DI, currently at physical 00010.",
+        "bits": "10101011"
+      },
+      {
+        "offset": 14,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop after writing to the wrong physical address.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Canonical starting puzzle: every executable byte is a literal binary token.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 00000000 00000000 # instruction | MOV AX,0000 | The wrong segment base directs the write into low memory.\n10001110 11000000 # instruction | MOV ES,AX | Set the extra segment used by STOSW.\n10111000 01000010 00001010 # instruction | MOV AX,0A42 | A VGA-style word contains ASCII B and attribute 0A.\n10111111 00010000 00000000 # instruction | MOV DI,0010 | Set the offset within the chosen segment.\n11111100 # instruction | CLD | Advance DI after the word store.\n10101011 # instruction | STOSW | Store AX through ES:DI, currently at physical 00010.\n11110100 # instruction | HLT | Stop after writing to the wrong physical address.\n",
+    "startSha256": "69994e79661a42fa0a61c21a27649a62b821bdf975872952795e4d4bca3173f9",
+    "solutionBytes": [
+      250,
+      184,
+      0,
+      16,
+      142,
+      192,
+      184,
+      66,
+      10,
+      191,
+      16,
+      0,
+      252,
+      171,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,1000",
+        "explanation": "A segment value is multiplied by sixteen to form its base.",
+        "bits": "10111000 00000000 00010000"
+      },
+      {
+        "offset": 4,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV ES,AX",
+        "explanation": "ES=1000 gives physical base 10000.",
+        "bits": "10001110 11000000"
+      },
+      {
+        "offset": 6,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,0A42",
+        "explanation": "A VGA-style word contains ASCII B and attribute 0A.",
+        "bits": "10111000 01000010 00001010"
+      },
+      {
+        "offset": 9,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV DI,0010",
+        "explanation": "Offset 0010 combines with base 10000.",
+        "bits": "10111111 00010000 00000000"
+      },
+      {
+        "offset": 12,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLD",
+        "explanation": "Advance DI after the word store.",
+        "bits": "11111100"
+      },
+      {
+        "offset": 13,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "STOSW",
+        "explanation": "Store 42 0A at physical 10010 and advance DI by two.",
+        "bits": "10101011"
+      },
+      {
+        "offset": 14,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop after the segment-and-offset write.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Canonical reviewed solution: directly authored binary, not assembler output.\n11111010 # instruction | CLI | Keep the final halt stopped.\n10111000 00000000 00010000 # instruction | MOV AX,1000 | A segment value is multiplied by sixteen to form its base.\n10001110 11000000 # instruction | MOV ES,AX | ES=1000 gives physical base 10000.\n10111000 01000010 00001010 # instruction | MOV AX,0A42 | A VGA-style word contains ASCII B and attribute 0A.\n10111111 00010000 00000000 # instruction | MOV DI,0010 | Offset 0010 combines with base 10000.\n11111100 # instruction | CLD | Advance DI after the word store.\n10101011 # instruction | STOSW | Store 42 0A at physical 10010 and advance DI by two.\n11110100 # instruction | HLT | Stop after the segment-and-offset write.\n",
+    "solutionSha256": "6e34cad7552f4adf5f92b08d478f7fdfdb3fd4a8583069912b328206328626d1"
+  },
+  {
+    "id": "repair-boot",
+    "title": "Repair the boot in three bits",
+    "difficulty": "expert",
+    "path": "04 · Memory & boot architecture",
+    "summary": "This is the actual 512-byte bitborn boot source with two deliberately damaged opcodes.",
+    "goal": "Restore boot output and reach HLT by changing exactly three bits.",
+    "goals": {
+      "output": "bitborn v0.1\r\n---------------------------\r\nNO ASSEMBLY.\r\nNO COMPILER.\r\nJUST BITS.\r\n\r\nHello from raw machine code!\r\n\r\n512 bytes. 100% handwritten.\r\n",
+      "serial": "bitborn v0.1\r\n---------------------------\r\nNO ASSEMBLY.\r\nNO COMPILER.\r\nJUST BITS.\r\n\r\nHello from raw machine code!\r\n\r\n512 bytes. 100% handwritten.\r\n"
+    },
+    "editableOffsets": [
+      1,
+      17
+    ],
+    "maxChangedBits": 3,
+    "hints": [
+      "The first failure is at offset 1: a far jump became a short jump.",
+      "The intended far-jump opcode is EA. At offset 17, the intended CLD opcode is FC.",
+      "Change EB → EA (one bit) and FF → FC (two bits). Preserve the 55 AA signature."
+    ],
+    "explanation": "The far jump normalizes CS so the rest of the boot sector uses its intended addresses. CLD establishes forward string traversal. Repairing only these three bits restores the unmodified canonical sector, including real BIOS output and COM1 output.",
+    "visual": "offset 001: EB → EA · offset 011: FF → FC · total 3 flipped bits",
+    "maxSteps": 4096,
+    "loadAddress": 31744,
+    "source": "challenges/repair-boot/start.bits",
+    "solution": "challenges/repair-boot/solution.bits",
+    "startBytes": [
+      250,
+      235,
+      6,
+      124,
+      0,
+      0,
+      49,
+      192,
+      142,
+      216,
+      142,
+      192,
+      142,
+      208,
+      188,
+      0,
+      124,
+      255,
+      251,
+      184,
+      3,
+      0,
+      205,
+      16,
+      186,
+      249,
+      3,
+      176,
+      0,
+      238,
+      186,
+      251,
+      3,
+      176,
+      128,
+      238,
+      186,
+      248,
+      3,
+      176,
+      1,
+      238,
+      66,
+      176,
+      0,
+      238,
+      186,
+      251,
+      3,
+      176,
+      3,
+      238,
+      190,
+      91,
+      124,
+      172,
+      132,
+      192,
+      116,
+      27,
+      80,
+      86,
+      180,
+      14,
+      187,
+      7,
+      0,
+      205,
+      16,
+      94,
+      88,
+      80,
+      186,
+      253,
+      3,
+      236,
+      168,
+      32,
+      116,
+      251,
+      88,
+      186,
+      248,
+      3,
+      238,
+      235,
+      224,
+      250,
+      244,
+      235,
+      253,
+      98,
+      105,
+      116,
+      98,
+      111,
+      114,
+      110,
+      32,
+      118,
+      48,
+      46,
+      49,
+      13,
+      10,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      13,
+      10,
+      78,
+      79,
+      32,
+      65,
+      83,
+      83,
+      69,
+      77,
+      66,
+      76,
+      89,
+      46,
+      13,
+      10,
+      78,
+      79,
+      32,
+      67,
+      79,
+      77,
+      80,
+      73,
+      76,
+      69,
+      82,
+      46,
+      13,
+      10,
+      74,
+      85,
+      83,
+      84,
+      32,
+      66,
+      73,
+      84,
+      83,
+      46,
+      13,
+      10,
+      13,
+      10,
+      72,
+      101,
+      108,
+      108,
+      111,
+      32,
+      102,
+      114,
+      111,
+      109,
+      32,
+      114,
+      97,
+      119,
+      32,
+      109,
+      97,
+      99,
+      104,
+      105,
+      110,
+      101,
+      32,
+      99,
+      111,
+      100,
+      101,
+      33,
+      13,
+      10,
+      13,
+      10,
+      53,
+      49,
+      50,
+      32,
+      98,
+      121,
+      116,
+      101,
+      115,
+      46,
+      32,
+      49,
+      48,
+      48,
+      37,
+      32,
+      104,
+      97,
+      110,
+      100,
+      119,
+      114,
+      105,
+      116,
+      116,
+      101,
+      110,
+      46,
+      13,
+      10,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      85,
+      170
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "FA disables maskable interrupts during stack setup.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 5,
+        "kind": "instruction",
+        "mnemonic": "Broken far-jump opcode",
+        "explanation": "EB differs from the intended EA by one bit; the remaining three operand bytes are now misinterpreted.",
+        "bits": "11101011 00000110 01111100 00000000 00000000"
+      },
+      {
+        "offset": 6,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "XOR AX,AX",
+        "explanation": "31 /r; ModR/M C0 = register AX XOR register AX, producing zero.",
+        "bits": "00110001 11000000"
+      },
+      {
+        "offset": 8,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV DS,AX",
+        "explanation": "8E /r; D8 selects DS and AX; data addresses use segment zero.",
+        "bits": "10001110 11011000"
+      },
+      {
+        "offset": 10,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV ES,AX",
+        "explanation": "8E /r; C0 selects ES and AX.",
+        "bits": "10001110 11000000"
+      },
+      {
+        "offset": 12,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV SS,AX",
+        "explanation": "8E /r; D0 selects SS and AX; stack segment becomes zero.",
+        "bits": "10001110 11010000"
+      },
+      {
+        "offset": 14,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV SP,7C00",
+        "explanation": "BC = B8+SP; little-endian 7C00 places stack below the loaded sector.",
+        "bits": "10111100 00000000 01111100"
+      },
+      {
+        "offset": 17,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "Broken CLD opcode",
+        "explanation": "FF differs from the intended FC by two low bits; it no longer selects CLD.",
+        "bits": "11111111"
+      },
+      {
+        "offset": 18,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "STI",
+        "explanation": "FB enables BIOS keyboard/timer interrupts after stack is ready.",
+        "bits": "11111011"
+      },
+      {
+        "offset": 19,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,0003",
+        "explanation": "B8 loads AX with video mode 3.",
+        "bits": "10111000 00000011 00000000"
+      },
+      {
+        "offset": 22,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "INT 10",
+        "explanation": "CD imm8; BIOS video interrupt selects 80x25 text mode.",
+        "bits": "11001101 00010000"
+      },
+      {
+        "offset": 24,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV DX,03F9",
+        "explanation": "BA loads COM1 interrupt-enable port.",
+        "bits": "10111010 11111001 00000011"
+      },
+      {
+        "offset": 27,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AL,00",
+        "explanation": "B0 loads an 8-bit zero to disable UART interrupts.",
+        "bits": "10110000 00000000"
+      },
+      {
+        "offset": 29,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "OUT DX,AL",
+        "explanation": "EE writes AL to the I/O port in DX.",
+        "bits": "11101110"
+      },
+      {
+        "offset": 30,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV DX,03FB",
+        "explanation": "BA loads UART line-control port.",
+        "bits": "10111010 11111011 00000011"
+      },
+      {
+        "offset": 33,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AL,80",
+        "explanation": "B0 selects divisor-latch access (DLAB bit 7).",
+        "bits": "10110000 10000000"
+      },
+      {
+        "offset": 35,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "OUT DX,AL",
+        "explanation": "EE enables the baud divisor registers.",
+        "bits": "11101110"
+      },
+      {
+        "offset": 36,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV DX,03F8",
+        "explanation": "BA loads divisor low-byte port.",
+        "bits": "10111010 11111000 00000011"
+      },
+      {
+        "offset": 39,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AL,01",
+        "explanation": "B0 loads divisor 1, giving 115200 baud on a standard 16550.",
+        "bits": "10110000 00000001"
+      },
+      {
+        "offset": 41,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "OUT DX,AL",
+        "explanation": "EE writes divisor low byte.",
+        "bits": "11101110"
+      },
+      {
+        "offset": 42,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "INC DX",
+        "explanation": "42 = 40+DX; selects divisor high-byte port.",
+        "bits": "01000010"
+      },
+      {
+        "offset": 43,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AL,00",
+        "explanation": "B0 clears divisor high byte.",
+        "bits": "10110000 00000000"
+      },
+      {
+        "offset": 45,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "OUT DX,AL",
+        "explanation": "EE writes divisor high byte.",
+        "bits": "11101110"
+      },
+      {
+        "offset": 46,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV DX,03FB",
+        "explanation": "BA selects line-control port again.",
+        "bits": "10111010 11111011 00000011"
+      },
+      {
+        "offset": 49,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AL,03",
+        "explanation": "B0 selects 8 data bits, no parity, one stop bit; clears DLAB.",
+        "bits": "10110000 00000011"
+      },
+      {
+        "offset": 51,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "OUT DX,AL",
+        "explanation": "EE writes 8N1 UART configuration.",
+        "bits": "11101110"
+      },
+      {
+        "offset": 52,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV SI,7C5B",
+        "explanation": "BE loads SI; message begins at sector offset 91, physical 7C5B.",
+        "bits": "10111110 01011011 01111100"
+      },
+      {
+        "offset": 55,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "LODSB",
+        "explanation": "AC loads DS:SI into AL and increments SI.",
+        "bits": "10101100"
+      },
+      {
+        "offset": 56,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "TEST AL,AL",
+        "explanation": "84 /r; C0 tests AL against itself and sets ZF at NUL.",
+        "bits": "10000100 11000000"
+      },
+      {
+        "offset": 58,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "JZ 7C57",
+        "explanation": "74 rel8; next offset 60 + 27 = 87, the halt path.",
+        "bits": "01110100 00011011"
+      },
+      {
+        "offset": 60,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "PUSH AX",
+        "explanation": "50 preserves the character across BIOS video output.",
+        "bits": "01010000"
+      },
+      {
+        "offset": 61,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "PUSH SI",
+        "explanation": "56 preserves the string pointer across BIOS video output.",
+        "bits": "01010110"
+      },
+      {
+        "offset": 62,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AH,0E",
+        "explanation": "B4 loads BIOS teletype service number.",
+        "bits": "10110100 00001110"
+      },
+      {
+        "offset": 64,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,0007",
+        "explanation": "BB selects display page zero and text attribute 07.",
+        "bits": "10111011 00000111 00000000"
+      },
+      {
+        "offset": 67,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "INT 10",
+        "explanation": "CD 10 emits the character on the VGA display.",
+        "bits": "11001101 00010000"
+      },
+      {
+        "offset": 69,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "POP SI",
+        "explanation": "5E restores the source pointer.",
+        "bits": "01011110"
+      },
+      {
+        "offset": 70,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "POP AX",
+        "explanation": "58 restores the character.",
+        "bits": "01011000"
+      },
+      {
+        "offset": 71,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "PUSH AX",
+        "explanation": "50 saves AL while polling the UART status.",
+        "bits": "01010000"
+      },
+      {
+        "offset": 72,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV DX,03FD",
+        "explanation": "BA selects UART line-status register.",
+        "bits": "10111010 11111101 00000011"
+      },
+      {
+        "offset": 75,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "IN AL,DX",
+        "explanation": "EC reads UART status into AL.",
+        "bits": "11101100"
+      },
+      {
+        "offset": 76,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "TEST AL,20",
+        "explanation": "A8 imm8 checks transmitter holding register empty bit 5.",
+        "bits": "10101000 00100000"
+      },
+      {
+        "offset": 78,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "JZ 7C4B",
+        "explanation": "74 rel8; next offset 80 minus 5 = 75, poll until ready.",
+        "bits": "01110100 11111011"
+      },
+      {
+        "offset": 80,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "POP AX",
+        "explanation": "58 restores the character after status polling.",
+        "bits": "01011000"
+      },
+      {
+        "offset": 81,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV DX,03F8",
+        "explanation": "BA selects COM1 transmit data register.",
+        "bits": "10111010 11111000 00000011"
+      },
+      {
+        "offset": 84,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "OUT DX,AL",
+        "explanation": "EE emits the same character to COM1 for machine-readable testing.",
+        "bits": "11101110"
+      },
+      {
+        "offset": 85,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "JMP 7C37",
+        "explanation": "EB rel8; next offset 87 minus 32 = 55, fetch the next character.",
+        "bits": "11101011 11100000"
+      },
+      {
+        "offset": 87,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "FA prevents interrupts waking the final halt.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 88,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "F4 stops instruction execution until NMI/reset.",
+        "bits": "11110100"
+      },
+      {
+        "offset": 89,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "JMP 7C58",
+        "explanation": "EB rel8; next offset 91 minus 3 = 88, halt again if awakened.",
+        "bits": "11101011 11111101"
+      },
+      {
+        "offset": 91,
+        "size": 14,
+        "kind": "data",
+        "mnemonic": "bitborn v0.1 CR LF",
+        "explanation": "ASCII greeting; CR LF advances the VGA cursor and serial terminal.",
+        "bits": "01100010 01101001 01110100 01100010 01101111 01110010 01101110 00100000 01110110 00110000 00101110 00110001 00001101 00001010"
+      },
+      {
+        "offset": 105,
+        "size": 29,
+        "kind": "data",
+        "mnemonic": "separator CR LF",
+        "explanation": "27 literal ASCII hyphens followed by a line break.",
+        "bits": "00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00001101 00001010"
+      },
+      {
+        "offset": 134,
+        "size": 14,
+        "kind": "data",
+        "mnemonic": "NO ASSEMBLY. CR LF",
+        "explanation": "Literal ASCII message bytes.",
+        "bits": "01001110 01001111 00100000 01000001 01010011 01010011 01000101 01001101 01000010 01001100 01011001 00101110 00001101 00001010"
+      },
+      {
+        "offset": 148,
+        "size": 14,
+        "kind": "data",
+        "mnemonic": "NO COMPILER. CR LF",
+        "explanation": "Literal ASCII message bytes.",
+        "bits": "01001110 01001111 00100000 01000011 01001111 01001101 01010000 01001001 01001100 01000101 01010010 00101110 00001101 00001010"
+      },
+      {
+        "offset": 162,
+        "size": 14,
+        "kind": "data",
+        "mnemonic": "JUST BITS. CR LF CR LF",
+        "explanation": "Literal ASCII bytes and one empty line.",
+        "bits": "01001010 01010101 01010011 01010100 00100000 01000010 01001001 01010100 01010011 00101110 00001101 00001010 00001101 00001010"
+      },
+      {
+        "offset": 176,
+        "size": 32,
+        "kind": "data",
+        "mnemonic": "Hello from raw machine code! CR LF CR LF",
+        "explanation": "Literal ASCII greeting and one empty line.",
+        "bits": "01001000 01100101 01101100 01101100 01101111 00100000 01100110 01110010 01101111 01101101 00100000 01110010 01100001 01110111 00100000 01101101 01100001 01100011 01101000 01101001 01101110 01100101 00100000 01100011 01101111 01100100 01100101 00100001 00001101 00001010 00001101 00001010"
+      },
+      {
+        "offset": 208,
+        "size": 31,
+        "kind": "data",
+        "mnemonic": "512 bytes. 100% handwritten. CR LF NUL",
+        "explanation": "Literal ASCII final line; zero terminates the string.",
+        "bits": "00110101 00110001 00110010 00100000 01100010 01111001 01110100 01100101 01110011 00101110 00100000 00110001 00110000 00110000 00100101 00100000 01101000 01100001 01101110 01100100 01110111 01110010 01101001 01110100 01110100 01100101 01101110 00101110 00001101 00001010 00000000"
+      },
+      {
+        "offset": 239,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 255,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 271,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 287,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 303,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 319,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 335,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 351,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 367,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 383,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 399,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 415,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 431,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 447,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 463,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 479,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 495,
+        "size": 15,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Fifteen bytes place the signature at offsets 510 and 511.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 510,
+        "size": 2,
+        "kind": "signature",
+        "mnemonic": "BIOS boot signature",
+        "explanation": "Literal 55 AA bytes; the little-endian word is AA55. These are data, never instructions.",
+        "bits": "01010101 10101010"
+      }
+    ],
+    "startText": "# Deliberate corruption fixture: one opcode bit at offset 1 and two at offset 17.\n# bitborn v0.1 — canonical, manually authored 16-bit x86 bytes.\n# Annotation syntax: kind | disassembly for explanation only | encoding explanation.\n11111010 # instruction | CLI | FA disables maskable interrupts during stack setup.\n11101011 00000110 01111100 00000000 00000000 # instruction | Broken far-jump opcode | EB differs from the intended EA by one bit; the remaining three operand bytes are now misinterpreted.\n00110001 11000000 # instruction | XOR AX,AX | 31 /r; ModR/M C0 = register AX XOR register AX, producing zero.\n10001110 11011000 # instruction | MOV DS,AX | 8E /r; D8 selects DS and AX; data addresses use segment zero.\n10001110 11000000 # instruction | MOV ES,AX | 8E /r; C0 selects ES and AX.\n10001110 11010000 # instruction | MOV SS,AX | 8E /r; D0 selects SS and AX; stack segment becomes zero.\n10111100 00000000 01111100 # instruction | MOV SP,7C00 | BC = B8+SP; little-endian 7C00 places stack below the loaded sector.\n11111111 # instruction | Broken CLD opcode | FF differs from the intended FC by two low bits; it no longer selects CLD.\n11111011 # instruction | STI | FB enables BIOS keyboard/timer interrupts after stack is ready.\n10111000 00000011 00000000 # instruction | MOV AX,0003 | B8 loads AX with video mode 3.\n11001101 00010000 # instruction | INT 10 | CD imm8; BIOS video interrupt selects 80x25 text mode.\n10111010 11111001 00000011 # instruction | MOV DX,03F9 | BA loads COM1 interrupt-enable port.\n10110000 00000000 # instruction | MOV AL,00 | B0 loads an 8-bit zero to disable UART interrupts.\n11101110 # instruction | OUT DX,AL | EE writes AL to the I/O port in DX.\n10111010 11111011 00000011 # instruction | MOV DX,03FB | BA loads UART line-control port.\n10110000 10000000 # instruction | MOV AL,80 | B0 selects divisor-latch access (DLAB bit 7).\n11101110 # instruction | OUT DX,AL | EE enables the baud divisor registers.\n10111010 11111000 00000011 # instruction | MOV DX,03F8 | BA loads divisor low-byte port.\n10110000 00000001 # instruction | MOV AL,01 | B0 loads divisor 1, giving 115200 baud on a standard 16550.\n11101110 # instruction | OUT DX,AL | EE writes divisor low byte.\n01000010 # instruction | INC DX | 42 = 40+DX; selects divisor high-byte port.\n10110000 00000000 # instruction | MOV AL,00 | B0 clears divisor high byte.\n11101110 # instruction | OUT DX,AL | EE writes divisor high byte.\n10111010 11111011 00000011 # instruction | MOV DX,03FB | BA selects line-control port again.\n10110000 00000011 # instruction | MOV AL,03 | B0 selects 8 data bits, no parity, one stop bit; clears DLAB.\n11101110 # instruction | OUT DX,AL | EE writes 8N1 UART configuration.\n10111110 01011011 01111100 # instruction | MOV SI,7C5B | BE loads SI; message begins at sector offset 91, physical 7C5B.\n10101100 # instruction | LODSB | AC loads DS:SI into AL and increments SI.\n10000100 11000000 # instruction | TEST AL,AL | 84 /r; C0 tests AL against itself and sets ZF at NUL.\n01110100 00011011 # instruction | JZ 7C57 | 74 rel8; next offset 60 + 27 = 87, the halt path.\n01010000 # instruction | PUSH AX | 50 preserves the character across BIOS video output.\n01010110 # instruction | PUSH SI | 56 preserves the string pointer across BIOS video output.\n10110100 00001110 # instruction | MOV AH,0E | B4 loads BIOS teletype service number.\n10111011 00000111 00000000 # instruction | MOV BX,0007 | BB selects display page zero and text attribute 07.\n11001101 00010000 # instruction | INT 10 | CD 10 emits the character on the VGA display.\n01011110 # instruction | POP SI | 5E restores the source pointer.\n01011000 # instruction | POP AX | 58 restores the character.\n01010000 # instruction | PUSH AX | 50 saves AL while polling the UART status.\n10111010 11111101 00000011 # instruction | MOV DX,03FD | BA selects UART line-status register.\n11101100 # instruction | IN AL,DX | EC reads UART status into AL.\n10101000 00100000 # instruction | TEST AL,20 | A8 imm8 checks transmitter holding register empty bit 5.\n01110100 11111011 # instruction | JZ 7C4B | 74 rel8; next offset 80 minus 5 = 75, poll until ready.\n01011000 # instruction | POP AX | 58 restores the character after status polling.\n10111010 11111000 00000011 # instruction | MOV DX,03F8 | BA selects COM1 transmit data register.\n11101110 # instruction | OUT DX,AL | EE emits the same character to COM1 for machine-readable testing.\n11101011 11100000 # instruction | JMP 7C37 | EB rel8; next offset 87 minus 32 = 55, fetch the next character.\n11111010 # instruction | CLI | FA prevents interrupts waking the final halt.\n11110100 # instruction | HLT | F4 stops instruction execution until NMI/reset.\n11101011 11111101 # instruction | JMP 7C58 | EB rel8; next offset 91 minus 3 = 88, halt again if awakened.\n01100010 01101001 01110100 01100010 01101111 01110010 01101110 00100000 01110110 00110000 00101110 00110001 00001101 00001010 # data | bitborn v0.1 CR LF | ASCII greeting; CR LF advances the VGA cursor and serial terminal.\n00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00001101 00001010 # data | separator CR LF | 27 literal ASCII hyphens followed by a line break.\n01001110 01001111 00100000 01000001 01010011 01010011 01000101 01001101 01000010 01001100 01011001 00101110 00001101 00001010 # data | NO ASSEMBLY. CR LF | Literal ASCII message bytes.\n01001110 01001111 00100000 01000011 01001111 01001101 01010000 01001001 01001100 01000101 01010010 00101110 00001101 00001010 # data | NO COMPILER. CR LF | Literal ASCII message bytes.\n01001010 01010101 01010011 01010100 00100000 01000010 01001001 01010100 01010011 00101110 00001101 00001010 00001101 00001010 # data | JUST BITS. CR LF CR LF | Literal ASCII bytes and one empty line.\n01001000 01100101 01101100 01101100 01101111 00100000 01100110 01110010 01101111 01101101 00100000 01110010 01100001 01110111 00100000 01101101 01100001 01100011 01101000 01101001 01101110 01100101 00100000 01100011 01101111 01100100 01100101 00100001 00001101 00001010 00001101 00001010 # data | Hello from raw machine code! CR LF CR LF | Literal ASCII greeting and one empty line.\n00110101 00110001 00110010 00100000 01100010 01111001 01110100 01100101 01110011 00101110 00100000 00110001 00110000 00110000 00100101 00100000 01101000 01100001 01101110 01100100 01110111 01110010 01101001 01110100 01110100 01100101 01101110 00101110 00001101 00001010 00000000 # data | 512 bytes. 100% handwritten. CR LF NUL | Literal ASCII final line; zero terminates the string.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Fifteen bytes place the signature at offsets 510 and 511.\n01010101 10101010 # signature | BIOS boot signature | Literal 55 AA bytes; the little-endian word is AA55. These are data, never instructions.\n",
+    "startSha256": "e2ffc7425908d4e8991a17aae3ee158159730304a96a39fe2c3254e5d131f92a",
+    "solutionBytes": [
+      250,
+      234,
+      6,
+      124,
+      0,
+      0,
+      49,
+      192,
+      142,
+      216,
+      142,
+      192,
+      142,
+      208,
+      188,
+      0,
+      124,
+      252,
+      251,
+      184,
+      3,
+      0,
+      205,
+      16,
+      186,
+      249,
+      3,
+      176,
+      0,
+      238,
+      186,
+      251,
+      3,
+      176,
+      128,
+      238,
+      186,
+      248,
+      3,
+      176,
+      1,
+      238,
+      66,
+      176,
+      0,
+      238,
+      186,
+      251,
+      3,
+      176,
+      3,
+      238,
+      190,
+      91,
+      124,
+      172,
+      132,
+      192,
+      116,
+      27,
+      80,
+      86,
+      180,
+      14,
+      187,
+      7,
+      0,
+      205,
+      16,
+      94,
+      88,
+      80,
+      186,
+      253,
+      3,
+      236,
+      168,
+      32,
+      116,
+      251,
+      88,
+      186,
+      248,
+      3,
+      238,
+      235,
+      224,
+      250,
+      244,
+      235,
+      253,
+      98,
+      105,
+      116,
+      98,
+      111,
+      114,
+      110,
+      32,
+      118,
+      48,
+      46,
+      49,
+      13,
+      10,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      13,
+      10,
+      78,
+      79,
+      32,
+      65,
+      83,
+      83,
+      69,
+      77,
+      66,
+      76,
+      89,
+      46,
+      13,
+      10,
+      78,
+      79,
+      32,
+      67,
+      79,
+      77,
+      80,
+      73,
+      76,
+      69,
+      82,
+      46,
+      13,
+      10,
+      74,
+      85,
+      83,
+      84,
+      32,
+      66,
+      73,
+      84,
+      83,
+      46,
+      13,
+      10,
+      13,
+      10,
+      72,
+      101,
+      108,
+      108,
+      111,
+      32,
+      102,
+      114,
+      111,
+      109,
+      32,
+      114,
+      97,
+      119,
+      32,
+      109,
+      97,
+      99,
+      104,
+      105,
+      110,
+      101,
+      32,
+      99,
+      111,
+      100,
+      101,
+      33,
+      13,
+      10,
+      13,
+      10,
+      53,
+      49,
+      50,
+      32,
+      98,
+      121,
+      116,
+      101,
+      115,
+      46,
+      32,
+      49,
+      48,
+      48,
+      37,
+      32,
+      104,
+      97,
+      110,
+      100,
+      119,
+      114,
+      105,
+      116,
+      116,
+      101,
+      110,
+      46,
+      13,
+      10,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      85,
+      170
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "FA disables maskable interrupts during stack setup.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 5,
+        "kind": "instruction",
+        "mnemonic": "JMP 0000:7C06",
+        "explanation": "EA has a little-endian offset 7C06 followed by segment 0000; normalize CS.",
+        "bits": "11101010 00000110 01111100 00000000 00000000"
+      },
+      {
+        "offset": 6,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "XOR AX,AX",
+        "explanation": "31 /r; ModR/M C0 = register AX XOR register AX, producing zero.",
+        "bits": "00110001 11000000"
+      },
+      {
+        "offset": 8,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV DS,AX",
+        "explanation": "8E /r; D8 selects DS and AX; data addresses use segment zero.",
+        "bits": "10001110 11011000"
+      },
+      {
+        "offset": 10,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV ES,AX",
+        "explanation": "8E /r; C0 selects ES and AX.",
+        "bits": "10001110 11000000"
+      },
+      {
+        "offset": 12,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV SS,AX",
+        "explanation": "8E /r; D0 selects SS and AX; stack segment becomes zero.",
+        "bits": "10001110 11010000"
+      },
+      {
+        "offset": 14,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV SP,7C00",
+        "explanation": "BC = B8+SP; little-endian 7C00 places stack below the loaded sector.",
+        "bits": "10111100 00000000 01111100"
+      },
+      {
+        "offset": 17,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLD",
+        "explanation": "FC clears direction flag; LODSB advances SI.",
+        "bits": "11111100"
+      },
+      {
+        "offset": 18,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "STI",
+        "explanation": "FB enables BIOS keyboard/timer interrupts after stack is ready.",
+        "bits": "11111011"
+      },
+      {
+        "offset": 19,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,0003",
+        "explanation": "B8 loads AX with video mode 3.",
+        "bits": "10111000 00000011 00000000"
+      },
+      {
+        "offset": 22,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "INT 10",
+        "explanation": "CD imm8; BIOS video interrupt selects 80x25 text mode.",
+        "bits": "11001101 00010000"
+      },
+      {
+        "offset": 24,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV DX,03F9",
+        "explanation": "BA loads COM1 interrupt-enable port.",
+        "bits": "10111010 11111001 00000011"
+      },
+      {
+        "offset": 27,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AL,00",
+        "explanation": "B0 loads an 8-bit zero to disable UART interrupts.",
+        "bits": "10110000 00000000"
+      },
+      {
+        "offset": 29,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "OUT DX,AL",
+        "explanation": "EE writes AL to the I/O port in DX.",
+        "bits": "11101110"
+      },
+      {
+        "offset": 30,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV DX,03FB",
+        "explanation": "BA loads UART line-control port.",
+        "bits": "10111010 11111011 00000011"
+      },
+      {
+        "offset": 33,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AL,80",
+        "explanation": "B0 selects divisor-latch access (DLAB bit 7).",
+        "bits": "10110000 10000000"
+      },
+      {
+        "offset": 35,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "OUT DX,AL",
+        "explanation": "EE enables the baud divisor registers.",
+        "bits": "11101110"
+      },
+      {
+        "offset": 36,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV DX,03F8",
+        "explanation": "BA loads divisor low-byte port.",
+        "bits": "10111010 11111000 00000011"
+      },
+      {
+        "offset": 39,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AL,01",
+        "explanation": "B0 loads divisor 1, giving 115200 baud on a standard 16550.",
+        "bits": "10110000 00000001"
+      },
+      {
+        "offset": 41,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "OUT DX,AL",
+        "explanation": "EE writes divisor low byte.",
+        "bits": "11101110"
+      },
+      {
+        "offset": 42,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "INC DX",
+        "explanation": "42 = 40+DX; selects divisor high-byte port.",
+        "bits": "01000010"
+      },
+      {
+        "offset": 43,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AL,00",
+        "explanation": "B0 clears divisor high byte.",
+        "bits": "10110000 00000000"
+      },
+      {
+        "offset": 45,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "OUT DX,AL",
+        "explanation": "EE writes divisor high byte.",
+        "bits": "11101110"
+      },
+      {
+        "offset": 46,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV DX,03FB",
+        "explanation": "BA selects line-control port again.",
+        "bits": "10111010 11111011 00000011"
+      },
+      {
+        "offset": 49,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AL,03",
+        "explanation": "B0 selects 8 data bits, no parity, one stop bit; clears DLAB.",
+        "bits": "10110000 00000011"
+      },
+      {
+        "offset": 51,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "OUT DX,AL",
+        "explanation": "EE writes 8N1 UART configuration.",
+        "bits": "11101110"
+      },
+      {
+        "offset": 52,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV SI,7C5B",
+        "explanation": "BE loads SI; message begins at sector offset 91, physical 7C5B.",
+        "bits": "10111110 01011011 01111100"
+      },
+      {
+        "offset": 55,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "LODSB",
+        "explanation": "AC loads DS:SI into AL and increments SI.",
+        "bits": "10101100"
+      },
+      {
+        "offset": 56,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "TEST AL,AL",
+        "explanation": "84 /r; C0 tests AL against itself and sets ZF at NUL.",
+        "bits": "10000100 11000000"
+      },
+      {
+        "offset": 58,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "JZ 7C57",
+        "explanation": "74 rel8; next offset 60 + 27 = 87, the halt path.",
+        "bits": "01110100 00011011"
+      },
+      {
+        "offset": 60,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "PUSH AX",
+        "explanation": "50 preserves the character across BIOS video output.",
+        "bits": "01010000"
+      },
+      {
+        "offset": 61,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "PUSH SI",
+        "explanation": "56 preserves the string pointer across BIOS video output.",
+        "bits": "01010110"
+      },
+      {
+        "offset": 62,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV AH,0E",
+        "explanation": "B4 loads BIOS teletype service number.",
+        "bits": "10110100 00001110"
+      },
+      {
+        "offset": 64,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,0007",
+        "explanation": "BB selects display page zero and text attribute 07.",
+        "bits": "10111011 00000111 00000000"
+      },
+      {
+        "offset": 67,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "INT 10",
+        "explanation": "CD 10 emits the character on the VGA display.",
+        "bits": "11001101 00010000"
+      },
+      {
+        "offset": 69,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "POP SI",
+        "explanation": "5E restores the source pointer.",
+        "bits": "01011110"
+      },
+      {
+        "offset": 70,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "POP AX",
+        "explanation": "58 restores the character.",
+        "bits": "01011000"
+      },
+      {
+        "offset": 71,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "PUSH AX",
+        "explanation": "50 saves AL while polling the UART status.",
+        "bits": "01010000"
+      },
+      {
+        "offset": 72,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV DX,03FD",
+        "explanation": "BA selects UART line-status register.",
+        "bits": "10111010 11111101 00000011"
+      },
+      {
+        "offset": 75,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "IN AL,DX",
+        "explanation": "EC reads UART status into AL.",
+        "bits": "11101100"
+      },
+      {
+        "offset": 76,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "TEST AL,20",
+        "explanation": "A8 imm8 checks transmitter holding register empty bit 5.",
+        "bits": "10101000 00100000"
+      },
+      {
+        "offset": 78,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "JZ 7C4B",
+        "explanation": "74 rel8; next offset 80 minus 5 = 75, poll until ready.",
+        "bits": "01110100 11111011"
+      },
+      {
+        "offset": 80,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "POP AX",
+        "explanation": "58 restores the character after status polling.",
+        "bits": "01011000"
+      },
+      {
+        "offset": 81,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV DX,03F8",
+        "explanation": "BA selects COM1 transmit data register.",
+        "bits": "10111010 11111000 00000011"
+      },
+      {
+        "offset": 84,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "OUT DX,AL",
+        "explanation": "EE emits the same character to COM1 for machine-readable testing.",
+        "bits": "11101110"
+      },
+      {
+        "offset": 85,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "JMP 7C37",
+        "explanation": "EB rel8; next offset 87 minus 32 = 55, fetch the next character.",
+        "bits": "11101011 11100000"
+      },
+      {
+        "offset": 87,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "FA prevents interrupts waking the final halt.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 88,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "F4 stops instruction execution until NMI/reset.",
+        "bits": "11110100"
+      },
+      {
+        "offset": 89,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "JMP 7C58",
+        "explanation": "EB rel8; next offset 91 minus 3 = 88, halt again if awakened.",
+        "bits": "11101011 11111101"
+      },
+      {
+        "offset": 91,
+        "size": 14,
+        "kind": "data",
+        "mnemonic": "bitborn v0.1 CR LF",
+        "explanation": "ASCII greeting; CR LF advances the VGA cursor and serial terminal.",
+        "bits": "01100010 01101001 01110100 01100010 01101111 01110010 01101110 00100000 01110110 00110000 00101110 00110001 00001101 00001010"
+      },
+      {
+        "offset": 105,
+        "size": 29,
+        "kind": "data",
+        "mnemonic": "separator CR LF",
+        "explanation": "27 literal ASCII hyphens followed by a line break.",
+        "bits": "00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00001101 00001010"
+      },
+      {
+        "offset": 134,
+        "size": 14,
+        "kind": "data",
+        "mnemonic": "NO ASSEMBLY. CR LF",
+        "explanation": "Literal ASCII message bytes.",
+        "bits": "01001110 01001111 00100000 01000001 01010011 01010011 01000101 01001101 01000010 01001100 01011001 00101110 00001101 00001010"
+      },
+      {
+        "offset": 148,
+        "size": 14,
+        "kind": "data",
+        "mnemonic": "NO COMPILER. CR LF",
+        "explanation": "Literal ASCII message bytes.",
+        "bits": "01001110 01001111 00100000 01000011 01001111 01001101 01010000 01001001 01001100 01000101 01010010 00101110 00001101 00001010"
+      },
+      {
+        "offset": 162,
+        "size": 14,
+        "kind": "data",
+        "mnemonic": "JUST BITS. CR LF CR LF",
+        "explanation": "Literal ASCII bytes and one empty line.",
+        "bits": "01001010 01010101 01010011 01010100 00100000 01000010 01001001 01010100 01010011 00101110 00001101 00001010 00001101 00001010"
+      },
+      {
+        "offset": 176,
+        "size": 32,
+        "kind": "data",
+        "mnemonic": "Hello from raw machine code! CR LF CR LF",
+        "explanation": "Literal ASCII greeting and one empty line.",
+        "bits": "01001000 01100101 01101100 01101100 01101111 00100000 01100110 01110010 01101111 01101101 00100000 01110010 01100001 01110111 00100000 01101101 01100001 01100011 01101000 01101001 01101110 01100101 00100000 01100011 01101111 01100100 01100101 00100001 00001101 00001010 00001101 00001010"
+      },
+      {
+        "offset": 208,
+        "size": 31,
+        "kind": "data",
+        "mnemonic": "512 bytes. 100% handwritten. CR LF NUL",
+        "explanation": "Literal ASCII final line; zero terminates the string.",
+        "bits": "00110101 00110001 00110010 00100000 01100010 01111001 01110100 01100101 01110011 00101110 00100000 00110001 00110000 00110000 00100101 00100000 01101000 01100001 01101110 01100100 01110111 01110010 01101001 01110100 01110100 01100101 01101110 00101110 00001101 00001010 00000000"
+      },
+      {
+        "offset": 239,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 255,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 271,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 287,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 303,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 319,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 335,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 351,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 367,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 383,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 399,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 415,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 431,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 447,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 463,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 479,
+        "size": 16,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Sixteen unused bytes, never executed.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 495,
+        "size": 15,
+        "kind": "padding",
+        "mnemonic": "zero fill",
+        "explanation": "Fifteen bytes place the signature at offsets 510 and 511.",
+        "bits": "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+      },
+      {
+        "offset": 510,
+        "size": 2,
+        "kind": "signature",
+        "mnemonic": "BIOS boot signature",
+        "explanation": "Literal 55 AA bytes; the little-endian word is AA55. These are data, never instructions.",
+        "bits": "01010101 10101010"
+      }
+    ],
+    "solutionText": "# Challenge solution is the canonical boot/boot.bits source, copied without re-encoding.\n# bitborn v0.1 — canonical, manually authored 16-bit x86 bytes.\n# Annotation syntax: kind | disassembly for explanation only | encoding explanation.\n11111010 # instruction | CLI | FA disables maskable interrupts during stack setup.\n11101010 00000110 01111100 00000000 00000000 # instruction | JMP 0000:7C06 | EA has a little-endian offset 7C06 followed by segment 0000; normalize CS.\n00110001 11000000 # instruction | XOR AX,AX | 31 /r; ModR/M C0 = register AX XOR register AX, producing zero.\n10001110 11011000 # instruction | MOV DS,AX | 8E /r; D8 selects DS and AX; data addresses use segment zero.\n10001110 11000000 # instruction | MOV ES,AX | 8E /r; C0 selects ES and AX.\n10001110 11010000 # instruction | MOV SS,AX | 8E /r; D0 selects SS and AX; stack segment becomes zero.\n10111100 00000000 01111100 # instruction | MOV SP,7C00 | BC = B8+SP; little-endian 7C00 places stack below the loaded sector.\n11111100 # instruction | CLD | FC clears direction flag; LODSB advances SI.\n11111011 # instruction | STI | FB enables BIOS keyboard/timer interrupts after stack is ready.\n10111000 00000011 00000000 # instruction | MOV AX,0003 | B8 loads AX with video mode 3.\n11001101 00010000 # instruction | INT 10 | CD imm8; BIOS video interrupt selects 80x25 text mode.\n10111010 11111001 00000011 # instruction | MOV DX,03F9 | BA loads COM1 interrupt-enable port.\n10110000 00000000 # instruction | MOV AL,00 | B0 loads an 8-bit zero to disable UART interrupts.\n11101110 # instruction | OUT DX,AL | EE writes AL to the I/O port in DX.\n10111010 11111011 00000011 # instruction | MOV DX,03FB | BA loads UART line-control port.\n10110000 10000000 # instruction | MOV AL,80 | B0 selects divisor-latch access (DLAB bit 7).\n11101110 # instruction | OUT DX,AL | EE enables the baud divisor registers.\n10111010 11111000 00000011 # instruction | MOV DX,03F8 | BA loads divisor low-byte port.\n10110000 00000001 # instruction | MOV AL,01 | B0 loads divisor 1, giving 115200 baud on a standard 16550.\n11101110 # instruction | OUT DX,AL | EE writes divisor low byte.\n01000010 # instruction | INC DX | 42 = 40+DX; selects divisor high-byte port.\n10110000 00000000 # instruction | MOV AL,00 | B0 clears divisor high byte.\n11101110 # instruction | OUT DX,AL | EE writes divisor high byte.\n10111010 11111011 00000011 # instruction | MOV DX,03FB | BA selects line-control port again.\n10110000 00000011 # instruction | MOV AL,03 | B0 selects 8 data bits, no parity, one stop bit; clears DLAB.\n11101110 # instruction | OUT DX,AL | EE writes 8N1 UART configuration.\n10111110 01011011 01111100 # instruction | MOV SI,7C5B | BE loads SI; message begins at sector offset 91, physical 7C5B.\n10101100 # instruction | LODSB | AC loads DS:SI into AL and increments SI.\n10000100 11000000 # instruction | TEST AL,AL | 84 /r; C0 tests AL against itself and sets ZF at NUL.\n01110100 00011011 # instruction | JZ 7C57 | 74 rel8; next offset 60 + 27 = 87, the halt path.\n01010000 # instruction | PUSH AX | 50 preserves the character across BIOS video output.\n01010110 # instruction | PUSH SI | 56 preserves the string pointer across BIOS video output.\n10110100 00001110 # instruction | MOV AH,0E | B4 loads BIOS teletype service number.\n10111011 00000111 00000000 # instruction | MOV BX,0007 | BB selects display page zero and text attribute 07.\n11001101 00010000 # instruction | INT 10 | CD 10 emits the character on the VGA display.\n01011110 # instruction | POP SI | 5E restores the source pointer.\n01011000 # instruction | POP AX | 58 restores the character.\n01010000 # instruction | PUSH AX | 50 saves AL while polling the UART status.\n10111010 11111101 00000011 # instruction | MOV DX,03FD | BA selects UART line-status register.\n11101100 # instruction | IN AL,DX | EC reads UART status into AL.\n10101000 00100000 # instruction | TEST AL,20 | A8 imm8 checks transmitter holding register empty bit 5.\n01110100 11111011 # instruction | JZ 7C4B | 74 rel8; next offset 80 minus 5 = 75, poll until ready.\n01011000 # instruction | POP AX | 58 restores the character after status polling.\n10111010 11111000 00000011 # instruction | MOV DX,03F8 | BA selects COM1 transmit data register.\n11101110 # instruction | OUT DX,AL | EE emits the same character to COM1 for machine-readable testing.\n11101011 11100000 # instruction | JMP 7C37 | EB rel8; next offset 87 minus 32 = 55, fetch the next character.\n11111010 # instruction | CLI | FA prevents interrupts waking the final halt.\n11110100 # instruction | HLT | F4 stops instruction execution until NMI/reset.\n11101011 11111101 # instruction | JMP 7C58 | EB rel8; next offset 91 minus 3 = 88, halt again if awakened.\n01100010 01101001 01110100 01100010 01101111 01110010 01101110 00100000 01110110 00110000 00101110 00110001 00001101 00001010 # data | bitborn v0.1 CR LF | ASCII greeting; CR LF advances the VGA cursor and serial terminal.\n00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00001101 00001010 # data | separator CR LF | 27 literal ASCII hyphens followed by a line break.\n01001110 01001111 00100000 01000001 01010011 01010011 01000101 01001101 01000010 01001100 01011001 00101110 00001101 00001010 # data | NO ASSEMBLY. CR LF | Literal ASCII message bytes.\n01001110 01001111 00100000 01000011 01001111 01001101 01010000 01001001 01001100 01000101 01010010 00101110 00001101 00001010 # data | NO COMPILER. CR LF | Literal ASCII message bytes.\n01001010 01010101 01010011 01010100 00100000 01000010 01001001 01010100 01010011 00101110 00001101 00001010 00001101 00001010 # data | JUST BITS. CR LF CR LF | Literal ASCII bytes and one empty line.\n01001000 01100101 01101100 01101100 01101111 00100000 01100110 01110010 01101111 01101101 00100000 01110010 01100001 01110111 00100000 01101101 01100001 01100011 01101000 01101001 01101110 01100101 00100000 01100011 01101111 01100100 01100101 00100001 00001101 00001010 00001101 00001010 # data | Hello from raw machine code! CR LF CR LF | Literal ASCII greeting and one empty line.\n00110101 00110001 00110010 00100000 01100010 01111001 01110100 01100101 01110011 00101110 00100000 00110001 00110000 00110000 00100101 00100000 01101000 01100001 01101110 01100100 01110111 01110010 01101001 01110100 01110100 01100101 01101110 00101110 00001101 00001010 00000000 # data | 512 bytes. 100% handwritten. CR LF NUL | Literal ASCII final line; zero terminates the string.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Fifteen bytes place the signature at offsets 510 and 511.\n01010101 10101010 # signature | BIOS boot signature | Literal 55 AA bytes; the little-endian word is AA55. These are data, never instructions.\n",
+    "solutionSha256": "46f0cf66a237fdc51d033d3e0fc86a1c7d7691770a42049077cf470f660cbfc9"
+  }
+]

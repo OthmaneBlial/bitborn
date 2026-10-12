@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>20 Binary Machine Code Challenges — bitborn</title>
+  <meta name="description" content="Learn x86 instruction bits through twenty tested puzzles: registers, flags, loops, stacks, memory and a real three-bit boot-sector repair.">
+  <link rel="canonical" href="https://othmaneblial.github.io/bitborn/challenges/">
+  <meta property="og:title" content="Make every bit count — bitborn challenges"><meta property="og:description" content="Twenty interactive, tested machine-code puzzles. Edit literal bits and watch the result."><meta property="og:type" content="website"><meta property="og:url" content="https://othmaneblial.github.io/bitborn/challenges/">
+  <meta name="twitter:card" content="summary"><meta name="theme-color" content="#080a08">
+  <link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="challenges.css">
+  <script type="module" src="challenges.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#workbench">Skip to challenge</a>
+  <header class="header wrap"><a class="brand" href="../">bitborn <span class="version">/ CHALLENGES</span></a><nav aria-label="Main navigation"><a href="../boot-builder/">Boot builder</a><a href="../cpu-lab/">CPU lab</a><a href="../learn/">Learn</a></nav></header>
+  <main class="wrap">
+    <section class="challenge-intro"><div><p class="eyebrow">20 PUZZLES / FOUR LEARNING PATHS</p><h1>Make every<br><span>bit count.</span></h1><p class="intro-copy">A wrong operand. A runaway jump. A broken boot.<br>Read the bytes, change the bits, prove the result.</p></div><div class="progress-instrument"><span class="meta-label">YOUR LOCAL FIELD NOTES</span><strong id="completion-count">0 <span>/ 20</span></strong><progress id="completion-meter" value="0" max="20" aria-label="Completed challenges"></progress><p id="attempt-count">0 validation attempts</p><p class="privacy-note">Saved in this browser only. No account, tracking or submission.</p></div></section>
+    <p id="load-status" role="status">Loading reviewed binary sources…</p>
+    <div class="challenge-layout" hidden id="challenge-app">
+      <aside class="curriculum"><h2 class="meta-label">CHOOSE YOUR NEXT BIT</h2><nav id="challenge-list" aria-label="Challenge curriculum"></nav></aside>
+      <section class="workbench" id="workbench" tabindex="-1" aria-labelledby="challenge-title">
+        <div class="challenge-heading"><span id="challenge-number" class="eyebrow"></span><span id="difficulty" class="difficulty"></span></div>
+        <h2 id="challenge-title"></h2><p id="challenge-summary" class="muted"></p>
+        <div class="goal-box"><span class="meta-label">SUCCESS CONDITION</span><p id="challenge-goal"></p></div>
+        <div class="editor-heading"><h3>Editable bytes</h3><span id="edit-budget"></span></div>
+        <p class="editor-help">Toggle a bit, or edit the literal source below. Byte offsets are hexadecimal. Locked bytes keep this experiment focused.</p>
+        <div id="editable-bytes" class="editable-bytes"></div>
+        <label class="meta-label" for="binary-source">LITERAL BINARY SOURCE · COMMENTS ARE EXPLANATIONS</label>
+        <textarea id="binary-source" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="source-limit" rows="9"></textarea>
+        <p id="source-limit" class="editor-help">Eight bits per byte; spaces, line breaks and # comments are allowed. Maximum 512 bytes. Only highlighted offsets may change.</p>
+        <div class="actions challenge-controls"><button id="validate" class="button primary">Run &amp; validate <span aria-hidden="true">↗</span></button><button id="reset" class="small-button">Reset bits</button><button id="hint" class="small-button">Reveal hint <span id="hint-count">0/3</span></button><a id="share" class="small-button" href="?id=return-42">Share this puzzle ↗</a></div>
+        <ol id="hints" class="hints" aria-live="polite"></ol>
+        <div id="result-panel" class="result-panel"><p id="result" role="status" aria-live="polite">Edit the highlighted bytes, then run the teaching model.</p><div id="registers" class="result-registers"></div><pre id="output" class="challenge-output" aria-label="Simulated screen output"></pre><ul id="goal-checks" class="goal-checks"></ul></div>
+        <details class="explanation"><summary>Understand the encoding</summary><div id="visual-explanation" class="visual-explanation"></div><p id="explanation"></p><a id="canonical-source" class="inline-link" href="https://github.com/OthmaneBlial/bitborn/tree/main/challenges/return-42">Inspect canonical start and reviewed solution ↗</a></details>
+        <details class="instruction-map"><summary>Starting-source instruction boundaries</summary><ol id="instructions"></ol></details>
+        <p class="model-note">Execution here is a bounded x86 teaching model. Reviewed solutions also have real QEMU tests. User edits remain inside the browser model; completing a puzzle does not prove arbitrary BIOS compatibility.</p>
+      </section>
+    </div>
+  </main>
+  <footer class="wrap challenge-footer"><a href="../">← bitborn</a><span>Directly authored bits. Inspectable explanations. No hidden assembler.</span><a href="https://github.com/OthmaneBlial/bitborn/tree/main/challenges">Source ↗</a></footer>
+</body></html>

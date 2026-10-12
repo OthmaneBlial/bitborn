@@ -1,0 +1,9 @@
+# Canonical reviewed solution: directly authored binary, not assembler output.
+11111010 # instruction | CLI | Keep interrupts masked while using the stack.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Use the loader's segment-zero stack below 7C00.
+10111000 00110100 00010010 # instruction | MOV AX,1234 | Initialize the value being transferred.
+10111011 00000000 00000000 # instruction | MOV BX,0 | Initialize the intended destination.
+10111001 00000000 00000000 # instruction | MOV CX,0 | CX must remain unchanged.
+01010000 # instruction | PUSH AX | SP decreases by two before storing the little-endian word.
+01011011 # instruction | POP BX | 5B selects BX; restore 1234 and increase SP by two.
+11110100 # instruction | HLT | Stop with BX=1234, CX=0 and SP=7C00.

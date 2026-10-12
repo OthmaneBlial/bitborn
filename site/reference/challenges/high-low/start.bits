@@ -1,0 +1,6 @@
+# Canonical starting puzzle: every executable byte is a literal binary token.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 00000000 00000000 # instruction | MOV AX,0 | Initialize both halves of AX.
+10110100 01000010 # instruction | MOV AH,42 | AH is the high byte; 42 here is hexadecimal 42, ASCII B.
+10110000 00001110 # instruction | MOV AL,0E | AL is the low byte; the two operands are exchanged.
+11110100 # instruction | HLT | Stop with AX=420E.

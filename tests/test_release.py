@@ -23,7 +23,7 @@ class ReleaseTests(unittest.TestCase):
             ]))
             self.assertEqual([str(path) for path in artifact_paths(root)],['boot.img','exit.bin','exit.elf','monitor.bin','monitor.img'])
             (root / 'targets.json').write_text(json.dumps([{'source':'x.bits','output':'../outside.img'}]))
-            with self.assertRaisesRegex(ValueError,'inside build'):
+            with self.assertRaisesRegex(ValueError,'inside the project'):
                 artifact_paths(root)
 
     def test_deterministic_archive_and_executable_mode(self):

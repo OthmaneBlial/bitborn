@@ -68,13 +68,27 @@ not release requirements or advertised capabilities.
 - [x] Extend the shared teaching model with CS, logical IP, arithmetic flags,
   near calls/returns, direct memory, string direction and live instruction fetch.
   Literal source parsing and exports have explicit input limits.
-- [ ] Publish the full editable 512-byte Boot Sector Builder after browser
-  downloads and actual QEMU execution of an edited image pass.
-- [ ] Publish the Visual CPU Lab with register, flag, stack and memory inspection.
-- [ ] Publish 20 binary challenges with deterministic goals and native checks.
-- [ ] Publish dedicated playground, examples, learning, architecture and roadmap
-  routes. The website roadmap must reflect this source progress at each build.
-- [ ] Add a verified before/after byte-size optimization example.
+- [x] Build the full editable 512-byte Boot Sector Builder. The downloaded image
+  and `.bits` match exactly; real QEMU prints the one-bit-edited lowercase greeting.
+- [x] Build the Visual CPU Lab with register bits, flags, stack and memory,
+  Step/Run/Pause/Reset, speed, pre-execution breakpoints and literal-source import.
+- [x] Build 20 binary challenges, five per difficulty level. All reviewed solutions
+  pass deterministic model and actual QEMU goals; all unchanged seeds fail.
+  Alternative answers, byte budgets, loops, malformed input and local-storage
+  failure are checked. Progress stays in the browser; no account or analytics.
+- [x] Build all eight dedicated routes plus a binary size lab; generated progress
+  reflects README at every build. Chrome checks desktop, tablet and 320px layouts.
+- [x] Add a 12→8-byte Linux exit comparison with independent encodings and sizes.
+  ELF sizes are 132→128; instructions increase 3→5. No speed claim is made.
+- [x] Capture actual browser GIFs with source/frame hashes and explicit model
+  labeling; add SHOWCASE, GOOD_FIRST_ISSUES and four contributor issue forms.
+- [x] Firefox 157 and WebKit 27.2 pass all routes, 320px layouts, real downloads,
+  CPU controls, memory, breakpoints, challenge edits/progress and the roadmap.
+  Firefox exposed a detached-download-anchor bug; connecting the anchor fixes
+  the actual image and source downloads, now covered by both engines.
+- [ ] Verify the expanded milestone in Linux CI, including all six ELF programs,
+  three browser engines and the actual downloaded image boot.
+- [ ] Verify all new routes/assets/downloads live after automatic Pages deployment.
 - [ ] Publish a meaningful v0.2 release and independently verify its downloads.
 
 ## Future experiments

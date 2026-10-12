@@ -1,0 +1,8 @@
+# Canonical reviewed solution: directly authored binary, not assembler output.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 00101010 00000000 # instruction | MOV AX,42 | Establish the value to compare.
+10111011 00000000 00000000 # instruction | MOV BX,0 | Zero is the success marker.
+00111101 00101010 00000000 # instruction | CMP AX,42 | Equal operands set ZF without changing AX.
+01110100 00000011 # instruction | JZ +3 | The next offset is 12; adding three lands on HLT at 15.
+10111011 00000001 00000000 # instruction | MOV BX,1 | The successful branch skips this assignment.
+11110100 # instruction | HLT | Stop with BX=0 and ZF=1.

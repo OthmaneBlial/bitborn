@@ -1,0 +1,5 @@
+# Canonical reviewed solution: directly authored binary, not assembler output.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 00110100 00010010 # instruction | MOV AX,1234 | Initialize the word to store.
+10100011 00000000 00000110 # instruction | MOV [0600],AX | A3 stores low byte 34 at DS:0600 and high byte 12 at DS:0601.
+11110100 # instruction | HLT | Stop after the complete little-endian store.

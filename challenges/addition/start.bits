@@ -1,0 +1,5 @@
+# Canonical starting puzzle: every executable byte is a literal binary token.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 00100011 00000000 # instruction | MOV AX,35 | Start from decimal 35.
+00000101 00000110 00000000 # instruction | ADD AX,6 | 05 adds a little-endian immediate; this produces only 41.
+11110100 # instruction | HLT | Stop after the arithmetic.

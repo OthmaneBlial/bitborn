@@ -1,0 +1,12 @@
+# Canonical starting puzzle: every executable byte is a literal binary token.
+11111010 # instruction | CLI | Keep interrupts masked while using the stack.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Set a known empty stack.
+10111000 00010001 00010001 # instruction | MOV AX,1111 | First value to push.
+10111011 00100010 00100010 # instruction | MOV BX,2222 | Second value to push.
+10111001 00000000 00000000 # instruction | MOV CX,0 | Initialize the first requested result.
+10111010 00000000 00000000 # instruction | MOV DX,0 | Initialize the second requested result.
+01010000 # instruction | PUSH AX | Push 1111 first.
+01010011 # instruction | PUSH BX | Push 2222 on top of 1111.
+01011010 # instruction | POP DX | The top word goes to the wrong result register.
+01011001 # instruction | POP CX | The bottom word also goes to the wrong result register.
+11110100 # instruction | HLT | Stop with the result order reversed.

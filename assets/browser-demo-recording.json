@@ -1,0 +1,105 @@
+{
+  "kind": "Actual browser screenshots of bounded educational simulation; not native CPU or QEMU footage",
+  "browser": "155.0.8059.39",
+  "viewport": {
+    "width": 1280,
+    "height": 960
+  },
+  "presentationFps": 1,
+  "alterations": "960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.",
+  "sourceSha256": {
+    "boot/boot.bits": "230bbafbfa02abd62dc964efbad02db0431f0efa263216bba02146cd164262b8",
+    "site/simulator.mjs": "30dd2086420df56c210e7c569b395f5fb786c1531325d28210d9f4179c0b3937",
+    "site/binary.mjs": "c69a35f7d3b2bfdc91cac78f9f691be0eeadcbe518ac7a4d7f266061b2d84051",
+    "site/boot-builder/app.mjs": "13f9234f36f0b6c166dd3ab9f16750ba680c8e3e7045d6c9bbc7e5a275fd1cb4",
+    "site/cpu-lab/lab.mjs": "ec92799e623638dd05c44abbd7b5b08c94a5c9a8c88b50bcafe28dfcfa77d8a7",
+    "site/cpu-lab/presets.mjs": "4b0ed3df4b5ca8d9f53b8d407cd0761cdbd1cc047d169c66f15f99cf93624941",
+    "site/challenges/challenges.mjs": "871be9c721a83d2066fe51b10f8df93c7e84de59ba04f52a18048d1cd1bdadba",
+    "challenges/catalog.json": "81e9abfbf8fbe7c6c3709fe5bb483f87f4ee15bbba708dd96b59b948b2629b02"
+  },
+  "captures": [
+    {
+      "file": "assets/boot-builder-demo.gif",
+      "sha256": "ba626910e23cb05b26a5643cca65a25c01d9ac88474994e668f012b2d0ecd205",
+      "capturedFrames": 5,
+      "encodedFrames": 5,
+      "durationSeconds": 5,
+      "actions": [
+        "Loaded the baseline boot sector; page labels browser simulation separately from QEMU.",
+        "Selected literal greeting byte176, ASCII H.",
+        "Toggled MSB-index2: H→h, exactly one changed bit.",
+        "Model reached HLT and displayed lowercase hello in the screen/COM1 outputs.",
+        "Held the verified browser result for readability."
+      ],
+      "sourceFrameSha256": [
+        "046e75fea18b8d6da0aeabdc13769263c0f417b6e8fd557560d1f42b7083fee0",
+        "844530cebbe507e0e7078ad0ef16b640de14c71933d6e00ff620cba8ef87879b",
+        "f411dc13a9e1226fcfde8ca6d0df1cc5372d85bd37f6fb594cdc249df89f08c8",
+        "b901008a8cdad93432bcf62de467b4daf40e3d83223c7b6a9af1eaf1d9e22350",
+        "b901008a8cdad93432bcf62de467b4daf40e3d83223c7b6a9af1eaf1d9e22350"
+      ]
+    },
+    {
+      "file": "assets/cpu-lab-demo.gif",
+      "sha256": "0a46093fbe53d60dc6a8febda86a53a043181322a18b7ad21301627fd5ffbdd8",
+      "capturedFrames": 12,
+      "encodedFrames": 12,
+      "durationSeconds": 12,
+      "actions": [
+        "Loaded the literal stack/CALL/RET preset.",
+        "Actual browser Step control 1; registers, flags and stack are model state.",
+        "Actual browser Step control 2; registers, flags and stack are model state.",
+        "Inspected actual model stack bytes written by PUSH or CALL.",
+        "Actual browser Step control 3; registers, flags and stack are model state.",
+        "Actual browser Step control 4; registers, flags and stack are model state.",
+        "Actual browser Step control 5; registers, flags and stack are model state.",
+        "Inspected actual model stack bytes written by PUSH or CALL.",
+        "Actual browser Step control 6; registers, flags and stack are model state.",
+        "Actual browser Step control 7; registers, flags and stack are model state.",
+        "Actual browser Step control 8; registers, flags and stack are model state.",
+        "Arithmetic preset FFFF+1 wraps AX to zero and sets CF/ZF in the teaching model."
+      ],
+      "sourceFrameSha256": [
+        "f08a66f634c176e6424c780b218297f0c5224e6d2de87da72d2b67893b0161c8",
+        "dac8664473d989dcc800ecaa7adbc123dbbb5efec25b92e42df395f378022435",
+        "8011bc8665178d6fe8d4ed4947e886a53d1bdcbe6a063393fd38ade06a5e174f",
+        "272aea24b26b82de2d679e10ce41d5768e99eb98a732f7185785ec9d02fbfe4c",
+        "9ba0d8655c7155acddc036b5c3aaeebea4ba2bcfca6fd34c6f5f06fd7f05ec03",
+        "a0208f2a7a5386d77e03d7b35c6416f94714e574b3847a3d23860e877e3294ba",
+        "9ad17450d7eb24654f47f3551ea7841b05556feaed1f2d94e949ce218c060d02",
+        "33f5bed3074e1d2bdf1f50d77d8438e8fdb9923ad187770a031e68f576aa7062",
+        "a41253e12bdad239edb0487267399782a4f64e95b33b5439bedec834c98f6353",
+        "3226bca996c0480edc64ae9f00f974232feceffe45057e2b5af4bfeb9d134b79",
+        "5be7d1656a6cacabe557ec8e6687847bf06a976c4218f56833a5fdb1a881305d",
+        "0dbb753662d89724d168354506bc62df96484ace4c69c53d48baf780f5a681f5"
+      ]
+    },
+    {
+      "file": "assets/challenges-demo.gif",
+      "sha256": "36f4de3939d7461f46ba79b7c0a25c3ef00f7fdf29eb6968192335f97bfe4656",
+      "capturedFrames": 7,
+      "encodedFrames": 7,
+      "durationSeconds": 7,
+      "actions": [
+        "Opened the three-bit real boot repair challenge.",
+        "Inspected the locked/editable offsets and three-bit budget.",
+        "Flipped editable offset1, MSB-index7.",
+        "Flipped editable offset17, MSB-index6.",
+        "Flipped editable offset17, MSB-index7.",
+        "Deterministic browser goal checks passed; the curated solution is also QEMU-tested.",
+        "Held the solved challenge result and local progress count."
+      ],
+      "sourceFrameSha256": [
+        "6580e29cf6673f656e7e3b8e26345b0e38b1fcdb5663f932becab53a2e502474",
+        "08149c650cd8301e3a9f25ae2e19b27fdcb6e853939c51bf322cb78f653536f2",
+        "c972c3525e649fb6dd38d9a249989d8a998d9e6da74544f23936d10970c82966",
+        "71ea3d1e34f5e194f467141309d37b7473f1b8f5b9ccb1d500ff2b11df54d28c",
+        "e8085a4ce160d60901a6804ee44ee8870c530ba79eeeabbec80db65126f3d69a",
+        "cb060c8e8313e49a4a2f752284145eb1722d48d9bb3e51e3877fc1846f37a8b7",
+        "cb060c8e8313e49a4a2f752284145eb1722d48d9bb3e51e3877fc1846f37a8b7"
+      ]
+    }
+  ],
+  "reproduce": "make site-test && npm ci && npx playwright install chromium && npm run record:browser",
+  "requires": "ffmpeg and ffprobe; PLAYWRIGHT_CHROMIUM_EXECUTABLE may select an installed Chrome"
+}

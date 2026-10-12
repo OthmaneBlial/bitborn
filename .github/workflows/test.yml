@@ -25,15 +25,19 @@ jobs:
       - name: Website and documentation checks
         run: make site-test
       - name: Install browser test tools
-        run: npm ci && npx playwright install --with-deps chromium
+        run: npm ci && npx playwright install --with-deps chromium firefox webkit
       - name: Real browser interactions and mobile layouts
         run: npm run test:browser
+      - name: Firefox and WebKit routes, interactions and downloads
+        run: npm run test:cross-browser
+      - name: Boot the exact curated browser export in QEMU
+        run: python3 tools/verify_browser_export.py
       - name: Clean source, deterministic artifacts
         run: |
           git diff --exit-code
-          find build -maxdepth 1 -type f \( -name '*.img' -o -name '*.bin' -o -name '*.elf' \) -print0 | sort -z | xargs -0 sha256sum > /tmp/first-build
+          python3 -c 'import json; from tools.bitborn import ROOT,artifact_paths,digest; print(json.dumps({str(p):digest((ROOT/"build"/p).read_bytes()) for p in artifact_paths()},sort_keys=True))' > /tmp/first-build
           make build
-          find build -maxdepth 1 -type f \( -name '*.img' -o -name '*.bin' -o -name '*.elf' \) -print0 | sort -z | xargs -0 sha256sum > /tmp/second-build
+          python3 -c 'import json; from tools.bitborn import ROOT,artifact_paths,digest; print(json.dumps({str(p):digest((ROOT/"build"/p).read_bytes()) for p in artifact_paths()},sort_keys=True))' > /tmp/second-build
           diff /tmp/first-build /tmp/second-build
       - uses: actions/upload-artifact@v4
         with:

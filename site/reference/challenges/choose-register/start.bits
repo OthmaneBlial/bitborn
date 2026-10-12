@@ -1,0 +1,6 @@
+# Canonical starting puzzle: every executable byte is a literal binary token.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111011 00000000 00000000 # instruction | MOV BX,0 | Initialize BX independently of the BIOS loader.
+10111001 00000000 00000000 # instruction | MOV CX,0 | Initialize CX so the wrong destination is observable.
+10111001 00101010 00000000 # instruction | MOV CX,42 | B9 selects CX; the immediate itself is already correct.
+11110100 # instruction | HLT | Stop after writing the wrong register.

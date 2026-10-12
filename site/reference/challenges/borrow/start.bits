@@ -1,0 +1,5 @@
+# Canonical starting puzzle: every executable byte is a literal binary token.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 00000001 00000000 # instruction | MOV AX,1 | One minus one cannot demonstrate unsigned borrow.
+00101101 00000001 00000000 # instruction | SUB AX,1 | 2D subtracts one and updates arithmetic flags.
+11110100 # instruction | HLT | Stop with AX=0 and CF clear.

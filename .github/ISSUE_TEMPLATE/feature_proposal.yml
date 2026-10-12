@@ -1,0 +1,30 @@
+name: Feature proposal
+description: Propose a concrete mechanism worth implementing and independently checking.
+title: "[Feature]: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or learning opportunity
+      description: "What can a learner or contributor not do or understand today? Give a concrete example."
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Smallest useful behavior
+      description: "Describe the proposed result, intended execution environment, and explicit limits. Link existing code or roadmap items where relevant."
+    validations:
+      required: true
+  - type: textarea
+    id: proof
+    attributes:
+      label: Verification plan
+      description: "How can someone reproduce and check it? Separate byte/format checks, browser model behavior, QEMU, native execution, and any hardware claim."
+    validations:
+      required: true
+  - type: textarea
+    id: source_boundary
+    attributes:
+      label: Target and host boundary
+      description: "If it changes executable targets, explain the literal .bits source and independent encoding checks. Host tools may package and explain bytes; they must not generate target instructions."

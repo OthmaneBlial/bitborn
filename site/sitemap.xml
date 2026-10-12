@@ -1,2 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://othmaneblial.github.io/bitborn/</loc></url><url><loc>https://othmaneblial.github.io/bitborn/docs.html</loc></url></urlset>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url><loc>https://othmaneblial.github.io/bitborn/</loc></url>
+<url><loc>https://othmaneblial.github.io/bitborn/docs.html</loc></url>
+<url><loc>https://othmaneblial.github.io/bitborn/playground/</loc></url>
+<url><loc>https://othmaneblial.github.io/bitborn/cpu-lab/</loc></url>
+<url><loc>https://othmaneblial.github.io/bitborn/boot-builder/</loc></url>
+<url><loc>https://othmaneblial.github.io/bitborn/challenges/</loc></url>
+<url><loc>https://othmaneblial.github.io/bitborn/examples/</loc></url>
+<url><loc>https://othmaneblial.github.io/bitborn/examples/optimization/</loc></url>
+<url><loc>https://othmaneblial.github.io/bitborn/learn/</loc></url>
+<url><loc>https://othmaneblial.github.io/bitborn/architecture/</loc></url>
+<url><loc>https://othmaneblial.github.io/bitborn/roadmap/</loc></url>
+</urlset>

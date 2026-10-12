@@ -1,0 +1,99 @@
+import assert from 'node:assert/strict';
+import {createServer} from 'node:http';
+import {readFile,mkdir} from 'node:fs/promises';
+import {resolve,dirname,extname} from 'node:path';
+import {fileURLToPath,pathToFileURL} from 'node:url';
+
+const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE ? pathToFileURL(resolve(process.env.PLAYWRIGHT_MODULE)).href : 'playwright');
+const types={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json','.css':'text/css','.svg':'image/svg+xml','.png':'image/png'};
+const server=createServer(async (request,response)=>{
+  const route=decodeURIComponent(new URL(request.url,'http://localhost').pathname);
+  if (!route.startsWith('/bitborn/')) {response.writeHead(404).end();return;}
+  const relative=route.slice('/bitborn/'.length), path=resolve(root,'site',relative.endsWith('/') || !relative ? `${relative}index.html` : relative);
+  if (!path.startsWith(resolve(root,'site')+'/')) {response.writeHead(403).end();return;}
+  try {response.writeHead(200,{'Content-Type':types[extname(path)] || 'application/octet-stream'}); response.end(await readFile(path));}
+  catch {response.writeHead(404).end();}
+});
+await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+const base=process.env.SITE_BASE_URL || `http://127.0.0.1:${server.address().port}/bitborn/`;
+let browser;
+try {
+  browser=await chromium.launch({headless:true,...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE ? {executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE} : {})});
+  const page=await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'}),errors=[];
+  page.on('pageerror',error=>errors.push(error.message));
+  page.on('response',response=>{if(response.status()>=400)errors.push(`${response.status()} ${response.url()}`);});
+  await page.goto(new URL('cpu-lab/',base).href);
+  await page.waitForFunction(()=>document.querySelectorAll('.register').length===14);
+  assert.equal(await page.locator('.instruction-row.current').evaluate(row=>getComputedStyle(row).animationName),'none','reduced motion disables pointer animation');
+  assert.equal(await page.locator('#step-count').textContent(),'0000');
+  assert.equal(await page.locator('[data-register="IP"] .register-value').textContent(),'7C00');
+  assert.equal(await page.locator('[data-register="SP"] .register-value').textContent(),'7C00');
+  await page.locator('#step').click();
+  assert.equal(await page.locator('[data-register="AX"] .register-value').textContent(),'002A');
+  assert.deepEqual(await page.locator('[data-register="AX"] .changed-bit').evaluateAll(bits=>bits.map(bit=>Number(bit.dataset.bit))),[5,3,1]);
+  assert.match(await page.locator('#changes').textContent(),/AX 0000 → 002A/);
+  assert.match(await page.locator('#pointer-change').textContent(),/0000:7C00 → 0000:7C03 · sequential/);
+  await page.locator('#preset').selectOption('flags'); await page.locator('#step').click(); await page.locator('#step').click();
+  assert.equal(await page.locator('[data-flag="CF"]').getAttribute('class'),'flag changed');
+  assert.match(await page.locator('[data-flag="ZF"]').textContent(),/ZF1/);
+  await page.locator('#preset').selectOption('stack'); await page.locator('#step').click(); await page.locator('#step').click();
+  assert.equal(await page.locator('[data-register="SP"] .register-value').textContent(),'7BFE');
+  assert.equal(await page.locator('.stack-word:first-child .changed-bit').count(),2);
+  await page.locator('#inspect-stack').click(); assert.equal(await page.locator('[data-address="07BFE"]').textContent(),'34'); assert.equal(await page.locator('[data-address="07BFF"]').textContent(),'12');
+  await page.locator('#preset').selectOption('branch');
+  await page.locator('#speed').evaluate(input=>{input.value='12';input.dispatchEvent(new Event('input',{bubbles:true}));});
+  assert.equal(await page.locator('#speed-label').textContent(),'12 steps/s');
+  await page.locator('[data-breakpoint="6"]').click(); await page.locator('#run').click();
+  await page.waitForFunction(()=>document.getElementById('status').textContent.includes('Paused before execution'));
+  assert.equal(await page.locator('#step-count').textContent(),'0002'); assert.equal(await page.locator('#pause').isDisabled(),true);
+  await page.locator('#run').click(); await page.waitForFunction(()=>document.getElementById('step-count').textContent==='0004' && document.getElementById('status').textContent.includes('Paused before execution'));
+  assert.match(await page.locator('#pointer-change').textContent(),/control transfer/);
+  await page.locator('#step').click(); assert.equal(await page.locator('#step-count').textContent(),'0005');
+  await page.locator('#reset').click(); assert.equal(await page.locator('#step-count').textContent(),'0000');
+  assert.equal(await page.locator('[data-breakpoint="6"]').getAttribute('aria-pressed'),'true','reset retains breakpoints');
+  await page.locator('[data-breakpoint="6"]').click();
+  await page.locator('#speed').evaluate(input=>{input.value='1';input.dispatchEvent(new Event('input',{bubbles:true}));});
+  await page.locator('#run').click(); await page.locator('#pause').click(); const paused=await page.locator('#step-count').textContent();
+  await page.waitForTimeout(1100); assert.equal(await page.locator('#step-count').textContent(),paused,'pause cancels scheduled execution');
+  await page.locator('#lab-title').click(); await page.keyboard.press('s'); assert.equal(await page.locator('#step-count').textContent(),'0001');
+  await page.keyboard.press('r'); assert.equal(await page.locator('#step-count').textContent(),'0000');
+  await page.keyboard.press('Space'); assert.equal(await page.locator('#run-state').textContent(),'RUNNING');
+  await page.keyboard.press('Space'); assert.equal(await page.locator('#run-state').textContent(),'READY');
+  await page.locator('#memory-address').fill('FFFFF'); await page.locator('#memory-form button').click();
+  assert.equal(await page.locator('.memory-byte').count(),1); assert.equal(await page.locator('[data-address="FFFFF"]').count(),1);
+  await page.locator('#memory-address').fill('100000'); await page.locator('#memory-form button').click();
+  assert.equal(await page.locator('[data-address="FFFFF"]').count(),1,'invalid address preserves inspection');
+  assert.match(await page.locator('#status').textContent(),/00000–FFFFF/);
+  await page.locator('#binary-editor').fill('10111000 00000001'); await page.locator('#load-program').click();
+  assert.match(await page.locator('#editor-status').textContent(),/literal bytes loaded/);
+  await page.locator('#step').click(); assert.match(await page.locator('#status').textContent(),/Truncated/);
+  await page.locator('#binary-editor').fill('MOV AX, 42'); await page.locator('#load-program').click();
+  assert.match(await page.locator('#editor-status').textContent(),/Current program and state kept/);
+  await page.locator('#binary-editor').fill('10010000 '.repeat(513)); await page.locator('#load-program').click();
+  assert.match(await page.locator('#editor-status').textContent(),/512/);
+  await page.locator('#binary-editor').fill('10111100 11111111 11111111 11110100'); await page.locator('#load-program').click(); await page.locator('#step').click();
+  assert.match(await page.locator('.stack-word:first-child').getAttribute('aria-label'),/crosses the modeled segment limit/);
+  await page.locator('#import-program').setInputFiles({name:'halt.bits',mimeType:'text/plain',buffer:Buffer.from('11110100\n')});
+  await page.waitForFunction(()=>document.getElementById('byte-count').textContent==='1 BYTES'); await page.locator('#step').click();
+  assert.equal(await page.locator('#run-state').textContent(),'HALTED'); assert.equal(await page.locator('#step').isDisabled(),true);
+  await page.locator('#preset').selectOption('memory');
+  for(let i=0;i<5;i++)await page.locator('#step').click();
+  await page.locator('#memory-address').fill('00120'); await page.locator('#memory-form button').click();
+  assert.equal(await page.locator('[data-address="00120"]').textContent(),'CD'); assert.equal(await page.locator('[data-address="00121"]').textContent(),'AB');
+  assert.equal(await page.locator('.memory-byte.changed-bit').count(),2);
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),true,'desktop overflow');
+  await mkdir(resolve(root,'build'),{recursive:true}); await page.screenshot({path:resolve(root,'build/cpu-lab-desktop.png'),fullPage:true});
+  for(const width of [390,320]) {
+    await page.setViewportSize({width,height:844});
+    const overflow=await page.evaluate(()=>[...document.querySelectorAll('body *')].filter(element=>element.getBoundingClientRect().right>window.innerWidth+1).map(element=>`${element.tagName}.${element.className}: ${Math.round(element.getBoundingClientRect().right)}`).slice(0,12));
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),true,`${width}px overflow: ${overflow.join(', ')}`);
+    assert.equal(await page.locator('.register-bits').first().evaluate(bits=>getComputedStyle(bits).fontSize),'9px','mobile register bits remain readable');
+    assert.equal(await page.locator('.stack-word:visible').count(),8,'all stack words remain visible');
+    await page.locator('#reset').click(); await page.locator('#step').focus(); await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#step-count').textContent(),'0001','keyboard button activation');
+  }
+  await page.screenshot({path:resolve(root,'build/cpu-lab-mobile.png'),fullPage:true});
+  assert.deepEqual(errors,[],'browser errors and asset failures');
+  console.log('CPU lab browser checks passed: exact changed bits/flags/stack bytes, branch pointer, breakpoints/resume, speed, pause, reset, keyboard, memory bounds, import/parser errors, 1440/390/320px layouts; screenshots in build/.');
+} finally {await browser?.close();await new Promise(resolve=>server.close(resolve));}

@@ -1,0 +1,4 @@
+# Canonical reviewed solution: directly authored binary, not assembler output.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 00110100 00010010 # instruction | MOV AX,1234 | The low byte 34 precedes the high byte 12.
+11110100 # instruction | HLT | Stop with the requested word.

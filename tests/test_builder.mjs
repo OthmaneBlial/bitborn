@@ -1,0 +1,57 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {dirname,resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {createState,step} from '../site/simulator.mjs';
+import {parseBits,formatBits,validateImage} from '../site/binary.mjs';
+import {liveLayout,byteDetails} from '../site/boot-builder/model.mjs';
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)),'..');
+const baseline = JSON.parse(readFileSync(resolve(root,'site/boot.json'),'utf8'));
+const bytes = Uint8Array.from(baseline.bytes);
+let layout = liveLayout(bytes,baseline.annotations);
+assert.equal(layout[0].mnemonic,'CLI');
+assert.equal(layout.at(-1).offset,89);
+assert.equal(layout.at(-1).size,2);
+assert.equal(byteDetails(bytes,baseline.annotations,layout,15).role,'immediate low byte');
+assert.match(byteDetails(bytes,baseline.annotations,layout,15).explanation,/least significant byte first|little-endian/);
+assert.match(byteDetails(bytes,baseline.annotations,layout,59).explanation,/0x7C3C.*27 = 0x7C57/);
+assert.match(byteDetails(bytes,baseline.annotations,layout,86).explanation,/− 32 = 0x7C37/);
+assert.equal(byteDetails(bytes,baseline.annotations,layout,176).mnemonic,'ASCII “H”');
+assert.equal(byteDetails(bytes,baseline.annotations,layout,510).role,'BIOS signature');
+
+bytes[176] ^= 1 << 5;
+assert.equal(bytes[176],104);
+assert.match(byteDetails(bytes,baseline.annotations,layout,176).mnemonic,/ASCII “h”/);
+assert.equal(validateImage(bytes).valid,true);
+assert.deepEqual(parseBits(formatBits(bytes)),bytes,'literal .bits export reproduces the exact edited image');
+const state = createState(bytes);
+while (!state.halted) step(bytes,state);
+assert.match(state.output,/hello from raw machine code!/);
+assert.equal(state.output,state.serial);
+
+bytes[0] = 0xB8;
+bytes[3] = 0xDA;
+layout = liveLayout(bytes,baseline.annotations);
+assert.equal(layout[0].size,3);
+assert.equal(byteDetails(bytes,baseline.annotations,layout,1).role,'immediate low byte','current operand must override old opcode boundary');
+assert.equal(layout[1].offset,3);
+assert.equal(layout.find(item => item.error).offset,3);
+assert.equal(byteDetails(bytes,baseline.annotations,layout,6).role,'boundary unresolved');
+assert.match(byteDetails(bytes,baseline.annotations,layout,6).explanation,/Later instruction boundaries are unresolved/);
+bytes[0] = baseline.bytes[0];
+bytes[3] = baseline.bytes[3];
+bytes[59] = 0x80;
+layout = liveLayout(bytes,baseline.annotations);
+assert.match(byteDetails(bytes,baseline.annotations,layout,59).explanation,/outside the loaded sector/);
+bytes[510] ^= 1;
+assert.equal(validateImage(bytes).valid,false);
+assert.deepEqual(parseBits(formatBits(bytes)),bytes,'invalid image remains reproducible as literal source');
+
+const html = readFileSync(resolve(root,'site/boot-builder/index.html'),'utf8');
+assert.match(html,/rel="canonical" href="https:\/\/othmaneblial.github.io\/bitborn\/boot-builder\/"/);
+assert.match(html,/type="application\/ld\+json"/);
+assert.match(html,/Skip to builder/);
+const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
+assert.equal(new Set(ids).size,ids.length,'builder IDs are unique');
+console.log('builder checks passed: live opcode/operand boundaries, unresolved decoding, little-endian values, signed branch targets, H→h simulation, exact .bits round trip, invalid signature, canonical metadata');

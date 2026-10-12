@@ -1,0 +1,10 @@
+# Canonical reviewed solution: directly authored binary, not assembler output.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 01000010 00000000 # instruction | MOV AX,0042 | Initialize AL to ASCII B.
+10111111 00000001 00000110 # instruction | MOV DI,0601 | Begin at the right-hand byte of the destination.
+11111101 # instruction | STD | Set DF so string stores move toward lower offsets.
+10101010 # instruction | STOSB | Store B at ES:0601, then decrement DI to 0600.
+10110000 01000001 # instruction | MOV AL,41 | Prepare ASCII A.
+10101010 # instruction | STOSB | Store A at ES:0600, then decrement DI to 05FF.
+11111100 # instruction | CLD | Restore the forward direction before halting.
+11110100 # instruction | HLT | Stop with memory 0600..0601 spelling AB.

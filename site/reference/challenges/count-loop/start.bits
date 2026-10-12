@@ -1,0 +1,7 @@
+# Canonical starting puzzle: every executable byte is a literal binary token.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 00000000 00000000 # instruction | MOV AX,0 | Initialize the count result.
+10111001 00000100 00000000 # instruction | MOV CX,4 | LOOP uses CX, but this bound is one too small.
+01000000 # instruction | INC AX | Count one executed body.
+11100010 11111101 # instruction | LOOP -3 | Decrement CX and branch from next offset 10 to INC at 7 if nonzero.
+11110100 # instruction | HLT | Stop after four increments.

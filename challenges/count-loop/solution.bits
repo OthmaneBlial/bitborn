@@ -1,0 +1,7 @@
+# Canonical reviewed solution: directly authored binary, not assembler output.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 00000000 00000000 # instruction | MOV AX,0 | Initialize the count result.
+10111001 00000101 00000000 # instruction | MOV CX,5 | Run the loop body five times.
+01000000 # instruction | INC AX | Count one executed body.
+11100010 11111101 # instruction | LOOP -3 | CX becomes zero after the fifth body; then fall through to HLT.
+11110100 # instruction | HLT | Stop with AX=5 and CX=0.

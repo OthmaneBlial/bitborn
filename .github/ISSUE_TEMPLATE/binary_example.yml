@@ -1,0 +1,48 @@
+name: Binary example
+description: Propose a small program with literal-bit source and reproducible execution evidence.
+title: "[Example]: "
+body:
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Intended execution environment
+      options:
+        - x86 legacy BIOS / 16-bit real mode
+        - Linux x86-64 / ELF
+        - Another environment, explained below
+    validations:
+      required: true
+  - type: textarea
+    id: mechanism
+    attributes:
+      label: Mechanism and expected behavior
+      description: "What does the program teach? Give its expected output, registers, memory, or exit status and its limits."
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Literal source and byte explanation
+      description: "Link the .bits source or include a small excerpt. Explain opcodes, operands, little-endian values, branches and data. Mnemonics are explanatory comments only."
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Independent checks and execution evidence
+      description: "Commands, environment/version and results; byte assertions or manual/disassembly references; QEMU or native checks. Mark any proposed checks not yet run."
+    validations:
+      required: true
+  - type: textarea
+    id: packaging
+    attributes:
+      label: Packaging and reviewed artifacts
+      description: "Distinguish literal instructions from generated headers, padding and signatures. Include reviewed sizes/hashes and affected docs or manifests when available."
+  - type: checkboxes
+    id: authorship
+    attributes:
+      label: Source constraint
+      options:
+        - label: "Executable instruction encodings are authored as literal binary digits; no assembler, compiler, or instruction-generating macro is used."
+          required: true

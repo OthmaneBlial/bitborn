@@ -10,10 +10,24 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 
+def targets(root=ROOT):
+    manifest = json.loads((root / 'targets.json').read_text())
+    challenge_manifest = root / 'challenges/targets.json'
+    if challenge_manifest.exists():
+        manifest += json.loads(challenge_manifest.read_text())
+    sources, outputs = [target['source'] for target in manifest], [target['output'] for target in manifest]
+    if len(set(sources)) != len(sources) or len(set(outputs)) != len(outputs):
+        raise ValueError('Reviewed targets must have unique sources and outputs')
+    for name in sources + outputs:
+        if Path(name).is_absolute() or '..' in Path(name).parts:
+            raise ValueError('Reviewed target paths must stay inside the project')
+    return manifest
+
+
 def artifact_paths(root=ROOT):
     """Only reviewed target outputs belong in public downloads or releases."""
     paths = set()
-    for target in json.loads((root / 'targets.json').read_text()):
+    for target in targets(root):
         output = Path(target['output'])
         if output.is_absolute() or '..' in output.parts:
             raise ValueError('Target outputs must stay inside build/')
@@ -77,7 +91,7 @@ def bitdiff(before, after):
 
 
 def verify(root=ROOT):
-    manifest = json.loads((root / "targets.json").read_text())
+    manifest = targets(root)
     failures = []
     for target in manifest:
         source = root / target["source"]
@@ -96,7 +110,7 @@ def verify(root=ROOT):
         if not binary.exists() or binary.read_bytes() != data:
             failures.append(f"{binary}: missing or different; run make build")
     allowed = {".bits", ".json", ".md"}
-    for directory in (root / "boot", root / "examples"):
+    for directory in (root / "boot", root / "examples", root / 'challenges'):
         failures.extend(f"unauthorized target file: {p}" for p in directory.rglob("*") if p.is_file() and p.suffix.lower() not in allowed)
     if failures:
         raise ValueError("\n".join(failures))

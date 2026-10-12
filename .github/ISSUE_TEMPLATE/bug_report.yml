@@ -1,0 +1,46 @@
+name: Bug report
+description: Report an incorrect byte, tool result, modeled behavior, or execution result.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: "Include a small reproduction. Distinguish browser simulation from QEMU or native execution. Keep credentials and unrelated personal data out of logs and captures."
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - Literal source or byte explanation
+        - Host packaging or byte tools
+        - BIOS target in QEMU
+        - Native Linux x86-64 example
+        - Browser builder, CPU lab, or challenge
+        - Documentation or website route
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Revision and execution environment
+      description: "Commit or release, affected path or URL, OS and CPU architecture, relevant Python/Node/QEMU or browser version."
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      description: "Exact commands or browser actions; include relevant literal bytes and offsets when they changed."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and observed behavior
+      description: "What should happen, what happened, and why the difference appears incorrect."
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Focused evidence
+      description: "Relevant test output, byte diff, error, or experiment-only capture. State checks not run."

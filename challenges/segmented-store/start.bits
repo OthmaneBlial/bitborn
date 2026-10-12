@@ -1,0 +1,9 @@
+# Canonical starting puzzle: every executable byte is a literal binary token.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 00000000 00000000 # instruction | MOV AX,0000 | The wrong segment base directs the write into low memory.
+10001110 11000000 # instruction | MOV ES,AX | Set the extra segment used by STOSW.
+10111000 01000010 00001010 # instruction | MOV AX,0A42 | A VGA-style word contains ASCII B and attribute 0A.
+10111111 00010000 00000000 # instruction | MOV DI,0010 | Set the offset within the chosen segment.
+11111100 # instruction | CLD | Advance DI after the word store.
+10101011 # instruction | STOSW | Store AX through ES:DI, currently at physical 00010.
+11110100 # instruction | HLT | Stop after writing to the wrong physical address.

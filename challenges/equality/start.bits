@@ -1,0 +1,8 @@
+# Canonical starting puzzle: every executable byte is a literal binary token.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 00101010 00000000 # instruction | MOV AX,42 | Establish the value to compare.
+10111011 00000000 00000000 # instruction | MOV BX,0 | Zero is the success marker.
+00111101 00101001 00000000 # instruction | CMP AX,41 | CMP sets flags but leaves AX unchanged; this is unequal.
+01110100 00000011 # instruction | JZ +3 | Jump over the three-byte failure assignment only when ZF is set.
+10111011 00000001 00000000 # instruction | MOV BX,1 | This fall-through path marks failure.
+11110100 # instruction | HLT | Stop at offset 15.

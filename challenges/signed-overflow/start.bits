@@ -1,0 +1,5 @@
+# Canonical starting puzzle: every executable byte is a literal binary token.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 11111110 01111111 # instruction | MOV AX,7FFE | This positive signed value is one below the boundary case.
+00000101 00000001 00000000 # instruction | ADD AX,1 | The result 7FFF is still positive and sets no signed overflow.
+11110100 # instruction | HLT | Stop before the requested sign transition.

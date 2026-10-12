@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Add an editable 512-byte Boot Sector Builder with live byte fields, safe
+  unsupported-encoding handling and exact image/source downloads.
+- Add the Visual CPU Lab with full modeled 16-bit state, memory, stack, controls
+  and breakpoints; 20 four-level challenges with hints and local progress.
+- Add eight dedicated Pages routes and a source-generated roadmap feed.
+- Add an eight-byte Linux exit size comparison while preserving the original;
+  three genuine browser demo GIFs, contributor guides and issue forms.
+
 - Correct modern real-mode `PUSH SP` in the bounded browser model and verify
   stack/flags/call/segmented-memory behavior with an independent QEMU probe.
 - Add modeled arithmetic flags, CS/logical IP, near calls/returns, direct memory,

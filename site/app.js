@@ -9,6 +9,18 @@ const element = (tag, text, className) => {
 };
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+if ($('progress-preview')) (async () => {
+  const response = await fetch(new URL('./progress.json', import.meta.url));
+  if (!response.ok) throw new Error(`Progress request failed (${response.status}).`);
+  const data = await response.json();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(data.updated) || !Array.isArray(data.milestones) || data.milestones.length > 100 || data.milestones.some(item => typeof item.milestone !== 'string' || typeof item.progress !== 'string')) throw new Error('Progress metadata has an invalid shape.');
+  $('progress-status').textContent = `Updated ${data.updated} · built from README.md`;
+  for (const item of data.milestones) {
+    const row = element('div'); row.append(element('strong', item.milestone), element('span', item.progress));
+    $('progress-preview').append(row);
+  }
+})().catch(error => { $('progress-status').textContent = error.message; });
+
 document.querySelectorAll('[data-copy]').forEach(button => {
   button.addEventListener('click', async () => {
     const text = $(button.dataset.copy).textContent;

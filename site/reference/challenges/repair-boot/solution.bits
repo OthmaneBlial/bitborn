@@ -1,0 +1,77 @@
+# Challenge solution is the canonical boot/boot.bits source, copied without re-encoding.
+# bitborn v0.1 — canonical, manually authored 16-bit x86 bytes.
+# Annotation syntax: kind | disassembly for explanation only | encoding explanation.
+11111010 # instruction | CLI | FA disables maskable interrupts during stack setup.
+11101010 00000110 01111100 00000000 00000000 # instruction | JMP 0000:7C06 | EA has a little-endian offset 7C06 followed by segment 0000; normalize CS.
+00110001 11000000 # instruction | XOR AX,AX | 31 /r; ModR/M C0 = register AX XOR register AX, producing zero.
+10001110 11011000 # instruction | MOV DS,AX | 8E /r; D8 selects DS and AX; data addresses use segment zero.
+10001110 11000000 # instruction | MOV ES,AX | 8E /r; C0 selects ES and AX.
+10001110 11010000 # instruction | MOV SS,AX | 8E /r; D0 selects SS and AX; stack segment becomes zero.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | BC = B8+SP; little-endian 7C00 places stack below the loaded sector.
+11111100 # instruction | CLD | FC clears direction flag; LODSB advances SI.
+11111011 # instruction | STI | FB enables BIOS keyboard/timer interrupts after stack is ready.
+10111000 00000011 00000000 # instruction | MOV AX,0003 | B8 loads AX with video mode 3.
+11001101 00010000 # instruction | INT 10 | CD imm8; BIOS video interrupt selects 80x25 text mode.
+10111010 11111001 00000011 # instruction | MOV DX,03F9 | BA loads COM1 interrupt-enable port.
+10110000 00000000 # instruction | MOV AL,00 | B0 loads an 8-bit zero to disable UART interrupts.
+11101110 # instruction | OUT DX,AL | EE writes AL to the I/O port in DX.
+10111010 11111011 00000011 # instruction | MOV DX,03FB | BA loads UART line-control port.
+10110000 10000000 # instruction | MOV AL,80 | B0 selects divisor-latch access (DLAB bit 7).
+11101110 # instruction | OUT DX,AL | EE enables the baud divisor registers.
+10111010 11111000 00000011 # instruction | MOV DX,03F8 | BA loads divisor low-byte port.
+10110000 00000001 # instruction | MOV AL,01 | B0 loads divisor 1, giving 115200 baud on a standard 16550.
+11101110 # instruction | OUT DX,AL | EE writes divisor low byte.
+01000010 # instruction | INC DX | 42 = 40+DX; selects divisor high-byte port.
+10110000 00000000 # instruction | MOV AL,00 | B0 clears divisor high byte.
+11101110 # instruction | OUT DX,AL | EE writes divisor high byte.
+10111010 11111011 00000011 # instruction | MOV DX,03FB | BA selects line-control port again.
+10110000 00000011 # instruction | MOV AL,03 | B0 selects 8 data bits, no parity, one stop bit; clears DLAB.
+11101110 # instruction | OUT DX,AL | EE writes 8N1 UART configuration.
+10111110 01011011 01111100 # instruction | MOV SI,7C5B | BE loads SI; message begins at sector offset 91, physical 7C5B.
+10101100 # instruction | LODSB | AC loads DS:SI into AL and increments SI.
+10000100 11000000 # instruction | TEST AL,AL | 84 /r; C0 tests AL against itself and sets ZF at NUL.
+01110100 00011011 # instruction | JZ 7C57 | 74 rel8; next offset 60 + 27 = 87, the halt path.
+01010000 # instruction | PUSH AX | 50 preserves the character across BIOS video output.
+01010110 # instruction | PUSH SI | 56 preserves the string pointer across BIOS video output.
+10110100 00001110 # instruction | MOV AH,0E | B4 loads BIOS teletype service number.
+10111011 00000111 00000000 # instruction | MOV BX,0007 | BB selects display page zero and text attribute 07.
+11001101 00010000 # instruction | INT 10 | CD 10 emits the character on the VGA display.
+01011110 # instruction | POP SI | 5E restores the source pointer.
+01011000 # instruction | POP AX | 58 restores the character.
+01010000 # instruction | PUSH AX | 50 saves AL while polling the UART status.
+10111010 11111101 00000011 # instruction | MOV DX,03FD | BA selects UART line-status register.
+11101100 # instruction | IN AL,DX | EC reads UART status into AL.
+10101000 00100000 # instruction | TEST AL,20 | A8 imm8 checks transmitter holding register empty bit 5.
+01110100 11111011 # instruction | JZ 7C4B | 74 rel8; next offset 80 minus 5 = 75, poll until ready.
+01011000 # instruction | POP AX | 58 restores the character after status polling.
+10111010 11111000 00000011 # instruction | MOV DX,03F8 | BA selects COM1 transmit data register.
+11101110 # instruction | OUT DX,AL | EE emits the same character to COM1 for machine-readable testing.
+11101011 11100000 # instruction | JMP 7C37 | EB rel8; next offset 87 minus 32 = 55, fetch the next character.
+11111010 # instruction | CLI | FA prevents interrupts waking the final halt.
+11110100 # instruction | HLT | F4 stops instruction execution until NMI/reset.
+11101011 11111101 # instruction | JMP 7C58 | EB rel8; next offset 91 minus 3 = 88, halt again if awakened.
+01100010 01101001 01110100 01100010 01101111 01110010 01101110 00100000 01110110 00110000 00101110 00110001 00001101 00001010 # data | bitborn v0.1 CR LF | ASCII greeting; CR LF advances the VGA cursor and serial terminal.
+00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00001101 00001010 # data | separator CR LF | 27 literal ASCII hyphens followed by a line break.
+01001110 01001111 00100000 01000001 01010011 01010011 01000101 01001101 01000010 01001100 01011001 00101110 00001101 00001010 # data | NO ASSEMBLY. CR LF | Literal ASCII message bytes.
+01001110 01001111 00100000 01000011 01001111 01001101 01010000 01001001 01001100 01000101 01010010 00101110 00001101 00001010 # data | NO COMPILER. CR LF | Literal ASCII message bytes.
+01001010 01010101 01010011 01010100 00100000 01000010 01001001 01010100 01010011 00101110 00001101 00001010 00001101 00001010 # data | JUST BITS. CR LF CR LF | Literal ASCII bytes and one empty line.
+01001000 01100101 01101100 01101100 01101111 00100000 01100110 01110010 01101111 01101101 00100000 01110010 01100001 01110111 00100000 01101101 01100001 01100011 01101000 01101001 01101110 01100101 00100000 01100011 01101111 01100100 01100101 00100001 00001101 00001010 00001101 00001010 # data | Hello from raw machine code! CR LF CR LF | Literal ASCII greeting and one empty line.
+00110101 00110001 00110010 00100000 01100010 01111001 01110100 01100101 01110011 00101110 00100000 00110001 00110000 00110000 00100101 00100000 01101000 01100001 01101110 01100100 01110111 01110010 01101001 01110100 01110100 01100101 01101110 00101110 00001101 00001010 00000000 # data | 512 bytes. 100% handwritten. CR LF NUL | Literal ASCII final line; zero terminates the string.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Fifteen bytes place the signature at offsets 510 and 511.
+01010101 10101010 # signature | BIOS boot signature | Literal 55 AA bytes; the little-endian word is AA55. These are data, never instructions.

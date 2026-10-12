@@ -1,0 +1,5 @@
+# Canonical reviewed solution: directly authored binary, not assembler output.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 00100011 00000000 # instruction | MOV AX,35 | Start from decimal 35.
+00000101 00000111 00000000 # instruction | ADD AX,7 | 23 plus 07 in hexadecimal is 2A, decimal 42.
+11110100 # instruction | HLT | Stop with AX=42.

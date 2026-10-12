@@ -1,0 +1,9 @@
+# Canonical reviewed solution: directly authored binary, not assembler output.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 00000000 00010000 # instruction | MOV AX,1000 | A segment value is multiplied by sixteen to form its base.
+10001110 11000000 # instruction | MOV ES,AX | ES=1000 gives physical base 10000.
+10111000 01000010 00001010 # instruction | MOV AX,0A42 | A VGA-style word contains ASCII B and attribute 0A.
+10111111 00010000 00000000 # instruction | MOV DI,0010 | Offset 0010 combines with base 10000.
+11111100 # instruction | CLD | Advance DI after the word store.
+10101011 # instruction | STOSW | Store 42 0A at physical 10010 and advance DI by two.
+11110100 # instruction | HLT | Stop after the segment-and-offset write.

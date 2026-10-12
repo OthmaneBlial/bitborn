@@ -1,0 +1,6 @@
+# Canonical reviewed solution: directly authored binary, not assembler output.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111011 00000000 00000000 # instruction | MOV BX,0 | Initialize BX independently of the BIOS loader.
+10111001 00000000 00000000 # instruction | MOV CX,0 | Initialize CX so it must remain zero.
+10111011 00101010 00000000 # instruction | MOV BX,42 | BB equals B8 plus register index three, selecting BX.
+11110100 # instruction | HLT | Stop with BX=42 and CX=0.

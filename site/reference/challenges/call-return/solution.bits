@@ -1,0 +1,8 @@
+# Canonical reviewed solution: directly authored binary, not assembler output.
+11111010 # instruction | CLI | Keep interrupts masked while using the call stack.
+10111000 00101001 00000000 # instruction | MOV AX,41 | Initialize the value for the helper to increment.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Set the call stack below the loader.
+11101000 00000001 00000000 # instruction | CALL +1 | Push return IP 7E0A; next offset 10 plus one enters the helper at 11.
+11110100 # instruction | HLT | RET returns here with AX=42 and a balanced SP.
+01000000 # instruction | INC AX | The helper adds one to AX.
+11000011 # instruction | RET | Restore IP 7E0A and increase SP by two.

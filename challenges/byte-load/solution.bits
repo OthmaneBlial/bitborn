@@ -1,0 +1,6 @@
+# Canonical reviewed solution: directly authored binary, not assembler output.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 00000000 00000000 # instruction | MOV AX,0 | Initialize AH so a byte load leaves it at zero.
+10100000 00001000 01111110 # instruction | MOV AL,[7E08] | A0 reads one byte from DS:7E08 into AL, preserving AH.
+11110100 # instruction | HLT | Stop before the literal data so it is never executed.
+01000010 01111111 # data | B and sentinel | 42 is the intended byte; the adjacent sentinel must not become AH.

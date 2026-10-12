@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Visual CPU Lab — bitborn</title>
+  <meta name="description" content="Step through hand-authored binary instructions. See 16-bit registers, exact bit changes, flags, CALL and RET, segmented memory and the stack in a bounded educational model.">
+  <meta name="theme-color" content="#080a08"><link rel="canonical" href="https://othmaneblial.github.io/bitborn/cpu-lab/">
+  <meta property="og:type" content="website"><meta property="og:title" content="Visual CPU Lab — bitborn"><meta property="og:description" content="Watch raw bits change registers, flags, the stack and memory."><meta property="og:url" content="https://othmaneblial.github.io/bitborn/cpu-lab/"><meta property="og:image" content="https://othmaneblial.github.io/bitborn/assets/social-preview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="lab.css">
+  <script type="module" src="lab.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to CPU lab</a>
+  <header class="header lab-wrap">
+    <a class="brand" href="../" aria-label="bitborn home"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 3h6v10h10v6H11v8H5zm16 10h6v14h-6zM11 27h10v-6H11z"/></svg>bitborn<span class="version">/ CPU LAB</span></a>
+    <nav aria-label="Main"><a href="../boot-builder/">Boot builder</a><a href="../docs.html">Documentation</a><a class="github-link" href="https://github.com/OthmaneBlial/bitborn">Source ↗</a></nav>
+  </header>
+  <main id="main" class="lab-wrap">
+    <section class="lab-intro" aria-labelledby="lab-title">
+      <div><p class="eyebrow"><span class="status-dot"></span> THE MACHINE ROOM / 16-BIT TEACHING MODEL</p><h1 id="lab-title">See every<br><span>state change.</span></h1></div>
+      <div class="intro-note"><p>One instruction. A handful of bits.<br>A machine that makes sense.</p><p>Step through literal binary and trace the path from instruction bytes to registers, flags, stack and memory.</p><span class="model-label">EDUCATIONAL SIMULATION · NOT NATIVE CPU EXECUTION</span></div>
+    </section>
+    <section class="control-panel" aria-label="Execution controls">
+      <div class="execution-buttons"><button id="step" class="lab-button primary" type="button">Step <span aria-hidden="true">→</span></button><button id="run" class="lab-button" type="button">Run <span aria-hidden="true">▶</span></button><button id="pause" class="lab-button" type="button" disabled>Pause <span aria-hidden="true">Ⅱ</span></button><button id="reset" class="lab-button" type="button">Reset <span aria-hidden="true">↺</span></button></div>
+      <label class="speed-control" for="speed">SPEED <input id="speed" type="range" min="1" max="12" value="3"><output id="speed-label" for="speed">3 steps/s</output></label>
+      <div class="execution-state"><span id="run-state">READY</span><span><b id="step-count">0000</b> / 4096 steps</span></div>
+    </section>
+    <p id="status" class="status-line" role="status">Loading the lab…</p>
+    <div class="machine-layout">
+      <section class="panel cpu-panel" aria-labelledby="registers-title">
+        <div class="panel-title"><h2 id="registers-title">Register file</h2><span>16 BITS / EACH</span></div>
+        <div id="registers" class="register-grid"></div>
+        <div class="flag-heading"><h3>FLAGS</h3><span>1 set · 0 clear · ? undefined</span></div><div id="flags" class="flags-grid"></div>
+        <p class="bit-legend"><span class="legend-bit">1</span> Underlined bits changed in the last step. Bits are numbered 15 → 0.</p>
+      </section>
+      <section class="panel program-panel" aria-labelledby="program-title">
+        <div class="panel-title"><h2 id="program-title">Instruction path</h2><span id="byte-count">0 BYTES</span></div>
+        <div class="preset-control"><label for="preset">EXPERIMENT</label><select id="preset"></select></div>
+        <p id="lesson" class="lesson"></p>
+        <div class="listing-heading"><span>BREAK</span><span>CS:IP</span><span>DECODED BYTES</span></div>
+        <div id="program-listing" class="program-listing" aria-label="Decoded instructions and breakpoints"></div>
+        <p class="listing-note">Click a circle to pause <em>before</em> an instruction. Step executes it; Run resumes from it.</p>
+      </section>
+    </div>
+    <section class="panel trace-panel" aria-labelledby="trace-title">
+      <div class="panel-title"><h2 id="trace-title">Follow the instruction pointer</h2><span id="pointer-label">0000:7C00</span></div>
+      <div class="instruction-flow"><div><span class="flow-label">PREVIOUS / EXECUTED</span><strong id="previous-instruction">—</strong><small id="previous-address">No instruction executed</small></div><span class="flow-arrow" aria-hidden="true">→</span><div class="current-instruction"><span class="flow-label">CURRENT / TO EXECUTE</span><strong id="current-instruction">—</strong><small id="current-address">—</small></div><span class="flow-arrow" aria-hidden="true">→</span><div><span class="flow-label">NEXT / SEQUENTIAL</span><strong id="next-instruction">—</strong><small id="next-address">Branch outcome may differ</small></div></div>
+      <p id="pointer-change" class="pointer-change">IP starts at 7C00.</p><p id="changes" class="changes">Step to see exactly which register bits, flags and memory bytes change.</p>
+    </section>
+    <div class="memory-layout">
+      <section class="panel stack-panel" aria-labelledby="stack-title">
+        <div class="panel-title"><h2 id="stack-title">Stack</h2><span>GROWS ↓ IN ADDRESS</span></div>
+        <div class="stack-address"><span>SS:SP <strong id="stack-pointer">0000:7C00</strong></span><span id="stack-motion">Initial stack pointer</span></div>
+        <div id="stack" class="stack-grid"></div><p class="panel-note">Eight words beginning at SS:SP. Each word is stored low byte first; the arrow marks the current top.</p>
+      </section>
+      <section class="panel memory-panel" aria-labelledby="memory-title">
+        <div class="panel-title"><h2 id="memory-title">Memory microscope</h2><span>1 MiB MODELED</span></div>
+        <form id="memory-form" class="memory-form"><label for="memory-address">PHYSICAL HEX <input id="memory-address" value="07C00" maxlength="8" spellcheck="false" autocomplete="off" aria-describedby="memory-help"></label><button class="lab-button" type="submit">Inspect</button></form>
+        <div class="memory-jumps"><button type="button" id="inspect-ds">DS:SI</button><button type="button" id="inspect-es">ES:DI</button><button type="button" id="inspect-stack">SS:SP</button><span id="memory-range">—</span></div>
+        <div id="memory" class="memory-grid" aria-label="Memory bytes"></div><p id="memory-help" class="panel-note">Enter 00000–FFFFF. Up to 64 bytes; underlined bytes changed in the last step.</p>
+      </section>
+    </div>
+    <div class="editor-layout">
+      <section class="panel editor-panel" aria-labelledby="editor-title"><div class="panel-title"><h2 id="editor-title">Literal binary program</h2><span>NO ASSEMBLER</span></div><label class="sr-only" for="binary-editor">Program source as binary digits</label><textarea id="binary-editor" maxlength="65536" spellcheck="false" autocomplete="off" aria-describedby="editor-help"></textarea><div class="editor-actions"><button id="load-program" class="lab-button primary" type="button">Load binary & reset</button><label class="lab-button import-label" for="import-program">Import .bits<input type="file" id="import-program" accept=".bits,.txt,text/plain"></label></div><p id="editor-help" class="panel-note">Up to 512 bytes. Every byte is eight literal 0s or 1s. Whitespace and # comments are allowed. Loading resets state and clears breakpoints; invalid input keeps the current program.</p><p id="editor-status" role="status"></p></section>
+      <section class="panel output-panel" aria-labelledby="output-title"><div class="panel-title"><h2 id="output-title">Modeled output</h2><span>INT 10h / COM1</span></div><h3>Screen teletype</h3><pre id="screen-output" aria-label="Modeled screen output">∅</pre><h3>Serial</h3><pre id="serial-output" aria-label="Modeled serial output">∅</pre><p class="panel-note">Output is recorded in this page. Simulated instructions cannot access your files or the network.</p></section>
+    </div>
+    <details class="model-details"><summary>What this model represents</summary><p>This is a bounded educational 16-bit simulation of selected x86 encodings, not a complete emulator or native CPU. It starts from a deterministic state: general and segment registers and flags are zero, IP is 7C00, SP is 7C00. This is not a BIOS register snapshot. Bit 1 of FLAGS is fixed to 1; undefined AF is shown as ? and encoded as 0 in the displayed word.</p><p>The model has 1 MiB of memory and a 4,096-step budget per reset. Physical addresses use <code>((segment &lt;&lt; 4) + offset) &amp; FFFFF</code>: A20 is masked. Register offsets wrap to 16 bits; word accesses beginning at offset FFFF stop because crossing a segment limit is outside this subset. There is no interrupt delivery, BIOS implementation, timing model or device emulation; only explicitly supported teletype and serial behavior. Unsupported instructions stop with an explanation. The listing decodes sequentially; a branch can skip bytes or land at a different boundary.</p><p>Keyboard: <kbd>S</kbd> steps; <kbd>Space</kbd> runs or pauses; <kbd>R</kbd> resets. Shortcuts are inactive while editing a form field. Every control also works with Tab and Enter.</p></details>
+  </main>
+  <footer class="footer lab-wrap"><a class="brand" href="../">bitborn</a><p>Literal bits. Visible consequences.</p><div><a href="../docs.html">Read the encoding guide ↗</a><a href="https://github.com/OthmaneBlial/bitborn">MIT / OPEN SOURCE ↗</a></div></footer>
+</body>
+</html>

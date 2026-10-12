@@ -3,9 +3,11 @@
 import json
 import struct
 if __package__:
-    from .bitborn import ROOT, digest, read_bits
+    from .bitborn import ROOT, digest, read_bits, targets
+    from .build_challenges import build_challenges
 else:
-    from bitborn import ROOT, digest, read_bits
+    from bitborn import ROOT, digest, read_bits, targets
+    from build_challenges import build_challenges
 
 
 def elf64(payload):
@@ -25,7 +27,7 @@ def bios_sector(payload):
 
 
 def build():
-    manifest = json.loads((ROOT / "targets.json").read_text())
+    manifest = targets()
     (ROOT / "build").mkdir(exist_ok=True)
     for target in manifest:
         data, annotations = read_bits(ROOT / target["source"])
@@ -37,7 +39,12 @@ def build():
             executable.write_bytes(elf64(data))
             executable.chmod(0o755)
         if target.get("bootable"):
-            output.with_suffix(".img").write_bytes(bios_sector(data))
+            if target.get('bios'):
+                if len(data) != 512 or data[510:] != b'\x55\xaa':
+                    raise ValueError('A complete BIOS image must contain exactly 512 bytes and 55 AA')
+                output.with_suffix('.img').write_bytes(data)
+            else:
+                output.with_suffix(".img").write_bytes(bios_sector(data))
         if target.get("loader"):
             loader, _ = read_bits(ROOT / target["loader"])
             if len(data) > 1024:
@@ -50,6 +57,8 @@ def build():
                        "architecture": "x86 real mode / BIOS", "source": "boot/boot.bits"}
             (ROOT / "site/boot.json").write_text(json.dumps(payload, indent=2) + "\n")
         print(f"{target['source']} → build/{target['output']} ({len(data)} bytes)")
+    if (ROOT / 'challenges/catalog.json').exists():
+        print(f'Packed {len(build_challenges())} reviewed binary challenges')
 
 
 if __name__ == "__main__":

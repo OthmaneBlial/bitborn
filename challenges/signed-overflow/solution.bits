@@ -1,0 +1,5 @@
+# Canonical reviewed solution: directly authored binary, not assembler output.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 11111111 01111111 # instruction | MOV AX,7FFF | 32767 is the largest positive signed 16-bit integer.
+00000101 00000001 00000000 # instruction | ADD AX,1 | The result 8000 has SF=1 and OF=1 while unsigned CF remains zero.
+11110100 # instruction | HLT | Stop at the signed boundary with AX=8000.

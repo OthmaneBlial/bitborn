@@ -1,0 +1,8 @@
+# Canonical starting puzzle: every executable byte is a literal binary token.
+11111010 # instruction | CLI | Keep interrupts masked while using the call stack.
+10111000 00101001 00000000 # instruction | MOV AX,41 | Initialize the value for the helper to increment.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Set the call stack below the loader.
+11101000 00000000 00000000 # instruction | CALL +0 | This pushes return IP 7E0A but calls HLT instead of the helper.
+11110100 # instruction | HLT | The broken call arrives here without incrementing or returning.
+01000000 # instruction | INC AX | The intended helper starts at offset 11.
+11000011 # instruction | RET | Pop the near return IP from the stack.

@@ -1,0 +1,655 @@
+[
+  {
+    "id": "return-42",
+    "title": "Make AX hold 42",
+    "difficulty": "beginner",
+    "path": "01 · Registers & bytes",
+    "summary": "Start with one instruction and find the operand hiding beside its opcode.",
+    "goal": "Halt with AX = 42.",
+    "goals": {
+      "registers": {
+        "AX": 42
+      }
+    },
+    "editableOffsets": [
+      2,
+      3
+    ],
+    "maxChangedBits": 8,
+    "hints": [
+      "The first byte B8 selects AX. Leave that opcode alone.",
+      "The next two bytes form the immediate value, low byte first.",
+      "42 in decimal is 00101010 in eight binary digits."
+    ],
+    "explanation": "MOV does not calculate: it copies the immediate into AX. The low operand byte changes from 41 to 42 while the high byte stays zero.",
+    "visual": "B8 → register AX · 2A 00 → value 002A",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/return-42/start.bits",
+    "solution": "challenges/return-42/solution.bits"
+  },
+  {
+    "id": "little-endian",
+    "title": "Untangle the byte order",
+    "difficulty": "beginner",
+    "path": "01 · Registers & bytes",
+    "summary": "Two correct-looking bytes form the wrong word.",
+    "goal": "Halt with AX = 0x1234 (4660).",
+    "goals": {
+      "registers": {
+        "AX": 4660
+      }
+    },
+    "editableOffsets": [
+      2,
+      3
+    ],
+    "maxChangedBits": 8,
+    "hints": [
+      "A 16-bit immediate occupies two bytes.",
+      "The first operand contributes bits 0–7; the second contributes bits 8–15.",
+      "Write 34 first, then 12: 00110100 00010010."
+    ],
+    "explanation": "Little-endian storage puts the least significant byte at the lower address. The bit order inside each byte does not reverse.",
+    "visual": "memory order: 34 → 12 · numeric word: 12 | 34",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/little-endian/start.bits",
+    "solution": "challenges/little-endian/solution.bits"
+  },
+  {
+    "id": "choose-register",
+    "title": "Choose the destination",
+    "difficulty": "beginner",
+    "path": "01 · Registers & bytes",
+    "summary": "The value is right. The three register-selector bits are wrong.",
+    "goal": "Halt with BX = 42 and CX = 0.",
+    "goals": {
+      "registers": {
+        "BX": 42,
+        "CX": 0
+      }
+    },
+    "editableOffsets": [
+      7
+    ],
+    "maxChangedBits": 3,
+    "hints": [
+      "B8 through BF are MOV immediate encodings for eight 16-bit registers.",
+      "The register order is AX, CX, DX, BX, SP, BP, SI, DI.",
+      "B9 is CX; BB (10111011) is BX."
+    ],
+    "explanation": "The low three opcode bits carry the register index. Changing one selector bit sends the same immediate to BX instead of CX.",
+    "visual": "10111[001] CX → 10111[011] BX",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/choose-register/start.bits",
+    "solution": "challenges/choose-register/solution.bits"
+  },
+  {
+    "id": "high-low",
+    "title": "Split a register in half",
+    "difficulty": "beginner",
+    "path": "01 · Registers & bytes",
+    "summary": "AH and AL are separately addressable halves of AX.",
+    "goal": "Halt with AX = 0x0E42.",
+    "goals": {
+      "registers": {
+        "AX": 3650
+      }
+    },
+    "editableOffsets": [
+      5,
+      7
+    ],
+    "maxChangedBits": 8,
+    "hints": [
+      "AH occupies bits 8–15. AL occupies bits 0–7.",
+      "The desired high byte is 0E; the desired low byte is 42.",
+      "Swap the operand bytes, preserving both opcodes B4 and B0."
+    ],
+    "explanation": "MOV AH changes only the upper half; MOV AL changes only the lower half. This layout also prepares AH=0E and AL=B for BIOS teletype output.",
+    "visual": "AX: [ AH 00001110 ][ AL 01000010 ]",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/high-low/start.bits",
+    "solution": "challenges/high-low/solution.bits"
+  },
+  {
+    "id": "print-character",
+    "title": "Put B on the screen",
+    "difficulty": "beginner",
+    "path": "01 · Registers & bytes",
+    "summary": "A real BIOS software interrupt turns an ASCII operand into a visible character.",
+    "goal": "Halt after printing exactly B.",
+    "goals": {
+      "output": "B"
+    },
+    "editableOffsets": [
+      12
+    ],
+    "maxChangedBits": 3,
+    "hints": [
+      "INT 10 with AH=0E prints the character stored in AL.",
+      "The MOV AL instruction starts at byte 11. Its operand is byte 12.",
+      "ASCII B is hexadecimal 42, binary 01000010."
+    ],
+    "explanation": "The instruction stream chooses BIOS text mode, selects page zero, loads a teletype character and calls INT 10. The teaching model records B; the QEMU test checks the actual VGA character byte.",
+    "visual": "AL = 42 → INT 10 / AH 0E → screen B",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/print-character/start.bits",
+    "solution": "challenges/print-character/solution.bits"
+  },
+  {
+    "id": "addition",
+    "title": "Balance the sum",
+    "difficulty": "intermediate",
+    "path": "02 · Arithmetic & control flow",
+    "summary": "Keep the arithmetic instruction and fix its input. Multiple correct immediate pairs are accepted.",
+    "goal": "Halt with AX = 42 and CF = 0.",
+    "goals": {
+      "registers": {
+        "AX": 42
+      },
+      "flags": {
+        "cf": false
+      }
+    },
+    "editableOffsets": [
+      2,
+      3,
+      5,
+      6
+    ],
+    "maxChangedBits": 12,
+    "hints": [
+      "The starting program computes 35 + 6 = 41.",
+      "ADD AX has opcode 05 followed by a little-endian immediate.",
+      "One solution changes the addend from 6 to 7; another uses 34 + 8."
+    ],
+    "explanation": "Validation checks the computed result rather than matching a secret answer. Different allowed immediate pairs are valid when their sum reaches 42 without unsigned carry.",
+    "visual": "AX 0023 + immediate 0007 → AX 002A",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/addition/start.bits",
+    "solution": "challenges/addition/solution.bits"
+  },
+  {
+    "id": "borrow",
+    "title": "Borrow below zero",
+    "difficulty": "intermediate",
+    "path": "02 · Arithmetic & control flow",
+    "summary": "Unsigned subtraction can wrap even when the stored result looks large.",
+    "goal": "Halt with AX = 0xFFFF, CF = 1 and ZF = 0.",
+    "goals": {
+      "registers": {
+        "AX": 65535
+      },
+      "flags": {
+        "cf": true,
+        "zf": false
+      }
+    },
+    "editableOffsets": [
+      2,
+      3
+    ],
+    "maxChangedBits": 8,
+    "hints": [
+      "The SUB immediate is already one. Change the initial AX value.",
+      "CF reports an unsigned borrow for SUB. ZF reports a zero result.",
+      "Start from zero: 0 − 1 wraps to FFFF."
+    ],
+    "explanation": "Sixteen result bits cannot store negative one as an unsigned value. They wrap to FFFF; CF records the borrow separately. ZF stays clear because FFFF is not zero.",
+    "visual": "0000 − 0001 → FFFF · CF 1 · ZF 0",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/borrow/start.bits",
+    "solution": "challenges/borrow/solution.bits"
+  },
+  {
+    "id": "equality",
+    "title": "Make the comparison equal",
+    "difficulty": "intermediate",
+    "path": "02 · Arithmetic & control flow",
+    "summary": "CMP updates flags without overwriting its input.",
+    "goal": "Halt with AX = 42, BX = 0 and ZF = 1.",
+    "goals": {
+      "registers": {
+        "AX": 42,
+        "BX": 0
+      },
+      "flags": {
+        "zf": true
+      }
+    },
+    "editableOffsets": [
+      8,
+      9
+    ],
+    "maxChangedBits": 8,
+    "hints": [
+      "The failure assignment is MOV BX,1. A JZ can skip it.",
+      "JZ checks ZF, which the immediately preceding CMP sets.",
+      "Compare AX with 42 by writing 2A 00 in the CMP operand."
+    ],
+    "explanation": "CMP performs a subtraction only to set flags. Equal values set ZF, so JZ takes its +3 displacement from the end of the jump to HLT. AX remains 42.",
+    "visual": "CMP at 07 → JZ at 0A → next 0C + 03 = HLT 0F",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/equality/start.bits",
+    "solution": "challenges/equality/solution.bits"
+  },
+  {
+    "id": "escape-loop",
+    "title": "Escape the infinite jump",
+    "difficulty": "intermediate",
+    "path": "02 · Arithmetic & control flow",
+    "summary": "A negative displacement sends the instruction pointer back to the same opcode.",
+    "goal": "Reach HLT within 96 model steps.",
+    "goals": {},
+    "editableOffsets": [
+      2
+    ],
+    "maxChangedBits": 8,
+    "hints": [
+      "EB is a short unconditional jump. Its operand is a signed eight-bit displacement.",
+      "FE represents −2, measured from the end of the two-byte instruction.",
+      "A displacement of zero lands on the next instruction, HLT."
+    ],
+    "explanation": "The starting jump ends at offset 3, then subtracts two to return to offset 1. Changing FE to 00 breaks that cycle. The bounded validator rejects the endless starting loop.",
+    "visual": "start: 01 → 03 − 02 → 01 · fix: 01 → 03 + 00 → HLT",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/escape-loop/start.bits",
+    "solution": "challenges/escape-loop/solution.bits"
+  },
+  {
+    "id": "count-loop",
+    "title": "Count five iterations",
+    "difficulty": "intermediate",
+    "path": "02 · Arithmetic & control flow",
+    "summary": "LOOP decrements CX and branches until it becomes zero.",
+    "goal": "Halt with AX = 5 and CX = 0.",
+    "goals": {
+      "registers": {
+        "AX": 5,
+        "CX": 0
+      }
+    },
+    "editableOffsets": [
+      5,
+      6
+    ],
+    "maxChangedBits": 8,
+    "hints": [
+      "The loop body is the one-byte INC AX instruction.",
+      "LOOP consumes CX, not AX, as its counter.",
+      "Set the MOV CX immediate to 05 00."
+    ],
+    "explanation": "CX starts at five. Each iteration increments AX once and LOOP decrements CX once. The −3 displacement returns to INC until CX reaches zero.",
+    "visual": "CX 5 → 4 → 3 → 2 → 1 → 0 · AX 0 → 1 → 2 → 3 → 4 → 5",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/count-loop/start.bits",
+    "solution": "challenges/count-loop/solution.bits"
+  },
+  {
+    "id": "stack-transfer",
+    "title": "Move through the stack",
+    "difficulty": "advanced",
+    "path": "03 · Stack & flags",
+    "summary": "PUSH and POP preserve a word while the stack grows down.",
+    "goal": "Halt with BX = 0x1234, CX = 0 and SP = 0x7C00.",
+    "goals": {
+      "registers": {
+        "BX": 4660,
+        "CX": 0,
+        "SP": 31744
+      },
+      "memory": [
+        {
+          "address": 31742,
+          "bytes": [
+            52,
+            18
+          ]
+        }
+      ]
+    },
+    "editableOffsets": [
+      14
+    ],
+    "maxChangedBits": 3,
+    "hints": [
+      "PUSH AX already saves the correct word. The wrong POP register loses the transfer.",
+      "POP register uses opcodes 58 through 5F, with the same register index order as MOV.",
+      "Change 59 (POP CX) to 5B (POP BX)."
+    ],
+    "explanation": "PUSH decrements SP by two, writes 34 12, and POP reads that word before restoring SP. Popping does not erase the old stack bytes; the memory goal makes that visible.",
+    "visual": "SP 7C00 → PUSH → 7BFE [34 12] → POP → 7C00",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/stack-transfer/start.bits",
+    "solution": "challenges/stack-transfer/solution.bits"
+  },
+  {
+    "id": "stack-order",
+    "title": "Respect last in, first out",
+    "difficulty": "advanced",
+    "path": "03 · Stack & flags",
+    "summary": "Two saved values must come back in the reverse order.",
+    "goal": "Halt with CX = 0x2222, DX = 0x1111 and a balanced stack.",
+    "goals": {
+      "registers": {
+        "CX": 8738,
+        "DX": 4369,
+        "SP": 31744
+      }
+    },
+    "editableOffsets": [
+      18,
+      19
+    ],
+    "maxChangedBits": 4,
+    "hints": [
+      "The second PUSH places 2222 on top of 1111.",
+      "The first POP must consume 2222 into CX; the second must consume 1111 into DX.",
+      "Use POP CX (59) followed by POP DX (5A)."
+    ],
+    "explanation": "A stack is last in, first out. Neither memory nor values need changing; selecting the correct two POP destinations preserves order and restores SP.",
+    "visual": "top 7BFC [2222] → CX · below 7BFE [1111] → DX",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/stack-order/start.bits",
+    "solution": "challenges/stack-order/solution.bits"
+  },
+  {
+    "id": "carry-branch",
+    "title": "Branch on unsigned carry",
+    "difficulty": "advanced",
+    "path": "03 · Stack & flags",
+    "summary": "Carry and zero can both be set by the same addition.",
+    "goal": "Halt with AX = 0, BX = 0, CF = 1 and ZF = 1.",
+    "goals": {
+      "registers": {
+        "AX": 0,
+        "BX": 0
+      },
+      "flags": {
+        "cf": true,
+        "zf": true
+      }
+    },
+    "editableOffsets": [
+      10
+    ],
+    "maxChangedBits": 1,
+    "hints": [
+      "FFFF + 1 makes a 17-bit sum; the stored word is zero.",
+      "JAE branches when CF is clear. JB branches when CF is set.",
+      "Change opcode 73 to 72. Their low bit is the only difference."
+    ],
+    "explanation": "Unsigned carry is separate from the result being zero. JB sees CF=1 and skips MOV BX,1. This puzzle changes exactly one bit without touching the branch displacement.",
+    "visual": "FFFF + 0001 → 1 | 0000 · CF 1 → JB taken",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/carry-branch/start.bits",
+    "solution": "challenges/carry-branch/solution.bits"
+  },
+  {
+    "id": "signed-overflow",
+    "title": "Cross the signed boundary",
+    "difficulty": "advanced",
+    "path": "03 · Stack & flags",
+    "summary": "The same sixteen bits can be interpreted as unsigned or signed.",
+    "goal": "Halt with AX = 0x8000, SF = 1, OF = 1 and CF = 0.",
+    "goals": {
+      "registers": {
+        "AX": 32768
+      },
+      "flags": {
+        "sf": true,
+        "of": true,
+        "cf": false
+      }
+    },
+    "editableOffsets": [
+      2,
+      3
+    ],
+    "maxChangedBits": 1,
+    "hints": [
+      "The largest signed positive 16-bit integer is 32767, hexadecimal 7FFF.",
+      "Adding one to 7FFF flips the sign bit without producing unsigned carry.",
+      "Change the low immediate byte FE to FF."
+    ],
+    "explanation": "A positive plus positive producing a negative signed result sets OF. The word 8000 is unsigned 32768 but signed −32768. CF remains zero because the unsigned sum fits in sixteen bits.",
+    "visual": "signed: +32767 + 1 → −32768 · unsigned: 32767 + 1 → 32768",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/signed-overflow/start.bits",
+    "solution": "challenges/signed-overflow/solution.bits"
+  },
+  {
+    "id": "byte-load",
+    "title": "Read one byte, not two",
+    "difficulty": "advanced",
+    "path": "03 · Stack & flags",
+    "summary": "An adjacent sentinel exposes a mistaken operand width.",
+    "goal": "Halt with AX = 0x0042 while preserving the data bytes.",
+    "goals": {
+      "registers": {
+        "AX": 66
+      },
+      "memory": [
+        {
+          "address": 32264,
+          "bytes": [
+            66,
+            127
+          ]
+        }
+      ]
+    },
+    "editableOffsets": [
+      4
+    ],
+    "maxChangedBits": 1,
+    "hints": [
+      "The address operand already points to physical 7E08 in segment zero.",
+      "A1 loads a word into AX. A0 loads a byte into AL and preserves AH.",
+      "Change A1 to A0; AX was initialized to zero first."
+    ],
+    "explanation": "The two opcodes share the same moffs16 address encoding but select different data widths. Reading one byte avoids importing the sentinel 7F into AH.",
+    "visual": "DS:7E08 [42][7F] · A0 reads [42] · A1 reads [42 7F]",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/byte-load/start.bits",
+    "solution": "challenges/byte-load/solution.bits"
+  },
+  {
+    "id": "word-store",
+    "title": "Store the whole word",
+    "difficulty": "expert",
+    "path": "04 · Memory & boot architecture",
+    "summary": "The low byte arrives, but a word-sized result needs two bytes.",
+    "goal": "Halt after storing 0x1234 as bytes 34 12 at physical 0x0600.",
+    "goals": {
+      "registers": {
+        "AX": 4660
+      },
+      "memory": [
+        {
+          "address": 1536,
+          "bytes": [
+            52,
+            18
+          ]
+        }
+      ]
+    },
+    "editableOffsets": [
+      4
+    ],
+    "maxChangedBits": 1,
+    "hints": [
+      "The destination address operand 00 06 is already correct.",
+      "A2 stores AL. A3 stores the whole AX register.",
+      "Change A2 to A3 by flipping the low opcode bit."
+    ],
+    "explanation": "A word store writes the low byte at the destination and the high byte at the next address. Segment zero makes DS:0600 equal to physical 0600.",
+    "visual": "AX [12 | 34] → DS:0600 [34] [12]",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/word-store/start.bits",
+    "solution": "challenges/word-store/solution.bits"
+  },
+  {
+    "id": "direction-flag",
+    "title": "Write backwards on purpose",
+    "difficulty": "expert",
+    "path": "04 · Memory & boot architecture",
+    "summary": "String stores change DI automatically according to the direction flag.",
+    "goal": "Halt with memory 0x0600..0x0601 spelling AB, DI = 0x05FF and DF clear.",
+    "goals": {
+      "registers": {
+        "DI": 1535
+      },
+      "flags": {
+        "df": false
+      },
+      "memory": [
+        {
+          "address": 1536,
+          "bytes": [
+            65,
+            66
+          ]
+        }
+      ]
+    },
+    "editableOffsets": [
+      7
+    ],
+    "maxChangedBits": 1,
+    "hints": [
+      "The first store begins at 0601 and writes B. The next store must move left to 0600.",
+      "CLD increments string pointers; STD decrements them.",
+      "Change FC to FD at offset 7. Keep the final CLD."
+    ],
+    "explanation": "STD selects decreasing offsets. Each STOSB writes AL before moving DI. Two stores produce AB in ascending memory order, then CLD restores the conventional direction.",
+    "visual": "DI 0601 → store B → 0600 → store A → 05FF",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/direction-flag/start.bits",
+    "solution": "challenges/direction-flag/solution.bits"
+  },
+  {
+    "id": "call-return",
+    "title": "Find the helper and return",
+    "difficulty": "expert",
+    "path": "04 · Memory & boot architecture",
+    "summary": "CALL saves a real return address; RET must restore it.",
+    "goal": "Halt with AX = 42 and SP = 0x7C00.",
+    "goals": {
+      "registers": {
+        "AX": 42,
+        "SP": 31744
+      },
+      "memory": [
+        {
+          "address": 31742,
+          "bytes": [
+            10,
+            126
+          ]
+        }
+      ]
+    },
+    "editableOffsets": [
+      8,
+      9
+    ],
+    "maxChangedBits": 8,
+    "hints": [
+      "A near CALL uses a signed 16-bit displacement measured from its end.",
+      "CALL ends at offset 10. The helper INC AX starts at offset 11.",
+      "Use displacement 01 00. RET returns to logical IP 7E0A."
+    ],
+    "explanation": "CALL pushes the logical return IP, not the model array offset. The helper increments AX and RET pops 7E0A. The memory check also verifies the actual stored return word.",
+    "visual": "CALL 07 → push 7E0A → helper 0B → RET → HLT 0A",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/call-return/start.bits",
+    "solution": "challenges/call-return/solution.bits"
+  },
+  {
+    "id": "segmented-store",
+    "title": "Combine segment and offset",
+    "difficulty": "expert",
+    "path": "04 · Memory & boot architecture",
+    "summary": "A segment register supplies an address base, not a raw byte address.",
+    "goal": "Halt with bytes 42 0A at physical 0x10010, ES = 0x1000 and DI = 0x0012.",
+    "goals": {
+      "registers": {
+        "ES": 4096,
+        "DI": 18
+      },
+      "memory": [
+        {
+          "address": 65552,
+          "bytes": [
+            66,
+            10
+          ]
+        }
+      ]
+    },
+    "editableOffsets": [
+      2,
+      3
+    ],
+    "maxChangedBits": 1,
+    "hints": [
+      "STOSW writes through ES:DI, and the MOV ES instruction already exists.",
+      "Physical address is segment × 16 + offset.",
+      "Set the first MOV AX to 1000: low byte 00, high byte 10."
+    ],
+    "explanation": "Real-mode segments overlap. ES=1000 contributes base 10000; adding DI=0010 selects 10010. STOSW writes a little-endian word and advances DI by two.",
+    "visual": "1000 × 10 + 0010 = physical 10010 · [42 0A]",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/segmented-store/start.bits",
+    "solution": "challenges/segmented-store/solution.bits"
+  },
+  {
+    "id": "repair-boot",
+    "title": "Repair the boot in three bits",
+    "difficulty": "expert",
+    "path": "04 · Memory & boot architecture",
+    "summary": "This is the actual 512-byte bitborn boot source with two deliberately damaged opcodes.",
+    "goal": "Restore boot output and reach HLT by changing exactly three bits.",
+    "goals": {
+      "output": "bitborn v0.1\r\n---------------------------\r\nNO ASSEMBLY.\r\nNO COMPILER.\r\nJUST BITS.\r\n\r\nHello from raw machine code!\r\n\r\n512 bytes. 100% handwritten.\r\n",
+      "serial": "bitborn v0.1\r\n---------------------------\r\nNO ASSEMBLY.\r\nNO COMPILER.\r\nJUST BITS.\r\n\r\nHello from raw machine code!\r\n\r\n512 bytes. 100% handwritten.\r\n"
+    },
+    "editableOffsets": [
+      1,
+      17
+    ],
+    "maxChangedBits": 3,
+    "hints": [
+      "The first failure is at offset 1: a far jump became a short jump.",
+      "The intended far-jump opcode is EA. At offset 17, the intended CLD opcode is FC.",
+      "Change EB → EA (one bit) and FF → FC (two bits). Preserve the 55 AA signature."
+    ],
+    "explanation": "The far jump normalizes CS so the rest of the boot sector uses its intended addresses. CLD establishes forward string traversal. Repairing only these three bits restores the unmodified canonical sector, including real BIOS output and COM1 output.",
+    "visual": "offset 001: EB → EA · offset 011: FF → FC · total 3 flipped bits",
+    "maxSteps": 4096,
+    "loadAddress": 31744,
+    "source": "challenges/repair-boot/start.bits",
+    "solution": "challenges/repair-boot/solution.bits"
+  }
+]

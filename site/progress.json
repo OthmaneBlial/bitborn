@@ -34,7 +34,7 @@
       "progress": "\u2705 Published; downloaded artifacts and checksums verified"
     },
     {
-      "milestone": "[v0.1.1 host-tool patch](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.1.1)",
+      "milestone": "v0.1.1 host-tool patch",
       "progress": "\u2705 Published; comment/failed-write checks and downloaded artifacts verified"
     },
     {
@@ -42,12 +42,28 @@
       "progress": "\u2705 Locally verified; modern PUSH SP semantics checked in real QEMU"
     },
     {
-      "milestone": "Full boot-sector builder, visual CPU lab and 20 challenges",
-      "progress": "In development; browser and native checks underway"
+      "milestone": "Full editable 512-byte boot-sector builder",
+      "progress": "\u2705 Chrome-tested; exact downloaded image/source boot the one-bit edit in QEMU"
     },
     {
-      "milestone": "Dedicated learning, architecture, examples and roadmap routes",
-      "progress": "In development; publication checks remain open"
+      "milestone": "Visual CPU lab: registers, flags, stack, memory and breakpoints",
+      "progress": "\u2705 Five literal teaching programs and Chrome controls verified"
+    },
+    {
+      "milestone": "20 challenges across four levels",
+      "progress": "\u2705 All solutions pass model and QEMU goals; seeds fail; local progress and sharing tested"
+    },
+    {
+      "milestone": "Eight dedicated `.io` routes and a size-comparison lab",
+      "progress": "\u2705 Locally verified; CI and live publication checks underway"
+    },
+    {
+      "milestone": "Original 12-byte exit versus 8-byte alternative",
+      "progress": "\u2705 Independent sizes/encodings checked; native Linux CI required"
+    },
+    {
+      "milestone": "New browser GIFs, showcase and contributor issue forms",
+      "progress": "\u2705 Genuine captured states with provenance; contributor files checked"
     },
     {
       "milestone": "Protected mode, interrupts and executable loading",

@@ -1,0 +1,9 @@
+# Canonical starting puzzle: every executable byte is a literal binary token.
+11111010 # instruction | CLI | Mask interrupts while retaining software BIOS calls.
+10111000 00000011 00000000 # instruction | MOV AX,0003 | Select BIOS text mode 3 to clear the screen.
+11001101 00010000 # instruction | INT 10 | Invoke the video BIOS using AX=0003.
+10111011 00000111 00000000 # instruction | MOV BX,0007 | Select page zero and attribute seven.
+10110100 00001110 # instruction | MOV AH,0E | Select BIOS teletype service.
+10110000 01000001 # instruction | MOV AL,41 | Load ASCII A, the wrong output character.
+11001101 00010000 # instruction | INT 10 | Print AL using AH=0E.
+11110100 # instruction | HLT | Stop after printing one character.

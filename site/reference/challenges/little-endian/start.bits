@@ -1,0 +1,4 @@
+# Canonical starting puzzle: every executable byte is a literal binary token.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 00010010 00110100 # instruction | MOV AX,3412 | The byte order is 12 34, so the word is 3412 rather than 1234.
+11110100 # instruction | HLT | Stop and inspect AX.

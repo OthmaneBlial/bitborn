@@ -1,0 +1,40 @@
+name: Educational challenge
+description: Propose a focused binary puzzle with a failing start and independently checked solution.
+title: "[Challenge]: "
+body:
+  - type: textarea
+    id: lesson
+    attributes:
+      label: Learning goal and difficulty
+      description: "Name one mechanism and the intended beginner/intermediate/advanced/expert level. Explain the result a learner should understand."
+    validations:
+      required: true
+  - type: textarea
+    id: programs
+    attributes:
+      label: Literal starting program and reviewed solution
+      description: "Link or show both .bits sources with annotations. The starting program must fail the goal; executable encodings must be authored directly as binary digits."
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Deterministic goal and edit rules
+      description: "Specify editable/locked offsets, bit budget if useful, execution bound, and expected registers/flags/memory/output. Explain which alternate solutions should pass."
+    validations:
+      required: true
+  - type: textarea
+    id: teaching
+    attributes:
+      label: Hints and explanation
+      description: "Propose progressive hints and a byte-level explanation. Describe a useful visual without representing model output as native execution."
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Verification and source review
+      description: "Positive and negative model tests, malformed-input/bounded-loop cases, reviewed sizes/hashes, and real QEMU evidence for the curated solution. Mark pending checks; do not run arbitrary submissions on the host."
+    validations:
+      required: true

@@ -1,0 +1,106 @@
+{
+  "before": {
+    "source": "examples/exit-code/program.bits",
+    "bytes": [
+      184,
+      60,
+      0,
+      0,
+      0,
+      191,
+      42,
+      0,
+      0,
+      0,
+      15,
+      5
+    ],
+    "annotations": [
+      {
+        "offset": 0,
+        "size": 5,
+        "kind": "instruction",
+        "mnemonic": "MOV EAX,60",
+        "explanation": "B8+EAX, imm32 60; selects Linux x86-64 exit syscall.",
+        "bits": "10111000 00111100 00000000 00000000 00000000"
+      },
+      {
+        "offset": 5,
+        "size": 5,
+        "kind": "instruction",
+        "mnemonic": "MOV EDI,42",
+        "explanation": "BF = B8+EDI, imm32 42; exit status goes in RDI via zero extension.",
+        "bits": "10111111 00101010 00000000 00000000 00000000"
+      },
+      {
+        "offset": 10,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "SYSCALL",
+        "explanation": "0F 05 enters the Linux kernel; exit does not return.",
+        "bits": "00001111 00000101"
+      }
+    ],
+    "sha256": "5875e23660cb0ae0c3f4b13815230783dff9fdbb55746e26ebf0869c5d091359",
+    "payloadSize": 12,
+    "elfSize": 132
+  },
+  "after": {
+    "source": "examples/exit-code-small/program.bits",
+    "bytes": [
+      106,
+      60,
+      88,
+      106,
+      42,
+      95,
+      15,
+      5
+    ],
+    "annotations": [
+      {
+        "offset": 0,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "PUSH 60",
+        "explanation": "6A sign-extends the immediate to a 64-bit stack word.",
+        "bits": "01101010 00111100"
+      },
+      {
+        "offset": 2,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "POP RAX",
+        "explanation": "58 moves that stack word into the syscall-number register.",
+        "bits": "01011000"
+      },
+      {
+        "offset": 3,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "PUSH 42",
+        "explanation": "Push the desired exit status as a 64-bit word.",
+        "bits": "01101010 00101010"
+      },
+      {
+        "offset": 5,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "POP RDI",
+        "explanation": "5F restores the stack pointer and sets the first syscall argument.",
+        "bits": "01011111"
+      },
+      {
+        "offset": 6,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "SYSCALL",
+        "explanation": "0F 05 enters the Linux kernel; syscall 60 exits with status 42.",
+        "bits": "00001111 00000101"
+      }
+    ],
+    "sha256": "a0a5759b059d498f6567d39d2553b296ddc4b53b4fd9fde067fc8a1f7364b60b",
+    "payloadSize": 8,
+    "elfSize": 128
+  }
+}

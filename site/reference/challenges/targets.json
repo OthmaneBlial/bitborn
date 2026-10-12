@@ -1,0 +1,343 @@
+[
+  {
+    "source": "challenges/return-42/start.bits",
+    "output": "challenges/return-42-start.bin",
+    "size": 5,
+    "sha256": "51667a2e3651539c0361a54912989cb8882f71f39efcb64b569b2d5099c74aab",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/return-42/solution.bits",
+    "output": "challenges/return-42-solution.bin",
+    "size": 5,
+    "sha256": "c580524b53ad1a9be116f15dbdfa741d167b3323317766841364f7e72967b1fa",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/little-endian/start.bits",
+    "output": "challenges/little-endian-start.bin",
+    "size": 5,
+    "sha256": "2efc7e8eab58a480f1c2f1e3eb02f423b145f2016abd56cfc7dd56d95198eeb4",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/little-endian/solution.bits",
+    "output": "challenges/little-endian-solution.bin",
+    "size": 5,
+    "sha256": "dd49609a90f26a67404a2367e24fe0e531df49e9c8e8499b771380dd44918592",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/choose-register/start.bits",
+    "output": "challenges/choose-register-start.bin",
+    "size": 11,
+    "sha256": "69ae7f40d92c98df8bdeb916286fd08d1c19d21226cd753ddad0277374bce113",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/choose-register/solution.bits",
+    "output": "challenges/choose-register-solution.bin",
+    "size": 11,
+    "sha256": "8449a037aa435f82abdde432c8a71dd270723ff9432d304418cccb8c8bf98e18",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/high-low/start.bits",
+    "output": "challenges/high-low-start.bin",
+    "size": 9,
+    "sha256": "b5362a6bb3ad169a646b8bfd9dfb06edc003545401bb61fb74e1368242c6753e",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/high-low/solution.bits",
+    "output": "challenges/high-low-solution.bin",
+    "size": 9,
+    "sha256": "85a272e64e9559c769f4d91e08575f8b61cc5a48c32c6b71895dcffb6dcaef0a",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/print-character/start.bits",
+    "output": "challenges/print-character-start.bin",
+    "size": 16,
+    "sha256": "14a9df0cc3fdfc01acda1d1e5c2ecd76905b1192f8614688328f81e5fc67a3bb",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/print-character/solution.bits",
+    "output": "challenges/print-character-solution.bin",
+    "size": 16,
+    "sha256": "fc7388fb81b6282420b69ced1cf1f37f1e9f84a0f33307f95ca63daa3a739b0a",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/addition/start.bits",
+    "output": "challenges/addition-start.bin",
+    "size": 8,
+    "sha256": "cf041388e232c03e42a53f6d274ced49e7d7c3e7286e2af583865ee6133b49d4",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/addition/solution.bits",
+    "output": "challenges/addition-solution.bin",
+    "size": 8,
+    "sha256": "65c8867201f29daa89c6b1bc5c052a584df9d63daf5b3f5bf8285fe476c18764",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/borrow/start.bits",
+    "output": "challenges/borrow-start.bin",
+    "size": 8,
+    "sha256": "7b996a20704eb116811f6ea18af899b570b8a89e929df59dff7b08f2febb5585",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/borrow/solution.bits",
+    "output": "challenges/borrow-solution.bin",
+    "size": 8,
+    "sha256": "e798500ca7a75c42d43716602ccd09704693bf12eeacffdaf320273c63ee66c4",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/equality/start.bits",
+    "output": "challenges/equality-start.bin",
+    "size": 16,
+    "sha256": "e72778ba97a70a22eee52ce2ddeada69d4710a0bf07e27ed059974e106c4c618",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/equality/solution.bits",
+    "output": "challenges/equality-solution.bin",
+    "size": 16,
+    "sha256": "508af60814b02076b566ee0270cef5bbf45dee907016d08cf98ae9aa8641d843",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/escape-loop/start.bits",
+    "output": "challenges/escape-loop-start.bin",
+    "size": 4,
+    "sha256": "96d3dc53c3f829d795a2e89e75ad1f078bc8c4945b398cc512643e25cb9d2b59",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/escape-loop/solution.bits",
+    "output": "challenges/escape-loop-solution.bin",
+    "size": 4,
+    "sha256": "e17420decc423b7fab899d2c28726f59faf2fc311a027a701723282808fc3371",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/count-loop/start.bits",
+    "output": "challenges/count-loop-start.bin",
+    "size": 11,
+    "sha256": "3c716325ae9ff08a9bfb8b7b3f586467ddffa57d81477b64523222d6cba26786",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/count-loop/solution.bits",
+    "output": "challenges/count-loop-solution.bin",
+    "size": 11,
+    "sha256": "a773fddc55d706044b4695b521fd5f1543a86d2ec747a79b826a475d0fd5edc4",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/stack-transfer/start.bits",
+    "output": "challenges/stack-transfer-start.bin",
+    "size": 16,
+    "sha256": "8a0b27bb19d67d552e74c1902ebe9b7d863c70d5f2124d5a2b194e1b0274e227",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/stack-transfer/solution.bits",
+    "output": "challenges/stack-transfer-solution.bin",
+    "size": 16,
+    "sha256": "d3bbaed384b208b4798aef12328994808562f521371e9c62c9aabe0ca9666f16",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/stack-order/start.bits",
+    "output": "challenges/stack-order-start.bin",
+    "size": 21,
+    "sha256": "92a06a1f44a19973a3dfbbc0f98a0667a33eefd2c4a8294533f82ecdeba30e93",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/stack-order/solution.bits",
+    "output": "challenges/stack-order-solution.bin",
+    "size": 21,
+    "sha256": "89930e29724466c411ff2df84ecc86ea9f5eb7384bef0551f13744bf9e20af26",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/carry-branch/start.bits",
+    "output": "challenges/carry-branch-start.bin",
+    "size": 16,
+    "sha256": "ad1c3c840cf7e0dc9512666b24eb0790787aad5c72d2b0aa476bcc9cc57533f2",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/carry-branch/solution.bits",
+    "output": "challenges/carry-branch-solution.bin",
+    "size": 16,
+    "sha256": "5bf02283611cd65026f03c8aa8c9d0b5143c2f77d46cbdf11e777242ca8cb74e",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/signed-overflow/start.bits",
+    "output": "challenges/signed-overflow-start.bin",
+    "size": 8,
+    "sha256": "dea26d5b5445b3a08a59d7b20548973b58a4f69fed231c1a1669cb4c9b892120",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/signed-overflow/solution.bits",
+    "output": "challenges/signed-overflow-solution.bin",
+    "size": 8,
+    "sha256": "39efd34ec5ed14511e778ed2d6f3e1fc363d3254c7d69e5f0e0c134e605d2f4a",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/byte-load/start.bits",
+    "output": "challenges/byte-load-start.bin",
+    "size": 10,
+    "sha256": "795882b000aebb0349da6a68d643e6d267fff6111ac39d4df9fac687180cbfc4",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/byte-load/solution.bits",
+    "output": "challenges/byte-load-solution.bin",
+    "size": 10,
+    "sha256": "3daa1d8a1966defdce77d5af08cb07f330ee8f6278bdfd9503586077cb793fef",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/word-store/start.bits",
+    "output": "challenges/word-store-start.bin",
+    "size": 8,
+    "sha256": "778c1c4c4ac95751d7cfeb24aceabd755078b8433c6153b4d7a0bf030b311d87",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/word-store/solution.bits",
+    "output": "challenges/word-store-solution.bin",
+    "size": 8,
+    "sha256": "be767d33a45a48123da0c18db735aa37598f9a824de47253b82ad2bb241efffc",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/direction-flag/start.bits",
+    "output": "challenges/direction-flag-start.bin",
+    "size": 14,
+    "sha256": "8307cddafbb19b8d2c48b770966f27236d3ab090a65490ee2ee10abc6cd1def8",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/direction-flag/solution.bits",
+    "output": "challenges/direction-flag-solution.bin",
+    "size": 14,
+    "sha256": "eb6331495958135a61787b868bf53109a04169d34fe5fd187b5a119eec7a89bb",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/call-return/start.bits",
+    "output": "challenges/call-return-start.bin",
+    "size": 13,
+    "sha256": "aac350a379376c290b9f07c7f0f4ce6d2ce1b555f690663f58d8fba30875b678",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/call-return/solution.bits",
+    "output": "challenges/call-return-solution.bin",
+    "size": 13,
+    "sha256": "5f02612d7cb7a8255fd63f5b1cd5283af080fee012c356d9ce070e03c0dd19de",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/segmented-store/start.bits",
+    "output": "challenges/segmented-store-start.bin",
+    "size": 15,
+    "sha256": "69994e79661a42fa0a61c21a27649a62b821bdf975872952795e4d4bca3173f9",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/segmented-store/solution.bits",
+    "output": "challenges/segmented-store-solution.bin",
+    "size": 15,
+    "sha256": "6e34cad7552f4adf5f92b08d478f7fdfdb3fd4a8583069912b328206328626d1",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "loader": "boot/loader.bits"
+  },
+  {
+    "source": "challenges/repair-boot/start.bits",
+    "output": "challenges/repair-boot-start.bin",
+    "size": 512,
+    "sha256": "e2ffc7425908d4e8991a17aae3ee158159730304a96a39fe2c3254e5d131f92a",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode"
+  },
+  {
+    "source": "challenges/repair-boot/solution.bits",
+    "output": "challenges/repair-boot-solution.bin",
+    "size": 512,
+    "sha256": "46f0cf66a237fdc51d033d3e0fc86a1c7d7691770a42049077cf470f660cbfc9",
+    "architecture": "x86-real-mode",
+    "environment": "bios-real-mode",
+    "bios": true,
+    "bootable": true
+  }
+]

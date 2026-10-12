@@ -1,0 +1,8 @@
+# Canonical reviewed solution: directly authored binary, not assembler output.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111011 00000000 00000000 # instruction | MOV BX,0 | Initialize the success marker.
+10111000 11111111 11111111 # instruction | MOV AX,FFFF | Start at the unsigned upper boundary.
+00000101 00000001 00000000 # instruction | ADD AX,1 | The 17th result bit becomes CF and the truncated word sets ZF.
+01110010 00000011 # instruction | JB +3 | JB tests CF=1; next offset 12 plus three skips the failure assignment.
+10111011 00000001 00000000 # instruction | MOV BX,1 | The successful carry branch skips this assignment.
+11110100 # instruction | HLT | Stop with AX=0, BX=0, CF=1 and ZF=1.

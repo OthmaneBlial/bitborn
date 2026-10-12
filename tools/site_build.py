@@ -2,8 +2,10 @@
 """Copy real build outputs and source documentation into the portable site."""
 import hashlib
 import json
+import re
 import shutil
-from bitborn import ROOT, artifact_paths
+from pathlib import Path
+from bitborn import ROOT, artifact_paths, read_bits, digest, targets
 
 
 def prepare():
@@ -13,8 +15,16 @@ def prepare():
     for line in table.splitlines():
         if line.startswith('| ') and not line.startswith(('| Milestone ', '| ---')):
             _, milestone, progress, _ = line.split('|')
-            milestones.append({'milestone': milestone.strip(), 'progress': progress.strip()})
-    (ROOT / 'site/progress.json').write_text(json.dumps({'updated': '2026-10-12', 'milestones': milestones}, indent=2) + '\n')
+            milestones.append({'milestone': re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', milestone.strip()), 'progress': progress.strip()})
+    updated = re.search(r'Updated \*\*(\d{4}-\d{2}-\d{2})\*\*', table)[1]
+    (ROOT / 'site/progress.json').write_text(json.dumps({'updated': updated, 'milestones': milestones}, indent=2) + '\n')
+    comparison = {}
+    for role, slug in (('before', 'exit-code'), ('after', 'exit-code-small')):
+        source = f'examples/{slug}/program.bits'
+        data, annotations = read_bits(ROOT / source)
+        comparison[role] = {'source': source, 'bytes': list(data), 'annotations': annotations,
+                            'sha256': digest(data), 'payloadSize': len(data), 'elfSize': 120 + len(data)}
+    (ROOT / 'site/optimization.json').write_text(json.dumps(comparison, indent=2) + '\n')
     downloads = ROOT / "site/downloads"
     downloads.mkdir(parents=True, exist_ok=True)
     checksums = []
@@ -30,9 +40,13 @@ def prepare():
         checksums.append(f"{hashlib.sha256(binary.read_bytes()).hexdigest()}  {relative.as_posix()}")
     (downloads / "SHA256SUMS").write_text("\n".join(checksums) + "\n")
     reference = ROOT / "site/reference"
-    for folder in ("docs", "examples", "boot"):
+    for folder in ("docs", "boot", 'challenges'):
         shutil.copytree(ROOT / folder, reference / folder, dirs_exist_ok=True)
-    for name in ("README.md", "ROADMAP.md", "CONTRIBUTING.md", "CHANGELOG.md", "LICENSE", "targets.json"):
+    example_folders = {'boot-sector'} | {Path(target['source']).parent.name for target in targets() if target['source'].startswith('examples/')}
+    for folder in sorted(example_folders):
+        shutil.copytree(ROOT / 'examples' / folder, reference / 'examples' / folder, dirs_exist_ok=True)
+    shutil.copyfile(ROOT / 'examples/README.md', reference / 'examples/README.md')
+    for name in ("README.md", "ROADMAP.md", "CONTRIBUTING.md", "CHANGELOG.md", "LICENSE", "targets.json", 'SHOWCASE.md', 'GOOD_FIRST_ISSUES.md'):
         shutil.copyfile(ROOT / name, reference / name)
     for asset in (ROOT / "assets").iterdir():
         shutil.copyfile(asset, ROOT / "site/assets" / asset.name)

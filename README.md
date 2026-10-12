@@ -22,8 +22,8 @@ bitborn explores that question by encoding machine instructions directly as
 binary digits. Every opcode. Every operand. Every branch displacement. No
 assembler translates the target code: we author the bytes themselves.
 
-**A real 512-byte BIOS boot program, ten working examples, four byte tools,
-and an interactive explorer.** This is an educational experiment, not a
+**A real 512-byte BIOS boot program, eleven reviewed examples, four byte tools,
+an editable boot builder, a visual CPU lab, and 20 binary challenges.** This is an educational experiment, not a
 production operating system.
 
 ![Real QEMU boot recording, captured from guest VGA frames](assets/boot.gif)
@@ -46,7 +46,7 @@ make run
 the serial terminal. `make test` uses headless QEMU and checks real guest behavior.
 The BIOS examples also work under TCG emulation on Apple Silicon. Linux ELF
 examples require a **Linux x86-64 kernel**; macOS skips their native test and
-Ubuntu CI executes all five.
+Ubuntu CI executes all six.
 
 ## Roadmap — visible progress
 
@@ -65,8 +65,12 @@ for exact evidence and remaining gates.
 | Public v0.1.0 images, source and checksums | ✅ Published; downloaded artifacts and checksums verified |
 | [v0.1.1 host-tool patch](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.1.1) | ✅ Published; comment/failed-write checks and downloaded artifacts verified |
 | Shared CPU model: flags, calls, stack and segmented memory | ✅ Locally verified; modern PUSH SP semantics checked in real QEMU |
-| Full boot-sector builder, visual CPU lab and 20 challenges | In development; browser and native checks underway |
-| Dedicated learning, architecture, examples and roadmap routes | In development; publication checks remain open |
+| Full editable 512-byte boot-sector builder | ✅ Chrome-tested; exact downloaded image/source boot the one-bit edit in QEMU |
+| Visual CPU lab: registers, flags, stack, memory and breakpoints | ✅ Five literal teaching programs and Chrome controls verified |
+| 20 challenges across four levels | ✅ All solutions pass model and QEMU goals; seeds fail; local progress and sharing tested |
+| Eight dedicated `.io` routes and a size-comparison lab | ✅ Locally verified; CI and live publication checks underway |
+| Original 12-byte exit versus 8-byte alternative | ✅ Independent sizes/encodings checked; native Linux CI required |
+| New browser GIFs, showcase and contributor issue forms | ✅ Genuine captured states with provenance; contributor files checked |
 | Protected mode, interrupts and executable loading | Future research; no working claim |
 
 ## From text bits to CPU instructions
@@ -137,10 +141,11 @@ It then disables interrupts and enters a controlled halt loop.
 | [512-byte boot sector](examples/boot-sector/README.md) | Greeting and halt | BIOS |
 | [Interactive monitor](examples/monitor/README.md) | Five exact commands and edited input | BIOS |
 | [Disk reads](examples/disk-read/README.md) | Load and execute additional sectors | BIOS |
+| [Eight-byte exit](examples/exit-code-small/README.md) | Same exit 42; smaller payload, more stack traffic | Linux x86-64 |
 
 Each guide links its canonical source, per-byte table, generated binary path,
 expected behavior and automated test. `make build` produces the artifacts.
-The five ELF programs consist of the unchanged payload plus 120-byte host-packed
+The six ELF programs consist of the unchanged payload plus 120-byte host-packed
 headers; they use Linux syscalls with no runtime library or linker.
 
 ```sh
@@ -154,19 +159,40 @@ and disk-read images use a separately handwritten loader and two padded sectors.
 
 ## Explore and contribute
 
-The static website has an editable instruction playground, all 512 annotated
-boot bytes, keyboard navigation, and a step-by-step **bounded educational
-simulator**. It never claims native browser execution. `make site-test` builds
-the portable site and checks its decoder, simulation, source hashes and links.
+Start with the [Boot Sector Builder](https://othmaneblial.github.io/bitborn/boot-builder/):
+all 512 bytes are editable, current decoding explains fields, and `.bits`/`.img`
+exports preserve your exact bytes. Change offset 176 from `01001000` to
+`01101000`, then boot the downloaded image: “Hello” becomes “hello”.
+
+The [CPU Lab](https://othmaneblial.github.io/bitborn/cpu-lab/) shows all modeled
+16-bit registers, flags, changed register bits, stack and memory. Step, run,
+pause, adjust speed, set breakpoints or inspect a bounded literal program.
+The [20 challenges](https://othmaneblial.github.io/bitborn/challenges/) provide
+four difficulty levels, hints, semantic goals, share links and progress stored
+only in your browser. Every reviewed solution also runs in QEMU; success is
+based on the behavior goals rather than equality with one answer.
+
+Browser execution is a **bounded educational model**, with a 4,096-step ceiling,
+1 MiB modeled memory and explicit unsupported-encoding errors. It does not run
+native browser code. `make site-test` verifies source hashes, execution and links.
+[Learning paths](https://othmaneblial.github.io/bitborn/learn/),
+[architecture](https://othmaneblial.github.io/bitborn/architecture/),
+[examples](https://othmaneblial.github.io/bitborn/examples/) and the
+[live roadmap](https://othmaneblial.github.io/bitborn/roadmap/) have dedicated pages.
+The roadmap and homepage progress feed are rebuilt from the table above.
 
 ```sh
 npm ci                         # development-only browser test dependency
 npx playwright install chromium
 npm run test:browser            # real Chrome interactions and mobile layouts
+npx playwright install firefox webkit
+npm run test:cross-browser      # Firefox/WebKit interactions and exact downloads
+python3 tools/verify_browser_export.py # actual QEMU boot of the browser download
 python3 -m http.server 8000 --directory site
 ```
 
 [Beginner tutorial](docs/tutorials/from-bits-to-boot.md) · [Contributing](CONTRIBUTING.md) ·
+[Reproducible showcase](SHOWCASE.md) · [Good first contributions](GOOD_FIRST_ISSUES.md) ·
 [Changelog](CHANGELOG.md) · [Roadmap](ROADMAP.md) ·
 [v0.1.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.1.0)
 
@@ -175,9 +201,12 @@ python3 -m http.server 8000 --directory site
 Independent encoding assertions and branch checks supplement reviewed SHA-256
 hashes. QEMU tests verify exact serial output, halt state, actual VGA/loaded-disk
 memory, every monitor command, editing, buffer bounds, reboot, and a forced BIOS
-disk-read failure. Native Linux CI runs all five ELF payloads. Browser tests
+disk-read failure. Native Linux CI runs all six ELF payloads. Browser tests
 exercise bit edits, opcode changes, unsupported encodings, signature inspection,
 full simulated boot, copy controls, reduced-motion mode and mobile layouts.
+New checks cover every challenge's positive and negative case, exact bit-edit
+budgets, local storage failures, downloaded image/source identity, lab calls and
+flags, live memory fetch, breakpoints, and source-derived roadmap rendering.
 
 Hashes prove byte identity, not correctness or authorship. QEMU proves emulated
 behavior, not physical-hardware support. CI status is linked above.

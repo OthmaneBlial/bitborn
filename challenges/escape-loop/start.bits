@@ -1,0 +1,4 @@
+# Canonical starting puzzle: every executable byte is a literal binary token.
+11111010 # instruction | CLI | Mask interrupts before the control-flow puzzle.
+11101011 11111110 # instruction | JMP -2 | The next offset is 3; minus two returns to this JMP at 1 forever.
+11110100 # instruction | HLT | This instruction is unreachable in the starting program.

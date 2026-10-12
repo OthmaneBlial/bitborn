@@ -1,0 +1,4 @@
+# Canonical reviewed solution: directly authored binary, not assembler output.
+11111010 # instruction | CLI | Mask interrupts so the final halt stays stopped.
+10111000 00101010 00000000 # instruction | MOV AX,42 | B8 chooses AX; 2A 00 is the little-endian immediate 42.
+11110100 # instruction | HLT | Stop with AX equal to 42.

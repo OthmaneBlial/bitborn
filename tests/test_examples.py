@@ -34,7 +34,7 @@ class ExampleTests(unittest.TestCase):
 
     @unittest.skipUnless(platform.system() == "Linux" and platform.machine() == "x86_64", "native Linux x86-64 execution runs in CI")
     def test_native_linux_examples(self):
-        for slug, status, stdout in [("exit-code", 42, b""), ("arithmetic", 42, b""),
+        for slug, status, stdout in [("exit-code", 42, b""), ("exit-code-small", 42, b""), ("arithmetic", 42, b""),
                                      ("print-text", 0, b"Hello from raw bits!\n"), ("loop-count", 5, b""), ("compare-values", 42, b"")]:
             with self.subTest(example=slug):
                 result = subprocess.run([str(ROOT / f"build/{slug}.elf")], capture_output=True, timeout=5)

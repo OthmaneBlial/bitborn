@@ -1,0 +1,6 @@
+# Canonical starting puzzle: every executable byte is a literal binary token.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 00000000 00000000 # instruction | MOV AX,0 | Initialize AH so a byte load can leave it at zero.
+10100001 00001000 01111110 # instruction | MOV AX,[7E08] | A1 loads a full word, accidentally including the sentinel high byte.
+11110100 # instruction | HLT | Stop before the literal data so it is never executed.
+01000010 01111111 # data | B and sentinel | Physical 7E08 stores 42; 7E09 stores 7F to expose an unwanted word read.

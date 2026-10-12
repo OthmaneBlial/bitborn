@@ -1,0 +1,10 @@
+# Canonical starting puzzle: every executable byte is a literal binary token.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 01000010 00000000 # instruction | MOV AX,0042 | Initialize AL to ASCII B.
+10111111 00000001 00000110 # instruction | MOV DI,0601 | Begin at the right-hand byte of the destination.
+11111100 # instruction | CLD | The wrong direction makes DI increase instead of decrease.
+10101010 # instruction | STOSB | Store B through ES:DI and advance DI to 0602.
+10110000 01000001 # instruction | MOV AL,41 | Prepare ASCII A.
+10101010 # instruction | STOSB | Store A to the right of B, rather than to its left.
+11111100 # instruction | CLD | Restore the conventional forward direction.
+11110100 # instruction | HLT | Stop after the incorrect traversal.

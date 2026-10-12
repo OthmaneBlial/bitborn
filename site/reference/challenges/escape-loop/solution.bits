@@ -1,0 +1,4 @@
+# Canonical reviewed solution: directly authored binary, not assembler output.
+11111010 # instruction | CLI | Mask interrupts before the control-flow puzzle.
+11101011 00000000 # instruction | JMP +0 | A zero displacement lands at the next instruction, offset 3.
+11110100 # instruction | HLT | Execution now reaches the halt.
