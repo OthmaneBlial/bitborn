@@ -1,0 +1,28 @@
+# Literal, reviewed 286+ real-mode contract probe. No assembler generates these bytes.
+11111010 # instruction | CLI | Keep maskable interrupts disabled.
+11101010 00000110 01111100 00000000 00000000 # instruction | JMP 0000:7C06 | Normalize CS.
+00110001 11000000 # instruction | XOR AX,AX | Zero the segment source.
+10001110 11011000 # instruction | MOV DS,AX | Set DS to zero.
+10001110 11000000 # instruction | MOV ES,AX | Set ES to zero.
+10001110 11010000 # instruction | MOV SS,AX | Set SS to zero.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Initialize the stack.
+11111100 # instruction | CLD | Make direction deterministic.
+01010100 # instruction | PUSH SP | Save the original SP on modern x86.
+01011011 # instruction | POP BX | Retrieve the saved SP.
+10111000 11111111 01111111 # instruction | MOV AX,7FFF | Prepare signed overflow.
+00000101 00000001 00000000 # instruction | ADD AX,1 | Set OF SF AF PF, clear CF ZF.
+10011100 # instruction | PUSHF | Save actual CPU flags.
+01011001 # instruction | POP CX | Expose actual flags in CX.
+10111000 00000000 00010000 # instruction | MOV AX,1000 | Prepare a nonzero segment.
+10001110 11011000 # instruction | MOV DS,AX | Select physical base 10000.
+10111000 00110100 00010010 # instruction | MOV AX,1234 | Prepare a word.
+10100011 00100000 00000000 # instruction | MOV [DS:0020],AX | Write little-endian memory.
+10111000 00000000 00000000 # instruction | MOV AX,0 | Clear the destination.
+10100001 00100000 00000000 # instruction | MOV AX,[DS:0020] | Reload the stored word.
+00110001 11111111 # instruction | XOR DI,DI | Initialize the subroutine result.
+11101000 00000100 00000000 # instruction | CALL +4 | Push logical return IP 7C32 and call 7C36.
+11111010 # instruction | CLI | Keep the halt controlled.
+11110100 # instruction | HLT | Halt at 7C33; saved next IP is 7C34.
+11101011 11111101 # instruction | JMP -3 | Return to HLT if execution resumes.
+01000111 # instruction | INC DI | Prove the subroutine executed.
+11000011 # instruction | RET | Return to 7C32 with SP restored.

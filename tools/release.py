@@ -7,9 +7,9 @@ import shutil
 import subprocess
 import tarfile
 if __package__:
-    from .bitborn import ROOT, verify
+    from .bitborn import ROOT, verify, artifact_paths
 else:
-    from bitborn import ROOT, verify
+    from bitborn import ROOT, verify, artifact_paths
 
 
 def archive(entries):
@@ -30,8 +30,7 @@ def prepare():
     version = (ROOT / "VERSION").read_text().strip()
     destination = ROOT / "build" / f"release-v{version}"
     destination.mkdir(exist_ok=True)
-    files = {path.name: path.read_bytes() for path in (ROOT / "build").iterdir()
-             if path.suffix in {".img", ".bin", ".elf"} and path.stem != "loader"}
+    files = {path.as_posix(): (ROOT / 'build' / path).read_bytes() for path in artifact_paths()}
     files["README.txt"] = (f"bitborn v{version} — Software born from raw bits.\n"
         "BIOS: qemu-system-i386 -drive file=boot.img,format=raw,if=floppy -boot a -serial stdio\n"
         "monitor.img, disk-read.img, keyboard.img and vga.img boot the same way.\n"

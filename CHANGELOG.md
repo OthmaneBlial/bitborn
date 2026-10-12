@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+- Correct modern real-mode `PUSH SP` in the bounded browser model and verify
+  stack/flags/call/segmented-memory behavior with an independent QEMU probe.
+- Add modeled arithmetic flags, CS/logical IP, near calls/returns, direct memory,
+  string direction and memory-based instruction fetch for edited programs.
+- Add strict, bounded literal `.bits` parsing, exact formatting, image framing
+  validation and per-bit change descriptions shared by new browser instruments.
+- Restrict public downloads and release archives to reviewed manifest outputs;
+  browser test exports or other temporary images cannot enter published artifacts.
+
 ## 0.1.1 — 2026-10-12
 
 - Accept arbitrary `#` comment prose, including pipe separators, without changing

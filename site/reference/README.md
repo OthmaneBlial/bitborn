@@ -64,6 +64,9 @@ for exact evidence and remaining gates.
 | Interactive `.io` website and mobile browser checks | ✅ Live; HTTPS assets and Chrome interactions verified |
 | Public v0.1.0 images, source and checksums | ✅ Published; downloaded artifacts and checksums verified |
 | [v0.1.1 host-tool patch](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.1.1) | ✅ Published; comment/failed-write checks and downloaded artifacts verified |
+| Shared CPU model: flags, calls, stack and segmented memory | ✅ Locally verified; modern PUSH SP semantics checked in real QEMU |
+| Full boot-sector builder, visual CPU lab and 20 challenges | In development; browser and native checks underway |
+| Dedicated learning, architecture, examples and roadmap routes | In development; publication checks remain open |
 | Protected mode, interrupts and executable loading | Future research; no working claim |
 
 ## From text bits to CPU instructions

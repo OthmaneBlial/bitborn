@@ -10,6 +10,23 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 
+def artifact_paths(root=ROOT):
+    """Only reviewed target outputs belong in public downloads or releases."""
+    paths = set()
+    for target in json.loads((root / 'targets.json').read_text()):
+        output = Path(target['output'])
+        if output.is_absolute() or '..' in output.parts:
+            raise ValueError('Target outputs must stay inside build/')
+        if target['source'] == 'boot/loader.bits':
+            continue
+        paths.add(output)
+        if target.get('environment') == 'linux-x86_64':
+            paths.add(output.with_suffix('.elf'))
+        if target.get('bootable') or target.get('loader'):
+            paths.add(output.with_suffix('.img'))
+    return sorted(paths)
+
+
 def read_bits(path):
     data = bytearray()
     annotations = []

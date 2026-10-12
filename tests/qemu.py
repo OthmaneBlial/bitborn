@@ -24,7 +24,7 @@ class Guest:
             raise RuntimeError(f"{executable} is required; install QEMU")
         self.process = subprocess.Popen([executable, "-machine", "pc,accel=tcg", "-m", "16M", "-display", "none",
             "-drive", f"file={self.image},format=raw,if=floppy,readonly=on", "-boot", "a", "-serial", f"file:{self.serial}",
-            "-qmp", f"unix:{qmp},server=on,wait=off", "-no-reboot"] + (["-S"] if self.paused else []),
+            "-qmp", f"unix:{qmp},server=on,wait=off", "-no-reboot", "-nic", "none"] + (["-S"] if self.paused else []),
             stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
         try:
             deadline = time.monotonic() + 15

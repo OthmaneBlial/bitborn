@@ -17,4 +17,5 @@ site-test: site
 	node --check site/app.js
 	node --check site/simulator.mjs
 	node tests/test_site.mjs
+	node tests/test_cpu.mjs
 	$(PYTHON) -m unittest tests.test_docs -v

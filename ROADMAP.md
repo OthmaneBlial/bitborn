@@ -34,7 +34,7 @@ an idea below is not an advertised feature.
 - [x] Live website interactions repeated successfully in Chrome; deployed boot,
   monitor, disk-read, annotations, GIF and social image match local bytes exactly.
 - [x] Official [website](https://othmaneblial.github.io/bitborn/) and repository
-  homepage; all fifteen requested topics and a custom repository social preview.
+  homepage; twenty relevant topics and a custom repository social preview.
 - [x] Website/documentation/browser CI and clean-checkout reproduction proof:
   [ede398e verification](https://github.com/OthmaneBlial/bitborn/actions/runs/38212231354)
   and [successful deployment](https://github.com/OthmaneBlial/bitborn/actions/runs/38212311862).
@@ -58,6 +58,24 @@ not release requirements or advertised capabilities.
   passed all 20 Python tests, browser checks and reproduction. All eight public
   assets match the prepared files and all checksums pass; the five boot images
   are byte-for-byte identical to v0.1.0.
+
+## v0.2 evolution — work in progress
+
+- [x] Audit the v0.1.1 foundation: existing 20 Python tests and site checks pass.
+- [x] Fix the bounded simulator's `PUSH SP` behavior for 286+ real-mode x86.
+  Independent real QEMU execution checks the saved SP, signed-overflow flags,
+  little-endian segmented memory and a near call/return.
+- [x] Extend the shared teaching model with CS, logical IP, arithmetic flags,
+  near calls/returns, direct memory, string direction and live instruction fetch.
+  Literal source parsing and exports have explicit input limits.
+- [ ] Publish the full editable 512-byte Boot Sector Builder after browser
+  downloads and actual QEMU execution of an edited image pass.
+- [ ] Publish the Visual CPU Lab with register, flag, stack and memory inspection.
+- [ ] Publish 20 binary challenges with deterministic goals and native checks.
+- [ ] Publish dedicated playground, examples, learning, architecture and roadmap
+  routes. The website roadmap must reflect this source progress at each build.
+- [ ] Add a verified before/after byte-size optimization example.
+- [ ] Publish a meaningful v0.2 release and independently verify its downloads.
 
 ## Future experiments
 

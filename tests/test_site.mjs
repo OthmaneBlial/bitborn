@@ -20,18 +20,20 @@ assert.throws(() => validateBootData({...boot,bytes:boot.bytes.map((b,i) => i ==
 assert.equal(createHash('sha256').update(Uint8Array.from(boot.bytes)).digest('hex'),boot.sha256);
 
 const cpu = createState();
-step([0xB8,0xFF,0xFF],cpu); assert.equal(cpu.AX,65535);
-cpu.ip=0; step([0x05,1,0],cpu); assert.equal(cpu.AX,0); assert.equal(cpu.zf,true); assert.equal(cpu.cf,true);
-cpu.ip=0; step([0x40],cpu); assert.equal(cpu.AX,1); assert.equal(cpu.cf,true);
-cpu.ip=0; step([0x3D,1,0],cpu); assert.equal(cpu.AX,1); assert.equal(cpu.zf,true);
-cpu.ip=0; step([0x31,0xC0],cpu); assert.equal(cpu.AX,0); assert.equal(cpu.cf,false);
-cpu.ip=0; step([0xB4,0x0E],cpu); assert.equal(cpu.AX,0x0E00);
-cpu.ip=0; step([0xB0,0x41],cpu); assert.equal(cpu.AX,0x0E41);
-cpu.SP=0x7C00; cpu.ip=0; step([0x50],cpu); assert.equal(cpu.SP,0x7BFE);
-cpu.AX=0; cpu.ip=0; step([0x58],cpu); assert.equal(cpu.AX,0x0E41); assert.equal(cpu.SP,0x7C00);
-cpu.ip=0; step([0xCD,0x10],cpu); assert.equal(cpu.output,'A');
-cpu.ip=0; assert.throws(() => step([0xCD,0x16],cpu),/outside this model/);
-cpu.ip=0; cpu.steps=4096; assert.throws(() => step([0x90],cpu),/4,096/);
+// The one-instruction editor replaces its loaded bytes while retaining registers.
+const execute = bytes => { cpu.memory.set(bytes, cpu.loadAddress); return step(bytes, cpu); };
+execute([0xB8,0xFF,0xFF]); assert.equal(cpu.AX,65535);
+cpu.ip=0; execute([0x05,1,0]); assert.equal(cpu.AX,0); assert.equal(cpu.zf,true); assert.equal(cpu.cf,true);
+cpu.ip=0; execute([0x40]); assert.equal(cpu.AX,1); assert.equal(cpu.cf,true);
+cpu.ip=0; execute([0x3D,1,0]); assert.equal(cpu.AX,1); assert.equal(cpu.zf,true);
+cpu.ip=0; execute([0x31,0xC0]); assert.equal(cpu.AX,0); assert.equal(cpu.cf,false);
+cpu.ip=0; execute([0xB4,0x0E]); assert.equal(cpu.AX,0x0E00);
+cpu.ip=0; execute([0xB0,0x41]); assert.equal(cpu.AX,0x0E41);
+cpu.SP=0x7C00; cpu.ip=0; execute([0x50]); assert.equal(cpu.SP,0x7BFE);
+cpu.AX=0; cpu.ip=0; execute([0x58]); assert.equal(cpu.AX,0x0E41); assert.equal(cpu.SP,0x7C00);
+cpu.ip=0; execute([0xCD,0x10]); assert.equal(cpu.output,'A');
+cpu.ip=0; assert.throws(() => execute([0xCD,0x16]),/outside this model/);
+cpu.ip=0; cpu.steps=4096; assert.throws(() => execute([0x90]),/4,096/);
 
 for (const annotation of boot.annotations.filter(item => item.kind === 'instruction')) assert.equal(decode(boot.bytes,annotation.offset).size,annotation.size,`decoder boundary at ${annotation.offset}`);
 const machine = createState(boot.bytes);

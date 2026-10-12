@@ -1,0 +1,57 @@
+{
+  "updated": "2026-10-12",
+  "milestones": [
+    {
+      "milestone": "512-byte handwritten boot program and four byte tools",
+      "progress": "\u2705 QEMU-tested, public"
+    },
+    {
+      "milestone": "Linux exit, arithmetic, text, loops and comparisons",
+      "progress": "\u2705 Native execution passed in Linux CI"
+    },
+    {
+      "milestone": "BIOS keyboard and direct VGA memory writes",
+      "progress": "\u2705 QEMU-tested"
+    },
+    {
+      "milestone": "Multi-sector loader and interactive monitor",
+      "progress": "\u2705 QEMU-tested: help, clear, about, reboot, peek"
+    },
+    {
+      "milestone": "Ten example guides and complete byte tables",
+      "progress": "\u2705 Documented, with actual execution checks"
+    },
+    {
+      "milestone": "Real boot screenshot/GIF and architecture tutorial",
+      "progress": "\u2705 Captured from QEMU and reproducible"
+    },
+    {
+      "milestone": "Interactive `.io` website and mobile browser checks",
+      "progress": "\u2705 Live; HTTPS assets and Chrome interactions verified"
+    },
+    {
+      "milestone": "Public v0.1.0 images, source and checksums",
+      "progress": "\u2705 Published; downloaded artifacts and checksums verified"
+    },
+    {
+      "milestone": "[v0.1.1 host-tool patch](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.1.1)",
+      "progress": "\u2705 Published; comment/failed-write checks and downloaded artifacts verified"
+    },
+    {
+      "milestone": "Shared CPU model: flags, calls, stack and segmented memory",
+      "progress": "\u2705 Locally verified; modern PUSH SP semantics checked in real QEMU"
+    },
+    {
+      "milestone": "Full boot-sector builder, visual CPU lab and 20 challenges",
+      "progress": "In development; browser and native checks underway"
+    },
+    {
+      "milestone": "Dedicated learning, architecture, examples and roadmap routes",
+      "progress": "In development; publication checks remain open"
+    },
+    {
+      "milestone": "Protected mode, interrupts and executable loading",
+      "progress": "Future research; no working claim"
+    }
+  ]
+}

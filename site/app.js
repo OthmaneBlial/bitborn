@@ -92,6 +92,7 @@ if ($('bit-editor')) {
   $('reset-state').addEventListener('click', () => { cpu = createState(); showRegisters($('play-registers'),cpu); $('play-status').textContent = 'CPU state reset. AX = 0, ZF = 0, CF = 0.'; $('play-status').classList.remove('error'); });
   $('execute-instruction').addEventListener('click', () => {
     cpu.ip = 0;
+    cpu.memory.set(bytes, cpu.loadAddress);
     try {
       const instruction = step(bytes,cpu);
       showRegisters($('play-registers'),cpu);
@@ -134,7 +135,7 @@ if ($('demo-motion')) {
 if ($('byte-map')) initializeBoot().catch(error => { $('boot-load-status').textContent = `Unable to load the image: ${error.message}`; $('boot-load-status').classList.add('error'); $('selected-mnemonic').textContent = 'Image unavailable'; });
 
 async function initializeBoot() {
-  const response = await fetch('boot.json');
+  const response = await fetch(new URL('./boot.json', import.meta.url));
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const data = validateBootData(await response.json()), bytes = data.bytes;
   const digest = await crypto.subtle.digest('SHA-256',Uint8Array.from(bytes));
