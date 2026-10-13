@@ -6,6 +6,21 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 
 ## Current execution record
 
+Native paging (2026-10-13): 424 literal bytes build the directory and table as
+runtime data, identity map the low 4 MiB, enable PG/WP and record one native #PF
+with error 3, EIP=7C99 and CR2=B000. The handler repairs PTE.RW, uses INVLPG,
+discards only the error slot and retries the unchanged store. One PTE bit or
+one WP bit avoids that fault. Every entry in both 4 KiB structures, target value,
+retained frame, balanced stack and instruction/source/image integrity is checked.
+Captures contain actual structures and register/frame RAM with independent
+mixed-mode goldens and hashes. Counts become 60 reviewed targets, 96 artifacts,
+twelve BIOS images and 19 gallery entries. The model stops at LGDT after seven
+setup instructions; user-mode isolation and general fault handling remain open.
+The full native suite passes 102 tests with one expected macOS native-Linux skip;
+site/model/doc checks and complete Chrome, Firefox 157 and WebKit 27.2 routes
+pass locally. Browser checks verify the three literal imports, unchanged state
+at the unsupported LGDT boundary, exact native downloads and gallery layout.
+
 Native timer IRQ (2026-10-13): 568 literal bytes remap PIC/PIT IRQ0, install one
 32-bit interrupt gate and record CPU-generated frames. Three separate QEMU boots
 show counts 3/2 for a one-bit limit change, and one entry with ISR0 set plus a
@@ -701,7 +716,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 55 | 3 | Bounded native allocator with memory-map, ownership and overflow evidence | H | M | Reviewed BIOS target | High | Complete: fixed real-mode arena, two native five-request logs, one-bit ownership control, zero/exact-fit/exhaustion/wrap checks and guarded immutable code/disk proof; free, isolation and paging remain open |
 | 56 | 3 | Protected-mode exception handlers with controlled fault injection | H | M | IDT target | High | Partial: native #UD and selector #GP/error-code fixtures; general dispatch open |
 | 57 | 3 | Timer IRQ experiment with explicit PIC setup and deterministic QEMU assertions | H | M | 56 | High | Complete: explicit PIC/PIT setup, 3/2 native frame logs, guarded untouched IRETD frames, wrong-EOI pending/ISR proof and source/image integrity; timing, general handlers and physical hardware remain open |
-| 58 | 3 | Paging experiment with inspected page tables and deliberate page-fault evidence | H | L | 55,56 | High | Open |
+| 58 | 3 | Paging experiment with inspected page tables and deliberate page-fault evidence | H | L | 55,56 | High | Complete: full 2048-entry structure inspection, native #PF error/CR2/frame, PTE repair, INVLPG and unchanged store retry; independent PTE/WP controls, code/image integrity and explicit model boundary; user-mode isolation remains open |
 | 59 | 0 | QEMU runner resource/error-path checks and bounded process cleanup | H | H | Existing Guest harness | Medium | Complete: resource unwind, QMP bounds/deadlines and actual child kill/reap; disk quotas remain outside scope |
 | 60 | 2 | Accurate release/community draft showing actual new capabilities; no automatic posting | M | H | Verified release | Low | Complete: release published; community draft remains unposted |
 | 61 | 0 | Cancel delayed file imports/errors after a newer source choice or editor draft | H | H | CPU Lab import | Medium | Complete: race reproduced and checked in three browsers |

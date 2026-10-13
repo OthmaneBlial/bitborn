@@ -1,0 +1,199 @@
+{
+  "kind": "Actual final QMP snapshots, native-written page-fault logs and both complete paging structures from three independent QEMU boots; not an instruction trace or memory-isolation claim",
+  "qemu": "QEMU emulator version 11.1.1",
+  "textFormat": "Native HMP register output with LF endings and trailing whitespace removed",
+  "goldenFormat": "Independent instruction-only NDISASM blocks, 16-bit header then 32-bit kernel/handler; source-relative offsets",
+  "memoryMap": {
+    "loadAddress": 31744,
+    "directory": 16384,
+    "table": 20480,
+    "faultLog": 24576,
+    "logSize": 24,
+    "targetLinearAndPhysical": 45056,
+    "stackTop": 36864,
+    "identityMapEndExclusive": 4194304
+  },
+  "controls": {
+    "writable": {
+      "changedByte": 123,
+      "mask": 2,
+      "effect": "PTE RW allows the store with WP enabled"
+    },
+    "wp-off": {
+      "changedByte": 148,
+      "mask": 1,
+      "effect": "Supervisor store ignores a read-only PTE when CR0.WP is zero"
+    }
+  },
+  "sourceSha256": {
+    "tools/record_paging.py": "3f621a6bc320a4fe8da41b87622f51b4d7a3c58f3259ba2a80380cd78f98c945",
+    "tools/build.py": "0d7fccd1a6be5c7336dbd8bd9f56bd0d05999cf1c5a3ae3e454b4303ced67509",
+    "tests/qemu.py": "30bccf107c84c82d2045de4c605d5e8104eaa682b3e8e0b165ff16e0eb5315c2",
+    "tests/paging_checks.py": "3e1010c13519c88e81989cd6c72e779e80ec970d66e089f1578799c23e0edcda",
+    "examples/paging/program.bits": "3664a77554c82dfe2b994b633ebc6bf67b2c90a8e9a29c92d51fada0a79f7254",
+    "examples/paging/writable.bits": "14a633c74f4571e5ab314ba97f81071b24b4c8a858b60144e8f08454254188b7",
+    "examples/paging/wp-off.bits": "c81c18fde03903187359bec598a5862d7d64e92a0f4a749623347b75984dbd2f"
+  },
+  "captures": [
+    {
+      "source": "examples/paging/program.bits",
+      "payloadSize": 424,
+      "payloadSha256": "6db0671b2c518360688c8053bf8df4488523787f10a662eb67241cc5ab129ec8",
+      "imageSize": 512,
+      "imageSha256": "c29d1705933ee99d08ac7ba8c841c37e865d41deb1e078d21e0ad5ffc885e80a",
+      "snapshot": {
+        "registers": {
+          "AX": 65670,
+          "CX": 0,
+          "DI": 24576,
+          "SP": 36864
+        },
+        "segments": {
+          "CS": 8,
+          "DS": 16,
+          "ES": 16,
+          "SS": 16
+        },
+        "haltIP": 31908,
+        "flags": 134,
+        "cr0": 2147549201,
+        "cr2": 45056,
+        "cr3": 16384,
+        "cr4": 0,
+        "logHex": "0100000003000000997c000000b000000800000086000100",
+        "targetHex": "2a000000",
+        "remainingFrameHex": "03000000997c00000800000086000100",
+        "directorySha256": "723218036bbf14e476414841bf8858392049fd552f81c7c123d5ce4ee1d4de93",
+        "tableSha256": "bd6727cdfc90a9e5375b8c6d139f2bb894a0f1b3d373350ea3a5cb27ae94ee1e",
+        "payloadRamHex": "faea067c000031c08ed88ed0bc007cfc0f0116187d0f20c06683c8010f22c066ea287c0000080000b8100000008ed88ec08ed0bc009000000f011d1e7d000031c0bf00600000b906000000f3abbf00400000b900040000f3abb900040000b803000000ab0500100000e2f8c7050040000003500000c6052c50000001c70500b0000000000000b8004000000f22d80f20c00d000001800f22c0c70500b000002a000000f4ebfd000000000000000000008b0424a3046000008b442404a3086000000f20d0a30c6000008b442408a3106000008b44240ca314600000ff0500600000800d2c500000020f013d00b0000083c404cf000000000000000000000000000000000000000000ffff0000009acf00ffff00000093cf001700007d00007700307d000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b07c0800008e0000",
+        "payloadRamSha256": "7a124a5e1d810004e2e2e733161a9de4584ee57f0d8ece3237ef6e58f2a5537b",
+        "instructionRamSha256": "37b98460764166f13bbd9c671f757f65c6b2fa80a67f80824fe359ed0bd068ef"
+      },
+      "assets": {
+        "registers.txt": {
+          "file": "assets/paging-program-registers.txt",
+          "sha256": "243e20ad405ff70f37757295b0d603033f21484a17e906672048262981a41d68"
+        },
+        "disassembly.txt": {
+          "file": "assets/paging-program-disassembly.txt",
+          "sha256": "834a9b7fb9276750d801d027418d06b4531e7bcf1c39298d63ab267522f734cb"
+        },
+        "directory.bin": {
+          "file": "assets/paging-program-directory.bin",
+          "sha256": "723218036bbf14e476414841bf8858392049fd552f81c7c123d5ce4ee1d4de93"
+        },
+        "table.bin": {
+          "file": "assets/paging-program-table.bin",
+          "sha256": "bd6727cdfc90a9e5375b8c6d139f2bb894a0f1b3d373350ea3a5cb27ae94ee1e"
+        }
+      }
+    },
+    {
+      "source": "examples/paging/writable.bits",
+      "payloadSize": 424,
+      "payloadSha256": "b529c9dfb5b686c40eb80bb553146add5ced492a0df48362803d53f05c27d90b",
+      "imageSize": 512,
+      "imageSha256": "8889be14c3e6696198d45ccc774dcc77afdbc5dc549ef4017171cc8d9b114f9f",
+      "snapshot": {
+        "registers": {
+          "AX": 2147549201,
+          "CX": 0,
+          "DI": 24576,
+          "SP": 36864
+        },
+        "segments": {
+          "CS": 8,
+          "DS": 16,
+          "ES": 16,
+          "SS": 16
+        },
+        "haltIP": 31908,
+        "flags": 134,
+        "cr0": 2147549201,
+        "cr2": 0,
+        "cr3": 16384,
+        "cr4": 0,
+        "logHex": "000000000000000000000000000000000000000000000000",
+        "targetHex": "2a000000",
+        "remainingFrameHex": "00000000000000000000000000000000",
+        "directorySha256": "723218036bbf14e476414841bf8858392049fd552f81c7c123d5ce4ee1d4de93",
+        "tableSha256": "f3b7b50df3f3dcd3215923b64e563991448d80bb14084fbe9d201fe3a42e1ed0",
+        "payloadRamHex": "faea067c000031c08ed88ed0bc007cfc0f0116187d0f20c06683c8010f22c066ea287c0000080000b8100000008ed88ec08ed0bc009000000f011d1e7d000031c0bf00600000b906000000f3abbf00400000b900040000f3abb900040000b803000000ab0500100000e2f8c7050040000003500000c6052c50000003c70500b0000000000000b8004000000f22d80f20c00d000001800f22c0c70500b000002a000000f4ebfd000000000000000000008b0424a3046000008b442404a3086000000f20d0a30c6000008b442408a3106000008b44240ca314600000ff0500600000800d2c500000020f013d00b0000083c404cf000000000000000000000000000000000000000000ffff0000009acf00ffff00000093cf001700007d00007700307d000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b07c0800008e0000",
+        "payloadRamSha256": "5510f03fcca5e24266a047262fbdd9428c5babb6c4c037364d1142f4bd051598",
+        "instructionRamSha256": "b168413f2b95fb22a93831284eb884559a988984363f7d3e2d8ec40c3a38775b"
+      },
+      "assets": {
+        "registers.txt": {
+          "file": "assets/paging-writable-registers.txt",
+          "sha256": "6d062f259a9b0843ec6e7528cb0ecbbf2dcca77b13649221bbe4f6b9b3562ad7"
+        },
+        "disassembly.txt": {
+          "file": "assets/paging-writable-disassembly.txt",
+          "sha256": "abd21a0a81981f0f92401b525515c830d6a268a321537b959a9c8c8c4aae705e"
+        },
+        "directory.bin": {
+          "file": "assets/paging-writable-directory.bin",
+          "sha256": "723218036bbf14e476414841bf8858392049fd552f81c7c123d5ce4ee1d4de93"
+        },
+        "table.bin": {
+          "file": "assets/paging-writable-table.bin",
+          "sha256": "f3b7b50df3f3dcd3215923b64e563991448d80bb14084fbe9d201fe3a42e1ed0"
+        }
+      }
+    },
+    {
+      "source": "examples/paging/wp-off.bits",
+      "payloadSize": 424,
+      "payloadSha256": "3867bacc66a3f99ed90f84a2f896d2a8c6c1714d60f17c0009f98d0fcac1d2fd",
+      "imageSize": 512,
+      "imageSha256": "f30a7b40962f4aca3a0374b13fae75bd0dd65b5732f318b92c68786cf5c7bfb7",
+      "snapshot": {
+        "registers": {
+          "AX": 2147483665,
+          "CX": 0,
+          "DI": 24576,
+          "SP": 36864
+        },
+        "segments": {
+          "CS": 8,
+          "DS": 16,
+          "ES": 16,
+          "SS": 16
+        },
+        "haltIP": 31908,
+        "flags": 134,
+        "cr0": 2147483665,
+        "cr2": 0,
+        "cr3": 16384,
+        "cr4": 0,
+        "logHex": "000000000000000000000000000000000000000000000000",
+        "targetHex": "2a000000",
+        "remainingFrameHex": "00000000000000000000000000000000",
+        "directorySha256": "723218036bbf14e476414841bf8858392049fd552f81c7c123d5ce4ee1d4de93",
+        "tableSha256": "1abda99f88225323d578ee7659d2c883d0283c1bbe24bde5fab1e141300a7f15",
+        "payloadRamHex": "faea067c000031c08ed88ed0bc007cfc0f0116187d0f20c06683c8010f22c066ea287c0000080000b8100000008ed88ec08ed0bc009000000f011d1e7d000031c0bf00600000b906000000f3abbf00400000b900040000f3abb900040000b803000000ab0500100000e2f8c7050040000003500000c6052c50000001c70500b0000000000000b8004000000f22d80f20c00d000000800f22c0c70500b000002a000000f4ebfd000000000000000000008b0424a3046000008b442404a3086000000f20d0a30c6000008b442408a3106000008b44240ca314600000ff0500600000800d2c500000020f013d00b0000083c404cf000000000000000000000000000000000000000000ffff0000009acf00ffff00000093cf001700007d00007700307d000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b07c0800008e0000",
+        "payloadRamSha256": "523ab695e664fb7e5aa5d0595db21cd53ffe363906a2abf9765f219ccf85ca37",
+        "instructionRamSha256": "2b9aac80d4485938b501a9790f0cdde30ccca9f462dece820395389041012afd"
+      },
+      "assets": {
+        "registers.txt": {
+          "file": "assets/paging-wp-off-registers.txt",
+          "sha256": "507e05126284a416e682b021f2f8f3f6d3cfef41562bf900a1c02bd40fb28c9c"
+        },
+        "disassembly.txt": {
+          "file": "assets/paging-wp-off-disassembly.txt",
+          "sha256": "83feb4e22f2ccfa172c4db8ab6212229d851759a922eaabfd8054bc3bc23d2eb"
+        },
+        "directory.bin": {
+          "file": "assets/paging-wp-off-directory.bin",
+          "sha256": "723218036bbf14e476414841bf8858392049fd552f81c7c123d5ce4ee1d4de93"
+        },
+        "table.bin": {
+          "file": "assets/paging-wp-off-table.bin",
+          "sha256": "1abda99f88225323d578ee7659d2c883d0283c1bbe24bde5fab1e141300a7f15"
+        }
+      }
+    }
+  ],
+  "reproduce": "python3 tools/record_paging.py"
+}

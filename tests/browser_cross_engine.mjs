@@ -23,6 +23,7 @@ import {checkBitDiff} from './bit_diff_browser_checks.mjs';
 import {checkPrintLessons} from './print_browser_checks.mjs';
 import {checkVGABitmap} from './vga_bitmap_browser_checks.mjs';
 import {checkTimerIRQ} from './timer_irq_browser_checks.mjs';
+import {checkPaging} from './paging_browser_checks.mjs';
 import {checkIndicators} from './indicator_browser_checks.mjs';
 import {checkExecutionKeyboard} from './execution_keyboard_browser_checks.mjs';
 import {checkByteOrder} from './byte_order_browser_checks.mjs';
@@ -211,6 +212,7 @@ try {
       await checkPrintLessons(page,base);
       // VGA returns to the CPU lab required by the following indicator checks.
       await checkTimerIRQ(page,base);
+      await checkPaging(page,base);
       await checkVGABitmap(page,base);
       await checkIndicators(page);
       await checkExecutionKeyboard(page);

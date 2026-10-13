@@ -230,6 +230,10 @@
       "progress": "\u2705 568 literal bytes remap PIC/PIT IRQ0 to a protected-mode gate, record actual frames and return with IRETD; controls produce 3/2 entries or one blocked entry with ISR/pending-request proof; guards, unused slots, stack and immutable instructions/images checked; no browser hardware or timing claim"
     },
     {
+      "milestone": "Native paging and exact fault retry",
+      "progress": "\u2705 424 literal bytes build and inspect all 2048 directory/table entries, record #PF error 3 and CR2, repair PTE.RW, use INVLPG and retry the unchanged store; PTE/WP one-bit controls avoid the fault, with retained frames and code/image integrity; no browser paging or isolation claim"
+    },
+    {
       "milestone": "Short branch field microscope",
       "progress": "\u2705 Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged"
     },
@@ -298,7 +302,7 @@
       "progress": "\u2705 Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified"
     },
     {
-      "milestone": "Paging, general exception/NMI/APIC handling and physical hardware",
+      "milestone": "User-mode isolation, general exception/NMI/APIC handling and physical hardware",
       "progress": "Future research; no working claim"
     }
   ]

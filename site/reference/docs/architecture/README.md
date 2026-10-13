@@ -145,6 +145,15 @@ IRETD. One count bit changes three entries to two; one port bit leaves an IRQ
 in service with another request pending. It has no general interrupt driver,
 APIC or browser hardware model, and makes no timing claim.
 
+## Native paging and fault repair
+
+The [native paging experiment](../../examples/paging/README.md) builds a legacy
+directory/table in RAM, enables supervisor write protection and faults on a
+read-only page. It records error 3 and CR2, repairs the PTE, uses INVLPG and
+retries the original store with IRETD. Both complete structures and the retained
+frame are inspected in QEMU. PTE/WP controls distinguish permission from
+supervisor behavior; browser paging and user-mode isolation remain outside scope.
+
 ## Technical references
 
 - [Intel Software Developer's Manuals](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html): instruction encodings, real mode and flags.

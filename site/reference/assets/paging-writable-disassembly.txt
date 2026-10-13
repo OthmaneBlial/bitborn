@@ -1,0 +1,59 @@
+00000000  FA                cli
+00000001  EA067C0000        jmp word 0x0:word 0x7c06
+00000006  31C0              xor ax,ax
+00000008  8ED8              mov ds,ax
+0000000A  8ED0              mov ss,ax
+0000000C  BC007C            mov sp,0x7c00
+0000000F  FC                cld
+00000010  0F0116187D        lgdt word [0x7d18]
+00000015  0F20C0            mov eax,cr0
+00000018  6683C801          or eax,0x1
+0000001C  0F22C0            mov cr0,eax
+0000001F  66EA287C00000800  jmp word 0x8:dword 0x7c28
+00000028  B810000000        mov eax,0x10
+0000002D  8ED8              mov ds,eax
+0000002F  8EC0              mov es,eax
+00000031  8ED0              mov ss,eax
+00000033  BC00900000        mov esp,0x9000
+00000038  0F011D1E7D0000    lidt dword [0x7d1e]
+0000003F  31C0              xor eax,eax
+00000041  BF00600000        mov edi,0x6000
+00000046  B906000000        mov ecx,0x6
+0000004B  F3AB              rep stosd
+0000004D  BF00400000        mov edi,0x4000
+00000052  B900040000        mov ecx,0x400
+00000057  F3AB              rep stosd
+00000059  B900040000        mov ecx,0x400
+0000005E  B803000000        mov eax,0x3
+00000063  AB                stosd
+00000064  0500100000        add eax,0x1000
+00000069  E2F8              loop 0x63
+0000006B  C705004000000350  mov dword [0x4000],0x5003
+         -0000
+00000075  C6052C50000003    mov byte [0x502c],0x3
+0000007C  C70500B000000000  mov dword [0xb000],0x0
+         -0000
+00000086  B800400000        mov eax,0x4000
+0000008B  0F22D8            mov cr3,eax
+0000008E  0F20C0            mov eax,cr0
+00000091  0D00000180        or eax,0x80010000
+00000096  0F22C0            mov cr0,eax
+00000099  C70500B000002A00  mov dword [0xb000],0x2a
+         -0000
+000000A3  F4                hlt
+000000A4  EBFD              jmp 0xa3
+000000B0  8B0424            mov eax,[esp]
+000000B3  A304600000        mov [0x6004],eax
+000000B8  8B442404          mov eax,[esp+0x4]
+000000BC  A308600000        mov [0x6008],eax
+000000C1  0F20D0            mov eax,cr2
+000000C4  A30C600000        mov [0x600c],eax
+000000C9  8B442408          mov eax,[esp+0x8]
+000000CD  A310600000        mov [0x6010],eax
+000000D2  8B44240C          mov eax,[esp+0xc]
+000000D6  A314600000        mov [0x6014],eax
+000000DB  FF0500600000      inc dword [0x6000]
+000000E1  800D2C50000002    or byte [0x502c],0x2
+000000E8  0F013D00B00000    invlpg [0xb000]
+000000EF  83C404            add esp,0x4
+000000F2  CF                iret

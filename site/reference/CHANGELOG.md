@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add a 424-byte literal paging experiment: build a legacy directory/table,
+  record a native supervisor write #PF, repair PTE.RW, invalidate the translation
+  and retry the unchanged store with IRETD. Two independent permission/WP bit
+  controls avoid the fault. Capture complete structures, frames and code/image
+  hashes; browser paging and user-mode isolation remain unsupported.
+
 - Add a literal protected-mode timer IRQ experiment with actual frame logs.
   PIC/PIT setup, a guarded three-entry log and IRETD pass native QEMU checks.
   A count bit changes 3→2; a wrong EOI port bit leaves one IRQ in service with

@@ -24,5 +24,5 @@ for(const source of sources) {
   assert.equal(state.SP,0x7C00,`${source}: establish SP before calling BIOS`);
   checked++;
 }
-assert.equal(checked,9);
-console.log('Boot-stack checks passed: nine reviewed standalone boot/control headers establish SS:SP with interrupts masked during setup, before their first BIOS call or near call, from deliberately perturbed model entry registers. Later STI remains allowed. This checks setup ordering, not BIOS emulation or physical hardware.');
+assert.equal(checked,10);
+console.log('Boot-stack checks passed: ten reviewed standalone boot/control headers establish SS:SP with interrupts masked during setup, before their first BIOS call or near call, from deliberately perturbed model entry registers. Later STI remains allowed. This checks setup ordering, not BIOS emulation or physical hardware.');
