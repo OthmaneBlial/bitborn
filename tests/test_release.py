@@ -10,6 +10,17 @@ from tools.bitborn import artifact_paths, digest
 
 
 class ReleaseTests(unittest.TestCase):
+    def test_release_notes_match_distribution_counts(self):
+        root = Path(__file__).resolve().parents[1]
+        version = (root / 'VERSION').read_text().strip()
+        notes = (root / 'docs' / f'release-v{version}.md').read_text()
+        self.assertIn(f'**{len(IMAGES)} primary BIOS images**', notes)
+        self.assertIn(f'**{len(artifact_paths(root))} manifest-reviewed artifacts**', notes)
+        self.assertIn(f'**{len(EVIDENCE)} evidence files**', notes)
+        files = len(IMAGES) + len(EVIDENCE) + 4
+        self.assertIn(f'{files} files total', notes)
+        self.assertIn(f'{files - 1} checksum entries', notes)
+
     def test_current_native_images_and_capture_evidence_are_explicit(self):
         self.assertEqual(len(IMAGES), 14)
         self.assertIn('self-modifying.img', IMAGES)
