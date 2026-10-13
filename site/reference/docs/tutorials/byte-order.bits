@@ -1,0 +1,3 @@
+10010000 # instruction | NOP | One instruction byte; advance to the word load.
+10111000 00110100 00010010 # instruction | MOV AX,1234 | Immediate low byte 34 precedes high byte 12.
+11101011 11111010 # instruction | JMP -6 | From the end at offset 6, return to offset 0.

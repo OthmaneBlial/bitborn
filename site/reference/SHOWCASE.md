@@ -59,6 +59,18 @@ These demonstrations are reproducible from the repository. Browser recordings
 show real interactions with the bounded JavaScript teaching model. QEMU captures
 show guest machine-code execution. Those are separate kinds of evidence.
 
+## Start with one byte, one word, one branch
+
+![Actual browser lesson: linked byte edits, a word swap and a branch sign-bit change](assets/byte-order-demo.gif)
+
+Open the [learning path](https://othmaneblial.github.io/bitborn/learn/#byte-order-title).
+Flip the low immediate bit: 52 becomes 53, and the word becomes 4661. Swap its
+bytes to get 0x3512. Flip the branch sign bit: a backward jump to 0x7C00 becomes
+a calculated target at 0x7C80, outside the six-byte fragment. Reset restores
+the [literal source](docs/tutorials/byte-order.bits). This is read-only decoding;
+neither native code nor the CPU model runs. The [lesson](docs/tutorials/byte-order.md)
+explains the arithmetic, while the recording keeps actual browser frame hashes.
+
 ## Inspect the same bytes in three contexts
 
 ![Actual browser context and bit changes; inspection only](assets/encoding-demo.gif)

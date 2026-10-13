@@ -40,6 +40,10 @@ def prepare():
             milestones.append({'milestone': re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', milestone.strip()), 'progress': progress.strip()})
     updated = re.search(r'Updated \*\*(\d{4}-\d{2}-\d{2})\*\*', table)[1]
     (ROOT / 'site/progress.json').write_text(json.dumps({'updated': updated, 'milestones': milestones}, indent=2) + '\n')
+    lesson_source = 'docs/tutorials/byte-order.bits'
+    lesson_bytes, _ = read_bits(ROOT / lesson_source)
+    (ROOT / 'site/learn/byte-order-source.mjs').write_text('export const byteOrderSource = ' + json.dumps({
+        'source': lesson_source, 'bytes': list(lesson_bytes), 'sha256': digest(lesson_bytes)}, indent=2) + ';\n')
     comparison = {}
     for role, slug in (('before', 'exit-code'), ('after', 'exit-code-small')):
         source = f'examples/{slug}/program.bits'

@@ -335,6 +335,11 @@ dependencies, risks and the current execution record. It is not a feature list.
 
 ## Further research
 
+- [x] Add a [progressive byte-order lesson](docs/tutorials/byte-order.md) to the
+  learning path: linked byte edits, immediate-byte swaps and signed branch targets,
+  with complete word/displacement checks and keyboard/browser regression coverage.
+  The six-byte learning fragment remains read-only inspection, without native claims.
+
 - [ ] Paging or a bounded allocator with explicit memory-map evidence.
 - [ ] General exception handlers and hardware interrupt delivery.
 - [ ] Physical-hardware calibration and broader boot compatibility.

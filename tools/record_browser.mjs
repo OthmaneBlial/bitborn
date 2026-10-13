@@ -257,6 +257,23 @@ try {
   await capture('Flipped byte7 bit0 (the rightmost bit): FC becomes FD, selecting STD without changing any other byte.');
   await page.locator('#validate').click();assert.match(await page.locator('#result').textContent(),/Solved in 9/);
   await page.locator('#result-panel').scrollIntoViewIfNeeded();await capture('The repaired model writes A at0600 and B at0601, restores DF=0 and halts after nine steps. This is browser footage, not native execution.');await encode();
+  await begin('byte-order');await page.goto(base+'learn/');
+  await page.waitForFunction(()=>document.querySelector('#lesson-branch').textContent.includes('JMP -6'));
+  await page.locator('#byte-order-title').scrollIntoViewIfNeeded();
+  await capture('The learning path starts with the actual six handwritten bytes, linked byte and word values, and inspection-only controls.');
+  await page.locator('#lesson-bit').click();
+  assert.equal(await page.locator('#lesson-word').textContent(),'B8 35 12 → MOV AX, 4661 (0x1235)');
+  await capture('Flipping bit0 changes the immediate low byte from52 to53 and the whole word from4660 to4661.');
+  await page.locator('#lesson-swap').click();await page.locator('#lesson-word').scrollIntoViewIfNeeded();
+  assert.equal(await page.locator('#lesson-word').textContent(),'B8 12 35 → MOV AX, 13586 (0x3512)');
+  await capture('Swapping the two edited immediate bytes changes the word to3512 without changing its MOV opcode.');
+  await page.locator('#lesson-sign').click();await page.locator('#lesson-branch').scrollIntoViewIfNeeded();
+  assert.match(await page.locator('#lesson-branch').textContent(),/JMP \+122.*0x7C80/);
+  await capture('The branch sign-bit flip turns FA (-6) into7A (+122), placing the calculated target outside this fragment. No instruction executes.');
+  await page.locator('#lesson-reset').click();
+  assert.equal(await page.locator('#lesson-word').textContent(),'B8 34 12 → MOV AX, 4660 (0x1234)');
+  assert.match(await page.locator('#lesson-boundary').textContent(),/offset 0 inside/);
+  await capture('Reset restores the six source bytes and the original backward branch to7C00.');await encode();
   assert.deepEqual(errors,[]);
   const hashes={};
   for(const source of ['tools/record_browser.mjs','boot/boot.bits','site/elf.mjs','site/elf/index.html','site/elf/app.mjs','site/elf/elf.css','site/elf/catalog.json','site/downloads/exit-code-small.elf','site/downloads/exit-code.elf','site/styles.css','site/learn/routes.css','site/app.js','site/bit-diff.mjs','site/bit-diff/index.html','site/bit-diff/app.mjs','site/bit-diff/diff.css','site/encoding.mjs','site/encoding-presets.mjs','site/playground/index.html','docs/instruction-encoding/fixtures/mov32.bits','docs/instruction-encoding/fixtures/mov64.bits','docs/instruction-encoding/fixtures/mov-register.bits','docs/instruction-encoding/fixtures/mov-register64.bits','docs/instruction-encoding/fixtures/mov-byte.bits','docs/instruction-encoding/fixtures/mov-byte-rex.bits','docs/instruction-encoding/fixtures/mov-memory-bp.bits','docs/instruction-encoding/fixtures/mov-memory-absolute.bits','docs/instruction-encoding/fixtures/mov-memory-pair.bits','docs/instruction-encoding/fixtures/mov-register-reverse.bits','docs/instruction-encoding/fixtures/mov-memory-positive.bits','docs/instruction-encoding/fixtures/mov32-next.bits','site/address16.mjs','site/simulator.mjs','site/binary.mjs','site/history.mjs','site/program-link.mjs','site/boot-builder/index.html','site/boot-builder/builder.css','site/boot-builder/model.mjs','site/boot-builder/app.mjs','site/cpu-lab/index.html','site/cpu-lab/lab.css','site/cpu-lab/lab.mjs','site/cpu-lab/presets.mjs','site/cpu-lab/memory-program.mjs','docs/instruction-encoding/fixtures/memory-mov-program.bits','site/challenges/index.html','site/challenges/challenges.css','site/challenges/challenges.mjs','site/challenges/catalog.json','challenges/catalog.json']){
@@ -272,6 +289,7 @@ try {
   for(const name of ['short-branch','short-branch-inverse']) {const source=`docs/instruction-encoding/fixtures/${name}.bits`;metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');}
   for(const name of ['start','solution']) {const source=`challenges/direction-flag/${name}.bits`;metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');}
   for(const name of ['exit-code','exit-code-small']) {const source=`examples/${name}/program.bits`;metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');}
+  for(const source of ['site/learn/index.html','site/learn/byte-order.mjs','site/learn/byte-order-source.mjs','docs/tutorials/byte-order.bits'])metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');
   await writeFile(resolve(root,'assets/browser-demo-recording.json'),JSON.stringify(metadata,null,2)+'\n');
-  console.log('Recorded six genuine browser GIFs with frame/source hashes and explicit inspection/simulation provenance.');
+  console.log(`Recorded ${captures.length} genuine browser GIFs with frame/source hashes and explicit inspection/simulation provenance.`);
 } finally {await browser?.close();await new Promise(resolve=>server.close(resolve));}

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add a hands-on byte-order lesson to `/learn/`, using a canonical six-byte
+  fragment and the shared decoder. Link byte weights to a little-endian MOV
+  immediate and an instruction-end-relative signed branch; support Reset and
+  keyboard controls. Exhaustively check word values and branch/model targets,
+  with independent disassembly and Chrome/Firefox/WebKit interaction coverage.
+
 - Add unprefixed 64-bit PUSH immediate/register and POP register inspection with
   sign-extension fields and the POP RSP alias. Seven Linux syscall setup presets
   are exact slices of existing 8-/12-byte native programs, with source ranges and

@@ -494,6 +494,21 @@ Actual browser captures now include the seven Linux setup slices and signed-bit
 change. All 66 source hashes, six GIFs and 106 actual PNG frame hashes match;
 the encoding recording has 29 frames. Visual capture review shows readable fields
 and the disabled simulation control, with existing model registers preserved.
+Linux inspection commit `fdddcdd` passed CI `38347405113` and deployment
+`38347839473`; mirror `27a5410` changes only 18 `bitborn/` paths. Public
+README, roadmap, evolution record, progress and decoder match that exact source.
+The repository retains 20 relevant topics and its canonical `.io` homepage.
+The progressive byte-order lesson uses six canonical handwritten bytes and the
+shared decoder: linked low-bit changes, a word-byte swap, signed branch targets
+and Reset. All 65,536 immediate words and 256 signed branch targets pass, including
+one-step model agreement and independent NDISASM; a bounded original loop check
+does not pretend the fragment halts. Chrome, Firefox and WebKit pass linked edits,
+keyboard focus, reset/reload and 1440/320px checks; final buttons use the existing
+46px site style. Genuine five-frame browser footage is added to the showcase.
+The completed browser recording set has 70 current source hashes, seven GIFs
+and 111 actual PNG frames; every source/GIF/frame hash is rechecked.
+No native executable, boot target or release asset changes. Native execution and
+live assistive-technology speech are separate evidence. Next: a stack/call lesson.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -543,7 +558,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 22 | 1 | Explain Linux syscall encodings in 64-bit inspection mode without host execution | H | H | 05 | Medium | Complete: canonical setup slices, stack fields/sign extension, Linux ABI text and three-browser read-only proof; no 64-bit execution |
 | 23 | 1 | Literal native self-modification experiment with controlled halt and RAM proof | H | M | Existing BIOS loader | Medium | Complete: current two literal 82-byte cases, one input/live operand bit and native/model proof; original 80-byte checkpoint preserved in history |
 | 24 | 1 | Program gallery presets derived from canonical .bits instead of duplicated source | H | M | Site packaging | Medium | Complete: all six CPU presets from canonical files, exact source/byte identity and loaded-source downloads |
-| 25 | 2 | Progressive interactive byte-order lesson: one byte, one word, one branch | H | H | Existing playground | Low | Open |
+| 25 | 2 | Progressive interactive byte-order lesson: one byte, one word, one branch | H | H | Existing playground | Low | Complete: six-byte source, shared decoding, exhaustive word/branch and keyboard/browser checks |
 | 26 | 2 | Guided stack/calling-convention lesson with return-address inspection | H | H | 02,10 | Low | Open |
 | 27 | 2 | Flags lesson separating signed overflow, carry, parity and undefined AF | H | H | 04 | Medium | Open |
 | 28 | 2 | Meaningful bit-diff explanations tied to instruction boundaries and execution mode | H | M | 05,07 | Medium | Complete: positional changes and linear field roles; no execution/control-flow/alignment claim |

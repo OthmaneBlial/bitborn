@@ -44,7 +44,7 @@ display, type `help` and press Enter. `peek` reads the first boot byte; `clear`
 clears VGA; `reboot` reloads through BIOS. The `disk-read.img` target prints
 `Sector 2 loaded!` only after the loader has actually read the second stage.
 
-The five `.elf` examples are executable on Linux x86-64 only. Exit statuses 42
+The six `.elf` examples are executable on Linux x86-64 only. Exit statuses 42
 or 5 are the expected results, so a shell may label successful demonstrations as
 nonzero commands. For example: `./build/exit-code.elf; echo $?` prints 42.
 
@@ -56,7 +56,7 @@ nonzero commands. For example: `./build/exit-code.elf; echo $?` prints 42.
 - **Headless host:** `make test` uses no display and captures serial; `make run`
   expects a graphical display. CI tests real guest behavior through QMP.
 - **Native Linux test skipped on macOS:** expected. That test is mandatory on
-  Linux x86-64 CI, where all five ELF programs execute.
+  Linux x86-64 CI, where all six ELF programs execute.
 - **Checksum mismatch after editing:** review your byte changes and independent
   encoding/behavior tests before updating `targets.json`. Never treat a new hash
   as proof that an altered program works.
@@ -64,5 +64,7 @@ nonzero commands. For example: `./build/exit-code.elf; echo $?` prints 42.
 ## What happens next?
 
 Follow the [roadmap](../../ROADMAP.md). Protected mode, custom interrupt handlers,
-memory management and executable loading are research milestones, not current
-features. Begin with source bytes and the existing verified examples.
+memory management and executable loading have specific support boundaries in
+[execution scope](../execution-scope.md); broader support remains research.
+Begin with [one byte, one word, one branch](byte-order.md) and the existing
+verified examples.

@@ -5,6 +5,7 @@ import {resolve,dirname,extname} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {checkEncoding} from './encoding_browser_checks.mjs';
 import {checkVGABitmap} from './vga_bitmap_browser_checks.mjs';
+import {checkByteOrder} from './byte_order_browser_checks.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const modulePath = process.env.PLAYWRIGHT_MODULE;
@@ -62,6 +63,7 @@ try {
   await page.reload();await page.waitForFunction(() => document.querySelector('#roadmap-status').textContent.includes('invalid shape'));
   assert.equal(await page.locator('.milestone-row').count(),0);
   await page.unroute('**/progress.json');
+  await checkByteOrder(page, base);
   await mkdir(resolve(root,'build'),{recursive:true});
   for (const width of [1440,768,390,320]) {
     await page.setViewportSize({width,height:844});

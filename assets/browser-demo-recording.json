@@ -8,7 +8,7 @@
   "presentationFps": 1,
   "alterations": "960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.",
   "sourceSha256": {
-    "tools/record_browser.mjs": "af9fc203e8ed38db7520bb9cc39622ae0b6b3ded0f2aae472d19af5d2d52a265",
+    "tools/record_browser.mjs": "dd37b0b46cdacb5eb733df7d5d5dd46d20704a8346f65fdc8c25536f1a5d2f90",
     "boot/boot.bits": "230bbafbfa02abd62dc964efbad02db0431f0efa263216bba02146cd164262b8",
     "site/elf.mjs": "552aabb816be8add70c470c951f0110697d491d0a0e926c3bd9e6001e623832b",
     "site/elf/index.html": "767e441bc2b8d9e29a626d264b2d437bce24c296196a5b37c33d09cf6f58f29b",
@@ -18,7 +18,7 @@
     "site/downloads/exit-code-small.elf": "3a0c6088c8b5f20c76f52de98abd9ce2259622420844ad05a37cb269670fe0fe",
     "site/downloads/exit-code.elf": "d93aa7e7fd49e17fb09ac7cd6b0cd0776dea9e40503595ae28b1abf7c71c48c7",
     "site/styles.css": "f255737251dfa8c6c0d133b70367b09578a5f0ebaa01a6d044c3902c555f6a38",
-    "site/learn/routes.css": "f77ddb1b9b7187f92c69e594a8002543deed69c74d7954dfa670ef4bb85052d1",
+    "site/learn/routes.css": "5477cc8776632cf2d21e085e3804b66239942cd85105f55fbfc1b609c1b44d56",
     "site/app.js": "6f73733d058031b76a6a34d0e23fe8f13d2723b56808e1af850e58e32f0b4963",
     "site/bit-diff.mjs": "4ba0be7d157650d7cb338925ac0f9496992242f93b6f52b9e54775c17c2ce940",
     "site/bit-diff/index.html": "b447ffa63451bf4f9986f2c94db9ec9af80669ba9df254d2a5e0d9ed3dc4f3d7",
@@ -73,7 +73,11 @@
     "challenges/direction-flag/start.bits": "d387552b942bde49537f7201a208934f9fd92be055eac0b8c29c294eb93a235c",
     "challenges/direction-flag/solution.bits": "4c3a1682ef3d95a5714dca47e5cc990287a4eb949772108ffc9730f803d484d4",
     "examples/exit-code/program.bits": "98d348a117d9359aa0ef903017b36989b36612a392f900c2eb13615b97adf73a",
-    "examples/exit-code-small/program.bits": "b7cc118bb7dba4e8c002480513a082049ded573455d8a55b227cc85643adc650"
+    "examples/exit-code-small/program.bits": "b7cc118bb7dba4e8c002480513a082049ded573455d8a55b227cc85643adc650",
+    "site/learn/index.html": "4d6184554eefe4b07b81cc21d037753264a2e69f96449c6ca7fc8bbc9863d383",
+    "site/learn/byte-order.mjs": "16d1bc306a8ddd2d35e4b398813e6d797d8f73bde2f840b18f42b62de51ffdf0",
+    "site/learn/byte-order-source.mjs": "03142e5e9c7a0361cf411c315c84b10538726ae9df34ea4b33b76319d263cab2",
+    "docs/tutorials/byte-order.bits": "b1ec8a35bc7388757d0e7bff1c3b225b037c83ca77f1e8d55d17e84a6c02fc0d"
   },
   "captures": [
     {
@@ -218,7 +222,7 @@
     },
     {
       "file": "assets/cpu-lab-demo.gif",
-      "sha256": "6ae03b4c10ec76dea4b1e7f978e0bb088ae3f351ca5dc4705f1e137adafc2167",
+      "sha256": "9909ca55c8b4f06b876f0cae0ed822262d41d20b22a1173b93a27157cad01af8",
       "capturedFrames": 47,
       "encodedFrames": 47,
       "durationSeconds": 47,
@@ -288,10 +292,10 @@
         "e549e88cb4e5d64e697f81da55763fb9fffacb334407f58c1d9a50e279ffc14b",
         "2b7ad80edc20e3d1f64393572ec3cf78bd1302e694dbba827317835b18187183",
         "36dc147f036820e517c0483041dbb96b081d565b99ab17a5a9e18671889cbe46",
-        "1908d4518765a33ee8d9f09328e23f9c78c5b4149ac2fe4c8a7e41ebc6a6ca25",
+        "89473d41bb5cf05e9db3e8a66a8d55e049575088e574a601f7e03d01d1cfc585",
         "039e52eb75767270fab70fa8c341a3ba346a40340cb581939ec7cbfda22697dc",
         "4fee36b1645604348656af6066cadf5f6ae06006ff5a363bd6b6cd08a5e698e3",
-        "94638ec889562887e87b20182d91a8f99564127343ccf341185c3f0168178504",
+        "0bd5104836514ee621cdf2f91ce2d8d7f652331e4392d0db678b33f0bec84d62",
         "07c24a8f2b66198bb12bc2a1cc7a36a50621b2336a9369d7092f53cd206abb35",
         "0c2011f69c07a3fcaf7df571187b30ad89a892578c4513d962f00f14048a4834",
         "f35e6f67a16e2a76cfe106256d1eee23f791a2c381a923769aec2047373d071d",
@@ -352,6 +356,27 @@
         "142f4e8392e9e9f237c43d1d12829c7bc4d2b073cf7fc0e3b05dbad7cc07fd58",
         "64deaaa0c4006e8d5ec89824d8dbaddae679df05ead477ad3c5ecff8855229b5",
         "098b288c8cb0431a9a3d6cb1b2b78f310d084f3c4cd65013e3d61a4c85261bcd"
+      ]
+    },
+    {
+      "file": "assets/byte-order-demo.gif",
+      "sha256": "89854d0b23b37d89e72943e9841f048bb737ca68cd72f96cec4257b39394a03f",
+      "capturedFrames": 5,
+      "encodedFrames": 5,
+      "durationSeconds": 5,
+      "actions": [
+        "The learning path starts with the actual six handwritten bytes, linked byte and word values, and inspection-only controls.",
+        "Flipping bit0 changes the immediate low byte from52 to53 and the whole word from4660 to4661.",
+        "Swapping the two edited immediate bytes changes the word to3512 without changing its MOV opcode.",
+        "The branch sign-bit flip turns FA (-6) into7A (+122), placing the calculated target outside this fragment. No instruction executes.",
+        "Reset restores the six source bytes and the original backward branch to7C00."
+      ],
+      "sourceFrameSha256": [
+        "627cf5f5bf6f1d653f035172c5beb696f0815a89b74240aaac704976d50ddda2",
+        "3aff55932c75aaa5ea572ee7bf318b5164e5d27af4e9ecbe9c1c7c0ff8eb2487",
+        "475d1cd206c298e18dc75103aae5ba56074d9eb46847519a6b56c6560fd82e0c",
+        "18320abc46a3882dbe2d6cb6a442855a35440b6ca586b578d5e41d408de07e73",
+        "3ad634b1ffb13a6743354dacf972b6da49bd5cd2b8fa1a52f351499e816c6b03"
       ]
     }
   ],
