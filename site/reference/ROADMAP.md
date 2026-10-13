@@ -274,6 +274,11 @@ The v0.2 milestone is published and verified. The following research remains ope
   white paper/margins, unchanged readable code, Arabic RTL/LTR boundaries and
   actual source URLs. Print-media checks and real PDF captures complement visual
   QA; physical printers remain untested. See [printing](docs/printing.md).
+- [x] Draw a native VGA bitmap from manually authored pixel and instruction bytes.
+  Change one DAC operand bit while preserving all 64,000 framebuffer indices;
+  verify complete QEMU screen pixels, initialized registers and immutable source/
+  disk. Capture actual native states and keep browser graphics rejection explicit;
+  see [palette surgery](examples/vga-bitmap/README.md).
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

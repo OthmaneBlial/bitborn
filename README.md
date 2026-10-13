@@ -29,7 +29,7 @@ bitborn explores that question by encoding machine instructions directly as
 binary digits. Every opcode. Every operand. Every branch displacement. No
 assembler translates the target code: we author the bytes themselves.
 
-**A real 512-byte BIOS boot program, fifteen reviewed examples, four byte tools,
+**A real 512-byte BIOS boot program, sixteen reviewed examples, four byte tools,
 an editable boot builder, a visual CPU lab, and 20 binary challenges.** This is an educational experiment, not a
 production operating system.
 
@@ -103,6 +103,7 @@ for exact evidence and remaining gates.
 | [Carry and borrow arithmetic](docs/carry-borrow.md) | ✅ Byte/word ADC and SBB, 270,736 ripple-oracle cases and AH/IF/DF preservation; exact 81-byte multiword exercise plus eight native FLAGS samples |
 | [Canonical CPU teaching sources](docs/cpu-lab/README.md) | ✅ All six presets come from `.bits` files; editor/reference identity, original bytes, bounded build inputs and loaded-preset source links verified |
 | [Native one-bit self-modification](examples/self-modifying/README.md) | ✅ One writer bit changes one future operand bit and A→a; both literal controls match model/QEMU registers, code RAM, serial and VGA; actual native capture and immutable source/image checks |
+| [Native one-bit palette surgery](examples/vga-bitmap/README.md) | ✅ 142 authored bytes draw an 8×8 bitmap; one DAC bit changes all sixteen green pixels while all 64,000 framebuffer indices stay identical; actual screen/GIF proof and explicit browser graphics rejection |
 | [Short branch field microscope](docs/instruction-encoding/short-branches.md) | ✅ Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged |
 | [Keyboard instruction-bit editing](docs/instruction-encoding/keyboard.md) | ✅ One Tab stop, arrows, row/global Home/End, Enter/Space and stable edit focus; fixture shortening preserves selector focus and navigation never executes bytes |
 | [Actionable source errors](docs/source-diagnostics.md) | ✅ Exact UTF-16 token/excess-byte ranges, 704 location cases and focused binary/hex selection; invalid drafts preserve loaded state/history and corrections clear stale errors |
@@ -197,6 +198,7 @@ It then disables interrupts and enters a controlled halt loop.
 | [Binary shell](examples/shell/README.md) | Nine commands, real memory, register snapshot and disk app | BIOS |
 | [Returning disk app](examples/shell-app/README.md) | Computes 7×6, stores 2A in RAM, returns to shell | BIOS payload |
 | [Protected mode](examples/protected-mode/README.md) | 32-bit flat memory, IDT software interrupt and IRETD | BIOS → protected mode |
+| [Native VGA bitmap](examples/vga-bitmap/README.md) | Authored pixel rows and one-bit palette surgery; unchanged framebuffer indices | BIOS / native QEMU |
 
 Each guide links its canonical source, per-byte table, generated binary path,
 expected behavior and automated test. `make build` produces the artifacts.
@@ -275,7 +277,7 @@ native browser code. `make site-test` verifies source hashes, execution and link
 [examples](https://othmaneblial.github.io/bitborn/examples/) and the
 [live roadmap](https://othmaneblial.github.io/bitborn/roadmap/) have dedicated pages.
 The roadmap and homepage progress feed are rebuilt from the table above.
-The website documentation links all fifteen current examples and the latest
+The website documentation links all sixteen current examples and the latest
 release. The original 512-byte boot message still reports v0.1; its exact bytes
 are preserved while v0.2 adds separate instruments and native targets.
 
@@ -321,8 +323,8 @@ and [tag CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38223865244)
 both passed all 37 Python tests, browser checks and artifact reproduction.
 At the v0.2 checkpoint, all 135 live runtime files matched local bytes, including
 86 curated downloads; the published interactions were repeated in Chrome.
-The Unreleased build now has 56 reviewed targets and 88 derived artifacts, adding
-the native self-modifying raw payload/image. Later milestone evidence is recorded
+The Unreleased build now has 57 reviewed targets and 90 derived artifacts, adding
+the native self-modifying and VGA bitmap raw payloads/images. Later milestone evidence is recorded
 in [ROADMAP.md](ROADMAP.md); existing release downloads remain unchanged.
 
 ## FAQ and limits

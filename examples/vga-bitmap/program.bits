@@ -1,0 +1,48 @@
+11111010 # instruction | CLI | Mask hardware interrupts before segment setup.
+11101010 00000110 01111100 00000000 00000000 # instruction | JMP 0000:7C06 | Normalize CS; physical entry remains 7C06.
+00110001 11000000 # instruction | XOR AX,AX | Prepare our own stack before calling the BIOS.
+10001110 11010000 # instruction | MOV SS,AX | Stack segment zero.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Stack below this boot payload.
+10111000 00010011 00000000 # instruction | MOV AX,0013 | BIOS graphics mode 13h: 320 by 200 indexed pixels.
+11001101 00010000 # instruction | INT 10h | Enter graphics mode using the initialized stack.
+00110001 11000000 # instruction | XOR AX,AX | Restore a known zero source segment after the BIOS call.
+10001110 11011000 # instruction | MOV DS,AX | Source bytes use physical addresses.
+10111010 11001000 00000011 # instruction | MOV DX,03C8 | VGA DAC palette write-index port.
+00110000 11000000 # instruction | XOR AL,AL | Select palette entry zero.
+11101110 # instruction | OUT DX,AL | Begin the black background palette entry.
+01000010 # instruction | INC DX | Palette component data port 03C9.
+11101110 # instruction | OUT DX,AL | Background red component zero.
+11101110 # instruction | OUT DX,AL | Background green component zero.
+11101110 # instruction | OUT DX,AL | Background blue component zero.
+01001010 # instruction | DEC DX | Return to palette write-index port 03C8.
+10110000 00001010 # instruction | MOV AL,0A | Select the letter's palette entry ten.
+11101110 # instruction | OUT DX,AL | Begin palette entry ten.
+01000010 # instruction | INC DX | Component data port 03C9.
+00110000 11000000 # instruction | XOR AL,AL | Red component zero.
+11101110 # instruction | OUT DX,AL | Write red zero.
+10110000 00111111 # instruction | MOV AL,3F | Offset 41: six-bit green component 63; control clears only bit 5.
+11101110 # instruction | OUT DX,AL | Write the authored green palette component.
+00110000 11000000 # instruction | XOR AL,AL | Blue component zero.
+11101110 # instruction | OUT DX,AL | Write blue zero; entry ten is complete.
+10111000 00000000 10100000 # instruction | MOV AX,A000 | VGA framebuffer segment.
+10001110 11000000 # instruction | MOV ES,AX | Destination is the packed VGA aperture.
+11111100 # instruction | CLD | Source and destination advance forward.
+10111110 01001110 01111100 # instruction | MOV SI,7C4E | The manually authored 64-pixel bitmap begins at payload offset 78.
+10111111 10011100 01111000 # instruction | MOV DI,789C | Pixel x=156, y=96: 96 times 320 plus 156.
+10111011 00001000 00000000 # instruction | MOV BX,0008 | Eight bitmap rows; initialize both bytes of BX.
+10111001 00001000 00000000 # instruction | MOV CX,0008 | Row loop at offset 61 copies eight authored pixel indices.
+11110011 10100100 # instruction | REP MOVSB | Copy eight bytes from DS:SI to ES:DI; no generated pixel values.
+10000001 11000111 00111000 00000001 # instruction | ADD DI,0138 | Advance 312 more bytes to the next 320-byte framebuffer row.
+11111110 11001011 # instruction | DEC BL | Count the completed bitmap row.
+01110101 11110011 # instruction | JNZ -13 | Offset 72: next offset 74 minus 13 returns to row loop 61.
+11111010 # instruction | CLI | Keep the finished native framebuffer still.
+11110100 # instruction | HLT | Halt at offset 75; sampled instruction pointer is 7C4C.
+11101011 11111101 # instruction | JMP -3 | Return to HLT if execution resumes.
+00000000 00001010 00000000 00000000 00000000 00000000 00000000 00000000 # data | bitmap row 0 | 01000000: the upper stem, palette indices zero or ten.
+00000000 00001010 00000000 00000000 00000000 00000000 00000000 00000000 # data | bitmap row 1 | 01000000.
+00000000 00001010 00001010 00001010 00001010 00000000 00000000 00000000 # data | bitmap row 2 | 01111000: top of the bowl.
+00000000 00001010 00000000 00000000 00000000 00001010 00000000 00000000 # data | bitmap row 3 | 01000100.
+00000000 00001010 00000000 00000000 00000000 00001010 00000000 00000000 # data | bitmap row 4 | 01000100.
+00000000 00001010 00000000 00000000 00000000 00001010 00000000 00000000 # data | bitmap row 5 | 01000100.
+00000000 00001010 00001010 00001010 00001010 00000000 00000000 00000000 # data | bitmap row 6 | 01111000: bottom of the bowl.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | bitmap row 7 | 00000000: empty final row.

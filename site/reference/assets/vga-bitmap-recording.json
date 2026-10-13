@@ -1,0 +1,73 @@
+{
+  "kind": "Actual QEMU/SeaBIOS VGA bitmap pixels from two separate curated boots; not browser simulation or native palette animation",
+  "qemu": "QEMU emulator version 11.1.1",
+  "alterations": "Native 8x8 letter crop, nearest-neighbor scale to 512x512, then lossless-for-these-colors GIF palette encoding; no synthetic pixels or overlays",
+  "sourcePaletteOffset": 41,
+  "changedBit": 5,
+  "bitmapSourceOffset": 78,
+  "presentationSecondsPerFrame": 2,
+  "captures": [
+    {
+      "source": "examples/vga-bitmap/control.bits",
+      "sourceSha256": "e9c0b9aad6adb22940b1589baa097835d03eb63311a09fb0054f89150d669c28",
+      "payloadSha256": "0c0d2eca50cba213e7e1559f064bf5eb53ffc25490b07ed2c8f3b0d27c67b14c",
+      "imageSha256": "8a8d1f66a0b4348fd6a2f93ecb002fc1815a4e38ba844469b5f2c2235797dbb4",
+      "framebufferSha256": "b461d149246658fd5d85fb719a3ccec7ec60e6b9beaa4c44278b1dab700d26c8",
+      "foregroundPixels": 16,
+      "dacGreen": 31,
+      "capturedRGB": [
+        0,
+        127,
+        0
+      ],
+      "dimensions": [
+        640,
+        400
+      ],
+      "crop": [
+        312,
+        192,
+        16,
+        16
+      ],
+      "screenshot": "assets/vga-bitmap-control.png",
+      "screenshotSha256": "704e7aa3af041e6320ff257849bd78a11d75e7ee3749f9f7f674f823e3bd18b0",
+      "ppmSha256": "40574079acb04bd90accaa782a7310c94c44b6c610ba2daaf2011f16e7a723cf",
+      "frameSha256": "a2b0d0f07ffdddaf7c22d1821af4ce8ae07a87b81d2aebf2b0d6ab32c3c4dd9b"
+    },
+    {
+      "source": "examples/vga-bitmap/program.bits",
+      "sourceSha256": "4cb5c520fa67495199875d7635b156fe621723b236143a4d2588b6c98266a0fd",
+      "payloadSha256": "7e00752e2334ab6aa28a6769fc289c5f31a90b37f4e804f22f5f4481427925bc",
+      "imageSha256": "5640383f704dc63572e90041c55887fa3930f4d0745348f4baaa6fe6f0467dde",
+      "framebufferSha256": "b461d149246658fd5d85fb719a3ccec7ec60e6b9beaa4c44278b1dab700d26c8",
+      "foregroundPixels": 16,
+      "dacGreen": 63,
+      "capturedRGB": [
+        0,
+        255,
+        0
+      ],
+      "dimensions": [
+        640,
+        400
+      ],
+      "crop": [
+        312,
+        192,
+        16,
+        16
+      ],
+      "screenshot": "assets/vga-bitmap-program.png",
+      "screenshotSha256": "0f4b8c3b63052e8b0cad2051fbe19d1ced3f779af91837295b9ec7e8cc24749b",
+      "ppmSha256": "e098042c4f6ba694092cba033bc753739550e347b01d9fa2113084e5841c060d",
+      "frameSha256": "0d924407bca5f6b71df42b209965cf91bcbf9b2f0d2b131879b108adaf192e52"
+    }
+  ],
+  "gif": "assets/vga-bitmap-demo.gif",
+  "gifSha256": "89e1b285f4d2ccf9f7e5df9d662becbf8e47218214a94cbac5200ad24e2ea31e",
+  "toolSha256": "52120f5b4bf4d90479b0c0d6942f068440452817c8c97d288eba426ae69a4755",
+  "harnessSha256": "86308121d5afa2eaa92a88c0b4b2f24686bbf2b177c112965b4fc19c5eb99fa8",
+  "oracleSha256": "9a5c96e7dbe8a26e7c216521c701bb62f414632314df0767248e98f027b8b83c",
+  "reproduce": "make build && python3 tools/record_vga_bitmap.py"
+}

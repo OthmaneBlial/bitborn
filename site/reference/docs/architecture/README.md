@@ -116,6 +116,14 @@ Unprefixed register-direct MOV byte/word copies have independent byte-layout,
 history and [native sampled-flags evidence](register-mov.md); wider/prefixed and
 memory forms remain outside model execution.
 
+## Native indexed pixels
+
+The [native VGA bitmap](../../examples/vga-bitmap/README.md) uses BIOS graphics
+mode 13h, the A000 framebuffer aperture and explicit DAC palette writes. A
+one-bit source control changes displayed RGB while all 64,000 stored indices
+stay identical. Full QEMU framebuffer/screen checks accompany genuine captures;
+graphics-mode BIOS, REP MOVSB and palette hardware are outside the browser model.
+
 ## Technical references
 
 - [Intel Software Developer's Manuals](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html): instruction encodings, real mode and flags.

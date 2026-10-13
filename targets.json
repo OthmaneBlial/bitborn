@@ -12,5 +12,6 @@
   {"source": "examples/monitor/program.bits", "output": "monitor.bin", "size": 462, "loader": "boot/loader.bits", "sha256": "77dc05c43306afa208ee4b93a7c9d13442a2057dc79cc7af6b8c085c3834a601"},
   {"source": "examples/exit-code-small/program.bits", "output": "exit-code-small.bin", "size": 8, "environment": "linux-x86_64", "sha256": "a0a5759b059d498f6567d39d2553b296ddc4b53b4fd9fde067fc8a1f7364b60b"},
   {"source": "examples/protected-mode/program.bits", "output": "protected-mode.bin", "size": 568, "loader": "boot/loader.bits", "sha256": "358e284ead6a98bd0bf9dd024e943abc2acd271fb5ff8659df67399c14d6e2ac"},
-  {"source": "examples/self-modifying/program.bits", "output": "self-modifying.bin", "size": 80, "bootable": true, "sha256": "3525e89a45fa14f092153f1a337b82af0e51a2a8b8f0cc78d5dd74c9b29f16dc"}
+  {"source": "examples/self-modifying/program.bits", "output": "self-modifying.bin", "size": 80, "bootable": true, "sha256": "3525e89a45fa14f092153f1a337b82af0e51a2a8b8f0cc78d5dd74c9b29f16dc"},
+  {"source": "examples/vga-bitmap/program.bits", "output": "vga-bitmap.bin", "size": 142, "bootable": true, "sha256": "7e00752e2334ab6aa28a6769fc289c5f31a90b37f4e804f22f5f4481427925bc"}
 ]

@@ -303,8 +303,28 @@ visually inspected; corner pixels are white and extracted source URLs/literal
 tokens are preserved. Monospaced code and paragraph widow/orphan controls improve
 paper readability; the stale fourteen-example manual link now correctly says
 fifteen. Physical printers and live assistive technology remain separate gates.
-Next: inspect remaining accessibility/contrast gates without substituting CSS
-assertions for live assistive-technology evidence.
+Print commit `20dc57c` passed CI `38330611051` and deployment `38330974534`;
+its Pages mirror `e455a54` changes only 18 `bitborn/` paths. Public print CSS,
+manual, Arabic introduction, print guide and progress match exact source bytes.
+The next native experiment is a manually authored 142-byte VGA bitmap with 64
+pixel-index bytes. It initializes its own stack before the BIOS graphics call.
+Two complete literal controls differ only at byte 41, bit 5: green DAC 63 versus
+31. Independent native checks match all 64,000 framebuffer indices and every
+captured RGB pixel; indices remain identical while displayed green is 255/127.
+Initialized registers, source/code RAM and read-only image checks pass. Two actual
+native captures produce a GIF whose decoded pixels exactly match the source
+crops; separate boots are explicit. The browser model rejects mode 13h after
+six setup instructions. Chromium, Firefox and WebKit verify the native gallery
+image, exact 512-byte download (payload, zero fill and signature), 1440/320px
+layout and the CPU Lab's explicit graphics rejection with empty output. The full
+78-test Python suite passes (one expected macOS native-Linux skip), as do all
+site/module/source-copy checks. Current targets/artifacts are 57/90 and gallery
+entries 16; tagged releases remain unchanged.
+The standalone boot-source annotation audit confirms explicit pre-BIOS stack
+setup in boot, keyboard, VGA text, loader and the new bitmap. The self-modifying
+example still calls the BIOS first; its existing QEMU proof does not establish
+independence from firmware stack state. Next: review and correct that fixture's
+literal source, addresses, one-bit control and complete native/model provenance.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -382,7 +402,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 50 | 0 | Reproducible host-model benchmark; distinguish rendering, interpretation and native execution | H | M | 01,02 | Medium | Complete |
 | 51 | 0 | Release-provenance manifest tying reviewed source, packaged output and commit | H | H | Existing releases | Medium | Complete: v0.3 public bytes, checksums and commit verified |
 | 52 | 0 | Clean-checkout reproduction and platform-specific validation documentation | H | H | CI | Low | Complete: fresh remote accecee install, 77 Python/site checks, all 88 hashes across two builds and clean tracked tree; platform gates explicit |
-| 53 | 3 | Real VGA bitmap experiment with manually authored pixel/instruction bytes | H | M | BIOS target | High | Open |
+| 53 | 3 | Real VGA bitmap experiment with manually authored pixel/instruction bytes | H | M | BIOS target | High | Complete: 142 authored bytes, full native index/RGB proof, exact actual GIF pixels and three-browser download/model-boundary checks; hardware remains untested |
 | 54 | 3 | Tiny text-mode game with deterministic input and genuine QEMU recording | H | M | Shell keyboard helpers | High | Open |
 | 55 | 3 | Bounded native allocator with memory-map, ownership and overflow evidence | H | M | Protected-mode target | High | Open |
 | 56 | 3 | Protected-mode exception handlers with controlled fault injection | H | M | IDT target | High | Partial: native #UD and selector #GP/error-code fixtures; general dispatch open |
@@ -395,6 +415,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 63 | 0 | Roving keyboard focus for instruction-bit editors, field-aware labels and stable edits | H | H | 05,07 | Low | Complete: shared root/playground one-stop navigation and invalid/shortened fixture focus checks; full AT review remains open |
 | 64 | 0 | Exact source error ranges, relevant editor focus and preserved invalid-load state | H | H | 15,42 | Low | Complete: UTF-16 token spans, normalized imports, binary/hex focus and corrected-error cleanup; live AT review open |
 | 65 | 0 | Identify both invalid comparison sides and focus failed notation conversion without losing drafts/results | H | H | 15,64 | Low | Complete: independent invalid markers, full token/excess selection and partial correction in three browsers; live AT review open |
+| 66 | 0 | Audit native boot fixtures for explicit stack initialization before their first BIOS call | H | H | Native boot fixtures | Medium | Partial: standalone source annotations reviewed; self-modifying fixture requires instruction-level correction and full provenance refresh; immutable releases preserved |
 
 Large tasks are divided into useful verified milestones. Native experiments only
 become capabilities after literal source review and real QEMU checks; hardware

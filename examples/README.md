@@ -17,6 +17,7 @@ example uses the canonical source in `boot/`, avoiding a second divergent copy.
 | Read keyboard input | x86 BIOS / QEMU | Wait for a key, echo to VGA/COM1 | [keyboard](keyboard/README.md) |
 | Display VGA characters | x86 BIOS / QEMU | Green B at first text cell | [vga](vga/README.md) |
 | Modify a future instruction | x86 BIOS / QEMU | One writer bit changes A to a; exact code RAM, serial and VGA proof | [self-modifying](self-modifying/README.md) |
+| Recolor a literal bitmap | x86 BIOS / QEMU | One palette bit changes native RGB while all 64,000 pixel indices stay identical | [vga-bitmap](vga-bitmap/README.md) |
 | Boot from one sector | x86 BIOS / QEMU | Full bitborn greeting, halt | [boot-sector](boot-sector/README.md) |
 | Interactive monitor | x86 BIOS / QEMU | Exact help/clear/about/reboot/peek commands | [monitor](monitor/README.md) |
 | Read additional sectors | x86 BIOS / QEMU | Sector 2 loaded! | [disk-read](disk-read/README.md) |
@@ -26,5 +27,6 @@ example uses the canonical source in `boot/`, avoiding a second divergent copy.
 
 Native Linux examples run in CI on Ubuntu x86-64; macOS does not execute them.
 BIOS examples run in QEMU TCG, including on Apple Silicon. All binary outputs
-are available in the release archive and website downloads. The separate loader
+are available in website downloads. Releases contain the artifacts from their
+tagged source revisions; newer examples do not alter published archives. The separate loader
 is explained in [boot/loader.bits](../boot/loader.bits).

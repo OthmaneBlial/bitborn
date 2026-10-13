@@ -4,6 +4,7 @@ import {readFile,mkdir} from 'node:fs/promises';
 import {resolve,dirname,extname} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {checkEncoding} from './encoding_browser_checks.mjs';
+import {checkVGABitmap} from './vga_bitmap_browser_checks.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const modulePath = process.env.PLAYWRIGHT_MODULE;
@@ -41,8 +42,8 @@ try {
   assert.match(await page.locator('#play-registers').textContent(),/ZF1/);
   await checkEncoding(page);
   await page.goto(new URL('examples/',base).href);
-  assert.equal(await page.locator('[data-example]').count(),15);
-  assert.equal(await page.locator('[data-example] a[download]').count(),15);
+  assert.equal(await page.locator('[data-example]').count(),16);
+  assert.equal(await page.locator('[data-example] a[download]').count(),16);
   assert.match(await page.locator('[data-example="shell-app"]').textContent(),/not independently bootable/);
   assert.equal(await page.locator('[data-example="shell-app"] a[download]').getAttribute('href'),'../downloads/shell-app.bin');
   await page.goto(new URL('roadmap/',base).href);
@@ -73,6 +74,7 @@ try {
       if (width === 1440 || width === 390) await page.screenshot({path:resolve(root,`build/route-${route}-${width}.png`),fullPage:true});
     }
   }
+  await checkVGABitmap(page,base);
   assert.deepEqual(errors,[],'route console / failed assets');
-  console.log('dedicated-route browser checks passed: nested playground editing/keyboard/flags, fifteen example downloads and app payload boundary, exact generated roadmap, safe text rendering and invalid-data handling, all five routes at 1440/768/390/320px; screenshots in build/');
+  console.log('dedicated-route browser checks passed: nested playground editing/keyboard/flags, sixteen example downloads and app payload boundary, native bitmap/GIF/image bytes and graphics rejection, exact generated roadmap, safe text rendering and invalid-data handling, all five routes at 1440/768/390/320px; screenshots in build/');
 } finally {await browser?.close();await new Promise(resolve => server.close(resolve));}

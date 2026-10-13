@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add a 142-byte native VGA bitmap with 64 authored pixel-index bytes and a
+  separate one-bit palette control. Verify all 64,000 framebuffer bytes and every
+  captured RGB pixel, unchanged source/code/disk and explicit browser graphics
+  rejection. Genuine two-boot captures include exact decoded-GIF pixel proof;
+  current reviewed targets/artifacts grow to 57/90, without changing releases.
+
 - Add print-only lesson layouts for the manual, learning path and eight
   introductions, preserving literal code, Arabic direction and source URLs.
   Verify light page margins and capture actual A4 PDFs for visual QA.
