@@ -210,6 +210,10 @@
       "progress": "\u2705 Interactive learning path connects bit weights, little-endian immediates and signed branch targets from six handwritten bytes; all word/displacement values and three browser engines checked; [actual browser recording](assets/byte-order-demo.gif); inspection only"
     },
     {
+      "milestone": "Guided stack and call lesson",
+      "progress": "\u2705 Inspect saved values and return addresses through nine verified checkpoints; full RAM/state rewind and replay, retained POP bytes, native challenge load-address differences, browser memory checks and [actual CALL rewind footage](assets/cpu-lab-demo.gif)"
+    },
+    {
       "milestone": "Short branch field microscope",
       "progress": "\u2705 Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged"
     },

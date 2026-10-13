@@ -19,6 +19,11 @@ generate instructions from the explanations.
 | 05 / Segment + offset | [memory.bits](memory.bits) | DS/ES, words, string pointer direction |
 | 06 / BP, DS and SS | [memory-mov-program.bits](../instruction-encoding/fixtures/memory-mov-program.bits) | Default address segments, byte halves and load/store journals |
 
+The [guided stack/call lesson](../tutorials/stack-and-calls.md) follows all nine
+states of preset 03, including the retained POP bytes and CALL's overwrite of
+the saved word. Back/Forward restore recorded RAM; native challenge checks are
+explicitly separate and use their own 7E00 load address.
+
 The first five files preserve every original preset byte and add per-instruction
 comments. Native release targets and their manifest are unchanged. These first
 five are bounded teaching programs with initialized model state; they are not

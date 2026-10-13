@@ -515,6 +515,20 @@ was correctly skipped. Mirror `ec617ff` changes only 20 `bitborn/` paths. Both
 validation and Pages jobs now explicitly install the inspection package, and
 the contributor guide records it. This is a test dependency, not target assembly;
 the fresh exact-commit CI/deployment result remains pending verification.
+The guided stack/call lesson reuses the original 13-byte preset. Its published
+nine-state table is checked against independent disassembly and actual model
+states, including POP's retained RAM and CALL's saved return-word overwrite.
+Every recorded state and all 1 MiB of RAM rewind/replay exactly; source bytes
+remain unchanged. Chrome's complete CPU suite and targeted Firefox/WebKit tests
+check all checkpoints, visible stack bytes and physical memory at 1440/320px.
+All twenty curated solutions were freshly booted through QEMU/QMP, including the
+7E00 call/return solution; that final native result is separate from the preset's
+7C00 model trace. No new target instructions, native formats or general ABI are
+claimed. Next: distinguish signed/unsigned flag behavior in the learning path.
+Actual CPU footage adds Back/Forward around CALL's saved-word overwrite and
+shows the guided source link. All 70 source hashes, seven GIFs and 113 actual
+PNG frames match; the CPU recording now has 49 frames. The captured memory
+microscope visibly restores 34 12 below SP, without claiming native reversal.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -565,7 +579,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 23 | 1 | Literal native self-modification experiment with controlled halt and RAM proof | H | M | Existing BIOS loader | Medium | Complete: current two literal 82-byte cases, one input/live operand bit and native/model proof; original 80-byte checkpoint preserved in history |
 | 24 | 1 | Program gallery presets derived from canonical .bits instead of duplicated source | H | M | Site packaging | Medium | Complete: all six CPU presets from canonical files, exact source/byte identity and loaded-source downloads |
 | 25 | 2 | Progressive interactive byte-order lesson: one byte, one word, one branch | H | H | Existing playground | Low | Complete: six-byte source, shared decoding, exhaustive word/branch and keyboard/browser checks |
-| 26 | 2 | Guided stack/calling-convention lesson with return-address inspection | H | H | 02,10 | Low | Open |
+| 26 | 2 | Guided stack/calling-convention lesson with return-address inspection | H | H | 02,10 | Low | Complete: original preset checkpoints, return-word overwrite/retention, full recorded RAM rewind/replay and separate native challenge proof |
 | 27 | 2 | Flags lesson separating signed overflow, carry, parity and undefined AF | H | H | 04 | Medium | Open |
 | 28 | 2 | Meaningful bit-diff explanations tied to instruction boundaries and execution mode | H | M | 05,07 | Medium | Complete: positional changes and linear field roles; no execution/control-flow/alignment claim |
 | 29 | 2 | New optimization challenges with alternate valid solutions and actual size measurements | H | M | Challenge evaluator | Medium | Open |

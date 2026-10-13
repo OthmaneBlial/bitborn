@@ -335,6 +335,11 @@ dependencies, risks and the current execution record. It is not a feature list.
 
 ## Further research
 
+- [x] Add a [guided stack/call lesson](docs/tutorials/stack-and-calls.md) using
+  the existing 13-byte preset: saved words, instruction-end return addresses,
+  retained POP memory and exact recorded RAM rewind/replay. Keep native challenge
+  evidence at 7E00 separate from the preset's 7C00 model trace.
+
 - [x] Add a [progressive byte-order lesson](docs/tutorials/byte-order.md) to the
   learning path: linked byte edits, immediate-byte swaps and signed branch targets,
   with complete word/displacement checks and keyboard/browser regression coverage.

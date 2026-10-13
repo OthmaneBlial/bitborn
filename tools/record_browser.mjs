@@ -156,6 +156,15 @@ try {
   for(let index=0;index<8;index++){
     await page.locator('#step').click();await capture(`Actual browser Step control ${index+1}; registers, flags and stack are model state.`);
     if(index===1||index===4){await page.locator('#stack').scrollIntoViewIfNeeded();await capture('Inspected actual model stack bytes written by PUSH or CALL.');}
+    if(index===4){
+      await page.locator('#memory-address').fill('07BFE');await page.locator('#memory-form button').click();
+      await page.locator('#back').click();
+      assert.equal(await page.locator('[data-address="07BFE"]').textContent(),'34');assert.equal(await page.locator('[data-address="07BFF"]').textContent(),'12');
+      await page.locator('#memory').scrollIntoViewIfNeeded();await capture('Back across CALL restores the saved 1234 word as34 12 below SP; this is recorded model RAM, not native reversal.');
+      await page.locator('#forward').click();
+      assert.equal(await page.locator('[data-address="07BFE"]').textContent(),'0A');assert.equal(await page.locator('[data-address="07BFF"]').textContent(),'7C');
+      await capture('Forward replays the CALL overwrite as0A 7C, the logical return address7C0A, without executing CALL again.');
+    }
   }
   assert.match(await page.locator('#status').textContent(),/HLT|halted/i);
   await page.locator('#timeline').scrollIntoViewIfNeeded();
