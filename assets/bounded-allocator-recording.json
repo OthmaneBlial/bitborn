@@ -1,5 +1,6 @@
 {
   "kind": "Final QMP halt snapshots and native-written allocation logs from two separate boots; not a native instruction trace",
+  "registerTextFormat": "Native HMP register output with LF line endings and trailing whitespace removed",
   "qemu": "QEMU emulator version 11.1.1",
   "memoryMap": {
     "arenaStart": 8192,
@@ -13,7 +14,7 @@
   "changedSourceByte": 103,
   "changedBitMask": 1,
   "sourceSha256": {
-    "tools/record_allocator.py": "e41fb4b372b8aa35605da910b0d4260539316e17d73e73cb76deb7958c207340",
+    "tools/record_allocator.py": "26cf37e923d711d6a9856241191e73866ee17c10a76a5a32959e67f7692da2e7",
     "tools/build.py": "0d7fccd1a6be5c7336dbd8bd9f56bd0d05999cf1c5a3ae3e454b4303ced67509",
     "tests/qemu.py": "30bccf107c84c82d2045de4c605d5e8104eaa682b3e8e0b165ff16e0eb5315c2",
     "tests/bounded_allocator_checks.py": "8a09a5a9079db4855617462c793ba813d6b593f84735ca9406dc504099e9a21f",
@@ -29,7 +30,7 @@
       "imageSize": 512,
       "imageSha256": "b7af0605701d2502ff21f5e7ad214908d110cce16c951f501210914907918b0c",
       "registerFile": "assets/bounded-allocator-program-registers.txt",
-      "registerFileSha256": "0f80266878d91234fe86d4a71d2c5c25d22eb64e156b3124b6ab4cb91ba80bcf",
+      "registerFileSha256": "f04ccc05eb80dae8276dab1aef2494258662ab0ebeb362cfe347979a0d4f0d20",
       "disassemblyFile": "assets/bounded-allocator-program-disassembly.txt",
       "disassemblyFileSha256": "d3ee67f4df796d9081af9c8900e090d721f0b60b5acbc1124d82e4d2066fd8a2",
       "snapshot": {
@@ -91,7 +92,7 @@
       "imageSize": 512,
       "imageSha256": "2c723462dc6fc3cbfedf2b7279c2295222297be1008471e9454204fa6792283b",
       "registerFile": "assets/bounded-allocator-control-registers.txt",
-      "registerFileSha256": "0f80266878d91234fe86d4a71d2c5c25d22eb64e156b3124b6ab4cb91ba80bcf",
+      "registerFileSha256": "f04ccc05eb80dae8276dab1aef2494258662ab0ebeb362cfe347979a0d4f0d20",
       "disassemblyFile": "assets/bounded-allocator-control-disassembly.txt",
       "disassemblyFileSha256": "140e5fdb4164d80cab683ac511f9dd8c9e3584365411c6228b61bfab62542d3d",
       "snapshot": {

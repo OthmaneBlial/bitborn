@@ -30,7 +30,7 @@ def main():
             assert image.read_bytes()==image_bytes
         register_file=f'assets/bounded-allocator-{name}-registers.txt'
         disassembly_file=f'assets/bounded-allocator-{name}-disassembly.txt'
-        (ROOT/register_file).write_text(registers+'\n')
+        (ROOT/register_file).write_text('\n'.join(line.rstrip() for line in registers.strip().splitlines())+'\n')
         (ROOT/disassembly_file).write_bytes(disassembly)
         records.append({'source':source,'payloadSize':len(data),'payloadSha256':digest(data),
                         'imageSize':len(image_bytes),'imageSha256':digest(image_bytes),
@@ -43,6 +43,7 @@ def main():
     qemu=os.environ.get('QEMU','qemu-system-i386')
     version=subprocess.run([qemu,'--version'],check=True,capture_output=True,text=True,timeout=10).stdout.splitlines()[0]
     metadata={'kind':'Final QMP halt snapshots and native-written allocation logs from two separate boots; not a native instruction trace',
+              'registerTextFormat':'Native HMP register output with LF line endings and trailing whitespace removed',
               'qemu':version,'memoryMap':{'arenaStart':0x2000,'arenaEndExclusive':0x2010,'lowerGuard':0x1FFF,
                                        'upperGuard':0x2010,'logStart':0x2100,'logSize':30,'codeStart':0x7C00},
               'changedSourceByte':103,'changedBitMask':1,
