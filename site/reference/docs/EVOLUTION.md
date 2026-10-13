@@ -17,6 +17,11 @@ required before declaring v0.5.0 published.
 Local preparation checks pass 113 Python tests (one expected macOS native-Linux
 skip), the complete site/model suite and unchanged capture-source hashes. These
 do not substitute for the upcoming exact-archive and Linux/source/tag gates.
+The first unpublished staging at `bd0034d` verifies all eighty-eight attachment
+checksums and exposes a documentation count error: the release manifest selects
+112 artifacts, including nested challenge outputs. Unreviewed root build files
+are excluded. Release notes now use the measured manifest count; that initial
+staging is retained separately and cannot be overwritten by the corrected source.
 
 Release staging audit (2026-10-13): recognized filenames alone previously allowed
 the release packager to overwrite a completed staging directory after source

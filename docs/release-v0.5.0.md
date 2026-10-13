@@ -51,7 +51,7 @@ Native speaker and assistive technology review remain separate evidence.
 ## Distribution and reproduction
 
 The packaging list contains **14 primary BIOS images**, a deterministic archive
-of **114 derived artifacts**, an exact source archive, **71 evidence files**,
+of **112 manifest-reviewed artifacts**, an exact source archive, **71 evidence files**,
 release provenance and checksums: 89 files total, with 88 checksum entries.
 Evidence includes actual native registers/disassembly, PIC state, paging tables,
 exception logs/stack/code RAM and game pixels, plus existing demonstrations.

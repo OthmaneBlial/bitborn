@@ -3,7 +3,7 @@
   "milestones": [
     {
       "milestone": "v0.5.0 distribution",
-      "progress": "\ud83d\udea7 Packaging 14 primary BIOS images, 114 derived artifacts and 71 explicit evidence files; source/tag CI, archive reproduction and anonymous public download verification remain pending"
+      "progress": "\ud83d\udea7 Packaging 14 primary BIOS images, 112 manifest-reviewed artifacts and 71 explicit evidence files; source/tag CI, archive reproduction and anonymous public download verification remain pending"
     },
     {
       "milestone": "Release staging preserves its recorded revision",
