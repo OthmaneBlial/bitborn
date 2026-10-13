@@ -162,6 +162,12 @@ try {
       assert.match(await page.locator('#completion-count').textContent(),/^2 \/ 20$/);
       await page.locator('#binary-source').fill('00000000 '.repeat(513)); await page.locator('#validate').click();
       assert.match(await page.locator('#result').textContent(),/512|limit|large|maximum/i,'oversized input is rejected');
+      await open('challenges/?id=direction-flag');await page.locator('#validate').click();
+      assert.match(await page.locator('#result').textContent(),/goal is still unmet/);
+      await page.locator('[data-offset="7"][data-bit="7"]').click();
+      assert.equal(await page.locator('.editable-byte small').textContent(),'Starting source: CLD');
+      await page.locator('#validate').click();assert.match(await page.locator('#result').textContent(),/Solved in 9.*1 changed bit/);
+      assert.equal(await page.locator('.goal-checks .fail').count(),0);
 
       // The displayed roadmap must be the exact generated, fetched record.
       const roadmapResponse=page.waitForResponse(response=>new URL(response.url()).pathname.endsWith('/progress.json'));
@@ -200,7 +206,7 @@ try {
       await checkVGABitmap(page,base);
       await checkIndicators(page);
       assert.deepEqual(errors,[],`${engine}: page errors and HTTP asset failures`);
-      console.log(`${engine} ${browser.version()} passed locally: 8 dedicated routes + optimization, home/docs, eight localized introductions with RTL/LTR code and keyboard navigation, 16/32/64 inspection with exact imm64 and read-only bit/context changes, desktop/320px reduced motion, real H→h binary downloads, CPU state/flags/memory/breakpoint resume, two bit-button challenges and local progress, generated roadmap, optimization byte inspection.`);
+      console.log(`${engine} ${browser.version()} passed locally: 8 dedicated routes + optimization, home/docs, eight localized introductions with RTL/LTR code and keyboard navigation, 16/32/64 inspection with exact imm64 and read-only bit/context changes, desktop/320px reduced motion, real H→h binary downloads, CPU state/flags/memory/breakpoint resume, three bit-button challenges and local progress, generated roadmap, optimization byte inspection.`);
     } finally {await browser.close();}
   }
 } finally {await new Promise(resolve=>server.close(resolve));}

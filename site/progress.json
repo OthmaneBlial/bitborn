@@ -182,6 +182,10 @@
       "progress": "\u2705 Contributor guide separates 16/32/64 inspection, bounded 16-bit execution, BIOS/Linux targets and the checks needed for each claim"
     },
     {
+      "milestone": "One-bit debugging lesson",
+      "progress": "\u2705 Follow the wrong store addresses, flip CLD\u2192STD, then check the failing seed and repaired literal bytes in both the model and QEMU; genuine browser repair recording"
+    },
+    {
       "milestone": "Short branch field microscope",
       "progress": "\u2705 Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged"
     },

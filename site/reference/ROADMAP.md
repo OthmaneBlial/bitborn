@@ -290,6 +290,9 @@ The v0.2 milestone is published and verified. The following research remains ope
 - [x] Link a shared [execution-scope guide](docs/execution-scope.md) from the README,
   contributor guide, CPU presets and website manual, with encoding boundaries,
   simplified BIOS/I/O behavior and explicit proof levels.
+- [x] Add a [one-bit debugging walkthrough](docs/tutorials/repair-direction.md)
+  with the actual failing direction seed, intermediate modeled write addresses,
+  both native controls and genuine browser repair frames.
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

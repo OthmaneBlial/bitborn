@@ -230,7 +230,21 @@ try {
   await page.locator('#validate').click();await page.locator('#result-panel').scrollIntoViewIfNeeded();
   assert.match(await page.locator('#result').textContent(),/Solved/);
   await capture('Deterministic browser goal checks passed; the curated solution is also QEMU-tested.');
-  await capture('Held the solved challenge result and local progress count.');await encode();
+  await capture('Held the solved challenge result and local progress count.');
+  await page.goto(new URL('challenges/?id=direction-flag',base).href);
+  await page.locator('#editable-bytes').waitFor({state:'visible'});
+  const directionStart=await readFile(resolve(root,'challenges/direction-flag/start.bits'),'utf8');
+  const directionSolution=await readFile(resolve(root,'challenges/direction-flag/solution.bits'),'utf8');
+  assert.deepEqual(parseBits(await page.locator('#binary-source').inputValue()),parseBits(directionStart));
+  await page.locator('#validate').click();assert.match(await page.locator('#result').textContent(),/goal is still unmet/);
+  await page.locator('#result-panel').scrollIntoViewIfNeeded();await capture('The reviewed broken direction seed halts but fails the AB memory goal; both controls have separate native QEMU proof.');
+  await page.locator('#editable-bytes').scrollIntoViewIfNeeded();await capture('Byte7 is FC: CLD advances DI after STOSB, placing A to the right of B.');
+  await page.locator('[data-offset="7"][data-bit="7"]').click();
+  assert.deepEqual(parseBits(await page.locator('#binary-source').inputValue()),parseBits(directionSolution));
+  assert.equal(await page.locator('.editable-byte small').textContent(),'Starting source: CLD','immutable annotations must not claim to decode edited bytes');
+  await capture('Flipped byte7 bit0 (the rightmost bit): FC becomes FD, selecting STD without changing any other byte.');
+  await page.locator('#validate').click();assert.match(await page.locator('#result').textContent(),/Solved in 9/);
+  await page.locator('#result-panel').scrollIntoViewIfNeeded();await capture('The repaired model writes A at0600 and B at0601, restores DF=0 and halts after nine steps. This is browser footage, not native execution.');await encode();
   assert.deepEqual(errors,[]);
   const hashes={};
   for(const source of ['tools/record_browser.mjs','boot/boot.bits','site/elf.mjs','site/elf/index.html','site/elf/app.mjs','site/elf/elf.css','site/elf/catalog.json','site/downloads/exit-code-small.elf','site/downloads/exit-code.elf','site/styles.css','site/learn/routes.css','site/app.js','site/bit-diff.mjs','site/bit-diff/index.html','site/bit-diff/app.mjs','site/bit-diff/diff.css','site/encoding.mjs','site/encoding-presets.mjs','site/playground/index.html','docs/instruction-encoding/fixtures/mov32.bits','docs/instruction-encoding/fixtures/mov64.bits','docs/instruction-encoding/fixtures/mov-register.bits','docs/instruction-encoding/fixtures/mov-register64.bits','docs/instruction-encoding/fixtures/mov-byte.bits','docs/instruction-encoding/fixtures/mov-byte-rex.bits','docs/instruction-encoding/fixtures/mov-memory-bp.bits','docs/instruction-encoding/fixtures/mov-memory-absolute.bits','docs/instruction-encoding/fixtures/mov-memory-pair.bits','docs/instruction-encoding/fixtures/mov-register-reverse.bits','docs/instruction-encoding/fixtures/mov-memory-positive.bits','docs/instruction-encoding/fixtures/mov32-next.bits','site/address16.mjs','site/simulator.mjs','site/binary.mjs','site/history.mjs','site/program-link.mjs','site/boot-builder/index.html','site/boot-builder/builder.css','site/boot-builder/model.mjs','site/boot-builder/app.mjs','site/cpu-lab/index.html','site/cpu-lab/lab.css','site/cpu-lab/lab.mjs','site/cpu-lab/presets.mjs','site/cpu-lab/memory-program.mjs','docs/instruction-encoding/fixtures/memory-mov-program.bits','site/challenges/index.html','site/challenges/challenges.css','site/challenges/challenges.mjs','site/challenges/catalog.json','challenges/catalog.json']){
@@ -244,6 +258,7 @@ try {
   for(const preset of presets)metadata.sourceSha256[preset.sourcePath]=createHash('sha256').update(await readFile(resolve(root,preset.sourcePath))).digest('hex');
   for(const name of ['program','control']) {const source=`examples/self-modifying/${name}.bits`;metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');}
   for(const name of ['short-branch','short-branch-inverse']) {const source=`docs/instruction-encoding/fixtures/${name}.bits`;metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');}
+  for(const name of ['start','solution']) {const source=`challenges/direction-flag/${name}.bits`;metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');}
   await writeFile(resolve(root,'assets/browser-demo-recording.json'),JSON.stringify(metadata,null,2)+'\n');
   console.log('Recorded six genuine browser GIFs with frame/source hashes and explicit inspection/simulation provenance.');
 } finally {await browser?.close();await new Promise(resolve=>server.close(resolve));}

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add a one-bit direction-flag debugging walkthrough using existing reviewed
+  challenge sources. Compare the failed seed and repaired literal bytes in QEMU
+  and the model, with actual browser seed/edit/result capture frames.
+  Identify editable-byte captions as starting-source annotations so an edited
+  opcode does not appear to retain its original instruction name.
+
 - Add a linked execution-scope guide for contributors: encoding-specific
   inspector/model support, simplified BIOS/I/O, separate native targets and
   validation commands matched to the claim being made.

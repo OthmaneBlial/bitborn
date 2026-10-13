@@ -99,7 +99,7 @@ async function startApp() {
         bits.append(button);
       }
       const annotation = challenge.startAnnotations.find(item => item.offset <= offset && offset < item.offset + item.size);
-      panel.append(head,bits,element('small',annotation?.mnemonic || 'Operand'));
+      panel.append(head,bits,element('small',`Starting source: ${annotation?.mnemonic || 'Operand'}`));
       byId('editable-bytes').append(panel);
     }
   }

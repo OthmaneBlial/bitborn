@@ -8,7 +8,7 @@
   "presentationFps": 1,
   "alterations": "960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.",
   "sourceSha256": {
-    "tools/record_browser.mjs": "f7b753b7b3af63423cc35458516e90dd0908bd77690783a93abb90c6593cdc49",
+    "tools/record_browser.mjs": "cef96addc586e162845d2f319f1919b5167adf1d937013951625650c8fe38388",
     "boot/boot.bits": "230bbafbfa02abd62dc964efbad02db0431f0efa263216bba02146cd164262b8",
     "site/elf.mjs": "552aabb816be8add70c470c951f0110697d491d0a0e926c3bd9e6001e623832b",
     "site/elf/index.html": "767e441bc2b8d9e29a626d264b2d437bce24c296196a5b37c33d09cf6f58f29b",
@@ -56,7 +56,7 @@
     "docs/instruction-encoding/fixtures/memory-mov-program.bits": "8a9fcb196926d81656931a6e982a2d37cf8dc73ac8c9497fc9ca62f8abf3f614",
     "site/challenges/index.html": "8939e5722f8bb3e9016ceca1fc4e309272519b14759bced24e3fe36300f4aff5",
     "site/challenges/challenges.css": "49eb44bbd41c5f154aa68bb7b7392b05e682766a714010d4cc15c98394362218",
-    "site/challenges/challenges.mjs": "871be9c721a83d2066fe51b10f8df93c7e84de59ba04f52a18048d1cd1bdadba",
+    "site/challenges/challenges.mjs": "5d5feae8919105743ecedc998304a1377a3e495a8b07b4929d9feb8ee54ee983",
     "site/challenges/catalog.json": "2b51f2b288973f94c35510887c9ae1b011ff12137895d1220d723682782604aa",
     "challenges/catalog.json": "81e9abfbf8fbe7c6c3709fe5bb483f87f4ee15bbba708dd96b59b948b2629b02",
     "docs/instruction-encoding/fixtures/signed-branches.bits": "741ed929009fee99694a94c3726314529b761ec5f3ec85c4cd41ccfe66eea626",
@@ -69,7 +69,9 @@
     "examples/self-modifying/program.bits": "60a473a7691766f63ea06d0839a00acbfc799114732ff240c40e94787f94ee8f",
     "examples/self-modifying/control.bits": "b2acb6804bb4f350edf1f57d5767921e1c2f4a694d43dc756f22626c17c036f7",
     "docs/instruction-encoding/fixtures/short-branch.bits": "2ee11e1e3268c7750cf87a7cd5d44789a5b9809b8c35b76fddc4730aa531c93b",
-    "docs/instruction-encoding/fixtures/short-branch-inverse.bits": "e2501a33e500401f5d67e971c5b3c40f30314698cd73cf8242b9a1e1664cbaa1"
+    "docs/instruction-encoding/fixtures/short-branch-inverse.bits": "e2501a33e500401f5d67e971c5b3c40f30314698cd73cf8242b9a1e1664cbaa1",
+    "challenges/direction-flag/start.bits": "d387552b942bde49537f7201a208934f9fd92be055eac0b8c29c294eb93a235c",
+    "challenges/direction-flag/solution.bits": "4c3a1682ef3d95a5714dca47e5cc990287a4eb949772108ffc9730f803d484d4"
   },
   "captures": [
     {
@@ -198,7 +200,7 @@
     },
     {
       "file": "assets/cpu-lab-demo.gif",
-      "sha256": "4d57dbb21a730b126e32689aba7fb3193a74503da5464162a7e409ab455e1868",
+      "sha256": "8339ebae1f8ac0a9a2c24b1156ef6ebb690897e51103318aea168d8eba15e915",
       "capturedFrames": 45,
       "encodedFrames": 45,
       "durationSeconds": 45,
@@ -264,10 +266,10 @@
         "2efb5ff6eaec7f08bf8c1134b1f5a85495f80e51e84baa11222a6cd3cc56b28b",
         "c2d400aff5c3ac14fca255582a77bcf192612c583f711ca5154aedb531542816",
         "82d092ca2e2c61cf9dcab2f26d5eada4bcb7cac3ff01edc48847b66ccf4af18b",
-        "33e13a20bc383feb6d0e4ceea151ee714429cd15ec0d3cbe0613dd54ec3ecba1",
+        "59cb4b3750fca5b6fb83ac8bf460d980e6e9307d562d3eed8d160cd78de314ce",
         "98e831a33d23ac7979a10a9a8ea1353c87671ad7bdb8461f84df6b143ac26d9a",
         "11246b405b744a5ead64bc99eb8d8aaaef1bb88795ba4269a800591410e81ada",
-        "4e9f258f54166d49a718733866755802bdd1bf872b1ff97dace2aa81e23a2f2e",
+        "365fa181f59b4448708fdcfae866818ad1e65d19574ffc7ed8323ea6fbd7b04c",
         "0bdbffd65ade2c80e9a60c04f019f0e3e9f2b67dd4ef8af9f43a5e96faada4b8",
         "7f82f7944631eca8aa5e65c2caa8610650c2cb567860b80394755ce3fecbee7f",
         "1b31443176ac58f0b086a0b5ad45f9930100de41153fda7d8e26152b1937c81d",
@@ -284,8 +286,8 @@
         "7293c2f34184450f11c92d52aa7e9160eb964a96770ba43867cd643442bf449d",
         "9ae67ece8540dc5f419a78243b6530c70fb1d159e90e4d3558a531169ed335ab",
         "58da028d82a9aca1f409bbc5d283544759fd1db36502bb64cdd7a430eefa19af",
-        "9f3c9ce45824c31dd55c4f536c883e1fb4373fc7c69c0ac6930cd8cb8b7720f1",
-        "c1f2b109b53cbc642fb3ad20a710c8b66efec10d7658bccdc716279cf09824e9",
+        "e15224985c50b432e6fe86cc2139412d45d1f33f9fdd6ab0413ffd7e4887820d",
+        "b1b2c46904f0771ab4871525772b506bd1bdf2ddedf495848dac952c1ec4bc78",
         "5fce759694fbe494cb5c6b93eb3d4edbc26bf898e546718e22a06a496a1d952a",
         "745474f8d64f208c6dfa30522d09be6c26d883c6ddf947eff202b02e86741793",
         "7a476e3885bac7f2c8680b8ae626ef76243c592c6ea4f4feee9f356b362212bd",
@@ -299,10 +301,10 @@
     },
     {
       "file": "assets/challenges-demo.gif",
-      "sha256": "ee567a613e65c5515a6874bafed1fc0ebcc8569117e97410f20ba86ff1063e50",
-      "capturedFrames": 7,
-      "encodedFrames": 7,
-      "durationSeconds": 7,
+      "sha256": "6f6686376687c149601cc12967157cb210859eb27084eec6f29a0c86ee786a88",
+      "capturedFrames": 11,
+      "encodedFrames": 11,
+      "durationSeconds": 11,
       "actions": [
         "Opened the three-bit real boot repair challenge.",
         "Inspected the locked/editable offsets and three-bit budget.",
@@ -310,16 +312,24 @@
         "Flipped editable offset17, MSB-index6.",
         "Flipped editable offset17, MSB-index7.",
         "Deterministic browser goal checks passed; the curated solution is also QEMU-tested.",
-        "Held the solved challenge result and local progress count."
+        "Held the solved challenge result and local progress count.",
+        "The reviewed broken direction seed halts but fails the AB memory goal; both controls have separate native QEMU proof.",
+        "Byte7 is FC: CLD advances DI after STOSB, placing A to the right of B.",
+        "Flipped byte7 bit0 (the rightmost bit): FC becomes FD, selecting STD without changing any other byte.",
+        "The repaired model writes A at0600 and B at0601, restores DF=0 and halts after nine steps. This is browser footage, not native execution."
       ],
       "sourceFrameSha256": [
         "981462d3516dbdab6ff390442f05b2f4f4a8f310217ae988186d2c0a275c2bd0",
-        "6c1b2499ccedb45fdb161276678a838c2a471ce7edc19eec5e582ae4617c38ec",
-        "8f957566948f8bffdd9763caeb9892c6cf04ab9126f439f468be63e601fda184",
-        "28be87c7638c81de30458801e94807caad47560819ee7076d74df609e1e70107",
-        "60bec909bb81ab4c0d413027ea31b95508c514ccf6f4a187c214b270841ee5e6",
-        "9ddc2e22d7cbd7d4336d7573ceb3f4ddd32154b68948771fedb7fb66c4588bd5",
-        "9ddc2e22d7cbd7d4336d7573ceb3f4ddd32154b68948771fedb7fb66c4588bd5"
+        "c8a7d8592eb0e0168462880e431d40b9c13da6d9f4532f85e6563f82ba0d813e",
+        "337f1a9f192f50f6e9ad6e7753f953ca48a6b8c4143472a7a3af66af05dc3302",
+        "08cd87783cd26a3c9a60665d16453aedd7ad9d7dff433a6ac032161175e8ba77",
+        "0b9f44c3109df47299c065e92471d1b0c6280709ef70060a7f5a083101c38558",
+        "2857303048bf114155b34560512536dd817c3e483a5119062713de20781fb0ef",
+        "2857303048bf114155b34560512536dd817c3e483a5119062713de20781fb0ef",
+        "d334f1b01c03cf992bbd76f176e6acf41744a04a9d46136fdc68f37c826e7c7f",
+        "142f4e8392e9e9f237c43d1d12829c7bc4d2b073cf7fc0e3b05dbad7cc07fd58",
+        "64deaaa0c4006e8d5ec89824d8dbaddae679df05ead477ad3c5ecff8855229b5",
+        "098b288c8cb0431a9a3d6cb1b2b78f310d084f3c4cd65013e3d61a4c85261bcd"
       ]
     }
   ],

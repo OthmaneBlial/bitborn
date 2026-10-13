@@ -37,6 +37,7 @@ exact source revision, generated copies and every artifact hash across builds.
 | --- | --- | --- |
 | Literal source, manifest and packaging | `boot/`, `examples/`, `targets.json`, `tools/bitborn.py`, `tools/build.py` | `python3 -m unittest tests.test_tools tests.test_packaging` |
 | Actual guest behavior | `tests/qemu.py`, `tests/test_boot.py`, example-specific tests | `make test` |
+| [Direction-flag repair lesson](docs/tutorials/repair-direction.md) | `challenges/direction-flag/`, `tests/test_direction_repair.py` | `python3 -m unittest tests.test_direction_repair` |
 | Shared browser CPU and history | `site/simulator.mjs`, `site/history.mjs` | `node tests/test_cpu.mjs` and `node tests/test_history.mjs` |
 | Register-copy execution | `site/simulator.mjs`, `tests/fixtures/register-mov.bits` | `node tests/test_register_mov.mjs` and `python3 -m unittest tests.test_register_mov` |
 | Mode/bit/address inspection | `site/encoding.mjs`, `docs/instruction-encoding/fixtures/` | `node tests/test_encoding.mjs` and `node tests/test_memory_encoding.mjs` |

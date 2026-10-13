@@ -54,6 +54,7 @@ try {
     assert.equal(new URL(await page.locator('#share').getAttribute('href')).searchParams.get('id'),challenge.id);
     await page.locator('#binary-source').fill(challenge.solutionText);
     await page.locator('#validate').click();
+    for(const label of await page.locator('.editable-byte small').allTextContents())assert.match(label,/^Starting source: /,'byte captions identify original annotations after edits');
     assert.match(await page.locator('#result').textContent(),/Solved in/,
       `${challenge.id}: ${await page.locator('#result').textContent()}`);
     assert.equal(await page.locator('.goal-checks .fail').count(),0);

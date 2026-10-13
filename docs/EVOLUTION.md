@@ -360,12 +360,38 @@ compositing and 1,000 seeded ratios. Actual tablet screenshot review confirms
 readable contained rows. This is scoped reduced-motion/flat-background evidence,
 not a whole-site accessibility certification or live AT session.
 Next: contributor-facing supported-instruction and proof-level navigation.
+Indicator commit `1c1cd36` passed CI `38337292451`. Deployment `38337760575`
+checked out that exact source despite its displayed trigger head being newer.
+Mirror `80f6102` changes only twelve `bitborn/` paths; public CSS, progress,
+README, roadmap and the indicator guide match the committed bytes exactly.
 The shared execution-scope guide now maps tools, encoding families, BIOS/I/O
 limits and proof levels to existing checks. README, contributor and preset guides
 link it; the website manual exposes it at the browser-simulation boundary.
 The guide was checked against the actual inspector and execution switch, including
 the distinction between rejected BIOS calls and port writes without device behavior.
 Next: a curated broken-program repair lesson with literal controls and native proof.
+Scope guide `a1d0cee` passed CI `38337555976` and deployment `38337966576`.
+Mirror `b08ea76` changes only nine `bitborn/` paths. Public manual, progress,
+scope guide, README and roadmap match that exact commit byte-for-byte.
+The direction-flag lesson reuses both existing fourteen-byte challenge sources.
+Only byte 7 bit 0 changes FC to FD. A focused parity check boots both the broken seed
+and reviewed repair behind the same loader, compares final AX/DI/SP/DF, zero
+segments, halt address and stored bytes, and verifies unchanged guest code/image
+and empty serial output. Model journals independently check both write addresses
+and intermediate DI/DF across nine steps. The lesson explains why final DF=0
+alone hides the error and distinguishes CPU Lab's 7C00 from native loading at 7E00.
+Actual challenge capture frames show the failed seed, editable byte, one-bit repair
+and solved result. The instruction sources and released artifacts are unchanged.
+Capture review exposed an original CLD annotation beneath an edited FD byte.
+Editable-byte captions now explicitly say Starting source; browser assertions
+prevent these immutable annotations from masquerading as a current decode.
+The full 79-test Python/native suite passes with one expected macOS Linux skip.
+Chromium checks all twenty solutions and the starting-source captions. Refreshed
+capture provenance verifies all 64 source hashes, six GIFs and 96 actual PNG
+frame hashes, including the four direction seed/edit/repair frames.
+Firefox and WebKit also verify the failing direction seed, actual one-bit button
+repair, starting-source caption and all successful goal checks.
+Next: remaining keyboard execution shortcuts and screen-reader announcements.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -420,7 +446,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 27 | 2 | Flags lesson separating signed overflow, carry, parity and undefined AF | H | H | 04 | Medium | Open |
 | 28 | 2 | Meaningful bit-diff explanations tied to instruction boundaries and execution mode | H | M | 05,07 | Medium | Complete: positional changes and linear field roles; no execution/control-flow/alignment claim |
 | 29 | 2 | New optimization challenges with alternate valid solutions and actual size measurements | H | M | Challenge evaluator | Medium | Open |
-| 30 | 2 | Curated broken-program debugging walkthrough with recorded repair and native proof | H | H | 02 | Low | Open |
+| 30 | 2 | Curated broken-program debugging walkthrough with recorded repair and native proof | H | H | 02 | Low | Complete: direction-flag seed/repair, intermediate model journals, both native controls and genuine browser repair frames |
 | 31 | 2 | Stable English introduction as the maintained translation source | H | H | Existing README | Low | Complete |
 | 32 | 2 | Simplified Chinese README/introduction and working command/link checks | H | H | 31 | Medium | Complete |
 | 33 | 2 | Spanish README/introduction and working command/link checks | H | H | 31 | Medium | Complete |
