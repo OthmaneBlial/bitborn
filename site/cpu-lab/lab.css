@@ -11,3 +11,4 @@
 .hex-label{display:block;color:var(--green);font-size:11px;padding:20px 18px 8px}#hex-editor{min-height:100px;height:100px}
 #timeline-steps{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px;font-size:10px}#timeline-steps li{padding:6px 8px;border:1px solid var(--line);overflow-wrap:anywhere}#timeline-steps .selected{border-color:var(--green);color:var(--green);text-decoration:underline}#timeline-steps .future{border-style:dashed;color:var(--muted)}
 #program-link{width:calc(100% - 40px);min-width:0;margin:8px 20px 0;padding:10px;background:var(--bg);border:1px solid var(--line);color:var(--text);font:11px var(--mono)}@media(max-width:760px){#program-link{width:calc(100% - 28px);margin-inline:14px}}
+@media(max-width:1050px){.register-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.register-bits,.flag{font-size:9px}}

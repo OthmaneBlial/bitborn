@@ -174,6 +174,10 @@
       "progress": "\u2705 Seven reviewed boot/control headers establish SS:SP with interrupts masked during setup; self-modifying sources now use 82 bytes and retain native/model one-bit proof at offsets 52/61"
     },
     {
+      "milestone": "CPU indicator readability",
+      "progress": "\u2705 Tablet bit rows fit their register cells; bit/flag labels stay at least 9px; 11,072 computed samples per browser across four widths/eight states pass contrast, geometry and non-color change-cue checks"
+    },
+    {
       "milestone": "Short branch field microscope",
       "progress": "\u2705 Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged"
     },

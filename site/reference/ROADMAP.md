@@ -283,6 +283,10 @@ The v0.2 milestone is published and verified. The following research remains ope
   restore its data segment afterward. Audit all seven reviewed standalone boot/
   control headers from perturbed model entry registers, retain later STI behavior,
   and refresh literal addresses, native/model proof and capture provenance.
+- [x] Fix squeezed tablet register-bit rows and check CPU indicator contrast,
+  local bounds and non-color change cues at 1440/768/390/320px. Include carry,
+  undefined AF, stack/memory writes and timeline overlap. The scoped checks do
+  not certify the whole site; see [indicator readability](docs/indicator-readability.md).
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

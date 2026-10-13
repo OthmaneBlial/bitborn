@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Fix 768px CPU register-bit overflow with two tablet register columns and a
+  9px bit/flag-label floor. Add computed contrast, local geometry and underline/
+  undefined-state checks for four widths and eight states in three browsers;
+  contrast math uses unrounded thresholds and explicit scope limits.
+
 - Initialize the self-modifying program/control stack before the first BIOS call,
   removing firmware-stack dependence. Keep the one-bit experiment at 82 bytes,
   offsets 52/61 and 40 model steps; audit seven boot/control setup headers with

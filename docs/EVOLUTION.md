@@ -346,6 +346,20 @@ with all site/module checks. Chromium, Firefox and WebKit verify updated source,
 downloads. The new VGA capture source/provenance remains unchanged.
 Next: accessibility/contrast checks and contributor-facing scope clarity, while
 physical hardware and live assistive-technology sessions remain separate gates.
+Stack fix `449ae06` passed CI `38335257216` and deployment `38335638368`; mirror
+`47473dd` changes only 25 `bitborn/` paths. Public generated source metadata,
+raw payload, capture record, source/guide and progress match exact committed bytes.
+Computed indicator auditing exposed 768px register bits extending beyond their
+cells despite no page overflow. Tablet layouts now use two register columns and
+bit/flag labels retain a 9px project floor. Chromium, Firefox and WebKit each
+verify 11,072 visible text samples across four widths and eight states, with a
+6.742:1 minimum computed contrast. Local containment, underlines, carry/zero,
+preserved carry, stack/memory stores, undefined AF and current/changed timeline
+overlap are covered. sRGB math checks include thresholds without rounding, alpha
+compositing and 1,000 seeded ratios. Actual tablet screenshot review confirms
+readable contained rows. This is scoped reduced-motion/flat-background evidence,
+not a whole-site accessibility certification or live AT session.
+Next: contributor-facing supported-instruction and proof-level navigation.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -413,7 +427,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 40 | 2 | Localized introductory site routes with lang/dir/canonical/hreflang metadata | H | M | 31–39 | Medium | Complete |
 | 41 | 2 | Print-friendly lessons with readable code and source attribution | M | H | 25–27 | Low | Complete: ten pages in three browser print modes, actual 13-page Chromium PDF QA, RTL/LTR code and source URLs; physical printers untested |
 | 42 | 0 | Keyboard accessibility regression for timeline, imports, controls and error focus | H | H | 12 | Low | Open |
-| 43 | 0 | Contrast and narrow-screen checks for changed-bit and flag indicators | H | H | Existing CSS | Low | Open |
+| 43 | 0 | Contrast and narrow-screen checks for changed-bit and flag indicators | H | H | Existing CSS | Low | Complete: real tablet overflow fixed; four widths/eight states, 11,072 samples per browser, contrast/local geometry and non-color cues; full-site/animated/live AT review separate |
 | 44 | 2 | Explicit shortcuts guide and screen-reader-friendly execution announcements | M | H | 12,42 | Low | Open |
 | 45 | 2 | CODE_OF_CONDUCT with real, usable reporting paths | H | H | Maintainer/profile evidence | Low | Complete |
 | 46 | 0 | SECURITY policy with scoped supported versions and verified private reporting | H | H | GitHub repository settings | Medium | Complete |

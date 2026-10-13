@@ -22,6 +22,7 @@ import {checkELF} from './elf_browser_checks.mjs';
 import {checkBitDiff} from './bit_diff_browser_checks.mjs';
 import {checkPrintLessons} from './print_browser_checks.mjs';
 import {checkVGABitmap} from './vga_bitmap_browser_checks.mjs';
+import {checkIndicators} from './indicator_browser_checks.mjs';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..'),site=resolve(root,'site');
 const playwright=await import(process.env.PLAYWRIGHT_MODULE ? pathToFileURL(resolve(process.env.PLAYWRIGHT_MODULE)).href : 'playwright');
@@ -197,6 +198,7 @@ try {
       await checkBitDiff(page,base);
       await checkPrintLessons(page,base);
       await checkVGABitmap(page,base);
+      await checkIndicators(page);
       assert.deepEqual(errors,[],`${engine}: page errors and HTTP asset failures`);
       console.log(`${engine} ${browser.version()} passed locally: 8 dedicated routes + optimization, home/docs, eight localized introductions with RTL/LTR code and keyboard navigation, 16/32/64 inspection with exact imm64 and read-only bit/context changes, desktop/320px reduced motion, real H→h binary downloads, CPU state/flags/memory/breakpoint resume, two bit-button challenges and local progress, generated roadmap, optimization byte inspection.`);
     } finally {await browser.close();}
