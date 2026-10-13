@@ -6,6 +6,32 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 
 ## Current execution record
 
+Shared native exception dispatch (2026-10-13): 736 literal bytes map eighteen
+legacy gates and normalize hardware-error/synthetic-zero frames through one
+handler. Native DE, BP, UD and GP verify actual frame shape, selector error 18,
+fault/trap EIPs, preserved PUSHAD context and DF, balanced return stack and source
+RAM integrity. Three literal one-bit controls remove DE, capture then halt, or
+retry DE until the fifth entry takes the four-record capacity stop. All gates,
+stub routes and mixed-mode instruction bytes/boundaries are independently checked.
+Four QEMU captures contain actual final registers, guest-written logs, retained
+stack and source RAM; metadata and twenty assets are revalidated against their
+hashes and raw fields. No instruction trace, arbitrary recovery or isolation is
+claimed. The full 736-byte stage exceeds the model import limit; four prefixes
+stop atomically at LGDT after seven setup instructions. Counts become 67 reviewed
+targets, 112 artifacts, thirteen primary BIOS images and twenty gallery entries.
+The full native suite passes 106 tests with one expected macOS native-Linux skip;
+site/model/doc checks, Chrome routes and complete Firefox 157/WebKit 27.2 suites
+pass. Browser checks verify exact image/source/capture/guide bytes, 1440/320px
+layout and the native-only scope. Publication remains pending.
+Other mapped delivery, modern vectors, nested/privilege-changing
+frames and general recovery remain open.
+
+Optimization publication `cc48b9a` passes CI `38376453864` and deployment
+`38377287455`. All 29 checked public files match the verified code, sources,
+images, guide, recording and progress. Live Chrome passes both distinct encodings,
+measured budgets, locked setup, wrong-goal rejection and 1440/320px layout. Central
+mirror `eb76fbe` changes only 42 paths under `bitborn/`.
+
 Measured optimization challenges (2026-10-13): six new literal sources establish
 different nonzero registers in seven locked bytes. Two reviewed encodings clear
 AX/BX in 12 bytes rather than 14; two transfer AX=42 into BX in 10 rather than 11.
@@ -761,7 +787,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 53 | 3 | Real VGA bitmap experiment with manually authored pixel/instruction bytes | H | M | BIOS target | High | Complete: 142 authored bytes, full native index/RGB proof, exact actual GIF pixels and three-browser download/model-boundary checks; hardware remains untested |
 | 54 | 3 | Tiny text-mode game with deterministic input and genuine QEMU recording | H | M | Shell keyboard helpers | High | Open |
 | 55 | 3 | Bounded native allocator with memory-map, ownership and overflow evidence | H | M | Reviewed BIOS target | High | Complete: fixed real-mode arena, two native five-request logs, one-bit ownership control, zero/exact-fit/exhaustion/wrap checks and guarded immutable code/disk proof; free, isolation and paging remain open |
-| 56 | 3 | Protected-mode exception handlers with controlled fault injection | H | M | IDT target | High | Partial: native #UD and selector #GP/error-code fixtures; general dispatch open |
+| 56 | 3 | Protected-mode exception handlers with controlled fault injection | H | M | IDT target | High | Complete: shared legacy dispatcher, native DE/BP/UD/GP error/no-error frames, trap/fault EIP and three one-bit controls; other delivery and arbitrary recovery remain open |
 | 57 | 3 | Timer IRQ experiment with explicit PIC setup and deterministic QEMU assertions | H | M | 56 | High | Complete: explicit PIC/PIT setup, 3/2 native frame logs, guarded untouched IRETD frames, wrong-EOI pending/ISR proof and source/image integrity; timing, general handlers and physical hardware remain open |
 | 58 | 3 | Paging experiment with inspected page tables and deliberate page-fault evidence | H | L | 55,56 | High | Complete: full 2048-entry structure inspection, native #PF error/CR2/frame, PTE repair, INVLPG and unchanged store retry; independent PTE/WP controls, code/image integrity and explicit model boundary; user-mode isolation remains open |
 | 59 | 0 | QEMU runner resource/error-path checks and bounded process cleanup | H | H | Existing Guest harness | Medium | Complete: resource unwind, QMP bounds/deadlines and actual child kill/reap; disk quotas remain outside scope |

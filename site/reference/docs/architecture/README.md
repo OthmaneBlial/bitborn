@@ -154,6 +154,21 @@ retries the original store with IRETD. Both complete structures and the retained
 frame are inspected in QEMU. PTE/WP controls distinguish permission from
 supervisor behavior; browser paging and user-mode isolation remain outside scope.
 
+## Shared legacy exception frames
+
+The [exception dispatcher](../../examples/exception-dispatch/README.md) maps
+eighteen of twenty legacy vector slots to one shared handler. No-error stubs
+insert zero before the vector; hardware-error stubs add only the vector. Native
+DE, BP, UD and GP delivery yields the same five-DWORD layout. PUSHAD preserves
+general registers, the log records original and return EIP, and IRETD discards
+only the two normalized software slots. The authored fault sites advance two
+bytes; the breakpoint trap retains its already-advanced EIP. Other policies stop
+after capture. One-bit controls remove DE, retain one diagnostic context or retry
+DE until the four-record capacity guard stops a fifth entry. Exact logs, contexts,
+guards, source RAM and mixed-mode goldens are captured and revalidated. Other
+native delivery, general recovery, privilege transitions and modern vectors
+remain unverified; the bounded model stops before protection at LGDT.
+
 ## Technical references
 
 - [Intel Software Developer's Manuals](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html): instruction encodings, real mode and flags.

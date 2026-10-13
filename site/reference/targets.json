@@ -16,5 +16,6 @@
   {"source": "examples/vga-bitmap/program.bits", "output": "vga-bitmap.bin", "size": 142, "bootable": true, "sha256": "7e00752e2334ab6aa28a6769fc289c5f31a90b37f4e804f22f5f4481427925bc"},
   {"source": "examples/bounded-allocator/program.bits", "output": "bounded-allocator.bin", "size": 220, "bootable": true, "sha256": "260fc5187fe5a244751b37898d9c2bbef07c885fe6e6801d03303e4c6346cceb"},
   {"source": "examples/timer-irq/program.bits", "output": "timer-irq.bin", "size": 568, "loader": "boot/loader.bits", "sha256": "729cdeb4f8a691fee516645dd0ec96ed7eee330e391e2f24b64bebbe5f74e4e9"},
-  {"source": "examples/paging/program.bits", "output": "paging.bin", "size": 424, "bootable": true, "sha256": "6db0671b2c518360688c8053bf8df4488523787f10a662eb67241cc5ab129ec8"}
+  {"source": "examples/paging/program.bits", "output": "paging.bin", "size": 424, "bootable": true, "sha256": "6db0671b2c518360688c8053bf8df4488523787f10a662eb67241cc5ab129ec8"},
+  {"source": "examples/exception-dispatch/program.bits", "output": "exception-dispatch.bin", "size": 736, "loader": "boot/loader.bits", "sha256": "cea014290f2a316549c66a5c584891018d066e73bb3c147f4d6ecb42a2fe19d8"}
 ]

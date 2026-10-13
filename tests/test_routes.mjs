@@ -36,7 +36,7 @@ for (const route of routes) {
 assert.equal(new Set(titles).size,routes.length,'unique route titles');
 assert.equal(new Set(descriptions).size,routes.length,'unique route descriptions');
 const examples = readFileSync(resolve(root,'site/examples/index.html'),'utf8');
-assert.equal([...examples.matchAll(/data-example="/g)].length,19);
+assert.equal([...examples.matchAll(/data-example="/g)].length,20);
 for(const name of ['program','control']) {
   const bytes=parseBits(readFileSync(resolve(root,`examples/bounded-allocator/${name}.bits`),'utf8'));
   assert.ok(examples.includes(`href="../cpu-lab/${programFragment(bytes)}"`),'allocator links preserve exact canonical bytes');
@@ -94,4 +94,4 @@ const readme=readFileSync(resolve(root,'README.md'),'utf8');
 assert.ok(!readme.includes('| Milestone | Progress |'),'README keeps only the summary and roadmap link');
 assert.match(readme,/Read the full roadmap.*\]\(ROADMAP\.md\)/);
 assert.ok(progress.milestones.every(item => typeof item.milestone === 'string' && typeof item.progress === 'string'));
-console.log(`route checks passed: ${routes.length} portable routes, unique metadata, local source/tutorial/download links, nineteen real example sizes, generated repository progress data`);
+console.log(`route checks passed: ${routes.length} portable routes, unique metadata, local source/tutorial/download links, twenty real example sizes, generated repository progress data`);

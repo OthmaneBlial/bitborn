@@ -1,0 +1,480 @@
+{
+  "kind": "Actual final QMP snapshots, native-written normalized exception logs and retained stack/RAM from four curated QEMU boots; not an instruction trace, arbitrary recovery or isolation proof",
+  "qemu": "QEMU emulator version 11.1.1",
+  "textFormat": "Native HMP register output with LF endings and trailing whitespace removed",
+  "goldenFormat": "Independent instruction-only NDISASM blocks with explicit 16/32-bit context and source-relative offsets",
+  "scope": {
+    "legacyVectorSlots": 20,
+    "presentGates": 18,
+    "reservedAbsent": [
+      9,
+      15
+    ],
+    "nativeExercisedVectors": [
+      0,
+      3,
+      6,
+      13
+    ],
+    "hardwareErrorVectorsWithinScope": [
+      8,
+      10,
+      11,
+      12,
+      13,
+      14,
+      17
+    ],
+    "privilegeLevel": 0,
+    "paging": false,
+    "modernVectorsAbove19": false
+  },
+  "memoryMap": {
+    "loadAddress": 32256,
+    "log": 24576,
+    "logRegionSize": 144,
+    "recordSize": 28,
+    "capacity": 4,
+    "count": 24704,
+    "stopStatus": 24708,
+    "stackTop": 36864,
+    "retainedContext": 36812,
+    "retainedContextSize": 52
+  },
+  "controls": {
+    "divisor-one": {
+      "changedByte": 135,
+      "mask": 1,
+      "effect": "DIV succeeds; no divide-error entry"
+    },
+    "stop-divide": {
+      "changedByte": 548,
+      "mask": 128,
+      "effect": "Capture one divide error then retain the diagnostic frame"
+    },
+    "retry-divide": {
+      "changedByte": 548,
+      "mask": 2,
+      "effect": "Retry the same divide fault; fifth entry stops before overflowing four records"
+    }
+  },
+  "sourceSha256": {
+    "tools/record_exception_dispatch.py": "d75a900f10cc3215e91ebcadae067a164ce9ed889d199609c12e0b67f1dbd1c1",
+    "tools/build.py": "0d7fccd1a6be5c7336dbd8bd9f56bd0d05999cf1c5a3ae3e454b4303ced67509",
+    "tools/bitborn.py": "06a1bc8ae1aeefd572a0e7755d0976fbc15247841157f531d56e74269f6ae609",
+    "tests/qemu.py": "30bccf107c84c82d2045de4c605d5e8104eaa682b3e8e0b165ff16e0eb5315c2",
+    "tests/exception_dispatch_checks.py": "6aa0910decb427bded688d0a2497442db97da007f70d13f299c54b1ccf4a0c36",
+    "boot/loader.bits": "4553161a5d37d3f3d7a4fae75c7d61f277163601e7f4b65986a0de37f5b1b539",
+    "examples/exception-dispatch/program.bits": "4c02323911c1bc9c3c10f04a5a8c33529badedac4be449b2017d7a38b2cef826",
+    "examples/exception-dispatch/divisor-one.bits": "31b5bd7a0a9c38ce916083d4b155c542a353f5551a53f0a78f118af6fa7d4ae5",
+    "examples/exception-dispatch/stop-divide.bits": "00a6b1999a4e1f98fd4bd0da6a1dcabf2fb07901c457b55d20013679ad0678f0",
+    "examples/exception-dispatch/retry-divide.bits": "5aab40042d2d9091522a9bd9aedcb9d197e42cab8ee43fe1806ff432aa7d1580"
+  },
+  "captures": [
+    {
+      "source": "examples/exception-dispatch/program.bits",
+      "payloadSize": 736,
+      "payloadSha256": "cea014290f2a316549c66a5c584891018d066e73bb3c147f4d6ecb42a2fe19d8",
+      "imageSize": 1536,
+      "imageSha256": "6f506bb3540b03f0ccedf20c62263f099962d47df084df818914c25c4e533a8d",
+      "snapshot": {
+        "count": 4,
+        "stopStatus": 0,
+        "registers": {
+          "EAX": 3511681028,
+          "EBX": 0,
+          "ECX": 3723427584,
+          "EDX": 0,
+          "ESI": 287454020,
+          "EDI": 1432778632,
+          "EBP": 2578103244,
+          "ESP": 36864,
+          "EIP": 32418,
+          "EFL": 1094,
+          "CR0": 17
+        },
+        "records": [
+          {
+            "vector": 0,
+            "error": 0,
+            "savedEIP": 32400,
+            "savedCS": 8,
+            "savedFlags": 66630,
+            "entryESP": 36844,
+            "returnEIP": 32402
+          },
+          {
+            "vector": 3,
+            "error": 0,
+            "savedEIP": 32403,
+            "savedCS": 8,
+            "savedFlags": 66630,
+            "entryESP": 36844,
+            "returnEIP": 32403
+          },
+          {
+            "vector": 6,
+            "error": 0,
+            "savedEIP": 32403,
+            "savedCS": 8,
+            "savedFlags": 66630,
+            "entryESP": 36844,
+            "returnEIP": 32405
+          },
+          {
+            "vector": 13,
+            "error": 24,
+            "savedEIP": 32410,
+            "savedCS": 8,
+            "savedFlags": 66630,
+            "entryESP": 36844,
+            "returnEIP": 32412
+          }
+        ],
+        "stackGuards": [
+          165,
+          90
+        ],
+        "normalizedFrame": [
+          13,
+          24,
+          32412,
+          8,
+          66630
+        ],
+        "pushadContext": [
+          1432778632,
+          287454020,
+          2578103244,
+          36844,
+          0,
+          0,
+          3723427584,
+          24
+        ]
+      },
+      "assets": {
+        "registers.txt": {
+          "file": "assets/exception-dispatch-program-registers.txt",
+          "size": 1381,
+          "sha256": "9ebe85a599673742070f890162eda58f475d8d3a17510e8dc1393370b6a94712"
+        },
+        "disassembly.txt": {
+          "file": "assets/exception-dispatch-program-disassembly.txt",
+          "size": 5125,
+          "sha256": "5635ef2ae686e9342f976d655d243c08a03db78301d3c8e5a3e0f5ea51c6f469"
+        },
+        "log.bin": {
+          "file": "assets/exception-dispatch-program-log.bin",
+          "size": 144,
+          "sha256": "5c4b68b1cccb270e7644d152f7fe6db53e8488a24c2a4d101343c8accb6659d7"
+        },
+        "stack.bin": {
+          "file": "assets/exception-dispatch-program-stack.bin",
+          "size": 52,
+          "sha256": "284bc5ef31c6200cf1485555fe54461ee1e40d3c750a10fd50bb5357e4c11ddd"
+        },
+        "ram.bin": {
+          "file": "assets/exception-dispatch-program-ram.bin",
+          "size": 736,
+          "sha256": "b345ff3fbe3da871d58b8b4c8a3b2611f8891eae6e7989152b32f522db4c6b25"
+        }
+      }
+    },
+    {
+      "source": "examples/exception-dispatch/divisor-one.bits",
+      "payloadSize": 736,
+      "payloadSha256": "546fd53fca96387f1d36bc3a95b7ba9510831fd2622245b46392b2a66e48376a",
+      "imageSize": 1536,
+      "imageSha256": "51b999ef106a99a86bfcea01f4ca2f34ead131a2ab5da77b87f6af15b0d3632d",
+      "snapshot": {
+        "count": 3,
+        "stopStatus": 0,
+        "registers": {
+          "EAX": 3511681028,
+          "EBX": 1,
+          "ECX": 3723427584,
+          "EDX": 0,
+          "ESI": 287454020,
+          "EDI": 1432778632,
+          "EBP": 2578103244,
+          "ESP": 36864,
+          "EIP": 32418,
+          "EFL": 1094,
+          "CR0": 17
+        },
+        "records": [
+          {
+            "vector": 3,
+            "error": 0,
+            "savedEIP": 32403,
+            "savedCS": 8,
+            "savedFlags": 1094,
+            "entryESP": 36844,
+            "returnEIP": 32403
+          },
+          {
+            "vector": 6,
+            "error": 0,
+            "savedEIP": 32403,
+            "savedCS": 8,
+            "savedFlags": 66630,
+            "entryESP": 36844,
+            "returnEIP": 32405
+          },
+          {
+            "vector": 13,
+            "error": 24,
+            "savedEIP": 32410,
+            "savedCS": 8,
+            "savedFlags": 66630,
+            "entryESP": 36844,
+            "returnEIP": 32412
+          }
+        ],
+        "stackGuards": [
+          165,
+          90
+        ],
+        "normalizedFrame": [
+          13,
+          24,
+          32412,
+          8,
+          66630
+        ],
+        "pushadContext": [
+          1432778632,
+          287454020,
+          2578103244,
+          36844,
+          1,
+          0,
+          3723427584,
+          24
+        ]
+      },
+      "assets": {
+        "registers.txt": {
+          "file": "assets/exception-dispatch-divisor-one-registers.txt",
+          "size": 1381,
+          "sha256": "3af0397547cf3e764687ccbb51c57b15e0d3367fca02929346ad05f8acf744f1"
+        },
+        "disassembly.txt": {
+          "file": "assets/exception-dispatch-divisor-one-disassembly.txt",
+          "size": 5125,
+          "sha256": "0fc3413ba9b3d20aa1e2daff0d41623fe772e9e79c58a5a667a6273a9ec5df82"
+        },
+        "log.bin": {
+          "file": "assets/exception-dispatch-divisor-one-log.bin",
+          "size": 144,
+          "sha256": "344566300436c6aa1e4c006384e283664e289b03a3a81aaaad9d230af3197ac4"
+        },
+        "stack.bin": {
+          "file": "assets/exception-dispatch-divisor-one-stack.bin",
+          "size": 52,
+          "sha256": "8d761526a498afbc26fdd80bcc92034add7783bc3eb62f9ad77d43165f4cf5d3"
+        },
+        "ram.bin": {
+          "file": "assets/exception-dispatch-divisor-one-ram.bin",
+          "size": 736,
+          "sha256": "0171721a561a98123fafd0d2942bc993dfb1a594eea866b3092c88f5dd5841f2"
+        }
+      }
+    },
+    {
+      "source": "examples/exception-dispatch/stop-divide.bits",
+      "payloadSize": 736,
+      "payloadSha256": "8cd9cd7c11058abe571ae0cd49a06de02ce1d87f70e1ba31cbbe87773d6843d1",
+      "imageSize": 1536,
+      "imageSha256": "ba1d09c9c47532b8065cbb6539f599f080cf3a9a128ba0ae9961bc8ef51718b1",
+      "snapshot": {
+        "count": 1,
+        "stopStatus": 1,
+        "registers": {
+          "EAX": 36844,
+          "EBX": 0,
+          "ECX": 130,
+          "EDX": 0,
+          "ESI": 287454020,
+          "EDI": 24576,
+          "EBP": 2578103244,
+          "ESP": 36812,
+          "EIP": 32571,
+          "EFL": 1154,
+          "CR0": 17
+        },
+        "records": [
+          {
+            "vector": 0,
+            "error": 0,
+            "savedEIP": 32400,
+            "savedCS": 8,
+            "savedFlags": 66630,
+            "entryESP": 36844,
+            "returnEIP": 32400
+          }
+        ],
+        "stackGuards": [
+          165,
+          90
+        ],
+        "normalizedFrame": [
+          0,
+          0,
+          32400,
+          8,
+          66630
+        ],
+        "pushadContext": [
+          1432778632,
+          287454020,
+          2578103244,
+          36844,
+          0,
+          0,
+          3723427584,
+          42
+        ]
+      },
+      "assets": {
+        "registers.txt": {
+          "file": "assets/exception-dispatch-stop-divide-registers.txt",
+          "size": 1381,
+          "sha256": "210d39e1b464ac6d231ee69bb31f1b8d1af5e8488c76c1d702bb23905db623a5"
+        },
+        "disassembly.txt": {
+          "file": "assets/exception-dispatch-stop-divide-disassembly.txt",
+          "size": 5125,
+          "sha256": "5635ef2ae686e9342f976d655d243c08a03db78301d3c8e5a3e0f5ea51c6f469"
+        },
+        "log.bin": {
+          "file": "assets/exception-dispatch-stop-divide-log.bin",
+          "size": 144,
+          "sha256": "64797cf2a644a703fc096e8a22b35d5fbc033e2875045511795eb8bd3e1cd813"
+        },
+        "stack.bin": {
+          "file": "assets/exception-dispatch-stop-divide-stack.bin",
+          "size": 52,
+          "sha256": "90ed02b4f93bebc8a736b66eadbe247eed1d061d407c535c7770293bc66115c2"
+        },
+        "ram.bin": {
+          "file": "assets/exception-dispatch-stop-divide-ram.bin",
+          "size": 736,
+          "sha256": "9a33f82badbec085f1c5e38966ead4ad4c86ec064a3cb2a2c9f438832b9a873d"
+        }
+      }
+    },
+    {
+      "source": "examples/exception-dispatch/retry-divide.bits",
+      "payloadSize": 736,
+      "payloadSha256": "294520ab0ab8d76d4104542ea26362ad0cdb4cbfdd6e712824ee38a61d0dd3c1",
+      "imageSize": 1536,
+      "imageSha256": "b8c40c31e3b7967618d1f7de5bf534ff164cefe5d10b195caab68eb2f300955f",
+      "snapshot": {
+        "count": 4,
+        "stopStatus": 1,
+        "registers": {
+          "EAX": 4,
+          "EBX": 0,
+          "ECX": 3723427584,
+          "EDX": 0,
+          "ESI": 287454020,
+          "EDI": 1432778632,
+          "EBP": 2578103244,
+          "ESP": 36812,
+          "EIP": 32571,
+          "EFL": 1094,
+          "CR0": 17
+        },
+        "records": [
+          {
+            "vector": 0,
+            "error": 0,
+            "savedEIP": 32400,
+            "savedCS": 8,
+            "savedFlags": 66630,
+            "entryESP": 36844,
+            "returnEIP": 32400
+          },
+          {
+            "vector": 0,
+            "error": 0,
+            "savedEIP": 32400,
+            "savedCS": 8,
+            "savedFlags": 66630,
+            "entryESP": 36844,
+            "returnEIP": 32400
+          },
+          {
+            "vector": 0,
+            "error": 0,
+            "savedEIP": 32400,
+            "savedCS": 8,
+            "savedFlags": 66630,
+            "entryESP": 36844,
+            "returnEIP": 32400
+          },
+          {
+            "vector": 0,
+            "error": 0,
+            "savedEIP": 32400,
+            "savedCS": 8,
+            "savedFlags": 66630,
+            "entryESP": 36844,
+            "returnEIP": 32400
+          }
+        ],
+        "stackGuards": [
+          165,
+          90
+        ],
+        "normalizedFrame": [
+          0,
+          0,
+          32400,
+          8,
+          66630
+        ],
+        "pushadContext": [
+          1432778632,
+          287454020,
+          2578103244,
+          36844,
+          0,
+          0,
+          3723427584,
+          42
+        ]
+      },
+      "assets": {
+        "registers.txt": {
+          "file": "assets/exception-dispatch-retry-divide-registers.txt",
+          "size": 1381,
+          "sha256": "c33a759f694fda884cb45c528550475a70a6be5aeaafffc90c08a528f445628b"
+        },
+        "disassembly.txt": {
+          "file": "assets/exception-dispatch-retry-divide-disassembly.txt",
+          "size": 5125,
+          "sha256": "5635ef2ae686e9342f976d655d243c08a03db78301d3c8e5a3e0f5ea51c6f469"
+        },
+        "log.bin": {
+          "file": "assets/exception-dispatch-retry-divide-log.bin",
+          "size": 144,
+          "sha256": "549d4543f1097d65a6185705c18f52346dc95a1691f60c85fe5797a87c9bef86"
+        },
+        "stack.bin": {
+          "file": "assets/exception-dispatch-retry-divide-stack.bin",
+          "size": 52,
+          "sha256": "90ed02b4f93bebc8a736b66eadbe247eed1d061d407c535c7770293bc66115c2"
+        },
+        "ram.bin": {
+          "file": "assets/exception-dispatch-retry-divide-ram.bin",
+          "size": 736,
+          "sha256": "189bd1b59c146d9cb7808eb94b05da70a90156d576612737137f9d57add367ca"
+        }
+      }
+    }
+  ],
+  "reproduce": "python3 tools/record_exception_dispatch.py"
+}

@@ -242,6 +242,10 @@
       "progress": "\u2705 424 literal bytes build and inspect all 2048 directory/table entries, record #PF error 3 and CR2, repair PTE.RW, use INVLPG and retry the unchanged store; PTE/WP one-bit controls avoid the fault, with retained frames and code/image integrity; no browser paging or isolation claim"
     },
     {
+      "milestone": "Shared legacy exception frames",
+      "progress": "\u2705 736 literal bytes normalize error/no-error entry, preserve PUSHAD context and DF, distinguish fault/trap EIP and guard four records; four native vectors, three one-bit controls, twenty mapped slots and actual snapshots; other delivery and general recovery remain unverified"
+    },
+    {
       "milestone": "Short branch field microscope",
       "progress": "\u2705 Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged"
     },

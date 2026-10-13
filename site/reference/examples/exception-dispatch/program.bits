@@ -1,0 +1,165 @@
+# Literal legacy exception dispatcher, loaded at 0000:7E00 by boot/loader.bits.
+11111010 # instruction | CLI | Keep external maskable interrupts disabled.
+11101010 00000110 01111110 00000000 00000000 # instruction | JMP 0000:7E06 | Normalize real-mode CS.
+00110001 11000000 # instruction | XOR AX,AX | Prepare zero segment selectors.
+10001110 11011000 # instruction | MOV DS,AX | Address literal pointers through segment zero.
+10001110 11010000 # instruction | MOV SS,AX | Establish the real-mode stack segment.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Establish the real-mode stack pointer.
+11111100 # instruction | CLD | Initialize the log forwards before the deliberate DF test.
+00001111 00000001 00010110 00011000 10000000 # instruction | LGDT [8018] | Load the GDT pointer at source offset 536.
+00001111 00100000 11000000 # instruction | MOV EAX,CR0 | Preserve existing control bits.
+01100110 10000011 11001000 00000001 # instruction | OR EAX,1 | Enable protection with a 32-bit operand.
+00001111 00100010 11000000 # instruction | MOV CR0,EAX | Enable PE while leaving paging off.
+01100110 11101010 00101000 01111110 00000000 00000000 00001000 00000000 # instruction | JMP 0008:00007E28 | Enter flat 32-bit code at source offset 40.
+00000000 # padding | ALIGN | Fill the byte before the protected entry.
+10111000 00010000 00000000 00000000 00000000 # instruction | MOV EAX,10 | Select flat writable data.
+10001110 11011000 # instruction | MOV DS,AX | Reload DS from the protected descriptor.
+10001110 11000000 # instruction | MOV ES,AX | Reload ES for log initialization.
+10001110 11100000 # instruction | MOV FS,AX | Give FS the same flat descriptor.
+10001110 11101000 # instruction | MOV GS,AX | Give GS the same flat descriptor.
+10001110 11010000 # instruction | MOV SS,AX | Use a flat 32-bit stack.
+10111100 00000000 10010000 00000000 00000000 # instruction | MOV ESP,9000 | Establish the protected stack.
+00001111 00000001 00011101 00011110 10000000 00000000 00000000 # instruction | LIDT [801E] | Load twenty legacy vector slots at physical 8040.
+00110001 11000000 # instruction | XOR EAX,EAX | Prepare zeroed log and counters.
+10111111 00000000 01100000 00000000 00000000 # instruction | MOV EDI,6000 | Begin the bounded log region.
+10111001 00100100 00000000 00000000 00000000 # instruction | MOV ECX,36 | Clear 144 bytes including counters and spare slots.
+11110011 10101011 # instruction | REP STOSD | Initialize log RAM as data, not instructions.
+11000110 00000101 01110000 01100000 00000000 00000000 10100101 # instruction | MOV byte [6070],A5 | Guard the end of four 28-byte records.
+11000110 00000101 01110100 01100000 00000000 00000000 01011010 # instruction | MOV byte [6074],5A | Keep a second log guard.
+11000110 00000101 11001011 10001111 00000000 00000000 10100101 # instruction | MOV byte [8FCB],A5 | Guard below the deepest normalized PUSHAD frame.
+11000110 00000101 00000000 10010000 00000000 00000000 01011010 # instruction | MOV byte [9000],5A | Guard above the protected stack.
+10111110 01000100 00110011 00100010 00010001 # instruction | MOV ESI,11223344 | Seed a register that the dispatcher must preserve.
+10111111 10001000 01110111 01100110 01010101 # instruction | MOV EDI,55667788 | Seed the caller's destination register.
+10111101 11001100 10111011 10101010 10011001 # instruction | MOV EBP,99AABBCC | Seed the caller's frame register.
+10111001 00000000 11111111 11101110 11011101 # instruction | MOV ECX,DDEEFF00 | Seed the caller's count register.
+10111000 00101010 00000000 00000000 00000000 # instruction | MOV EAX,42 | Prepare the dividend.
+10111011 00000000 00000000 00000000 00000000 # instruction | MOV EBX,0 | Deliberately select divide by zero; one immediate bit makes the divisor one.
+00110001 11010010 # instruction | XOR EDX,EDX | Use a zero high dividend.
+00111001 11000000 # instruction | CMP EAX,EAX | Establish defined arithmetic flags before the fault sequence.
+11111101 # instruction | STD | Verify that exception return preserves the caller's direction flag.
+11110111 11110011 # instruction | DIV EBX | Raise native divide error at source offset 144.
+11001100 # instruction | INT3 | Raise a breakpoint trap whose saved EIP is the following instruction.
+00001111 00001011 # instruction | UD2 | Raise invalid opcode at source offset 147.
+10111000 00011000 00000000 00000000 00000000 # instruction | MOV EAX,18 | Choose the nonexistent fourth GDT descriptor.
+10001110 11011000 # instruction | MOV DS,AX | Raise general protection at offset 154 with selector error 18.
+10111000 00000100 00000000 01010000 11010001 # instruction | MOV EAX,D1500004 | Mark completion of the controlled sequence; RAM at 6080 records the actual entry count.
+11110100 # instruction | HLT | Halt at source offset 161 with balanced ESP and DF preserved.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | ALIGN | Begin the common handler at offset 192.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | ALIGN | Complete thirty bytes of padding.
+01100000 # instruction | PUSHAD | Preserve all general registers above the normalized frame.
+10100001 10000000 01100000 00000000 00000000 # instruction | MOV EAX,[6080] | Read the completed-record count.
+10000011 11111000 00000100 # instruction | CMP EAX,4 | Bound the log to four records.
+01110011 01100101 # instruction | JAE stop | Stop at offset 304 instead of overflowing the log.
+01101011 00111101 10000000 01100000 00000000 00000000 00011100 # instruction | IMUL EDI,[6080],28 | Select the next 28-byte record.
+10000001 11000111 00000000 01100000 00000000 00000000 # instruction | ADD EDI,6000 | Address the bounded record.
+10001011 01011100 00100100 00100000 # instruction | MOV EBX,[ESP+32] | Read the normalized vector number.
+10001001 00011111 # instruction | MOV [EDI],EBX | Record the actual vector.
+10001011 01000100 00100100 00100100 # instruction | MOV EAX,[ESP+36] | Read the CPU error or synthetic zero.
+10001001 01000111 00000100 # instruction | MOV [EDI+4],EAX | Record the normalized error slot.
+10001011 01000100 00100100 00101000 # instruction | MOV EAX,[ESP+40] | Read the CPU-generated saved EIP.
+10001001 01000111 00001000 # instruction | MOV [EDI+8],EAX | Preserve the original saved EIP in the log.
+10001001 01000111 00011000 # instruction | MOV [EDI+24],EAX | Initialize the recorded return EIP before policy selection.
+10001011 01000100 00100100 00101100 # instruction | MOV EAX,[ESP+44] | Read the saved code selector.
+10001001 01000111 00001100 # instruction | MOV [EDI+12],EAX | Record the CPU-generated CS slot.
+10001011 01000100 00100100 00110000 # instruction | MOV EAX,[ESP+48] | Read the unmodified saved EFLAGS image.
+10001001 01000111 00010000 # instruction | MOV [EDI+16],EAX | Record flags without forcing undefined values.
+10001101 01000100 00100100 00100000 # instruction | LEA EAX,[ESP+32] | Recover the normalized entry stack pointer.
+10001001 01000111 00010100 # instruction | MOV [EDI+20],EAX | Record the same entry ESP for both error classes.
+11111111 00000101 10000000 01100000 00000000 00000000 # instruction | INC dword [6080] | Count the captured entry.
+00001111 10110110 10001011 00100100 10000000 00000000 00000000 # instruction | MOVZX ECX,byte [EBX+8024] | Read literal recovery policy data by vector.
+11110110 11000001 10000000 # instruction | TEST CL,80 | Distinguish default stop from the four controlled recovery policies.
+01110101 00011010 # instruction | JNZ stop | Capture then halt when the policy's stop bit is set.
+00000001 01001100 00100100 00101000 # instruction | ADD [ESP+40],ECX | Advance two-byte faults; the breakpoint policy adds zero.
+10001011 01000100 00100100 00101000 # instruction | MOV EAX,[ESP+40] | Read the actual return EIP after policy application.
+10001001 01000111 00011000 # instruction | MOV [EDI+24],EAX | Record the chosen return address.
+01100001 # instruction | POPAD | Restore the caller's general registers.
+10000011 11000100 00001000 # instruction | ADD ESP,8 | Discard only vector and normalized error slots.
+11001111 # instruction | IRETD | Restore CPU-generated EIP, CS and flags in 32-bit mode.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | ALIGN | Begin the default stop at offset 304.
+11000111 00000101 10000100 01100000 00000000 00000000 00000001 00000000 00000000 00000000 # instruction | MOV dword [6084],1 | Report a captured unhandled or capacity-limited entry.
+11110100 # instruction | HLT | Retain PUSHAD and the normalized frame for diagnosis.
+00000000 00000000 00000000 00000000 00000000 # padding | ALIGN | Begin nine-byte legacy stub slots at offset 320.
+01101010 00000000 # instruction | PUSH 0 | Vector zero has no hardware error; insert zero.
+01101010 00000000 # instruction | PUSH 0 | Identify divide error.
+11101001 01110111 11111111 11111111 11111111 # instruction | JMP common | Route to source offset 192.
+01101010 00000000 # instruction | PUSH 0 | Debug exceptions have no hardware error slot.
+01101010 00000001 # instruction | PUSH 1 | Identify debug exception.
+11101001 01101110 11111111 11111111 11111111 # instruction | JMP common | Share the normalized handler.
+01101010 00000000 # instruction | PUSH 0 | NMI has no hardware error slot.
+01101010 00000010 # instruction | PUSH 2 | Identify NMI; native delivery is not exercised here.
+11101001 01100101 11111111 11111111 11111111 # instruction | JMP common | Share the normalized handler.
+01101010 00000000 # instruction | PUSH 0 | Breakpoint has no hardware error slot.
+01101010 00000011 # instruction | PUSH 3 | Identify the controlled breakpoint trap.
+11101001 01011100 11111111 11111111 11111111 # instruction | JMP common | Preserve the trap's already-advanced saved EIP.
+01101010 00000000 # instruction | PUSH 0 | Overflow has no hardware error slot.
+01101010 00000100 # instruction | PUSH 4 | Identify overflow.
+11101001 01010011 11111111 11111111 11111111 # instruction | JMP common | Default policy captures and stops.
+01101010 00000000 # instruction | PUSH 0 | Bound range has no hardware error slot.
+01101010 00000101 # instruction | PUSH 5 | Identify bound-range exception.
+11101001 01001010 11111111 11111111 11111111 # instruction | JMP common | Default policy captures and stops.
+01101010 00000000 # instruction | PUSH 0 | Invalid opcode has no hardware error slot.
+01101010 00000110 # instruction | PUSH 6 | Identify the controlled UD2 fault.
+11101001 01000001 11111111 11111111 11111111 # instruction | JMP common | Share the normalized handler.
+01101010 00000000 # instruction | PUSH 0 | Device unavailable has no hardware error slot.
+01101010 00000111 # instruction | PUSH 7 | Identify device-unavailable exception.
+11101001 00111000 11111111 11111111 11111111 # instruction | JMP common | Default policy captures and stops.
+01101010 00001000 # instruction | PUSH 8 | Double fault supplies its own error slot; add only the vector.
+11101001 00110001 11111111 11111111 11111111 # instruction | JMP common | Normalize the hardware-error frame.
+10010000 10010000 # padding | ALIGN | Fill this nine-byte stub slot after the jump.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | RESERVED | Vector nine has no present gate or executable stub.
+01101010 00001010 # instruction | PUSH 10 | Invalid TSS supplies its own error slot.
+11101001 00011111 11111111 11111111 11111111 # instruction | JMP common | Normalize vector ten.
+10010000 10010000 # padding | ALIGN | Fill the fixed stub slot.
+01101010 00001011 # instruction | PUSH 11 | Segment not present supplies its own error slot.
+11101001 00010110 11111111 11111111 11111111 # instruction | JMP common | Normalize vector eleven.
+10010000 10010000 # padding | ALIGN | Fill the fixed stub slot.
+01101010 00001100 # instruction | PUSH 12 | Stack fault supplies its own error slot.
+11101001 00001101 11111111 11111111 11111111 # instruction | JMP common | Normalize vector twelve.
+10010000 10010000 # padding | ALIGN | Fill the fixed stub slot.
+01101010 00001101 # instruction | PUSH 13 | General protection supplies the actual selector error slot.
+11101001 00000100 11111111 11111111 11111111 # instruction | JMP common | Route the tested hardware-error frame to the same handler.
+10010000 10010000 # padding | ALIGN | Fill the fixed stub slot.
+01101010 00001110 # instruction | PUSH 14 | Page fault supplies its own error slot; paging is disabled in this probe.
+11101001 11111011 11111110 11111111 11111111 # instruction | JMP common | Provide structural legacy page-fault dispatch only.
+10010000 10010000 # padding | ALIGN | Fill the fixed stub slot.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | RESERVED | Vector fifteen has no present gate or executable stub.
+01101010 00000000 # instruction | PUSH 0 | x87 floating-point error has no hardware error slot.
+01101010 00010000 # instruction | PUSH 16 | Identify x87 exception.
+11101001 11100111 11111110 11111111 11111111 # instruction | JMP common | Default policy captures and stops.
+01101010 00010001 # instruction | PUSH 17 | Alignment check supplies its own error slot.
+11101001 11100000 11111110 11111111 11111111 # instruction | JMP common | Normalize vector seventeen.
+10010000 10010000 # padding | ALIGN | Fill the fixed stub slot.
+01101010 00000000 # instruction | PUSH 0 | Machine check has no hardware error slot.
+01101010 00010010 # instruction | PUSH 18 | Identify machine check; recovery is not claimed.
+11101001 11010101 11111110 11111111 11111111 # instruction | JMP common | Default policy captures and stops.
+01101010 00000000 # instruction | PUSH 0 | SIMD floating-point error has no hardware error slot.
+01101010 00010011 # instruction | PUSH 19 | Identify SIMD floating-point exception.
+11101001 11001100 11111110 11111111 11111111 # instruction | JMP common | Default policy captures and stops.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | ALIGN | Place the literal GDT at offset 512.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | GDT NULL | Reserve selector zero.
+11111111 11111111 00000000 00000000 00000000 10011010 11001111 00000000 # data | GDT CODE | Flat present ring-zero 32-bit executable descriptor.
+11111111 11111111 00000000 00000000 00000000 10010010 11001111 00000000 # data | GDT DATA | Flat present writable descriptor with 32-bit stack addressing.
+00010111 00000000 00000000 10000000 00000000 00000000 # data | GDTR | Limit 23 and physical base 8000.
+10011111 00000000 01000000 10000000 00000000 00000000 # data | IDTR | Limit 159 and physical base 8040.
+00000010 10000000 10000000 00000000 10000000 10000000 00000010 10000000 10000000 10000000 10000000 10000000 10000000 00000010 10000000 10000000 10000000 10000000 10000000 10000000 # data | RECOVERY POLICY | Advance two bytes for DE, UD and GP; preserve BP trap EIP; stop for all other legacy entries.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | ALIGN | Place twenty literal IDT gates at offset 576.
+01000000 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT 0 | Present ring-zero interrupt gate to stub 7F40.
+01001001 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT 1 | Present interrupt gate to stub 7F49.
+01010010 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT 2 | Present interrupt gate to stub 7F52.
+01011011 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT 3 | Present interrupt gate to stub 7F5B.
+01100100 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT 4 | Present interrupt gate to stub 7F64.
+01101101 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT 5 | Present interrupt gate to stub 7F6D.
+01110110 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT 6 | Present interrupt gate to stub 7F76.
+01111111 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT 7 | Present interrupt gate to stub 7F7F.
+10001000 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT 8 | Present hardware-error gate to stub 7F88.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT 9 | Keep reserved vector nine absent.
+10011010 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT 10 | Present hardware-error gate to stub 7F9A.
+10100011 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT 11 | Present hardware-error gate to stub 7FA3.
+10101100 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT 12 | Present hardware-error gate to stub 7FAC.
+10110101 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT 13 | Present tested GP gate to stub 7FB5.
+10111110 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT 14 | Present structural page-fault gate to stub 7FBE.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT 15 | Keep reserved vector fifteen absent.
+11010000 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT 16 | Present interrupt gate to stub 7FD0.
+11011001 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT 17 | Present hardware-error gate to stub 7FD9.
+11100010 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT 18 | Present machine-check gate to stub 7FE2; no recovery claim.
+11101011 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT 19 | Present SIMD exception gate to stub 7FEB.

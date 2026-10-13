@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Add a 736-byte literal legacy exception dispatcher: normalize hardware-error
+  and synthetic-zero frames, preserve general registers/DF and distinguish
+  fault/trap return EIPs for DE, BP, UD and GP. Three one-bit controls avoid DE,
+  stop after capture or exercise the log-capacity stop. Capture actual logs,
+  retained contexts and source RAM with independent mixed-mode goldens; mapping
+  other legacy vectors does not prove their delivery or arbitrary recovery.
+
 - Add two measured optimization challenges with two distinct literal solutions
   each: register clearing saves two payload bytes, value transfer saves one.
   Preserve seven setup bytes, check complete size and register/stack goals,
