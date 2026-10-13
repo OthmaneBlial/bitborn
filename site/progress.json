@@ -194,6 +194,10 @@
       "progress": "\u2705 bitinspect checks explicitly declared absolute/far/relative fields, including six original boot references; exhaustive word/displacement/alias checks, bounded reads and no byte rewriting"
     },
     {
+      "milestone": "Experiment reference maps",
+      "progress": "\u2705 Shared maps check both self-modifying and VGA controls; a 7E00-loaded CALL/RET map accepts the solution and rejects its broken seed"
+    },
+    {
       "milestone": "Safe inspection annotations",
       "progress": "\u2705 Typed ranges, non-overlap and literal bits are checked before rows print; bounded JSON, structured errors and escaped terminal controls preserve readable Unicode"
     },

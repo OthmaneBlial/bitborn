@@ -100,3 +100,9 @@ The browser CPU model represents selected text-mode BIOS behavior. It rejects
 this program's graphics-mode request after the six setup instructions; it does
 not draw a pretend bitmap. `REP MOVSB` and VGA palette ports are also outside
 that teaching model. Physical hardware and UEFI remain unverified.
+
+The [literal reference map](references.json) checks the bitmap source pointer,
+row branch and entry/halt paths for both palette controls. Run
+`./tools/bitinspect build/vga-bitmap.bin --references examples/vga-bitmap/references.json`.
+The [reference guide](../../docs/address-references.md) distinguishes these
+code/data addresses from external VGA memory and port behavior.

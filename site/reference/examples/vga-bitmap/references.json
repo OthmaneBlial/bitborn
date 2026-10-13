@@ -1,0 +1,9 @@
+{
+  "loadAddress": 31744,
+  "references": [
+    {"name": "normalize CS", "kind": "far16", "offset": 2, "targetOffset": 6},
+    {"name": "bitmap source", "kind": "abs16", "offset": 53, "segment": 0, "targetOffset": 78},
+    {"name": "next bitmap row", "kind": "rel8", "offset": 73, "segment": 0, "originOffset": 74, "targetOffset": 61},
+    {"name": "return to HLT", "kind": "rel8", "offset": 77, "segment": 0, "originOffset": 78, "targetOffset": 75}
+  ]
+}

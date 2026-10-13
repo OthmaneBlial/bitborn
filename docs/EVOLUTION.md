@@ -449,6 +449,16 @@ skip. Self-modifying and VGA bitmap captures were recreated through the correcte
 harness; their records match its current hash and retain actual native pixel,
 memory, source/image and GIF assertions. Browser runtime inputs are unchanged.
 Next: reference maps for independently loaded experiments and a coherent new release.
+Three manually authored reference maps now check self-modifying and VGA bitmap
+code/data addresses in both controls, plus the CALL/RET fragment loaded at 7E00.
+The four experiment sources share their maps without hiding the writer/palette
+bit change. Every mapped experiment field rejects a one-bit mutation. CALL's
+literal rel16 operand targets physical 7E0B from declared origin 7E0A; the broken
+seed fails the same map. Tests cover all five sources and raw payload reproduction
+commands. These are declared address contracts, not native device emulation or
+generated fixups; target bytes and native capture dependencies remain unchanged.
+The full 91-test Python/native suite passes, with one expected macOS Linux skip.
+Next: coherent release preparation from a clean tested source snapshot.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide

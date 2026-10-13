@@ -1,0 +1,9 @@
+{
+  "loadAddress": 31744,
+  "references": [
+    {"name": "normalize CS", "kind": "far16", "offset": 2, "targetOffset": 6},
+    {"name": "future operand", "kind": "abs16", "offset": 54, "segment": 0, "targetOffset": 61},
+    {"name": "fetch modified instruction", "kind": "rel8", "offset": 59, "segment": 0, "originOffset": 60, "targetOffset": 60},
+    {"name": "return to HLT", "kind": "rel8", "offset": 81, "segment": 0, "originOffset": 82, "targetOffset": 79}
+  ]
+}

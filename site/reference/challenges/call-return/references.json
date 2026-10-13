@@ -1,0 +1,6 @@
+{
+  "loadAddress": 32256,
+  "references": [
+    {"name": "increment subroutine", "kind": "rel16", "offset": 8, "segment": 0, "originOffset": 10, "targetOffset": 11}
+  ]
+}

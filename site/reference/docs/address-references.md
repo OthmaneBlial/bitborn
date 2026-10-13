@@ -87,3 +87,36 @@ displacements, and all 65,536 offsets in the FFFF far-segment alias, plus explic
 IP/A20 boundaries, six canonical fields and one-bit failures. Synthetic numeric
 arrays are never executed or packaged as target programs. CLI checks prove empty
 stdout on a late mismatch, structured errors and unchanged input files.
+
+## Native experiments and an independently loaded fragment
+
+The [self-modifying map](../examples/self-modifying/references.json) checks the
+future-operand pointer at bytes 54–55, pointing to byte 61, plus the far entry,
+transfer to the live instruction and halt loop. The same map validates both
+canonical controls: their one-bit writer difference does not move an address.
+
+The [VGA bitmap map](../examples/vga-bitmap/references.json) checks SI's source
+pointer to byte 78, the next-row branch and entry/halt paths. Both palette controls
+share those addresses; the changed DAC component is not an address field.
+These maps check raw code/data references, not the external VGA framebuffer or ports.
+
+```sh
+make build
+./tools/bitinspect build/self-modifying.bin --references examples/self-modifying/references.json
+./tools/bitinspect build/vga-bitmap.bin --references examples/vga-bitmap/references.json
+./tools/bitpack challenges/call-return/solution.bits build/call-return.bin
+./tools/bitinspect build/call-return.bin --references challenges/call-return/references.json
+```
+
+The [CALL/RET map](../challenges/call-return/references.json) declares load address
+32256 (`7E00`), matching the native challenge loader. Its two-byte displacement
+at offset 8 is `01 00`, from origin offset 10 to the increment subroutine at offset
+11: physical `7E0B`. The broken seed's displacement is zero and fails this map.
+Use the raw fragment bytes, not the floppy image containing the loader and framing.
+The map declares the environment; it does not infer a load address from file bytes
+or prove that CALL returns correctly. Existing model/native challenge tests prove
+the curated behavior separately.
+
+Regression checks validate all five experiment/fragment sources, reject one-bit
+changes to each mapped experiment field, and require the loader-address report
+to show `7E0B`. No new target instructions or generated fixups are introduced.

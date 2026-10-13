@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Extend literal reference checking with manually authored maps for self-modifying
+  and VGA bitmap controls and the independently loaded CALL/RET challenge. Verify
+  shared addresses, one-bit failures and the broken CALL seed; executable bytes
+  and existing native/model proof remain unchanged.
+
 - Validate optional bitinspect annotation metadata before rendering: strict typed
   ranges, known kinds, non-overlap and optional matching bits. Bound regular JSON
   inputs, reject duplicate keys/FIFOs, escape terminal controls and emit structured

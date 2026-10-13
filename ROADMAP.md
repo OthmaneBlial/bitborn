@@ -303,6 +303,9 @@ The v0.2 milestone is published and verified. The following research remains ope
 - [x] Harden [inspection annotation metadata](docs/inspection-annotations.md) with
   typed ranges, literal-bit matches, bounded regular JSON, terminal-safe text and
   structured errors before rendering, while preserving all canonical annotations.
+- [x] Add explicit [experiment/fragment reference maps](docs/address-references.md)
+  for both self-modifying and VGA controls plus the 7E00-loaded CALL/RET solution.
+  Reject corrupted operands and the wrong CALL seed without rewriting bytes.
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

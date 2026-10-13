@@ -12,6 +12,29 @@ from tools.bitborn import ROOT, read_bits
 
 
 class AddressReferenceTests(unittest.TestCase):
+    def test_native_experiment_and_loader_fragment_maps(self):
+        for name, pointer, target in [('self-modifying', 54, 61), ('vga-bitmap', 53, 78)]:
+            mapping = read_reference_map(ROOT / f'examples/{name}/references.json')
+            self.assertEqual(mapping['loadAddress'], 0x7C00)
+            self.assertEqual([(e['offset'], e['targetOffset']) for e in mapping['references'] if e['kind'] == 'abs16'], [(pointer, target)])
+            for variant in ('program', 'control'):
+                data, _ = read_bits(ROOT / f'examples/{name}/{variant}.bits')
+                self.assertIn('4 declared fields', inspect_references(data, mapping))
+                for entry in mapping['references']:
+                    changed = bytearray(data)
+                    changed[entry['offset']] ^= 1
+                    with self.subTest(example=name, variant=variant, field=entry['name']), self.assertRaises(AddressReferenceError):
+                        inspect_references(changed, mapping)
+        mapping = read_reference_map(ROOT / 'challenges/call-return/references.json')
+        self.assertEqual(mapping['loadAddress'], 0x7E00)
+        self.assertEqual(mapping['references'][0]['originOffset'], 10)
+        solution, _ = read_bits(ROOT / 'challenges/call-return/solution.bits')
+        start, _ = read_bits(ROOT / 'challenges/call-return/start.bits')
+        self.assertEqual(solution[8:10], b'\x01\x00')
+        self.assertIn('-> 07E0B', inspect_references(solution, mapping))
+        with self.assertRaises(AddressReferenceError):
+            inspect_references(start, mapping)
+
     def test_canonical_boot_fields_and_one_bit_regressions(self):
         data, annotations = read_bits(ROOT / "boot/boot.bits")
         mapping = read_reference_map(ROOT / "boot/references.json")
