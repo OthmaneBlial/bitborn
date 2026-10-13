@@ -1,6 +1,6 @@
 # One writer bit changes the next instruction
 
-This 80-byte handwritten BIOS program stores a new value into an upcoming MOV
+This 82-byte handwritten BIOS program stores a new value into an upcoming MOV
 operand, transfers control to that instruction, and emits the value it actually
 loads. The source contains uppercase `A`; the native guest prints lowercase `a`
 on COM1 and writes `61 0F` into the first VGA text cell.
@@ -15,18 +15,18 @@ are recorded alongside it. No synthetic glyph or browser output is substituted.
 
 | Property | [program.bits](program.bits) | [control.bits](control.bits) |
 | --- | --- | --- |
-| Writer immediate, source byte 50 | `61` / `01100001` | `41` / `01000001` |
-| Original future operand, source byte 59 | `41` | `41` |
-| Code RAM after the store | Byte 59 becomes `61` | Byte 59 remains `41` |
+| Writer immediate, source byte 52 | `61` / `01100001` | `41` / `01000001` |
+| Original future operand, source byte 61 | `41` | `41` |
+| Code RAM after the store | Byte 61 becomes `61` | Byte 61 remains `41` |
 | Character emitted by live MOV fetch | `a` | `A` |
 | First VGA word | `61 0F` | `41 0F` |
 
-The executable sources differ only at writer byte 50, bit 5 (`20` in hex).
-In the modified guest, code RAM differs from the original source only at byte 59,
+The executable sources differ only at writer byte 52, bit 5 (`20` in hex).
+In the modified guest, code RAM differs from the original source only at byte 61,
 also bit 5. The control performs the same store but writes the existing value.
 Comments do not participate in either comparison.
 
-`MOV BX,7C3B` points to that future operand: `7C00 + 59 = 7C3B`.
+`MOV BX,7C3D` points to that future operand: `7C00 + 61 = 7C3D`.
 `MOV [BX],AL` uses DS zero, while instruction fetch uses normalized CS zero.
 Both therefore refer to the same physical address. An unconditional `JMP +0`
 follows the store before the modified MOV executes. This follows Intel's
@@ -38,7 +38,7 @@ physical instruction caches, cross-thread modification or multiprocessor orderin
 
 ```sh
 make build
-./tools/bitverify build/self-modifying.bin --size 80 --sha256 3525e89a45fa14f092153f1a337b82af0e51a2a8b8f0cc78d5dd74c9b29f16dc
+./tools/bitverify build/self-modifying.bin --size 82 --sha256 39682d778b4924ef7c8c2843b3c8dff9d9d6d9254320d7099e8d33e8b2dbb9af
 ./tools/bitverify build/self-modifying.img --size 512 --bios
 qemu-system-i386 -machine pc,accel=tcg -drive file=build/self-modifying.img,format=raw,if=floppy,readonly=on -serial stdio
 ```
@@ -49,12 +49,18 @@ and recording. Both images are read-only; source and disk bytes remain unchanged
 when guest RAM changes. Existing release tags/assets are untouched.
 
 For step-by-step viewing, import the main `.bits` file into the
-[CPU Lab](https://othmaneblial.github.io/bitborn/cpu-lab/). After 26 modeled steps,
-byte `07C3B` still holds `41`. Step once: it becomes `61`. Back restores `41`;
+[CPU Lab](https://othmaneblial.github.io/bitborn/cpu-lab/). After 27 modeled steps,
+byte `07C3D` still holds `41`. Step once: it becomes `61`. Back restores `41`;
 Forward restores `61` without re-executing the store. Two more steps jump and
-fetch the modified MOV. Step 31 emits `a`; the final state at step 39 has
-AX=`0F61`, BX=`7C3B`, DX=`03F8`, DI=`0002`, SP=`7C00` and next logical IP `7C4E`.
+fetch the modified MOV. Step 32 emits `a`; the final state at step 40 has
+AX=`0F61`, BX=`7C3D`, DX=`03F8`, DI=`0002`, SP=`7C00` and next logical IP `7C50`.
 The VGA byte pair is at physical `B8000`.
+
+The current source establishes `SS:SP=0000:7C00` with hardware interrupts masked
+before its first BIOS call, then restores a known data segment afterward. This
+removes the earlier 80-byte fixture's reliance on the firmware-provided stack.
+All literal addresses, reviewed hashes and capture provenance track the current
+82-byte source; historical commits and release artifacts are not rewritten.
 
 The model uses its limited BIOS mode hook and UART rules, not a full BIOS/device
 implementation. Native QEMU checks compare all eight general-purpose words,

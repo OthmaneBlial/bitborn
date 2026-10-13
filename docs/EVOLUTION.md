@@ -325,6 +325,27 @@ setup in boot, keyboard, VGA text, loader and the new bitmap. The self-modifying
 example still calls the BIOS first; its existing QEMU proof does not establish
 independence from firmware stack state. Next: review and correct that fixture's
 literal source, addresses, one-bit control and complete native/model provenance.
+VGA bitmap commit `2c8b25c` passed CI `38333063253` and deployment `38333409584`;
+its Pages mirror is `33633e8` (26 changed paths, all `bitborn/`). Public gallery,
+image, actual GIF/capture record, literal source, guide and progress match exact
+committed bytes. Repository metadata retains 20 topics, now including VGA.
+The self-modifying sources now explicitly establish the stack before their first
+BIOS call and restore DS afterward. Both are 82 literal bytes; writer/future
+operand offsets are 52/61, physical operand address 7C3D and final logical IP
+7C50 after 40 modeled steps. Native/model register, defined-flag, code RAM,
+serial/VGA and whole-model rewind/replay checks pass. Seven reviewed boot/control
+headers establish SS:SP from perturbed model entry registers with interrupts
+masked during setup. Later STI remains permitted; setup ordering is not full
+BIOS emulation or hardware proof. The old 80-byte source fails the same perturbed
+entry-register guard before its first INT, establishing a concrete regression.
+Native captures and all six browser demos were refreshed; all 92 browser frame
+hashes and the current native writer/operand coordinates are verified. The full
+78-test Python suite passes with one expected macOS native-Linux skip, together
+with all site/module checks. Chromium, Firefox and WebKit verify updated source,
+40-step execution, exact code-write rewind/replay, bit-diff offsets and gallery
+downloads. The new VGA capture source/provenance remains unchanged.
+Next: accessibility/contrast checks and contributor-facing scope clarity, while
+physical hardware and live assistive-technology sessions remain separate gates.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -372,7 +393,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 20 | 1 | Carry-aware arithmetic examples and native/model differential checks | H | M | 04 | Medium | Complete: byte/word immediate ADC/SBB, 270,736 ripple cases, same 81-byte native/model program and eight native FLAGS samples |
 | 21 | 1 | ELF anatomy viewer: headers, entry point, segment permissions and payload bytes | H | H | Existing ELF packaging | Medium | Complete: bounded ELF64 scope; no imported-code execution |
 | 22 | 1 | Explain Linux syscall encodings in 64-bit inspection mode without host execution | H | H | 05 | Medium | Open |
-| 23 | 1 | Literal native self-modification experiment with controlled halt and RAM proof | H | M | Existing BIOS loader | Medium | Complete: two literal 80-byte cases, one input/live operand bit, native/model state and serial/VGA proof; source/image unchanged |
+| 23 | 1 | Literal native self-modification experiment with controlled halt and RAM proof | H | M | Existing BIOS loader | Medium | Complete: current two literal 82-byte cases, one input/live operand bit and native/model proof; original 80-byte checkpoint preserved in history |
 | 24 | 1 | Program gallery presets derived from canonical .bits instead of duplicated source | H | M | Site packaging | Medium | Complete: all six CPU presets from canonical files, exact source/byte identity and loaded-source downloads |
 | 25 | 2 | Progressive interactive byte-order lesson: one byte, one word, one branch | H | H | Existing playground | Low | Open |
 | 26 | 2 | Guided stack/calling-convention lesson with return-address inspection | H | H | 02,10 | Low | Open |
@@ -415,7 +436,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 63 | 0 | Roving keyboard focus for instruction-bit editors, field-aware labels and stable edits | H | H | 05,07 | Low | Complete: shared root/playground one-stop navigation and invalid/shortened fixture focus checks; full AT review remains open |
 | 64 | 0 | Exact source error ranges, relevant editor focus and preserved invalid-load state | H | H | 15,42 | Low | Complete: UTF-16 token spans, normalized imports, binary/hex focus and corrected-error cleanup; live AT review open |
 | 65 | 0 | Identify both invalid comparison sides and focus failed notation conversion without losing drafts/results | H | H | 15,64 | Low | Complete: independent invalid markers, full token/excess selection and partial correction in three browsers; live AT review open |
-| 66 | 0 | Audit native boot fixtures for explicit stack initialization before their first BIOS call | H | H | Native boot fixtures | Medium | Partial: standalone source annotations reviewed; self-modifying fixture requires instruction-level correction and full provenance refresh; immutable releases preserved |
+| 66 | 0 | Audit native boot fixtures for explicit stack initialization before their first BIOS call | H | H | Native boot fixtures | Medium | Complete: seven reviewed boot/control setup guards, prior-source regression, corrected 82-byte fixture, native/model and three-browser proof, refreshed captures; hardware and full BIOS emulation remain separate |
 
 Large tasks are divided into useful verified milestones. Native experiments only
 become capabilities after literal source review and real QEMU checks; hardware

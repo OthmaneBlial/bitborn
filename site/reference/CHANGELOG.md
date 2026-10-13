@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Initialize the self-modifying program/control stack before the first BIOS call,
+  removing firmware-stack dependence. Keep the one-bit experiment at 82 bytes,
+  offsets 52/61 and 40 model steps; audit seven boot/control setup headers with
+  interrupts masked while establishing SS:SP, without forbidding later STI.
+
 - Add a 142-byte native VGA bitmap with 64 authored pixel-index bytes and a
   separate one-bit palette control. Verify all 64,000 framebuffer bytes and every
   captured RGB pixel, unchanged source/code/disk and explicit browser graphics

@@ -1,11 +1,12 @@
 11111010 # instruction | CLI | Disable hardware interrupts for the controlled experiment.
 11101010 00000110 01111100 00000000 00000000 # instruction | JMP 0000:7C06 | Normalize CS before BIOS calls and code-address calculations.
-10111000 00000011 00000000 # instruction | MOV AX,0003 | Select the standard 80-column text mode.
-11001101 00010000 # instruction | INT 10 | Clear the native text display through the BIOS mode call.
-00110001 11000000 # instruction | XOR AX,AX | Prepare zero for the data and stack segments.
-10001110 11011000 # instruction | MOV DS,AX | DS zero makes BX a physical code address below 64 KiB.
+00110001 11000000 # instruction | XOR AX,AX | Prepare a known stack before the first BIOS call.
 10001110 11010000 # instruction | MOV SS,AX | Initialize the stack segment.
 10111100 00000000 01111100 # instruction | MOV SP,7C00 | Initialize the stack pointer.
+10111000 00000011 00000000 # instruction | MOV AX,0003 | Select the standard 80-column text mode.
+11001101 00010000 # instruction | INT 10 | Clear the native display using our initialized stack.
+00110001 11000000 # instruction | XOR AX,AX | Restore the known zero data segment after the BIOS call.
+10001110 11011000 # instruction | MOV DS,AX | DS zero makes BX a physical code address below 64 KiB.
 11111100 # instruction | CLD | Make string stores advance DI.
 00110001 11001001 # instruction | XOR CX,CX | Define the otherwise unused word for native/model comparison.
 00110001 11110110 # instruction | XOR SI,SI | Define SI without touching the loaded code.
@@ -22,8 +23,8 @@
 10111010 11111011 00000011 # instruction | MOV DX,03FB | Return to UART line control.
 10110000 00000011 # instruction | MOV AL,03 | Configure eight data bits, no parity and one stop bit; clear DLAB.
 11101110 # instruction | OUT DX,AL | Enable ordinary character output at 03F8.
-10110000 01100001 # instruction | MOV AL,61 | Writer immediate at source byte 50: lowercase a differs from A by bit 5.
-10111011 00111011 01111100 # instruction | MOV BX,7C3B | Point to source byte 59, the upcoming MOV immediate operand.
+10110000 01100001 # instruction | MOV AL,61 | Writer immediate at source byte 52: lowercase a differs from A by bit 5.
+10111011 00111101 01111100 # instruction | MOV BX,7C3D | Point to source byte 61, the upcoming MOV immediate operand.
 10001000 00000111 # instruction | MOV [BX],AL | Change the future operand from 41 to 61 in RAM; the source file stays unchanged.
 11101011 00000000 # instruction | JMP +0 | Transfer control to the modified instruction after the store.
 10110000 01000001 # instruction | MOV AL,41 | The literal file contains A; live instruction fetch sees the stored lowercase a.
@@ -36,5 +37,5 @@
 10110100 00001111 # instruction | MOV AH,0F | Bright-white-on-black attribute without changing AL.
 10111111 00000000 00000000 # instruction | MOV DI,0000 | Select the first VGA text cell.
 10101011 # instruction | STOSW | Store character and attribute at B8000 and B8001.
-11110100 # instruction | HLT | Expected next logical IP is 7C4E after 39 modeled instructions.
+11110100 # instruction | HLT | Expected next logical IP is 7C50 after 40 modeled instructions.
 11101011 11111101 # instruction | JMP -3 | Return to HLT if resumed.

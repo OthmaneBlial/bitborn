@@ -30,17 +30,17 @@ def record():
         relative = f'examples/self-modifying/{name}.bits'
         source = ROOT / relative
         data, _ = read_bits(source)
-        assert len(data) == 80 and data[50] == character and data[59] == 0x41
+        assert len(data) == 82 and data[52] == character and data[61] == 0x41
         packed = bios_sector(data)
         image = directory / f'{name}.img'
         image.write_bytes(packed)
         ppm = directory / f'{name}.ppm'
         with Guest(image) as guest:
-            guest.wait_for(lambda output: output == bytes([character]) and 'EIP=00007c4e' in guest.hmp('info registers') and 'HLT=1' in guest.hmp('info registers'))
+            guest.wait_for(lambda output: output == bytes([character]) and 'EIP=00007c50' in guest.hmp('info registers') and 'HLT=1' in guest.hmp('info registers'))
             guest.command('stop')
             assert guest.memory(0xB8000, 2) == bytes([character, 0x0F])
-            code = guest.memory(0x7C00, 80)
-            assert [offset for offset, (a, b) in enumerate(zip(data, code)) if a != b] == ([59] if name == 'program' else [])
+            code = guest.memory(0x7C00, 82)
+            assert [offset for offset, (a, b) in enumerate(zip(data, code)) if a != b] == ([61] if name == 'program' else [])
             guest.screenshot(ppm)
         assert image.read_bytes() == packed
         full = ROOT / f'assets/self-modifying-{name}.png'
@@ -53,7 +53,7 @@ def record():
         pixels = run('ffmpeg', '-v', 'error', '-i', str(frame), '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-')
         assert len(pixels) == 288 * 512 * 3 and len(set(pixels)) > 1, 'recorded cell must contain actual visible pixels'
         captures.append({'source': relative, 'sourceSha256': sha(source.read_bytes()), 'payloadSha256': sha(data), 'imageSha256': sha(packed),
-                         'serial': chr(character), 'vga': [character, 0x0F], 'originalOperand': data[59], 'liveOperand': code[59],
+                         'serial': chr(character), 'vga': [character, 0x0F], 'originalOperand': data[61], 'liveOperand': code[61],
                          'screenshot': str(full.relative_to(ROOT)), 'screenshotSha256': sha(full.read_bytes()), 'ppmSha256': sha(ppm.read_bytes()),
                          'dimensions': [width, height], 'crop': [0, 0, width//80, height//25], 'frameSha256': sha(frame.read_bytes())})
     gif = ROOT / 'assets/self-modifying-demo.gif'
@@ -68,7 +68,7 @@ def record():
     metadata = {'kind': 'Actual QEMU/SeaBIOS VGA cells from two separate curated boot runs; not native rewind or browser simulation',
                 'qemu': run(os.environ.get('QEMU', 'qemu-system-i386'), '--version').decode().splitlines()[0],
                 'alterations': 'First VGA text cell cropped, nearest-neighbor scaled to 288x512, then GIF palette encoding; no synthetic glyphs or overlays',
-                'presentationSecondsPerFrame': 2, 'writerSourceOffset': 50, 'runtimeOperandOffset': 59, 'changedBit': 5,
+                'presentationSecondsPerFrame': 2, 'writerSourceOffset': 52, 'runtimeOperandOffset': 61, 'changedBit': 5,
                 'captures': captures, 'gif': str(gif.relative_to(ROOT)), 'gifSha256': sha(gif.read_bytes()),
                 'toolSha256': sha(Path(__file__).read_bytes()), 'harnessSha256': sha((ROOT / 'tests/qemu.py').read_bytes()),
                 'reproduce': 'make build && python3 tools/record_self_modifying.py'}

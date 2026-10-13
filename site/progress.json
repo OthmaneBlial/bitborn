@@ -170,6 +170,10 @@
       "progress": "\u2705 142 authored bytes draw an 8\u00d78 bitmap; one DAC bit changes all sixteen green pixels while all 64,000 framebuffer indices stay identical; actual screen/GIF proof and explicit browser graphics rejection"
     },
     {
+      "milestone": "Explicit pre-BIOS boot stacks",
+      "progress": "\u2705 Seven reviewed boot/control headers establish SS:SP with interrupts masked during setup; self-modifying sources now use 82 bytes and retain native/model one-bit proof at offsets 52/61"
+    },
+    {
       "milestone": "Short branch field microscope",
       "progress": "\u2705 Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged"
     },

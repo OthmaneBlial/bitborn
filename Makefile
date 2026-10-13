@@ -33,6 +33,7 @@ site-test: site
 	node tests/test_branch_encoding.mjs
 	node tests/test_carry.mjs
 	node tests/test_self_modifying.mjs
+	node tests/test_boot_stack.mjs
 	node tests/test_vga_bitmap_scope.mjs
 	node tests/test_bit_diff.mjs
 	node tests/test_builder.mjs

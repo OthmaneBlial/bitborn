@@ -244,7 +244,7 @@ The v0.2 milestone is published and verified. The following research remains ope
   bytes and adding instruction comments. Verify exact text/reference copies and
   bounded regular-file inputs; link loaded byte-identical presets to their source.
   See the [canonical program guide](docs/cpu-lab/README.md).
-- [x] Add a reviewed 80-byte native self-modification example and separate literal
+- [x] Add a reviewed 82-byte native self-modification example and separate literal
   one-bit control. Verify the exact live-code operand change, defined flags,
   registers, serial/VGA and unchanged source/read-only images against the model.
   Capture actual native cells from separate boots and expose source/image guides.
@@ -279,6 +279,10 @@ The v0.2 milestone is published and verified. The following research remains ope
   verify complete QEMU screen pixels, initialized registers and immutable source/
   disk. Capture actual native states and keep browser graphics rejection explicit;
   see [palette surgery](examples/vga-bitmap/README.md).
+- [x] Establish the self-modifying example's stack before its first BIOS call and
+  restore its data segment afterward. Audit all seven reviewed standalone boot/
+  control headers from perturbed model entry registers, retain later STI behavior,
+  and refresh literal addresses, native/model proof and capture provenance.
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

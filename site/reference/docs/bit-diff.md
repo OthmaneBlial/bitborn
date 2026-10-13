@@ -66,8 +66,8 @@ token/excess-byte selection, corrected and empty drafts, preserved results, safe
 512-byte boundaries and 320px layouts. Preset bytes come from canonical `.bits`
 fixtures through generated metadata, not from assembling instruction names.
 
-The self-writing-letter preset compares the two literal 80-byte native
+The self-writing-letter preset compares the two literal 82-byte native
 [self-modification sources](../examples/self-modifying/README.md). Only writer
-byte 50, bit 5 changes from 41 to 61. The future operand at byte 59 is identical
+byte 52, bit 5 changes from 41 to 61. The future operand at byte 61 is identical
 in both source files; its runtime change is proven separately by the model/QEMU
 experiment. The diff workbench does not execute or infer that write.
