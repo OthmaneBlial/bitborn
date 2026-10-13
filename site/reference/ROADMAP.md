@@ -11,7 +11,7 @@ website progress; the [README](README.md) keeps a short summary.
 
 | Milestone | Progress |
 | --- | --- |
-| [v0.5.0 distribution](docs/release-v0.5.0.md) | 🚧 Packaging 14 primary BIOS images, 112 manifest-reviewed artifacts and 71 explicit evidence files; source/tag CI, archive reproduction and anonymous public download verification remain pending |
+| [v0.5.0 distribution](docs/release-v0.5.0.md) | ✅ Main/tag CI passed; clean source archive passes 114 Python tests and three browser engines, with 112 rebuilt hashes and 1,021 unchanged source files; all 89 public attachments re-downloaded anonymously, with 88 listed checksums and 14 primary BIOS images |
 | Release staging preserves its recorded revision | ✅ Different version/source commits rejected before writes; same-revision repacking retained, isolated regressions pass and 31 frozen v0.4.0 files remain unchanged |
 | 512-byte handwritten boot program and four byte tools | ✅ QEMU-tested, public |
 | Linux exit, arithmetic, text, loops and comparisons | ✅ Native execution passed in Linux CI |

@@ -6,6 +6,17 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 
 ## Current execution record
 
+v0.5 publication (2026-10-13): immutable source `f5b444a` passes main CI
+`38397864668` and tag CI `38398890607`. The exact source archive passes 114 Python
+tests (one expected macOS native-Linux skip), site/model checks, Chromium and
+complete Firefox 157/WebKit 27.2 checks. All 112 rebuilt artifact hashes match;
+all 1,021 archived source files remain unchanged. Public release ID `411662730`
+contains exactly 89 uploaded assets: each server digest and every anonymous
+re-download matches staging. The 88 checksum entries cover all non-checksum
+attachments. Tag `66061a3` resolves to the exact source; v0.4.0 remains unchanged.
+README, notes, roadmap, validation and the unposted community draft now describe
+the verified release. Live documentation publication is checked separately.
+
 v0.5 preparation (2026-10-13): the existing release attachment list stopped at
 nine primary BIOS images despite five newer native experiments. The next version
 explicitly packages all fourteen primary images and seventy-one evidence files,
@@ -887,7 +898,8 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 67 | 0 | Validate optional bitinspect annotation metadata and preserve structured errors before rendering | H | H | Existing host inspection | Medium | Complete: bounded JSON, typed non-overlapping ranges, literal-bit matches, terminal-safe labels and structured late-failure diagnostics; canonical targets remain valid |
 | 68 | 0 | Align executable quickstart dependencies across README, beginner guide and eight introductions | H | H | Native capture test | Low | Complete: NASM/FFmpeg install commands, localized host-tool roles, English source tracking and eight-page browser/link checks; native-speaker review remains separate |
 | 69 | 0 | Preserve recorded release staging when source advances without a version bump | H | H | Release provenance | Low | Complete: reject different revision/version before writes; isolated preservation regressions and all 31 frozen v0.4.0 staging files verified unchanged |
-| 70 | 1 | Publish the five newer native experiments as a verified v0.5 distribution | H | H | 68,69 and native proofs | Medium | In progress: explicit 14-image/71-evidence packaging, capture-reference regression and scoped notes; clean archive, main/tag CI, release downloads and live documentation gates remain |
+| 70 | 1 | Publish the five newer native experiments as a verified v0.5 distribution | H | H | 68,69 and native proofs | Medium | Complete: main/tag CI, clean-source 114-test/three-engine reproduction, 112 exact artifacts and all 89 anonymous attachment downloads verified; precise scope and publication notes updated |
+| 71 | 1 | Prove a curated protected-mode user/kernel privilege transition with explicit native frames and controls | H | M | GDT, exception frames, IRETD | High | Pending: research TSS/ring-3 entry, syscall gate and privilege-fault controls; do not claim memory isolation or concurrent scheduling |
 
 Large tasks are divided into useful verified milestones. Native experiments only
 become capabilities after literal source review and real QEMU checks; hardware

@@ -63,10 +63,10 @@ macOS skips their native test and Ubuntu CI executes all six.
 
 ## 🧭 Where we're headed
 
-Updated **2026-10-13**. **[v0.4.0 is public](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.4.0)**,
+Updated **2026-10-13**. **[v0.5.0 is public](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.5.0)**,
 with verified downloads, source and checksums. The boot tools, interactive labs,
 challenges and one-bit native experiments are working. The
-[v0.5.0 distribution](docs/release-v0.5.0.md) is being prepared; publication checks remain pending.
+[release notes](docs/release-v0.5.0.md) cover fourteen BIOS images and verified evidence.
 New [optimization puzzles](docs/tutorials/optimization.md)
 measure **14 → 12** and **11 → 10** payload bytes, with distinct valid solutions.
 [Keyboard checks](docs/cpu-lab/keyboard.md) cover timeline navigation, imports and

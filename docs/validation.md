@@ -73,3 +73,28 @@ Pages mirror was checked to change only `bitborn/`.
 These checks do not establish physical-hardware support, a complete BIOS/CPU
 emulator, paging, general exceptions or hardware IRQ delivery. Progress and
 research boundaries remain in [ROADMAP.md](../ROADMAP.md).
+
+## v0.5.0 native-state release: 2026-10-13
+
+Immutable source [`f5b444a`](https://github.com/OthmaneBlial/bitborn/commit/f5b444a0ebb6c4dd52592c41443141a34f77e066)
+passes [main CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38397864668)
+and [tag CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38398890607).
+Ubuntu checks the native Linux ELFs as well as curated BIOS experiments. This
+checkpoint adds the guarded allocator, legacy timer IRQ, scoped paging repair,
+four-vector exception dispatch and native Bit Hunt game described in the
+[release notes](release-v0.5.0.md); their controls and capture records retain
+precise execution boundaries.
+
+The prepared source archive was extracted outside the checkout. Fresh dependency
+installation, 114 Python tests (one expected macOS native-Linux skip), complete
+site/model checks and Chromium/Firefox 157/WebKit 27.2 interactions pass. Every
+one of 112 rebuilt artifact hashes matches release provenance, and all 1,021
+archived source files remain byte-identical after the checks.
+
+All 89 [public attachments](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.5.0)
+were downloaded without authentication and match staging byte-for-byte. The 88
+checksum entries cover every attachment except the checksum list itself. Images,
+source, 71 evidence files and provenance are all included. The immutable tag
+points to the exact source commit; older tags and local v0.4.0 staging remain
+unchanged. These proofs establish integrity and scoped execution, not physical
+hardware, complete CPU/BIOS emulation, arbitrary recovery or user-mode isolation.

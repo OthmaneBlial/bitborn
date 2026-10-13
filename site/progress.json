@@ -3,7 +3,7 @@
   "milestones": [
     {
       "milestone": "v0.5.0 distribution",
-      "progress": "\ud83d\udea7 Packaging 14 primary BIOS images, 112 manifest-reviewed artifacts and 71 explicit evidence files; source/tag CI, archive reproduction and anonymous public download verification remain pending"
+      "progress": "\u2705 Main/tag CI passed; clean source archive passes 114 Python tests and three browser engines, with 112 rebuilt hashes and 1,021 unchanged source files; all 89 public attachments re-downloaded anonymously, with 88 listed checksums and 14 primary BIOS images"
     },
     {
       "milestone": "Release staging preserves its recorded revision",

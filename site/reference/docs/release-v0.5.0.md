@@ -1,8 +1,16 @@
 # bitborn v0.5.0 — Native state, one bit at a time
 
-This distribution is being prepared from a clean, verified source revision.
-Publication and anonymous download verification are still pending. The latest
-published release remains [v0.4.0](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.4.0).
+Published **2026-10-13** from immutable source
+[`f5b444a`](https://github.com/OthmaneBlial/bitborn/commit/f5b444a0ebb6c4dd52592c41443141a34f77e066).
+All 89 [public attachments](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.5.0)
+were downloaded anonymously and match the prepared bytes. Earlier releases remain unchanged.
+
+[Main CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38397864668) and
+[tag CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38398890607) pass.
+The exact source archive independently passes 114 Python tests (one expected
+macOS native-Linux skip), site/model checks and Chromium, Firefox 157 and WebKit
+27.2 interactions. All 112 rebuilt artifact hashes match provenance, and all
+1,021 archived source files remain unchanged after those checks.
 
 Executable instructions remain literal handwritten `.bits` tokens. Host tools
 package and inspect those bytes; comments and address references never generate

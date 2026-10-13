@@ -2,7 +2,11 @@
 
 ## Unreleased
 
-## 0.5.0 — packaging in progress; publication pending
+## 0.5.0 — 2026-10-13
+
+Published from `f5b444a0ebb6c4dd52592c41443141a34f77e066`; main/tag CI and
+clean-source three-browser reproduction pass. All 89 anonymous release downloads
+match the prepared bytes. See [release notes](docs/release-v0.5.0.md).
 
 - Refuse release-staging overwrites when recorded version/source provenance differs
   from the current checkout. Preserve deterministic repacking of the same revision;
