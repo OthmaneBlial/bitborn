@@ -71,10 +71,13 @@ npm ci
 npx playwright install chromium firefox webkit
 npm run test:browser
 npm run test:cross-browser
-python3 tools/release.py
 ```
 
-Release preparation requires a clean source worktree and verifies reviewed bytes
+The source archive has no Git history. Preparing release attachments with
+`python3 tools/release.py` requires a clean Git checkout of the exact source commit.
+Archive users can rebuild/test the programs with the commands above.
+
+Release preparation requires a clean Git worktree and verifies reviewed bytes
 before staging. Provenance ties the exact commit to target source/payload hashes,
 all derived artifacts and attachment hashes. It proves integrity, not human-only
 authorship or a cryptographic publisher signature. AI assistance is disclosed.
