@@ -46,8 +46,15 @@ References: Intel SDM [instruction formats and INC/DEC](https://www.intel.com/co
 Decoding context does not grant execution support: browser simulation remains
 the documented 16-bit subset.
 
-The twenty-eight context goldens were compared with installed NDISASM 3.02 using
+The context goldens were compared with installed NDISASM 3.02 using
 `ndisasm -b CONTEXT -` on literal parsed fixture bytes; the disassembler only
 read them. [Recorded results](https://github.com/OthmaneBlial/bitborn/blob/main/tests/fixtures/encoding-golden.json)
 are checked without adding a runtime disassembler dependency. These are
 disassembly checks, not native CPU execution evidence.
+
+Seven [Linux syscall setup presets](../linux-syscalls.md) are literal byte slices
+of the existing native 8-/12-byte exit programs, rather than new generated target
+instructions. Their source ranges and hashes are exported with the presets.
+Unprefixed 64-bit register PUSH/POP and sign-extended imm8/imm32 PUSH are inspected;
+64-bit simulation remains unavailable. Seven additional independent goldens check
+the native payload slices.

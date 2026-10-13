@@ -22,6 +22,24 @@ export function inspectEncoding(bytes,mode=16) {
   if(offset===bytes.length)throw new Error('Truncated instruction: a prefix needs a following opcode.');
   const opcode=bytes[offset],width=rex!==null&&(rex&8)?64:override?(mode===16?32:16):mode===16?16:32;
   const finish=(size,mnemonic,explanation,extra={})=>({size,mnemonic,explanation,mode,width,fields,bitFields,...extra});
+  if(offset===0&&mode===64&&[0x68,0x6A].includes(opcode)) {
+    const count=opcode===0x6A?1:4;
+    if(bytes.length<1+count)throw new Error(`Truncated PUSH: ${count} immediate bytes required.`);
+    let value=0n;for(let index=0;index<count;index++)value|=BigInt(bytes[index+1])<<BigInt(index*8);
+    value=BigInt.asIntN(count*8,value);
+    fields.push('PUSH opcode');bitFields.push(bitNames('PUSH immediate opcode'));
+    for(let index=0;index<count;index++) {
+      fields.push(`signed immediate ${index+1}/${count}`);
+      bitFields.push(Array.from({length:8},(_,bit)=>index===count-1&&bit===7?'Immediate sign bit':`Immediate bit ${index*8+bit}`));
+    }
+    return {...finish(1+count,`PUSH ${value}`,`Context 64; unprefixed ${count*8}-bit immediate sign-extends to a 64-bit stack word (0x${BigInt.asUintN(64,value).toString(16).padStart(16,'0').toUpperCase()}). RSP decreases by eight before the word is stored. Flags are unchanged. Inspection does not read or write stack memory.`,{value,immediateWidth:count*8}),width:64};
+  }
+  if(offset===0&&mode===64&&opcode>=0x50&&opcode<=0x5F) {
+    const pop=opcode>=0x58,register=registerName(opcode&7,64),operation=pop?'POP':'PUSH';
+    fields.push('opcode + register');bitFields.push(['Register selector','Register selector','Register selector','Stack direction: PUSH/POP',...Array(4).fill('Stack opcode')]);
+    const effect=pop?`POP reads the stack word, increments RSP by eight, then writes ${register}.${register==='RSP'?' The loaded RSP replaces that incremented pointer.':''}`:`PUSH captures the previous ${register}, decreases RSP by eight and stores the captured word.`;
+    return {...finish(1,`${operation} ${register}`,`Context 64; unprefixed register stack operand is 64 bits. Opcode bits 2–0 choose ${register}. ${effect} Flags are unchanged; no stack/register state is read or changed by inspection.`,{register}),width:64};
+  }
   if(opcode>=0xB8&&opcode<=0xBF) {
     const count=width/8;
     if(bytes.length<offset+1+count)throw new Error(`Truncated MOV: ${width}-bit operand needs ${count} immediate bytes after the opcode.`);
@@ -103,7 +121,7 @@ export function inspectEncoding(bytes,mode=16) {
   }
   if(offset===0&&mode===64&&opcode===0x0F&&bytes[1]===0x05) {
     fields.push('opcode escape','opcode');bitFields.push(bitNames('Two-byte opcode escape'),bitNames('SYSCALL opcode'));
-    return finish(2,'SYSCALL','The configured supervisor entry is selected by the processor. Linux x86-64 assigns the syscall number to RAX; this inspector performs no system call.');
+    return finish(2,'SYSCALL','0F 05 selects the configured supervisor entry. Under the Linux x86-64 ABI, RAX supplies the syscall number; RDI, RSI, RDX, R10, R8 and R9 supply arguments, and RAX holds a returning result. This differs from a normal function call. The inspector reads no registers, infers no syscall number and performs no system call.');
   }
   throw new Error(`Encoding 0x${hex(opcode)} is outside this inspector in the selected ${mode}-bit context. No instruction was executed.`);
 }

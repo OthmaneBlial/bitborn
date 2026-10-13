@@ -8,7 +8,7 @@
   "presentationFps": 1,
   "alterations": "960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.",
   "sourceSha256": {
-    "tools/record_browser.mjs": "bfd4fed76eadd8acac3f335c9d5070ec2a1ef8865cc8631f50cda59e42d7c1b4",
+    "tools/record_browser.mjs": "af9fc203e8ed38db7520bb9cc39622ae0b6b3ded0f2aae472d19af5d2d52a265",
     "boot/boot.bits": "230bbafbfa02abd62dc964efbad02db0431f0efa263216bba02146cd164262b8",
     "site/elf.mjs": "552aabb816be8add70c470c951f0110697d491d0a0e926c3bd9e6001e623832b",
     "site/elf/index.html": "767e441bc2b8d9e29a626d264b2d437bce24c296196a5b37c33d09cf6f58f29b",
@@ -19,13 +19,13 @@
     "site/downloads/exit-code.elf": "d93aa7e7fd49e17fb09ac7cd6b0cd0776dea9e40503595ae28b1abf7c71c48c7",
     "site/styles.css": "f255737251dfa8c6c0d133b70367b09578a5f0ebaa01a6d044c3902c555f6a38",
     "site/learn/routes.css": "f77ddb1b9b7187f92c69e594a8002543deed69c74d7954dfa670ef4bb85052d1",
-    "site/app.js": "485804f0a0a3388b125854f60072b6fe99945e69906289f9868d317af5c075b3",
+    "site/app.js": "6f73733d058031b76a6a34d0e23fe8f13d2723b56808e1af850e58e32f0b4963",
     "site/bit-diff.mjs": "4ba0be7d157650d7cb338925ac0f9496992242f93b6f52b9e54775c17c2ce940",
     "site/bit-diff/index.html": "b447ffa63451bf4f9986f2c94db9ec9af80669ba9df254d2a5e0d9ed3dc4f3d7",
     "site/bit-diff/app.mjs": "7dbcd36a42a7a3c63b6e11da8fe18b68eb43736a3eb73ee0bd83e08781f12e07",
     "site/bit-diff/diff.css": "aa0c4f672af2b9499586ffdce045e48d0cbb563af58971090d9903ddce990dca",
-    "site/encoding.mjs": "8d696621dcdde60d7369d65bd8d40477aec47bd0fde0f9a8935dbb73814ed458",
-    "site/encoding-presets.mjs": "ca7b9f3db925769801b8baed055af0be01bfd8e887f9a37783f5b39fb8669eb3",
+    "site/encoding.mjs": "ec389f88fdb2e5995e3d4b2f58ec5e4d320ee6d719209d89f71722386a832cee",
+    "site/encoding-presets.mjs": "01a2f97f9c73d2c4c5da9366ca8a3f9c0c997d26e780b0373958602e53b76ed2",
     "site/playground/index.html": "d72e6255cb43c6d36e82216ffc30a53892386b206c6aea4c090db9992a506269",
     "docs/instruction-encoding/fixtures/mov32.bits": "52504d7b850f70f6ac262d1d07308878d686c80f485b347490c62f854b86c2cd",
     "docs/instruction-encoding/fixtures/mov64.bits": "01bbd5025d57433cdaf764232ade240dad18fcf879a227f29e0e3b94ea3c3e6e",
@@ -71,7 +71,9 @@
     "docs/instruction-encoding/fixtures/short-branch.bits": "2ee11e1e3268c7750cf87a7cd5d44789a5b9809b8c35b76fddc4730aa531c93b",
     "docs/instruction-encoding/fixtures/short-branch-inverse.bits": "e2501a33e500401f5d67e971c5b3c40f30314698cd73cf8242b9a1e1664cbaa1",
     "challenges/direction-flag/start.bits": "d387552b942bde49537f7201a208934f9fd92be055eac0b8c29c294eb93a235c",
-    "challenges/direction-flag/solution.bits": "4c3a1682ef3d95a5714dca47e5cc990287a4eb949772108ffc9730f803d484d4"
+    "challenges/direction-flag/solution.bits": "4c3a1682ef3d95a5714dca47e5cc990287a4eb949772108ffc9730f803d484d4",
+    "examples/exit-code/program.bits": "98d348a117d9359aa0ef903017b36989b36612a392f900c2eb13615b97adf73a",
+    "examples/exit-code-small/program.bits": "b7cc118bb7dba4e8c002480513a082049ded573455d8a55b227cc85643adc650"
   },
   "captures": [
     {
@@ -126,10 +128,10 @@
     },
     {
       "file": "assets/encoding-demo.gif",
-      "sha256": "f5390893724c4756dfc4f48f8819f318a2e0d017b909200c957ef97e1799601d",
-      "capturedFrames": 21,
-      "encodedFrames": 21,
-      "durationSeconds": 21,
+      "sha256": "5a1e8382c227925fcbfb23b1d0e8dc69ad418b6d8e6c254891c038f9bbe3371d",
+      "capturedFrames": 29,
+      "encodedFrames": 29,
+      "durationSeconds": 29,
       "actions": [
         "Inspected the literal B8 fixture in 16-bit context: three bytes consumed for MOV AX,42.",
         "Selected explicit 32-bit context: the same B8 fixture consumes five bytes for MOV EAX,42; simulation is disabled.",
@@ -151,7 +153,15 @@
         "Short JL exposes condition-group, inversion and signed-rel8 fields in16-bit inspection; no flags are read.",
         "The same unprefixed short-Jcc fields are valid in64-bit inspection; execution remains disabled.",
         "Toggling opcode bit0 selects the inverse condition: SF differing from OF becomes SF equal to OF.",
-        "Toggling rel8 bit7 changes FE (-2) to7E (+126); no absolute target or runtime flag state is guessed."
+        "Toggling rel8 bit7 changes FE (-2) to7E (+126); no absolute target or runtime flag state is guessed.",
+        "Inspected canonical Linux payload slice PUSH 60 in64-bit context; registers/stack are untouched and no syscall executes.",
+        "Inspected canonical Linux payload slice POP RAX in64-bit context; registers/stack are untouched and no syscall executes.",
+        "Inspected canonical Linux payload slice PUSH 42 in64-bit context; registers/stack are untouched and no syscall executes.",
+        "Inspected canonical Linux payload slice POP RDI in64-bit context; registers/stack are untouched and no syscall executes.",
+        "Inspected canonical Linux payload slice SYSCALL in64-bit context; registers/stack are untouched and no syscall executes.",
+        "Inspected canonical Linux payload slice MOV EAX, 60 in64-bit context; registers/stack are untouched and no syscall executes.",
+        "Inspected canonical Linux payload slice MOV EDI, 42 in64-bit context; registers/stack are untouched and no syscall executes.",
+        "Flipped the imm8 sign bit: 3C becomes BC and sign-extends to FFFFFFFFFFFFFFBC. This is inspection, not a Linux request."
       ],
       "sourceFrameSha256": [
         "b1c57902558a7fb95a524968ee6925e23a28c3d54f2c00f2a1ecfc55e9168403",
@@ -174,7 +184,15 @@
         "f9d18c7ef00d242c6f7e473c4e39f279c0f28a52d2854bd8dc69bc139ddc25bf",
         "5ca29e2332e3f02e0c75ec20a1310f827869d5a8bac06b7b8b0c07e6cb9a4867",
         "82a83fadaae17db2c112d554d79e45c1a5b9af7ccb8482cedc9652c624297d25",
-        "9a2235978c3bb8f2437df02371d674531b8116964c01f3bd016f437a6f21a0c5"
+        "9a2235978c3bb8f2437df02371d674531b8116964c01f3bd016f437a6f21a0c5",
+        "c8ad128427f46a304ff28890a548b6ebaead794610cadc3ccf093cc274833c66",
+        "550f25aaf7c56e5985492b1216fd71a994048d4e5e9d1d4afb49f4995f1f6bf3",
+        "036acc374b46606cb8dff71bb7ad6b2e8ca44fab13901da700a95668b435f6db",
+        "b99a1a7586fb7617042e72e693ae72e9986c7dbc42055465052f8a96725e0462",
+        "3154f96e82fa05842eac035bff5c096ac8f2f4250b1ff6c3b6bdd78321393ec2",
+        "328ddc5f4575904bdeee0f25a42192a5d188bee551c6c167ae5c2087f5449306",
+        "829a561bfba286ed206eaaff9070c3681983362c4932e66087a192102457ad1b",
+        "f50b8302704cdf407a904fb6917723bacec7c07f3b934b7ef747e9f57ca5e7b8"
       ]
     },
     {
@@ -200,7 +218,7 @@
     },
     {
       "file": "assets/cpu-lab-demo.gif",
-      "sha256": "f16ae843d996e42cf59499fd8b235f95540ffb9ef1b0b1450906ae451eb25492",
+      "sha256": "6ae03b4c10ec76dea4b1e7f978e0bb088ae3f351ca5dc4705f1e137adafc2167",
       "capturedFrames": 47,
       "encodedFrames": 47,
       "durationSeconds": 47,
@@ -270,10 +288,10 @@
         "e549e88cb4e5d64e697f81da55763fb9fffacb334407f58c1d9a50e279ffc14b",
         "2b7ad80edc20e3d1f64393572ec3cf78bd1302e694dbba827317835b18187183",
         "36dc147f036820e517c0483041dbb96b081d565b99ab17a5a9e18671889cbe46",
-        "9ffb8587053595aa33958b4ba0f5aa300dc19c018e7890d5f1ef62cd1e53ff2e",
+        "1908d4518765a33ee8d9f09328e23f9c78c5b4149ac2fe4c8a7e41ebc6a6ca25",
         "039e52eb75767270fab70fa8c341a3ba346a40340cb581939ec7cbfda22697dc",
         "4fee36b1645604348656af6066cadf5f6ae06006ff5a363bd6b6cd08a5e698e3",
-        "45796193235f40ee19835c2dda193c2549695b4da05ff94105fde54104a4e0dd",
+        "94638ec889562887e87b20182d91a8f99564127343ccf341185c3f0168178504",
         "07c24a8f2b66198bb12bc2a1cc7a36a50621b2336a9369d7092f53cd206abb35",
         "0c2011f69c07a3fcaf7df571187b30ad89a892578c4513d962f00f14048a4834",
         "f35e6f67a16e2a76cfe106256d1eee23f791a2c381a923769aec2047373d071d",

@@ -43,6 +43,7 @@ exact source revision, generated copies and every artifact hash across builds.
 | Shared browser CPU and history | `site/simulator.mjs`, `site/history.mjs` | `node tests/test_cpu.mjs` and `node tests/test_history.mjs` |
 | Register-copy execution | `site/simulator.mjs`, `tests/fixtures/register-mov.bits` | `node tests/test_register_mov.mjs` and `python3 -m unittest tests.test_register_mov` |
 | Mode/bit/address inspection | `site/encoding.mjs`, `docs/instruction-encoding/fixtures/` | `node tests/test_encoding.mjs` and `node tests/test_memory_encoding.mjs` |
+| [Linux syscall inspection](docs/instruction-encoding/linux-syscalls.md) | `site/encoding.mjs`, `tools/site_build.py`, canonical exit payloads | `node tests/test_linux_encoding.mjs` and `npm run test:cross-browser` |
 | Shared memory addressing/execution | `site/address16.mjs`, `site/simulator.mjs` | `node tests/test_memory_mov.mjs` and `python3 -m unittest tests.test_memory_parity` |
 | Loaded-program links | `site/program-link.mjs`, `site/cpu-lab/lab.mjs` | `node tests/test_program_link.mjs` and `node tests/browser_cpu_lab.mjs` |
 | Mode-aware program differences | `site/bit-diff.mjs`, `site/bit-diff/` | `node tests/test_bit_diff.mjs` and `node tests/browser_bit_diff.mjs` |

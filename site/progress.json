@@ -202,6 +202,10 @@
       "progress": "\u2705 Typed ranges, non-overlap and literal bits are checked before rows print; bounded JSON, structured errors and escaped terminal controls preserve readable Unicode"
     },
     {
+      "milestone": "Linux syscall instruction fields",
+      "progress": "\u2705 Seven exact native payload slices, sign-extended 64-bit PUSH and low-register PUSH/POP fields; ABI explanations and independent goldens; browser execution stays disabled"
+    },
+    {
       "milestone": "Short branch field microscope",
       "progress": "\u2705 Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged"
     },

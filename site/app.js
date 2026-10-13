@@ -75,7 +75,7 @@ if ($('bit-editor')) {
   $('decode-mode').setAttribute('aria-label','Decoding context, inspection only');
   const templates = {mov:[0xB8,0x2A,0x00],add:[0x05,0x07,0x00],cmp:[0x3D,0x2A,0x00],inc:[0x40],xor:[0x31,0xC0],nop:[0x90]};
   for(const [name,example] of Object.entries(encodingExamples))templates[name]=example.bytes;
-  for(const [value,title] of [['shortBranch','Short JL / condition and rel8'],['shortBranchInverse','Short JGE / inverse condition']]) {const option=document.createElement('option');option.value=value;option.textContent=title;$('instruction-select').append(option);}
+  for(const [value,title] of [['shortBranch','Short JL / condition and rel8'],['shortBranchInverse','Short JGE / inverse condition'],['linuxPushNumber','Linux exit / PUSH 60 (64-bit)'],['linuxPopNumber','Linux syscall number / POP RAX (64-bit)'],['linuxPushArgument','Linux exit status / PUSH 42 (64-bit)'],['linuxPopArgument','Linux first argument / POP RDI (64-bit)'],['linuxSyscall','Linux kernel entry / SYSCALL (64-bit)'],['linuxMovNumber','Linux exit / MOV EAX,60 (64-bit)'],['linuxMovArgument','Linux exit status / MOV EDI,42 (64-bit)']]) {const option=document.createElement('option');option.value=value;option.textContent=title;$('instruction-select').append(option);}
   let bytes = [...templates.mov], cpu = createState(), activeBit='0-7';
   function renderEditor(focusBit) {
     if(focusBit)activeBit=focusBit;

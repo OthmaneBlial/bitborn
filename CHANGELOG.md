@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add unprefixed 64-bit PUSH immediate/register and POP register inspection with
+  sign-extension fields and the POP RSP alias. Seven Linux syscall setup presets
+  are exact slices of existing 8-/12-byte native programs, with source ranges and
+  hashes. Explain the Linux ABI without inferring registers or performing syscalls;
+  retain disabled 64-bit simulation and add independent disassembly goldens.
+
 ## 0.4.0 — 2026-10-13
 
 - Extend literal reference checking with manually authored maps for self-modifying

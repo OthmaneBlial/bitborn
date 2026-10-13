@@ -306,6 +306,10 @@ The v0.2 milestone is published and verified. The following research remains ope
 - [x] Add explicit [experiment/fragment reference maps](docs/address-references.md)
   for both self-modifying and VGA controls plus the 7E00-loaded CALL/RET solution.
   Reject corrupted operands and the wrong CALL seed without rewriting bytes.
+- [x] Explain [Linux syscall setup](docs/instruction-encoding/linux-syscalls.md)
+  through seven canonical native payload slices and unprefixed 64-bit stack fields.
+  Check sign extension, register selectors and ABI text with independent goldens
+  and three-browser state/disabled-execution checks; no 64-bit model added.
 - [x] Prepare v0.4 version/notes and explicit staging for all nine BIOS images,
   actual native crops/GIFs, six browser recordings, source/artifact archives and
   deterministic provenance. Older staging archives are rejected without overwrite.

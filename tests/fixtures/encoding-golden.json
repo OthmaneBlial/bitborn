@@ -36,6 +36,13 @@
     {"source":"shortBranch","mode":64,"size":2,"disassembly":"jl 0x0","relative":true},
     {"source":"shortBranchInverse","mode":16,"size":2,"disassembly":"jnl 0x0","relative":true},
     {"source":"shortBranchInverse","mode":32,"size":2,"disassembly":"jnl 0x0","relative":true},
-    {"source":"shortBranchInverse","mode":64,"size":2,"disassembly":"jnl 0x0","relative":true}
+    {"source":"shortBranchInverse","mode":64,"size":2,"disassembly":"jnl 0x0","relative":true},
+    {"source":"linuxPushNumber","mode":64,"size":2,"disassembly":"push qword 0x3c","stackImmediate":true},
+    {"source":"linuxPopNumber","mode":64,"size":1,"disassembly":"pop rax"},
+    {"source":"linuxPushArgument","mode":64,"size":2,"disassembly":"push qword 0x2a","stackImmediate":true},
+    {"source":"linuxPopArgument","mode":64,"size":1,"disassembly":"pop rdi"},
+    {"source":"linuxSyscall","mode":64,"size":2,"disassembly":"syscall"},
+    {"source":"linuxMovNumber","mode":64,"size":5,"disassembly":"mov eax,0x3c"},
+    {"source":"linuxMovArgument","mode":64,"size":5,"disassembly":"mov edi,0x2a"}
   ]
 }

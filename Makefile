@@ -19,6 +19,7 @@ site-test: site
 	node tests/test_site.mjs
 	node tests/test_cpu.mjs
 	node tests/test_encoding.mjs
+	node tests/test_linux_encoding.mjs
 	node tests/test_memory_encoding.mjs
 	node tests/test_elf.mjs
 	node tests/test_hex.mjs

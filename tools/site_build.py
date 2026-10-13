@@ -55,6 +55,14 @@ def prepare():
     for name, source in (('selfModifyingControl', 'examples/self-modifying/control.bits'), ('selfModifyingProgram', 'examples/self-modifying/program.bits'), ('shortBranch', 'docs/instruction-encoding/fixtures/short-branch.bits'), ('shortBranchInverse', 'docs/instruction-encoding/fixtures/short-branch-inverse.bits')):
         data, _ = read_bits(ROOT / source)
         encoding[name] = {'source': source, 'bytes': list(data), 'sha256': digest(data)}
+    for slug, ranges in (('exit-code-small', [('linuxPushNumber', 0, 2), ('linuxPopNumber', 2, 3), ('linuxPushArgument', 3, 5), ('linuxPopArgument', 5, 6), ('linuxSyscall', 6, 8)]),
+                         ('exit-code', [('linuxMovNumber', 0, 5), ('linuxMovArgument', 5, 10)])):
+        source = f'examples/{slug}/program.bits'
+        data, _ = read_bits(ROOT / source)
+        for name, start, end in ranges:
+            literal = data[start:end]
+            encoding[name] = {'source': source, 'sourceByteRange': [start, end], 'sourcePayloadSha256': digest(data),
+                              'bytes': list(literal), 'sha256': digest(literal)}
     (ROOT / 'site/encoding-presets.mjs').write_text('export const encodingExamples = ' + json.dumps(encoding, indent=2) + ';\n')
     (ROOT / 'site/cpu-lab/memory-program.mjs').write_text('export const programSources = ' + json.dumps(program_sources, indent=2) + ';\nexport const memoryProgramSource = programSources["memory-mov"].source;\n')
     downloads = ROOT / "site/downloads"

@@ -35,7 +35,7 @@ for(const entry of golden.cases) {
     const [name,address]=expected.split(' ');
     assert.equal(result.operation.toUpperCase(),name==='JNL'?'JGE':name,'independent branch mnemonic/alias');
     assert.equal(result.displacement,Number(address)-entry.size,'independent target at disassembler origin zero minus instruction end');
-  } else assert.equal(result.mnemonic,expected,'independent disassembly golden');
+  } else assert.equal(result.mnemonic,entry.stackImmediate?expected.replace(' QWORD',''):expected,'independent disassembly golden');
   assert.equal(result.size,entry.size);
 }
 for(const mode of [16,32,64])for(const prefix of [[],[0x66]])for(let index=0;index<8;index++) {

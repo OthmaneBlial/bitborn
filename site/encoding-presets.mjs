@@ -306,5 +306,100 @@ export const encodingExamples = {
       254
     ],
     "sha256": "11902ed159d26f3c5a6adefc18d4e7b8135214f0e4747edf46a2ca770f987e9a"
+  },
+  "linuxPushNumber": {
+    "source": "examples/exit-code-small/program.bits",
+    "sourceByteRange": [
+      0,
+      2
+    ],
+    "sourcePayloadSha256": "a0a5759b059d498f6567d39d2553b296ddc4b53b4fd9fde067fc8a1f7364b60b",
+    "bytes": [
+      106,
+      60
+    ],
+    "sha256": "51377f71d445b1102c1427854a1040d0a672e40b33162d04d501a4e55442e09b"
+  },
+  "linuxPopNumber": {
+    "source": "examples/exit-code-small/program.bits",
+    "sourceByteRange": [
+      2,
+      3
+    ],
+    "sourcePayloadSha256": "a0a5759b059d498f6567d39d2553b296ddc4b53b4fd9fde067fc8a1f7364b60b",
+    "bytes": [
+      88
+    ],
+    "sha256": "4b68ab3847feda7d6c62c1fbcbeebfa35eab7351ed5e78f4ddadea5df64b8015"
+  },
+  "linuxPushArgument": {
+    "source": "examples/exit-code-small/program.bits",
+    "sourceByteRange": [
+      3,
+      5
+    ],
+    "sourcePayloadSha256": "a0a5759b059d498f6567d39d2553b296ddc4b53b4fd9fde067fc8a1f7364b60b",
+    "bytes": [
+      106,
+      42
+    ],
+    "sha256": "4788655e22b8037bfb88dabd9fa76717462465e62747b266c942021d02886a55"
+  },
+  "linuxPopArgument": {
+    "source": "examples/exit-code-small/program.bits",
+    "sourceByteRange": [
+      5,
+      6
+    ],
+    "sourcePayloadSha256": "a0a5759b059d498f6567d39d2553b296ddc4b53b4fd9fde067fc8a1f7364b60b",
+    "bytes": [
+      95
+    ],
+    "sha256": "d2e2adf7177b7a8afddbc12d1634cf23ea1a71020f6a1308070a16400fb68fde"
+  },
+  "linuxSyscall": {
+    "source": "examples/exit-code-small/program.bits",
+    "sourceByteRange": [
+      6,
+      8
+    ],
+    "sourcePayloadSha256": "a0a5759b059d498f6567d39d2553b296ddc4b53b4fd9fde067fc8a1f7364b60b",
+    "bytes": [
+      15,
+      5
+    ],
+    "sha256": "5ed9f33e4b004682e03bed14211e218c9dba2d75b3a76be0a1274c0a37ecc9e3"
+  },
+  "linuxMovNumber": {
+    "source": "examples/exit-code/program.bits",
+    "sourceByteRange": [
+      0,
+      5
+    ],
+    "sourcePayloadSha256": "5875e23660cb0ae0c3f4b13815230783dff9fdbb55746e26ebf0869c5d091359",
+    "bytes": [
+      184,
+      60,
+      0,
+      0,
+      0
+    ],
+    "sha256": "ce2a0b8f340fa4d559e8aca45a7156d5794a33471a215d41c9f97597acfab175"
+  },
+  "linuxMovArgument": {
+    "source": "examples/exit-code/program.bits",
+    "sourceByteRange": [
+      5,
+      10
+    ],
+    "sourcePayloadSha256": "5875e23660cb0ae0c3f4b13815230783dff9fdbb55746e26ebf0869c5d091359",
+    "bytes": [
+      191,
+      42,
+      0,
+      0,
+      0
+    ],
+    "sha256": "4b6b038b441b33b6be32325ea159bc20d8b41a8563aba68f6e4f6030c145f559"
   }
 };

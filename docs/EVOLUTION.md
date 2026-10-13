@@ -479,6 +479,21 @@ disable curl configuration to avoid inherited authentication. The 13 actual A4
 QA pages were rendered and visually reviewed, including Arabic RTL/LTR code.
 Older public releases and tags remain intact; no hardware or full-AT claim added.
 Next: resume native/model research after the verified release and public progress sync.
+Release proof `95d539a` passed CI `38346115009` and deployment `38346531351`;
+mirror `9f1f91c` changes only eight `bitborn/` paths. Public README, roadmap,
+changelog, evolution record and progress match the verified release state.
+The Linux instruction lesson adds unprefixed 64-bit stack inspection and seven
+exact slices of the original 8-/12-byte exit programs. It labels source ranges,
+sign-extension and register selectors, explains the Linux ABI and leaves all
+64-bit execution disabled. All imm8 values, 1,000 seeded imm32 words/boundaries,
+sixteen low-register stack forms, exact payload reconstruction and seven new
+NDISASM goldens pass. Chrome, Firefox and WebKit verify every preset and the sign
+bit flip at desktop/320px with unchanged model registers. No native target bytes
+or released artifacts change. Next: progressive byte-order and syscall lessons.
+Actual browser captures now include the seven Linux setup slices and signed-bit
+change. All 66 source hashes, six GIFs and 106 actual PNG frame hashes match;
+the encoding recording has 29 frames. Visual capture review shows readable fields
+and the disabled simulation control, with existing model registers preserved.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -525,7 +540,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 19 | 1 | Signed conditional branches and overflow examples with native QEMU proof | H | M | 04 | Medium | Complete: all short conditions, full rel8/flag oracle and identical 95-byte native/model exercise |
 | 20 | 1 | Carry-aware arithmetic examples and native/model differential checks | H | M | 04 | Medium | Complete: byte/word immediate ADC/SBB, 270,736 ripple cases, same 81-byte native/model program and eight native FLAGS samples |
 | 21 | 1 | ELF anatomy viewer: headers, entry point, segment permissions and payload bytes | H | H | Existing ELF packaging | Medium | Complete: bounded ELF64 scope; no imported-code execution |
-| 22 | 1 | Explain Linux syscall encodings in 64-bit inspection mode without host execution | H | H | 05 | Medium | Open |
+| 22 | 1 | Explain Linux syscall encodings in 64-bit inspection mode without host execution | H | H | 05 | Medium | Complete: canonical setup slices, stack fields/sign extension, Linux ABI text and three-browser read-only proof; no 64-bit execution |
 | 23 | 1 | Literal native self-modification experiment with controlled halt and RAM proof | H | M | Existing BIOS loader | Medium | Complete: current two literal 82-byte cases, one input/live operand bit and native/model proof; original 80-byte checkpoint preserved in history |
 | 24 | 1 | Program gallery presets derived from canonical .bits instead of duplicated source | H | M | Site packaging | Medium | Complete: all six CPU presets from canonical files, exact source/byte identity and loaded-source downloads |
 | 25 | 2 | Progressive interactive byte-order lesson: one byte, one word, one branch | H | H | Existing playground | Low | Open |

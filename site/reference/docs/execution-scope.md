@@ -16,8 +16,10 @@ change those bytes or provide a CPU for that context.
 
 The inspector handles immediate word/dword/qword register MOV, register-direct
 byte/default-width MOV and XOR, legacy one-byte INC/DEC, and bare short Jcc,
-NOP and HLT. Bare SYSCALL is recognized in 64-bit context. Memory MOV inspection
-uses the 16-bit address table. Other unprefixed 16-bit forms use the teaching
+NOP and HLT. Bare SYSCALL is recognized in 64-bit context. The inspector also
+handles [unprefixed 64-bit stack forms and Linux setup slices](instruction-encoding/linux-syscalls.md)
+without register, stack or kernel operations. Memory MOV inspection uses the
+16-bit address table. Other unprefixed 16-bit forms use the teaching
 decoder. Prefix handling is bounded: at most one `66`, then at most one REX in
 64-bit context, for the explicitly implemented forms. See the fixture guide for
 operand-size, byte-register and unsupported-prefix details.

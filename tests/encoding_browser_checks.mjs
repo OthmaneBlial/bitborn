@@ -97,6 +97,21 @@ export async function checkEncoding(page) {
     await page.locator('[data-bit="1-7"]').click();assert.equal(await page.locator('#decoded-instruction').textContent(),'JGE +126');
     assert.equal(await page.locator('#play-registers').textContent(),beforeBranches,'inspection of branch bits does not read/change runtime flags or registers');
   }
+  const beforeLinux=await page.locator('#play-registers').textContent();
+  for(const width of [1440,320]) {
+    await page.setViewportSize({width,height:1000});await page.locator('#decode-mode').selectOption('64');
+    for(const [name,mnemonic] of [['linuxPushNumber','PUSH 60'],['linuxPopNumber','POP RAX'],['linuxPushArgument','PUSH 42'],['linuxPopArgument','POP RDI'],['linuxSyscall','SYSCALL'],['linuxMovNumber','MOV EAX, 60'],['linuxMovArgument','MOV EDI, 42']]) {
+      await page.locator('#instruction-select').selectOption(name);
+      assert.equal(await page.locator('#decoded-instruction').textContent(),mnemonic);
+      assert.equal(await page.locator('#execute-instruction').isDisabled(),true);
+      assert.equal(await page.locator('#play-registers').textContent(),beforeLinux,'Linux inspection does not mutate model state');
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'Linux inspector fits viewport');
+    }
+    await page.locator('#instruction-select').selectOption('linuxPushNumber');
+    await page.locator('[data-bit="1-7"]').click();assert.equal(await page.locator('#decoded-instruction').textContent(),'PUSH -68');
+    assert.match(await page.locator('#encoding-explanation').textContent(),/FFFFFFFFFFFFFFBC/);
+    await page.locator('#instruction-select').selectOption('linuxSyscall');assert.match(await page.locator('#encoding-explanation').textContent(),/RDI, RSI, RDX, R10, R8 and R9/);
+  }
   await page.locator('#decode-mode').selectOption('16');await page.locator('#instruction-select').selectOption('mov');
   await checkBitKeyboard(page);
 }
