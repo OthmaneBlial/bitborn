@@ -335,6 +335,10 @@ dependencies, risks and the current execution record. It is not a feature list.
 
 ## Further research
 
+- [x] Add a [flags lesson](docs/tutorials/flags.md) separating carry, signed
+  overflow, low-byte parity and undefined AF. Validate all published checkpoints,
+  accessible question-mark replay and two native/model ADD condition masks.
+
 - [x] Add a [guided stack/call lesson](docs/tutorials/stack-and-calls.md) using
   the existing 13-byte preset: saved words, instruction-end return addresses,
   retained POP memory and exact recorded RAM rewind/replay. Keep native challenge

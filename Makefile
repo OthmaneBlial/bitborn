@@ -22,6 +22,7 @@ site-test: site
 	node tests/test_linux_encoding.mjs
 	node tests/test_byte_order.mjs
 	node tests/test_stack_lesson.mjs
+	node tests/test_flag_lesson.mjs
 	node tests/test_memory_encoding.mjs
 	node tests/test_elf.mjs
 	node tests/test_hex.mjs

@@ -156,6 +156,10 @@ try {
   for(let index=0;index<8;index++){
     await page.locator('#step').click();await capture(`Actual browser Step control ${index+1}; registers, flags and stack are model state.`);
     if(index===1||index===4){await page.locator('#stack').scrollIntoViewIfNeeded();await capture('Inspected actual model stack bytes written by PUSH or CALL.');}
+    if(index===2){
+      assert.equal(await page.locator('[data-flag="AF"] strong').textContent(),'?');
+      await page.locator('#flags').scrollIntoViewIfNeeded();await capture('XOR clears AX and displays AF as undefined, not a promised native zero; the guided flags reference is visible.');
+    }
     if(index===4){
       await page.locator('#memory-address').fill('07BFE');await page.locator('#memory-form button').click();
       await page.locator('#back').click();
@@ -240,7 +244,18 @@ try {
   assert.equal(await page.locator('#binary-editor').evaluate(editor=>editor.value.slice(editor.selectionStart,editor.selectionEnd)),'badtoken');assert.equal(await page.locator('#serial-output').textContent(),'a');await page.locator('#binary-editor').scrollIntoViewIfNeeded();await capture('A failed binary load focuses and selects the exact invalid token; the loaded self-modifying program and its output remain intact.');
   await page.locator('#hex-editor').fill('F4 GG');await page.locator('#load-hex').click();
   assert.equal(await page.locator('#hex-editor').evaluate(editor=>editor.value.slice(editor.selectionStart,editor.selectionEnd)),'GG');await page.locator('#hex-editor').scrollIntoViewIfNeeded();await capture('A failed hexadecimal load selects GG in the relevant editor and preserves the loaded execution history.');
-  await page.locator('#binary-editor').fill('11110100');assert.equal(await page.locator('#binary-editor').getAttribute('aria-invalid'),null);assert.equal(await page.locator('#serial-output').textContent(),'a');await page.locator('#binary-editor').scrollIntoViewIfNeeded();await capture('Correcting the binary draft clears stale error indicators; the new program replaces the loaded state only when Load is pressed.');await encode();
+  await page.locator('#binary-editor').fill('11110100');assert.equal(await page.locator('#binary-editor').getAttribute('aria-invalid'),null);assert.equal(await page.locator('#serial-output').textContent(),'a');await page.locator('#binary-editor').scrollIntoViewIfNeeded();await capture('Correcting the binary draft clears stale error indicators; the new program replaces the loaded state only when Load is pressed.');
+  await page.locator('#preset').selectOption('flags');await page.locator('#step').click();await page.locator('#step').click();
+  assert.equal(await page.locator('[data-flag="CF"] strong').textContent(),'1');assert.equal(await page.locator('[data-flag="OF"] strong').textContent(),'0');
+  await page.locator('#flags').scrollIntoViewIfNeeded();await capture('FFFF +1 wraps to0000 with unsigned CF=1 and signed OF=0; zero low-byte parity is even.');
+  await page.locator('#step').click();assert.equal(await page.locator('[data-flag="CF"] strong').textContent(),'1');
+  await page.locator('#flags').scrollIntoViewIfNeeded();await capture('INC changes AX to0001 while retaining the preceding carry; condition flags are not recomputed from the register alone.');
+  const signedSource=await readFile(resolve(root,'challenges/signed-overflow/solution.bits'),'utf8');
+  await page.locator('#binary-editor').fill(signedSource);await page.locator('#load-program').click();
+  for(let count=0;count<3;count++)await page.locator('#step').click();
+  assert.equal(await page.locator('[data-register="AX"] .register-value').textContent(),'8000');
+  assert.equal(await page.locator('[data-flag="CF"] strong').textContent(),'0');assert.equal(await page.locator('[data-flag="OF"] strong').textContent(),'1');
+  await page.locator('#flags').scrollIntoViewIfNeeded();await capture('The reviewed 7FFF +1 source gives8000 with CF=0 and OF=1 in the model; native QEMU flag checks are separate.');await encode();
 
   await begin('challenges');
   await page.goto(new URL('challenges/?id=repair-boot',base).href);
@@ -299,6 +314,7 @@ try {
   for(const name of ['start','solution']) {const source=`challenges/direction-flag/${name}.bits`;metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');}
   for(const name of ['exit-code','exit-code-small']) {const source=`examples/${name}/program.bits`;metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');}
   for(const source of ['site/learn/index.html','site/learn/byte-order.mjs','site/learn/byte-order-source.mjs','docs/tutorials/byte-order.bits'])metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');
+  const signedSourcePath='challenges/signed-overflow/solution.bits';metadata.sourceSha256[signedSourcePath]=createHash('sha256').update(await readFile(resolve(root,signedSourcePath))).digest('hex');
   await writeFile(resolve(root,'assets/browser-demo-recording.json'),JSON.stringify(metadata,null,2)+'\n');
   console.log(`Recorded ${captures.length} genuine browser GIFs with frame/source hashes and explicit inspection/simulation provenance.`);
 } finally {await browser?.close();await new Promise(resolve=>server.close(resolve));}

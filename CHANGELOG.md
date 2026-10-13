@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add a flags walkthrough using existing canonical sources. Compare unsigned
+  carry and signed overflow, preserve INC carry and CMP's destination, explain
+  low-byte parity, and inspect AF=? after XOR with recorded rewind/replay.
+  Two curated QEMU boots compare all six defined ADD flags with independent
+  expected masks and the model, preserving code RAM, source and disk bytes.
+
 - Add a guided stack/call walkthrough beside the CPU lab's stack panel, with a
   tested nine-state table, saved-word overwrite and full RAM/state rewind/replay.
   Compare the independently loaded native call challenge without conflating its

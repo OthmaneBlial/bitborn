@@ -529,6 +529,28 @@ Actual CPU footage adds Back/Forward around CALL's saved-word overwrite and
 shows the guided source link. All 70 source hashes, seven GIFs and 113 actual
 PNG frames match; the CPU recording now has 49 frames. The captured memory
 microscope visibly restores 34 12 below SP, without claiming native reversal.
+The CI dependency fix `787fcb5` passed `38348964402`; deployment `38349446294`
+actually checked out that exact fix despite displaying the newer default head.
+The live byte-order lesson, canonical import module, README, roadmap, contributor
+guide, progress and recording match the fix. Stack commit `d7d4005` passed CI
+`38349440352` and deployment `38349877536`; mirror `9f93693` changes only 13
+`bitborn/` paths. Public CPU markup, stack guide, README, roadmap, progress and
+CALL recording match that exact source. The earlier failed CI was corrected,
+not hidden or bypassed.
+The flags lesson reuses existing sources to separate CF from OF, low-byte parity,
+INC's preserved carry, CMP's unchanged destination and deliberately undefined AF.
+All seven published table states, the exact overflow import and unknown-AF
+rewind/replay pass. Two reviewed challenge boots compare all six defined ADD
+flags with independent expected masks and the model; loaded source RAM and disk
+images remain unchanged. The full local Python suite passes 93 tests with the
+one expected native-Linux skip on macOS. Chrome's complete CPU suite and targeted
+Firefox/WebKit tests check the actual flag displays, accessible undefined label,
+history and 1440/320px layouts. No physical hardware, native undefined-AF value
+or native instruction trace is claimed. Next: resume a bounded native experiment.
+The genuine browser footage now includes AF=?, unsigned carry, INC's preserved
+carry and the signed-overflow counterexample. All 71 source hashes, seven GIFs
+and 117 actual PNG frames match; the CPU GIF has 53 frames. Visual review shows
+AX=8000 with CF=0/OF=1 and the guided reference, without labeling it native footage.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -580,7 +602,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 24 | 1 | Program gallery presets derived from canonical .bits instead of duplicated source | H | M | Site packaging | Medium | Complete: all six CPU presets from canonical files, exact source/byte identity and loaded-source downloads |
 | 25 | 2 | Progressive interactive byte-order lesson: one byte, one word, one branch | H | H | Existing playground | Low | Complete: six-byte source, shared decoding, exhaustive word/branch and keyboard/browser checks |
 | 26 | 2 | Guided stack/calling-convention lesson with return-address inspection | H | H | 02,10 | Low | Complete: original preset checkpoints, return-word overwrite/retention, full recorded RAM rewind/replay and separate native challenge proof |
-| 27 | 2 | Flags lesson separating signed overflow, carry, parity and undefined AF | H | H | 04 | Medium | Open |
+| 27 | 2 | Flags lesson separating signed overflow, carry, parity and undefined AF | H | H | 04 | Medium | Complete: canonical checkpoint table, six defined native/model ADD flags, low-byte parity and accessible unknown-AF history |
 | 28 | 2 | Meaningful bit-diff explanations tied to instruction boundaries and execution mode | H | M | 05,07 | Medium | Complete: positional changes and linear field roles; no execution/control-flow/alignment claim |
 | 29 | 2 | New optimization challenges with alternate valid solutions and actual size measurements | H | M | Challenge evaluator | Medium | Open |
 | 30 | 2 | Curated broken-program debugging walkthrough with recorded repair and native proof | H | H | 02 | Low | Complete: direction-flag seed/repair, intermediate model journals, both native controls and genuine browser repair frames |

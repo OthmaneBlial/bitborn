@@ -14,6 +14,7 @@ import {checkPresetSources} from './preset_sources_browser_checks.mjs';
 import {checkSelfModifying} from './self_modifying_browser_checks.mjs';
 import {checkSourceErrors} from './source_error_browser_checks.mjs';
 import {checkStackLesson} from './stack_lesson_browser_checks.mjs';
+import {checkFlagLesson} from './flag_lesson_browser_checks.mjs';
 import {checkIndicators} from './indicator_browser_checks.mjs';
 import {checkExecutionKeyboard} from './execution_keyboard_browser_checks.mjs';
 
@@ -153,6 +154,7 @@ try {
   }
   await page.screenshot({path:resolve(root,'build/cpu-lab-mobile.png'),fullPage:true});
   await checkStackLesson(page);
+  await checkFlagLesson(page,base);
   assert.deepEqual(errors,[],'browser errors and asset failures');
   console.log('CPU lab browser checks passed: exact changed bits/flags/stack bytes, rewind/replay/fork/halt restoration, source/raw download/import round trips, self-modification exports and stale-read/error cancellation, branch pointer, breakpoints/resume, speed, pause, reset, keyboard, memory bounds, import/parser errors, 1440/390/320px layouts; screenshots in build/.');
 } finally {await browser?.close();await new Promise(resolve=>server.close(resolve));}

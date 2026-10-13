@@ -51,6 +51,7 @@ exact source revision, generated copies and every artifact hash across builds.
 | [Linux syscall inspection](docs/instruction-encoding/linux-syscalls.md) | `site/encoding.mjs`, `tools/site_build.py`, canonical exit payloads | `node tests/test_linux_encoding.mjs` and `npm run test:cross-browser` |
 | [Progressive byte-order lesson](docs/tutorials/byte-order.md) | `docs/tutorials/byte-order.bits`, `site/learn/byte-order.mjs`, shared decoder | `node tests/test_byte_order.mjs`, `node tests/browser_routes.mjs` and `npm run test:cross-browser` |
 | [Guided stack/call lesson](docs/tutorials/stack-and-calls.md) | Existing `docs/cpu-lab/stack.bits`, stack/memory UI and history journal | `node tests/test_stack_lesson.mjs`, `node tests/browser_cpu_lab.mjs` and `npm run test:cross-browser` |
+| [Flags lesson](docs/tutorials/flags.md) | Existing flags/stack presets and reviewed signed-overflow/carry-branch solutions | `node tests/test_flag_lesson.mjs`, `python3 -m unittest tests.test_flag_lesson_native` and browser checks |
 | Shared memory addressing/execution | `site/address16.mjs`, `site/simulator.mjs` | `node tests/test_memory_mov.mjs` and `python3 -m unittest tests.test_memory_parity` |
 | Loaded-program links | `site/program-link.mjs`, `site/cpu-lab/lab.mjs` | `node tests/test_program_link.mjs` and `node tests/browser_cpu_lab.mjs` |
 | Mode-aware program differences | `site/bit-diff.mjs`, `site/bit-diff/` | `node tests/test_bit_diff.mjs` and `node tests/browser_bit_diff.mjs` |
