@@ -1,0 +1,2 @@
+# Literal ten-byte probe slot for user-page.bits at byte 273; no address fixups.
+11000111 00000101 00000000 01111110 00000000 00000000 01000100 00110011 00100010 00010001 # instruction | MOV dword [7E00],11223344 user | Attempt to overwrite four already-executed bootstrap bytes on the read-only code page.

@@ -2,12 +2,18 @@
 
 ## Unreleased
 
+- Extend the user-page proof to six native cases: private reads/writes and
+  code-page writes, each denied and narrowly permission-enabled. Use independent
+  literal ten-byte read/code-write slots with no relocation or instruction
+  generation. Check errors 5/7, exact CR2/frames, failed/allowed read EAX, all
+  tables/dirty bits and exactly four runtime code bytes in the writable control.
+
 - Add a 712-byte literal user/supervisor page-permission fixture: deny a user
   write with #PF(7)/CR2 B000, preserve the kernel word and return through the
   captured privilege frame. One PTE user bit permits the same store. Check all
   2,048 directory/table entries, actual user stack/data writes, dirty bits,
   registers, source/TSS/loader integrity and disk bytes. Broader process isolation
-  and read/code-write negative probes remain outside this proof.
+  remains outside this proof; the later matrix adds read/code-write probes.
 
 - Add a 696-byte literal user/kernel INT gate research fixture. Check the actual
   five-word privilege frame, TSS-selected stack, preserved registers/DF and

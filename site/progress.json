@@ -2,6 +2,10 @@
   "updated": "2026-10-13",
   "milestones": [
     {
+      "milestone": "Native permission probe matrix",
+      "progress": "\u2705 Six actual QEMU cases: denied/permitted private reads, private writes and code-page writes; errors 5/7, exact CR2/frames, EAX read effects, source mutation limited to the allowed four-byte bootstrap write, all entries/dirty bits and unchanged source files/disk"
+    },
+    {
       "milestone": "Native user/supervisor page boundary",
       "progress": "\u2705 Literal 712-byte fixture passes QEMU: denied user write yields PF(7)/CR2 B000, preserved kernel word, six-word privilege frame and user return; one PTE bit permits the same store; all 2,048 entries, user stack/data, dirty bits and source integrity checked; no general process-isolation claim"
     },

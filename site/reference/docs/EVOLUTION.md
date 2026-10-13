@@ -6,6 +6,23 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 
 ## Current execution record
 
+Permission matrix (2026-10-13): two independent literal ten-byte slots extend
+the unchanged 712-byte template with private read and code-write probes. Hosts
+copy those exact authored bytes into the declared slot without instruction
+generation or relocation. Six actual boots prove denied/permitted private reads,
+private writes and code writes. Denied reads report PF(5) and preserve EAX;
+permitted reads return DEADBEEF without dirtying the private page. Denied code
+writes report PF(7)/CR2 7E00; one writable bit permits exactly four bootstrap-byte
+changes, without re-entering that already-executed code. Every case checks all
+2,048 entries, dirty/accessed bits, privilege frames/return state, actual user
+stack/data, source/TSS/loader RAM and unchanged source files/disk. Three focused
+tests pass all six native cases; general process isolation remains unadvertised.
+The full native suite passes 121 tests with one expected macOS native-Linux skip.
+
+Page-boundary source `b885eaa` passes CI `38409259011` and deployment
+`38410331344`. All five checked public README/roadmap/page-guide/evolution/
+progress files match; mirror `9f5a601` changes only nine `bitborn/` paths.
+
 User-page research (2026-10-13): 712 literal bytes build legacy identity paging
 with explicit user code/stack/marker pages and a supervisor-only target word.
 CPL-three write raises actual PF(7), CR2 B000, captures the six-word privilege
@@ -956,7 +973,8 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 70 | 1 | Publish the five newer native experiments as a verified v0.5 distribution | H | H | 68,69 and native proofs | Medium | Complete: main/tag CI, clean-source 114-test/three-engine reproduction, 112 exact artifacts and all 89 anonymous attachment downloads verified; precise scope and publication notes updated |
 | 71 | 1 | Prove a curated protected-mode user/kernel privilege transition with explicit native frames and controls | H | M | GDT, exception frames, IRETD | High | Complete: ring-three entry, TSS-selected HLT/GP return and CMC control; callable INT gate/IRETD and one-bit DPL denial pass four native cases with exact frames; no memory-isolation, Linux ABI or scheduling claim |
 | 72 | 1 | Prove a bounded user/supervisor page-permission boundary with native PF frames and a one-bit control | H | M | 71, native paging | High | Complete: native denied write PF(7)/CR2, protected word, privilege-frame return and one-bit user permission; all entries, user stack/data, dirty bits and source integrity checked; no general sandbox claim |
-| 73 | 1 | Extend the bounded permission proof with actual negative user-read and code-write probes | H | M | 72 | High | Pending: independent literal probe slots, exact PF addresses/errors and narrowly permitted controls; retain source integrity and avoid advertising arbitrary-process isolation |
+| 73 | 1 | Extend the bounded permission proof with actual negative user-read and code-write probes | H | M | 72 | High | Complete: two literal slots and six native denied/permitted cases; PF 5/7, exact CR2/frames, explicit read EAX and four-byte code control, all tables/dirty bits and source/disk integrity; no general isolation claim |
+| 74 | 1 | Record all six native permission snapshots with source/frame/table hashes and replayable provenance | H | H | 73, native recorder patterns | Medium | Pending: actual registers, logs, stack, directory/table and source RAM; independently recheck stored captures and distinguish native data from browser emulation |
 
 Large tasks are divided into useful verified milestones. Native experiments only
 become capabilities after literal source review and real QEMU checks; hardware

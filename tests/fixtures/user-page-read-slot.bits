@@ -1,0 +1,7 @@
+# Literal ten-byte probe slot for user-page.bits at byte 273; no address fixups.
+10100001 00000000 10110000 00000000 00000000 # instruction | MOV EAX,[B000] user | Five-byte absolute user read; denied read leaves EAX unchanged.
+10010000 # instruction | NOP slot 1 | Keep the authored slot ten bytes long.
+10010000 # instruction | NOP slot 2 | No flags or registers change.
+10010000 # instruction | NOP slot 3 | Literal slot padding.
+10010000 # instruction | NOP slot 4 | Literal slot padding.
+10010000 # instruction | NOP slot 5 | Following completion instruction remains at byte 283.

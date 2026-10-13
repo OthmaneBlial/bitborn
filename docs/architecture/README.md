@@ -190,7 +190,9 @@ code. The [user/kernel gate fixture](user-gate.md) adds a callable software
 interrupt service and one-bit DPL permission control. Flat memory remains shared;
 the [user-page fixture](user-page.md) separately proves a denied write to one
 supervisor-only page and a one-bit permission control, with all directory/table
-entries checked. Broader permission probes and scheduling remain separate work.
+entries checked. Its [six-case permission matrix](user-page.md#six-actual-permission-cases)
+also proves denied user reads and code writes with permission-enabled controls.
+Captured-data provenance and scheduling remain separate work.
 
 - [Intel Software Developer's Manuals](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html): instruction encodings, real mode and flags.
 - [QEMU invocation reference](https://www.qemu.org/docs/master/system/invocation.html): floppy, serial, TCG and QMP options.

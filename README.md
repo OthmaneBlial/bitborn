@@ -69,8 +69,8 @@ with verified downloads, source and checksums. The boot tools, interactive labs,
 [release notes](docs/release-v0.5.0.md) cover fourteen BIOS images and their evidence.
 [Native research](docs/architecture/README.md) now spans allocation, interrupts,
 paging and user/kernel privilege boundaries. The latest
-[user-page probe](docs/architecture/user-page.md) checks one protected write and
-its permission bit. Broader permission probes and general recovery remain next.
+[user-page probes](docs/architecture/user-page.md) check private reads/writes and
+code protection. Native capture provenance and general recovery remain next.
 
 **[Read the full roadmap, completed milestones and evidence →](ROADMAP.md)**
 The [live roadmap](https://othmaneblial.github.io/bitborn/roadmap/) follows that same

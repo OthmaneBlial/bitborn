@@ -10,11 +10,18 @@ store and returns to user code, leaving both permission and protected word intac
 python3 -m unittest tests.test_user_page -v
 ```
 
-The [canonical source](https://github.com/OthmaneBlial/bitborn/blob/main/tests/fixtures/user-page.bits)
-contains every instruction, descriptor and TSS byte. The existing literal loader
+The [canonical template](https://github.com/OthmaneBlial/bitborn/blob/main/tests/fixtures/user-page.bits)
+contains literal instructions, descriptors and TSS bytes. The existing literal loader
 reads two sectors and enters `0000:7E00`; packaging adds only padding/signature.
 The complete test image is 1,536 bytes. This fixture is outside the public
 artifact manifest and does not change the frozen v0.5.0 assets or browser model.
+
+The expanded matrix also uses two literal ten-byte probe slots:
+[private read](https://github.com/OthmaneBlial/bitborn/blob/main/tests/fixtures/user-page-read-slot.bits)
+and [code write](https://github.com/OthmaneBlial/bitborn/blob/main/tests/fixtures/user-page-code-write-slot.bits).
+Tests copy those exact bytes over source bytes 273–282; the remaining template
+bytes and all addresses stay fixed. No host instruction generation, relocation
+or mnemonic translation is involved. The fragments are not standalone images.
 
 ## Give the user specific pages
 
@@ -39,8 +46,9 @@ processor-managed accessed/dirty bits beyond the exact authored mapping.
 
 GDT accessed bits are already set in the literal descriptors. LTR marks the TSS
 descriptor busy before paging starts, so later selector loads need not write the
-read-only code/GDT page. Both native cases leave that page's dirty bit clear.
-The full loaded source is unchanged except for that pre-paging TSS busy bit.
+read-only code/GDT page. The original private-write pair leaves that page clean.
+Only the deliberate writable-code control below dirties and changes code bytes;
+all other cases leave loaded source unchanged except for the TSS busy bit.
 
 ## Read the denied-write frame
 
@@ -78,13 +86,41 @@ the same user checkpoint with restored registers, flags and stack balance.
 This control isolates the page permission from instruction encoding and CPL.
 It does not claim that the permission-enabled variant still protects that word.
 
+## Six actual permission cases
+
+Each probe has a denied case and a narrowly permission-enabled control. All six
+boots validate every directory/PTE entry, actual user stack/completion writes,
+the returned user state, source/TSS/loader RAM and unchanged source files/disk.
+
+| Probe | Denied outcome | Permission-enabled outcome |
+| --- | --- | --- |
+| Private write, `B000` | PF error `7`, CR2 `B000`; word remains `DEADBEEF`, target page clean | Source byte 149 bit two enables user access; word becomes `11223344`, page dirty |
+| Private read, `B000` | PF error `5` (present, read, user), CR2 `B000`; failed load leaves EAX `23` | Same user-permission bit permits the read; EAX becomes `DEADBEEF`, word unchanged, page accessed but clean |
+| Code write, `7E00` | PF error `7`, CR2 `7E00`; bootstrap bytes and code page remain unchanged/clean | Source byte 119 bit one enables writing the user code page; exactly four bootstrap bytes become `44 33 22 11`, code page dirty |
+
+The read slot contains five-byte `MOV EAX,[B000]` followed by five literal NOPs.
+On denial the handler skips the **declared ten-byte slot**, including that padding;
+on permission the read and NOPs execute normally. The final completion instruction
+stays at `7F1B` for every probe. This is authored-slot recovery, not instruction
+length discovery or arbitrary fault decoding.
+
+The code-write slot targets only four already-executed bootstrap bytes. The
+permitted control deliberately demonstrates loss of that protection; the program
+does not re-enter the overwritten bootstrap. Whole-source RAM comparison allows
+exactly those four changed bytes and the pre-paging TSS busy bit, with no other
+source changes. Source files and the read-only disk remain byte-identical.
+
+Every denied case records the real error/CR2 and original EIP `7F11`, retains all
+six privilege-frame words, restores known and saved registers, and returns with
+only saved EIP advanced by ten. Every permitted case leaves the fault log/marker
+zero. The permitted read's changed EAX is checked explicitly.
+
 ## Scope
 
-This proves one denied user write plus allowed user code, stack and marker paths.
-Code-page read-only permission and the remaining supervisor mappings are
-structurally checked; attempts to read the protected word or overwrite code are
-separate negative probes. Kernel code shares an executable page visible to the
-user, and recovery knows one fixed store length. There is no arbitrary-process
+This proves three fixed read/write/code permission probes plus allowed user code,
+stack and marker paths. Remaining supervisor mappings are structurally checked.
+Kernel code shares an executable page visible to the user, and recovery knows
+one fixed probe-slot width. There is no arbitrary-process
 sandbox, general fault recovery, scheduler, modern NX/PAE/long-mode paging,
 physical-hardware or UEFI proof here. The user checkpoint spins until QMP stops it.
 
