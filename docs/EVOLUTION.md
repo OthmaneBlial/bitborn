@@ -266,8 +266,9 @@ all site/module checks pass. Six browser recordings were recaptured with source
 and frame hashes; the CPU recording has 45 actual frames, including three error
 and correction states. Live assistive-technology review remains open.
 Source-error commit `dbd0236` is pushed; its Pages mirror `e19610f` changes only
-14 paths inside `bitborn/`. CI `38328762513` is running; public-byte verification
-will follow its deployment.
+14 paths inside `bitborn/`. CI `38328762513` and deployment `38329115442` passed;
+public parser, CPU module/page, progress and source-diagnostics guide match exact
+committed bytes.
 The bit-diff workbench now checks both drafts independently, identifies invalid
 Before/After sides and selects the first offending token on failed notation
 conversion. Typing focus, drafts, notation, selected row/roles and last valid
@@ -277,7 +278,14 @@ and WebKit cover both notations, Unicode token ranges, both-invalid/one-correcte
 recovery, excess bytes, empty drafts and preset reset. All site/module checks
 pass. Its genuine browser recording now contains ten frames, including three
 error/recovery states. Assistive-technology review remains separate.
-Next: fresh-checkout reproduction with platform-specific validation evidence.
+Comparison commit `accecee` is pushed; its Pages mirror `704c071` changes only
+15 `bitborn/` paths. CI `38329145675` is running at this checkpoint.
+A fresh remote clone at that exact source revision passed `npm ci`, 77 Python
+tests (one expected macOS native-Linux skip), and all site/model/generated-copy
+checks. Every one of the 88 reviewed artifact hashes matches across two builds;
+the Git tree remains clean. The reproduction guide records the actual source,
+environment, map fingerprint, commands and distinct Linux/browser/native gates.
+Next: print-friendly lessons that retain source attribution and readable bits.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -354,7 +362,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 49 | 2 | Genuine Time Machine capture with source/frame provenance | H | H | 02,12 | Low | Complete |
 | 50 | 0 | Reproducible host-model benchmark; distinguish rendering, interpretation and native execution | H | M | 01,02 | Medium | Complete |
 | 51 | 0 | Release-provenance manifest tying reviewed source, packaged output and commit | H | H | Existing releases | Medium | Complete: v0.3 public bytes, checksums and commit verified |
-| 52 | 0 | Clean-checkout reproduction and platform-specific validation documentation | H | H | CI | Low | Open |
+| 52 | 0 | Clean-checkout reproduction and platform-specific validation documentation | H | H | CI | Low | Complete: fresh remote accecee install, 77 Python/site checks, all 88 hashes across two builds and clean tracked tree; platform gates explicit |
 | 53 | 3 | Real VGA bitmap experiment with manually authored pixel/instruction bytes | H | M | BIOS target | High | Open |
 | 54 | 3 | Tiny text-mode game with deterministic input and genuine QEMU recording | H | M | Shell keyboard helpers | High | Open |
 | 55 | 3 | Bounded native allocator with memory-map, ownership and overflow evidence | H | M | Protected-mode target | High | Open |

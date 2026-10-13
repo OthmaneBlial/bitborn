@@ -28,6 +28,8 @@ python3 -m http.server 8000 --directory site
 Open `http://localhost:8000/` to develop the website. On Linux, Playwright may
 require its documented system dependencies (`npx playwright install --with-deps`).
 macOS cannot natively run the Linux ELF examples; CI runs their native checks.
+Use the [clean-checkout reproduction recipe](docs/reproduction.md) to check the
+exact source revision, generated copies and every artifact hash across builds.
 
 | Work on | Start here | Focused check |
 | --- | --- | --- |

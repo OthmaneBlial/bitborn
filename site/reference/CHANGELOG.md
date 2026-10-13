@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Document verified fresh-checkout reproduction with exact source/environment,
+  all 88 reviewed artifact hashes across two builds, clean generated copies and
+  explicit macOS/Linux/browser validation boundaries.
+
 - Identify invalid Before/After bit-comparison drafts independently and select
   the first offending token on failed notation conversion. Preserve both drafts,
   notation and the last valid comparison; clear each corrected error marker.

@@ -266,6 +266,10 @@ The v0.2 milestone is published and verified. The following research remains ope
   offending token on failed notation conversion. Keep typing focus, original
   drafts/notation and the last valid comparison; corrected sides clear their
   own markers. See [comparison error recovery](docs/bit-diff.md).
+- [x] Verify a fresh remote checkout with dependency installation, Python and
+  site/model checks, all 88 artifact hashes across two builds, and an unchanged
+  tracked source tree. Record source/environment and platform-specific gates in
+  the [reproduction recipe](docs/reproduction.md).
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review
