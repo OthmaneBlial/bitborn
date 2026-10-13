@@ -1,0 +1,7 @@
+# Reviewed twelve-byte solution: two self-XOR encodings save two bytes.
+11111010 # instruction | CLI | Keep the final native halt stopped.
+10111000 00110100 00010010 # instruction | MOV AX,1234 | Establish a nonzero AX; preserve the locked setup.
+10111011 01111000 01010110 # instruction | MOV BX,5678 | Establish a nonzero BX; preserve the locked setup.
+00110001 11000000 # instruction | XOR AX,AX | Two bytes clear AX and update arithmetic flags.
+00110001 11011011 # instruction | XOR BX,BX | Two bytes clear BX and update arithmetic flags.
+11110100 # instruction | HLT | Stop with AX and BX zero; flags are outside this challenge's goals.

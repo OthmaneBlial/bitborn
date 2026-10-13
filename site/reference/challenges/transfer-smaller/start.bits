@@ -1,0 +1,6 @@
+# Optimization seed: the first seven bytes establish AX=42 and a different BX.
+11111010 # instruction | CLI | Keep the final native halt stopped.
+10111000 00101010 00000000 # instruction | MOV AX,42 | Establish the source value; this setup remains locked.
+10111011 01111000 01010110 # instruction | MOV BX,5678 | Establish a different BX; this setup remains locked.
+10111011 00101010 00000000 # instruction | MOV BX,42 | Repeat the immediate in three bytes rather than reuse AX.
+11110100 # instruction | HLT | Stop with AX and BX equal to forty-two; the payload is eleven bytes.

@@ -55,7 +55,7 @@ Immutable release commit `4706efeeab9133f53b2b9e80089f144d9983ff89` passed
 [37-test Linux CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38223386652)
 and [tag CI](https://github.com/OthmaneBlial/bitborn/actions/runs/38223865244).
 Evidence now covers 55 reviewed literal targets, all six native Linux ELFs,
-all twenty challenge solutions in QEMU, original and expanded monitor behavior,
+all twenty-two primary challenge solutions plus two alternatives and two optimization starts in QEMU, original and expanded monitor behavior,
 protected-mode success/failure paths, three browser engines, exact browser
 downloads and source-to-packaged-artifact reproduction.
 

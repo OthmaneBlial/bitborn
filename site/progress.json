@@ -50,8 +50,12 @@
       "progress": "\u2705 Six literal teaching programs; controls and memory exercise verified in Chrome, Firefox and WebKit"
     },
     {
-      "milestone": "20 challenges across four levels",
-      "progress": "\u2705 All solutions pass model and QEMU goals; seeds fail; local progress and sharing tested"
+      "milestone": "22 challenges across four levels",
+      "progress": "\u2705 Twenty bit-edit puzzles plus two measured optimizations; native and model goals, locked setup, distinct alternatives, size budgets and local completion checks"
+    },
+    {
+      "milestone": "Measured optimization puzzles",
+      "progress": "\u2705 14 \u2192 12 and 11 \u2192 10 payload bytes, each with two reviewed encodings; explicit flags/stack tradeoffs, 26 curated QEMU cases and independent byte boundaries"
     },
     {
       "milestone": "Eight dedicated `.io` routes and a size-comparison lab",

@@ -24,22 +24,30 @@ export function evaluateChallenge(challenge, source) {
   try {
     if (typeof source !== 'string' && (!Array.isArray(source) && !(source instanceof Uint8Array) || source.length > 512 || Array.from(source).some(value => !Number.isInteger(value) || value < 0 || value > 255))) throw new Error('The program must contain at most 512 valid byte values.');
     const bytes = typeof source === 'string' ? parseBits(source, 512) : Uint8Array.from(source);
-    if (bytes.length !== challenge.startBytes.length || bytes.length > 512) throw new Error(`Keep all ${challenge.startBytes.length} bytes; this puzzle changes bits, not program length.`);
-    const changes = bitChanges(challenge.startBytes, bytes);
-    if (changes.some(change => !challenge.editableOffsets.includes(change.offset))) throw new Error('A locked byte changed. Edit only the highlighted offsets.');
-    const changedBits = changes.reduce((sum, change) => sum + change.bitCount, 0);
-    if (changedBits > challenge.maxChangedBits) throw new Error(`The edit budget is ${challenge.maxChangedBits} bits; ${changedBits} changed.`);
+    let changedBits=null;
+    if(challenge.optimization) {
+      const prefix=challenge.optimization.editableFrom;
+      if(bytes.length<prefix || challenge.startBytes.slice(0,prefix).some((byte,index)=>bytes[index]!==byte))throw new Error(`Keep the first ${prefix} setup bytes unchanged. Rewrite only the remaining program.`);
+    } else {
+      if (bytes.length !== challenge.startBytes.length) throw new Error(`Keep all ${challenge.startBytes.length} bytes; this puzzle changes bits, not program length.`);
+      const changes = bitChanges(challenge.startBytes, bytes);
+      if (changes.some(change => !challenge.editableOffsets.includes(change.offset))) throw new Error('A locked byte changed. Edit only the highlighted offsets.');
+      changedBits = changes.reduce((sum, change) => sum + change.bitCount, 0);
+      if (changedBits > challenge.maxChangedBits) throw new Error(`The edit budget is ${challenge.maxChangedBits} bits; ${changedBits} changed.`);
+    }
     state = createState(bytes, challenge.loadAddress);
     // The curated fragments use the same segment-zero stack established by boot/loader.bits.
     if (challenge.loadAddress === 0x7E00) state.SP = 0x7C00;
     while (!state.halted && state.steps < challenge.maxSteps) step(bytes, state);
     const checks = [{label:`HLT reached within ${challenge.maxSteps} steps`,pass:state.halted}];
+    if(challenge.optimization)checks.push({label:`${bytes.length} payload bytes ≤ ${challenge.optimization.maxBytes} (${challenge.startBytes.length} in the starting program)`,pass:bytes.length<=challenge.optimization.maxBytes});
     for (const [register, value] of Object.entries(challenge.goals.registers || {})) checks.push({label:`${register} = 0x${hex(value,4)}`,pass:state[register] === value});
     for (const [flag, value] of Object.entries(challenge.goals.flags || {})) checks.push({label:`${flag.toUpperCase()} = ${Number(value)}`,pass:state[flag] === value});
     for (const name of ['output','serial']) if (Object.hasOwn(challenge.goals,name)) checks.push({label:`${name === 'output' ? 'Screen' : 'Serial'} output matches the goal`,pass:state[name] === challenge.goals[name]});
     for (const memory of challenge.goals.memory || []) checks.push({label:`Memory 0x${hex(memory.address,5)} = ${memory.bytes.map(value => hex(value)).join(' ')}`,pass:memory.bytes.every((value,index) => state.memory[memory.address+index] === value)});
     const success = checks.every(check => check.pass);
-    return {success,state,checks,changedBits,message:success ? `Solved in ${state.steps} model steps with ${changedBits} changed ${changedBits === 1 ? 'bit' : 'bits'}.` : state.halted ? 'HLT reached, but a goal is still unmet. Inspect the result and try again.' : `The program did not reach HLT within ${challenge.maxSteps} model steps. Inspect the branch or loop.`};
+    const solved=challenge.optimization?`Solved in ${state.steps} model steps: ${bytes.length} payload bytes, ${challenge.startBytes.length-bytes.length} fewer than the starting program.`:`Solved in ${state.steps} model steps with ${changedBits} changed ${changedBits === 1 ? 'bit' : 'bits'}.`;
+    return {success,state,checks,changedBits,payloadSize:bytes.length,message:success ? solved : state.halted ? 'HLT reached, but a goal is still unmet. Inspect the result and try again.' : `The program did not reach HLT within ${challenge.maxSteps} model steps. Inspect the branch or loop.`};
   } catch (error) { return {success:false,state,checks:[],message:error.message}; }
 }
 
@@ -76,7 +84,8 @@ async function startApp() {
     try { bytes = parseBits(byId('binary-source').value,512); }
     catch { for (const button of byId('editable-bytes').querySelectorAll('button')) button.disabled = true; return; }
     byId('editable-bytes').replaceChildren();
-    for (const offset of challenge.editableOffsets) {
+    const offsets=challenge.optimization?Array.from({length:Math.max(0,bytes.length-challenge.optimization.editableFrom)},(_,index)=>index+challenge.optimization.editableFrom):challenge.editableOffsets;
+    for (const offset of offsets) {
       const byte = bytes[offset];
       const panel = element('div', undefined, `editable-byte${byte !== challenge.startBytes[offset] ? ' edited' : ''}`);
       const head = element('div', undefined, 'byte-head');
@@ -106,7 +115,7 @@ async function startApp() {
 
   function clearResult() {
     byId('result-panel').classList.remove('success','flash');
-    setText('result','Edit the highlighted bytes, then run the teaching model.');
+    setText('result',challenge.optimization?'Rewrite the program after the locked setup, then measure its bytes and check the goals.':'Edit the highlighted bytes, then run the teaching model.');
     byId('registers').replaceChildren(); byId('goal-checks').replaceChildren(); setText('output','');
   }
 
@@ -118,7 +127,8 @@ async function startApp() {
     setText('challenge-number',`CHALLENGE ${String(index+1).padStart(2,'0')} / ${catalog.length}`);
     setText('difficulty',challenge.difficulty); setText('challenge-title',challenge.title);
     setText('challenge-summary',challenge.summary); setText('challenge-goal',challenge.goal);
-    setText('edit-budget',`${challenge.startBytes.length} bytes · ≤ ${challenge.maxChangedBits} bit changes`);
+    setText('edit-budget',challenge.optimization?`${challenge.startBytes.length} starting bytes · ≤ ${challenge.optimization.maxBytes} payload bytes · first ${challenge.optimization.editableFrom} bytes locked`:`${challenge.startBytes.length} bytes · ≤ ${challenge.maxChangedBits} bit changes`);
+    setText('source-limit',challenge.optimization?`Eight bits per byte; spaces, line breaks and # comments are allowed. Keep the first ${challenge.optimization.editableFrom} bytes; rewrite or shorten the remaining program. Maximum 512 bytes; the goal measures the complete payload.`:'Eight bits per byte; spaces, line breaks and # comments are allowed. Maximum 512 bytes. Only highlighted offsets may change.');
     byId('binary-source').value = challenge.startText; byId('hints').replaceChildren();
     byId('hint').disabled = false; setText('hint-count',`0/${challenge.hints.length}`);
     setText('visual-explanation',challenge.visual); setText('explanation',challenge.explanation);

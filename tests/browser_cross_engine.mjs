@@ -24,6 +24,7 @@ import {checkPrintLessons} from './print_browser_checks.mjs';
 import {checkVGABitmap} from './vga_bitmap_browser_checks.mjs';
 import {checkTimerIRQ} from './timer_irq_browser_checks.mjs';
 import {checkPaging} from './paging_browser_checks.mjs';
+import {checkOptimizationChallenges} from './optimization_browser_checks.mjs';
 import {checkIndicators} from './indicator_browser_checks.mjs';
 import {checkExecutionKeyboard} from './execution_keyboard_browser_checks.mjs';
 import {checkByteOrder} from './byte_order_browser_checks.mjs';
@@ -166,7 +167,7 @@ try {
       await page.reload(); await page.locator('#challenge-app').waitFor({state:'visible'});
       const progress=await page.evaluate(()=>JSON.parse(localStorage.getItem('bitborn.challenges.v1')));
       assert.deepEqual([...progress.completed].sort(),['repair-boot','return-42']);
-      assert.match(await page.locator('#completion-count').textContent(),/^2 \/ 20$/);
+      assert.match(await page.locator('#completion-count').textContent(),/^2 \/ 22$/);
       await page.locator('#binary-source').fill('00000000 '.repeat(513)); await page.locator('#validate').click();
       assert.match(await page.locator('#result').textContent(),/512|limit|large|maximum/i,'oversized input is rejected');
       await open('challenges/?id=direction-flag');await page.locator('#validate').click();
@@ -176,6 +177,7 @@ try {
       await page.locator('#validate').click();assert.match(await page.locator('#result').textContent(),/Solved in 9.*1 changed bit/);
       assert.equal(await page.locator('.goal-checks .fail').count(),0);
 
+      await checkOptimizationChallenges(page,base);
       // The displayed roadmap must be the exact generated, fetched record.
       const roadmapResponse=page.waitForResponse(response=>new URL(response.url()).pathname.endsWith('/progress.json'));
       await open('roadmap/');

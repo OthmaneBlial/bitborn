@@ -23,7 +23,8 @@ website progress; the [README](README.md) keeps a short summary.
 | Shared CPU model: flags, calls, stack and segmented memory | ✅ Locally verified; modern PUSH SP semantics checked in real QEMU |
 | Full editable 512-byte boot-sector builder | ✅ Chrome-tested; exact downloaded image/source boot the one-bit edit in QEMU |
 | Visual CPU lab: registers, flags, stack, memory and breakpoints | ✅ Six literal teaching programs; controls and memory exercise verified in Chrome, Firefox and WebKit |
-| 20 challenges across four levels | ✅ All solutions pass model and QEMU goals; seeds fail; local progress and sharing tested |
+| 22 challenges across four levels | ✅ Twenty bit-edit puzzles plus two measured optimizations; native and model goals, locked setup, distinct alternatives, size budgets and local completion checks |
+| [Measured optimization puzzles](docs/tutorials/optimization.md) | ✅ 14 → 12 and 11 → 10 payload bytes, each with two reviewed encodings; explicit flags/stack tradeoffs, 26 curated QEMU cases and independent byte boundaries |
 | Eight dedicated `.io` routes and a size-comparison lab | ✅ Public; expanded Linux CI and live builder checks passed |
 | Original 12-byte exit versus 8-byte alternative | ✅ Both return 42 in Linux CI; 132→128-byte ELF sizes, no speed claim |
 | New browser GIFs, showcase and contributor issue forms | ✅ Genuine captured states with provenance; contributor files checked |

@@ -651,5 +651,49 @@
     "loadAddress": 31744,
     "source": "challenges/repair-boot/start.bits",
     "solution": "challenges/repair-boot/solution.bits"
+  },
+  {
+    "id": "clear-smaller",
+    "title": "Clear two registers in fewer bytes",
+    "difficulty": "intermediate",
+    "path": "05 · Measure an optimization",
+    "summary": "Two immediate loads reach the goal. Replace their tail with a smaller literal program.",
+    "goal": "Preserve the seven setup bytes, halt with AX = BX = 0 and SP = 7C00, using at most 12 payload bytes.",
+    "goals": {"registers": {"AX": 0, "BX": 0, "SP": 31744}},
+    "optimization": {"editableFrom": 7, "maxBytes": 12},
+    "hints": [
+      "The locked setup gives AX and BX different nonzero values; clearing cannot rely on initial zeros.",
+      "XOR of a register with itself takes two bytes. MOV immediate takes three.",
+      "31 C0 clears AX. Clear BX with 31 DB, or copy AX into BX with 89 C3. Keep the final F4."
+    ],
+    "explanation": "Both reviewed twelve-byte programs save two bytes from the fourteen-byte starting program. Two self-XOR instructions and XOR followed by MOV reach the same register and stack goals. Arithmetic flags are deliberately outside this challenge's goals; clearing with XOR does not preserve the flags of MOV immediate.",
+    "visual": "14 → 12 payload bytes · two XORs or XOR + register MOV · flags outside the goal",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/clear-smaller/start.bits",
+    "solution": "challenges/clear-smaller/solution.bits",
+    "alternatives": ["challenges/clear-smaller/alternative.bits"]
+  },
+  {
+    "id": "transfer-smaller",
+    "title": "Reuse a value, save one byte",
+    "difficulty": "intermediate",
+    "path": "05 · Measure an optimization",
+    "summary": "AX already holds forty-two. Avoid spelling the same immediate again when setting BX.",
+    "goal": "Preserve the seven setup bytes, halt with AX = BX = 42 and SP = 7C00, using at most 10 payload bytes.",
+    "goals": {"registers": {"AX": 42, "BX": 42, "SP": 31744}},
+    "optimization": {"editableFrom": 7, "maxBytes": 10},
+    "hints": [
+      "The locked setup establishes AX = 42 and gives BX a different value.",
+      "A register MOV uses two bytes. PUSH AX followed by POP BX uses one byte each.",
+      "Try 89 C3 F4 or 50 5B F4 after the setup. The stack pair must restore SP."
+    ],
+    "explanation": "Both ten-byte programs save one byte from the eleven-byte starting program. Register MOV copies AX directly. PUSH/POP transfers through the established stack and balances SP, but leaves 2A 00 in stack RAM. The goals require register values, halt and balanced SP; they do not require untouched stack memory or prove one version faster.",
+    "visual": "11 → 10 payload bytes · MOV register or PUSH/POP · balanced SP, distinct RAM effects",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/transfer-smaller/start.bits",
+    "solution": "challenges/transfer-smaller/solution.bits",
+    "alternatives": ["challenges/transfer-smaller/alternative.bits"]
   }
 ]

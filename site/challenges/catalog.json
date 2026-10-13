@@ -5303,5 +5303,452 @@
     ],
     "solutionText": "# Challenge solution is the canonical boot/boot.bits source, copied without re-encoding.\n# bitborn v0.1 — canonical, manually authored 16-bit x86 bytes.\n# Annotation syntax: kind | disassembly for explanation only | encoding explanation.\n11111010 # instruction | CLI | FA disables maskable interrupts during stack setup.\n11101010 00000110 01111100 00000000 00000000 # instruction | JMP 0000:7C06 | EA has a little-endian offset 7C06 followed by segment 0000; normalize CS.\n00110001 11000000 # instruction | XOR AX,AX | 31 /r; ModR/M C0 = register AX XOR register AX, producing zero.\n10001110 11011000 # instruction | MOV DS,AX | 8E /r; D8 selects DS and AX; data addresses use segment zero.\n10001110 11000000 # instruction | MOV ES,AX | 8E /r; C0 selects ES and AX.\n10001110 11010000 # instruction | MOV SS,AX | 8E /r; D0 selects SS and AX; stack segment becomes zero.\n10111100 00000000 01111100 # instruction | MOV SP,7C00 | BC = B8+SP; little-endian 7C00 places stack below the loaded sector.\n11111100 # instruction | CLD | FC clears direction flag; LODSB advances SI.\n11111011 # instruction | STI | FB enables BIOS keyboard/timer interrupts after stack is ready.\n10111000 00000011 00000000 # instruction | MOV AX,0003 | B8 loads AX with video mode 3.\n11001101 00010000 # instruction | INT 10 | CD imm8; BIOS video interrupt selects 80x25 text mode.\n10111010 11111001 00000011 # instruction | MOV DX,03F9 | BA loads COM1 interrupt-enable port.\n10110000 00000000 # instruction | MOV AL,00 | B0 loads an 8-bit zero to disable UART interrupts.\n11101110 # instruction | OUT DX,AL | EE writes AL to the I/O port in DX.\n10111010 11111011 00000011 # instruction | MOV DX,03FB | BA loads UART line-control port.\n10110000 10000000 # instruction | MOV AL,80 | B0 selects divisor-latch access (DLAB bit 7).\n11101110 # instruction | OUT DX,AL | EE enables the baud divisor registers.\n10111010 11111000 00000011 # instruction | MOV DX,03F8 | BA loads divisor low-byte port.\n10110000 00000001 # instruction | MOV AL,01 | B0 loads divisor 1, giving 115200 baud on a standard 16550.\n11101110 # instruction | OUT DX,AL | EE writes divisor low byte.\n01000010 # instruction | INC DX | 42 = 40+DX; selects divisor high-byte port.\n10110000 00000000 # instruction | MOV AL,00 | B0 clears divisor high byte.\n11101110 # instruction | OUT DX,AL | EE writes divisor high byte.\n10111010 11111011 00000011 # instruction | MOV DX,03FB | BA selects line-control port again.\n10110000 00000011 # instruction | MOV AL,03 | B0 selects 8 data bits, no parity, one stop bit; clears DLAB.\n11101110 # instruction | OUT DX,AL | EE writes 8N1 UART configuration.\n10111110 01011011 01111100 # instruction | MOV SI,7C5B | BE loads SI; message begins at sector offset 91, physical 7C5B.\n10101100 # instruction | LODSB | AC loads DS:SI into AL and increments SI.\n10000100 11000000 # instruction | TEST AL,AL | 84 /r; C0 tests AL against itself and sets ZF at NUL.\n01110100 00011011 # instruction | JZ 7C57 | 74 rel8; next offset 60 + 27 = 87, the halt path.\n01010000 # instruction | PUSH AX | 50 preserves the character across BIOS video output.\n01010110 # instruction | PUSH SI | 56 preserves the string pointer across BIOS video output.\n10110100 00001110 # instruction | MOV AH,0E | B4 loads BIOS teletype service number.\n10111011 00000111 00000000 # instruction | MOV BX,0007 | BB selects display page zero and text attribute 07.\n11001101 00010000 # instruction | INT 10 | CD 10 emits the character on the VGA display.\n01011110 # instruction | POP SI | 5E restores the source pointer.\n01011000 # instruction | POP AX | 58 restores the character.\n01010000 # instruction | PUSH AX | 50 saves AL while polling the UART status.\n10111010 11111101 00000011 # instruction | MOV DX,03FD | BA selects UART line-status register.\n11101100 # instruction | IN AL,DX | EC reads UART status into AL.\n10101000 00100000 # instruction | TEST AL,20 | A8 imm8 checks transmitter holding register empty bit 5.\n01110100 11111011 # instruction | JZ 7C4B | 74 rel8; next offset 80 minus 5 = 75, poll until ready.\n01011000 # instruction | POP AX | 58 restores the character after status polling.\n10111010 11111000 00000011 # instruction | MOV DX,03F8 | BA selects COM1 transmit data register.\n11101110 # instruction | OUT DX,AL | EE emits the same character to COM1 for machine-readable testing.\n11101011 11100000 # instruction | JMP 7C37 | EB rel8; next offset 87 minus 32 = 55, fetch the next character.\n11111010 # instruction | CLI | FA prevents interrupts waking the final halt.\n11110100 # instruction | HLT | F4 stops instruction execution until NMI/reset.\n11101011 11111101 # instruction | JMP 7C58 | EB rel8; next offset 91 minus 3 = 88, halt again if awakened.\n01100010 01101001 01110100 01100010 01101111 01110010 01101110 00100000 01110110 00110000 00101110 00110001 00001101 00001010 # data | bitborn v0.1 CR LF | ASCII greeting; CR LF advances the VGA cursor and serial terminal.\n00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 00001101 00001010 # data | separator CR LF | 27 literal ASCII hyphens followed by a line break.\n01001110 01001111 00100000 01000001 01010011 01010011 01000101 01001101 01000010 01001100 01011001 00101110 00001101 00001010 # data | NO ASSEMBLY. CR LF | Literal ASCII message bytes.\n01001110 01001111 00100000 01000011 01001111 01001101 01010000 01001001 01001100 01000101 01010010 00101110 00001101 00001010 # data | NO COMPILER. CR LF | Literal ASCII message bytes.\n01001010 01010101 01010011 01010100 00100000 01000010 01001001 01010100 01010011 00101110 00001101 00001010 00001101 00001010 # data | JUST BITS. CR LF CR LF | Literal ASCII bytes and one empty line.\n01001000 01100101 01101100 01101100 01101111 00100000 01100110 01110010 01101111 01101101 00100000 01110010 01100001 01110111 00100000 01101101 01100001 01100011 01101000 01101001 01101110 01100101 00100000 01100011 01101111 01100100 01100101 00100001 00001101 00001010 00001101 00001010 # data | Hello from raw machine code! CR LF CR LF | Literal ASCII greeting and one empty line.\n00110101 00110001 00110010 00100000 01100010 01111001 01110100 01100101 01110011 00101110 00100000 00110001 00110000 00110000 00100101 00100000 01101000 01100001 01101110 01100100 01110111 01110010 01101001 01110100 01110100 01100101 01101110 00101110 00001101 00001010 00000000 # data | 512 bytes. 100% handwritten. CR LF NUL | Literal ASCII final line; zero terminates the string.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Sixteen unused bytes, never executed.\n00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | zero fill | Fifteen bytes place the signature at offsets 510 and 511.\n01010101 10101010 # signature | BIOS boot signature | Literal 55 AA bytes; the little-endian word is AA55. These are data, never instructions.\n",
     "solutionSha256": "46f0cf66a237fdc51d033d3e0fc86a1c7d7691770a42049077cf470f660cbfc9"
+  },
+  {
+    "id": "clear-smaller",
+    "title": "Clear two registers in fewer bytes",
+    "difficulty": "intermediate",
+    "path": "05 · Measure an optimization",
+    "summary": "Two immediate loads reach the goal. Replace their tail with a smaller literal program.",
+    "goal": "Preserve the seven setup bytes, halt with AX = BX = 0 and SP = 7C00, using at most 12 payload bytes.",
+    "goals": {
+      "registers": {
+        "AX": 0,
+        "BX": 0,
+        "SP": 31744
+      }
+    },
+    "optimization": {
+      "editableFrom": 7,
+      "maxBytes": 12
+    },
+    "hints": [
+      "The locked setup gives AX and BX different nonzero values; clearing cannot rely on initial zeros.",
+      "XOR of a register with itself takes two bytes. MOV immediate takes three.",
+      "31 C0 clears AX. Clear BX with 31 DB, or copy AX into BX with 89 C3. Keep the final F4."
+    ],
+    "explanation": "Both reviewed twelve-byte programs save two bytes from the fourteen-byte starting program. Two self-XOR instructions and XOR followed by MOV reach the same register and stack goals. Arithmetic flags are deliberately outside this challenge's goals; clearing with XOR does not preserve the flags of MOV immediate.",
+    "visual": "14 → 12 payload bytes · two XORs or XOR + register MOV · flags outside the goal",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/clear-smaller/start.bits",
+    "solution": "challenges/clear-smaller/solution.bits",
+    "alternatives": [
+      {
+        "source": "challenges/clear-smaller/alternative.bits",
+        "bytes": [
+          250,
+          184,
+          52,
+          18,
+          187,
+          120,
+          86,
+          49,
+          192,
+          137,
+          195,
+          244
+        ],
+        "annotations": [
+          {
+            "offset": 0,
+            "size": 1,
+            "kind": "instruction",
+            "mnemonic": "CLI",
+            "explanation": "Keep the final native halt stopped.",
+            "bits": "11111010"
+          },
+          {
+            "offset": 1,
+            "size": 3,
+            "kind": "instruction",
+            "mnemonic": "MOV AX,1234",
+            "explanation": "Establish a nonzero AX; preserve the locked setup.",
+            "bits": "10111000 00110100 00010010"
+          },
+          {
+            "offset": 4,
+            "size": 3,
+            "kind": "instruction",
+            "mnemonic": "MOV BX,5678",
+            "explanation": "Establish a nonzero BX; preserve the locked setup.",
+            "bits": "10111011 01111000 01010110"
+          },
+          {
+            "offset": 7,
+            "size": 2,
+            "kind": "instruction",
+            "mnemonic": "XOR AX,AX",
+            "explanation": "Clear AX with a two-byte encoding.",
+            "bits": "00110001 11000000"
+          },
+          {
+            "offset": 9,
+            "size": 2,
+            "kind": "instruction",
+            "mnemonic": "MOV BX,AX",
+            "explanation": "Copy zero into BX; this encoding preserves the flags from XOR.",
+            "bits": "10001001 11000011"
+          },
+          {
+            "offset": 11,
+            "size": 1,
+            "kind": "instruction",
+            "mnemonic": "HLT",
+            "explanation": "Stop with AX and BX zero and the initial stack pointer unchanged.",
+            "bits": "11110100"
+          }
+        ],
+        "text": "# Distinct twelve-byte solution: clear AX once, then copy its zero into BX.\n11111010 # instruction | CLI | Keep the final native halt stopped.\n10111000 00110100 00010010 # instruction | MOV AX,1234 | Establish a nonzero AX; preserve the locked setup.\n10111011 01111000 01010110 # instruction | MOV BX,5678 | Establish a nonzero BX; preserve the locked setup.\n00110001 11000000 # instruction | XOR AX,AX | Clear AX with a two-byte encoding.\n10001001 11000011 # instruction | MOV BX,AX | Copy zero into BX; this encoding preserves the flags from XOR.\n11110100 # instruction | HLT | Stop with AX and BX zero and the initial stack pointer unchanged.\n",
+        "sha256": "64327d9d391dff23dbb9502d88f5b919f4749d49621d34c238b726fafdc826ce"
+      }
+    ],
+    "startBytes": [
+      250,
+      184,
+      52,
+      18,
+      187,
+      120,
+      86,
+      184,
+      0,
+      0,
+      187,
+      0,
+      0,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final native halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,1234",
+        "explanation": "Establish a nonzero AX; this setup remains locked.",
+        "bits": "10111000 00110100 00010010"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,5678",
+        "explanation": "Establish a nonzero BX; this setup remains locked.",
+        "bits": "10111011 01111000 01010110"
+      },
+      {
+        "offset": 7,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,0",
+        "explanation": "Three immediate bytes clear AX without changing flags.",
+        "bits": "10111000 00000000 00000000"
+      },
+      {
+        "offset": 10,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,0",
+        "explanation": "Three immediate bytes clear BX without changing flags.",
+        "bits": "10111011 00000000 00000000"
+      },
+      {
+        "offset": 13,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with both registers zero; the payload is fourteen bytes.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Optimization seed: the first seven bytes establish nonzero AX and BX.\n11111010 # instruction | CLI | Keep the final native halt stopped.\n10111000 00110100 00010010 # instruction | MOV AX,1234 | Establish a nonzero AX; this setup remains locked.\n10111011 01111000 01010110 # instruction | MOV BX,5678 | Establish a nonzero BX; this setup remains locked.\n10111000 00000000 00000000 # instruction | MOV AX,0 | Three immediate bytes clear AX without changing flags.\n10111011 00000000 00000000 # instruction | MOV BX,0 | Three immediate bytes clear BX without changing flags.\n11110100 # instruction | HLT | Stop with both registers zero; the payload is fourteen bytes.\n",
+    "startSha256": "f254577a12e0e60b485d413e908a26c7108e5da88cd13805423ee310fe3113a6",
+    "solutionBytes": [
+      250,
+      184,
+      52,
+      18,
+      187,
+      120,
+      86,
+      49,
+      192,
+      49,
+      219,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final native halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,1234",
+        "explanation": "Establish a nonzero AX; preserve the locked setup.",
+        "bits": "10111000 00110100 00010010"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,5678",
+        "explanation": "Establish a nonzero BX; preserve the locked setup.",
+        "bits": "10111011 01111000 01010110"
+      },
+      {
+        "offset": 7,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "XOR AX,AX",
+        "explanation": "Two bytes clear AX and update arithmetic flags.",
+        "bits": "00110001 11000000"
+      },
+      {
+        "offset": 9,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "XOR BX,BX",
+        "explanation": "Two bytes clear BX and update arithmetic flags.",
+        "bits": "00110001 11011011"
+      },
+      {
+        "offset": 11,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with AX and BX zero; flags are outside this challenge's goals.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Reviewed twelve-byte solution: two self-XOR encodings save two bytes.\n11111010 # instruction | CLI | Keep the final native halt stopped.\n10111000 00110100 00010010 # instruction | MOV AX,1234 | Establish a nonzero AX; preserve the locked setup.\n10111011 01111000 01010110 # instruction | MOV BX,5678 | Establish a nonzero BX; preserve the locked setup.\n00110001 11000000 # instruction | XOR AX,AX | Two bytes clear AX and update arithmetic flags.\n00110001 11011011 # instruction | XOR BX,BX | Two bytes clear BX and update arithmetic flags.\n11110100 # instruction | HLT | Stop with AX and BX zero; flags are outside this challenge's goals.\n",
+    "solutionSha256": "7494b72f070efa529684448d5c9656aaf35675c5bb5570b9bb56df49b92f4480"
+  },
+  {
+    "id": "transfer-smaller",
+    "title": "Reuse a value, save one byte",
+    "difficulty": "intermediate",
+    "path": "05 · Measure an optimization",
+    "summary": "AX already holds forty-two. Avoid spelling the same immediate again when setting BX.",
+    "goal": "Preserve the seven setup bytes, halt with AX = BX = 42 and SP = 7C00, using at most 10 payload bytes.",
+    "goals": {
+      "registers": {
+        "AX": 42,
+        "BX": 42,
+        "SP": 31744
+      }
+    },
+    "optimization": {
+      "editableFrom": 7,
+      "maxBytes": 10
+    },
+    "hints": [
+      "The locked setup establishes AX = 42 and gives BX a different value.",
+      "A register MOV uses two bytes. PUSH AX followed by POP BX uses one byte each.",
+      "Try 89 C3 F4 or 50 5B F4 after the setup. The stack pair must restore SP."
+    ],
+    "explanation": "Both ten-byte programs save one byte from the eleven-byte starting program. Register MOV copies AX directly. PUSH/POP transfers through the established stack and balances SP, but leaves 2A 00 in stack RAM. The goals require register values, halt and balanced SP; they do not require untouched stack memory or prove one version faster.",
+    "visual": "11 → 10 payload bytes · MOV register or PUSH/POP · balanced SP, distinct RAM effects",
+    "maxSteps": 96,
+    "loadAddress": 32256,
+    "source": "challenges/transfer-smaller/start.bits",
+    "solution": "challenges/transfer-smaller/solution.bits",
+    "alternatives": [
+      {
+        "source": "challenges/transfer-smaller/alternative.bits",
+        "bytes": [
+          250,
+          184,
+          42,
+          0,
+          187,
+          120,
+          86,
+          80,
+          91,
+          244
+        ],
+        "annotations": [
+          {
+            "offset": 0,
+            "size": 1,
+            "kind": "instruction",
+            "mnemonic": "CLI",
+            "explanation": "Keep the final native halt stopped.",
+            "bits": "11111010"
+          },
+          {
+            "offset": 1,
+            "size": 3,
+            "kind": "instruction",
+            "mnemonic": "MOV AX,42",
+            "explanation": "Establish the source value; preserve the locked setup.",
+            "bits": "10111000 00101010 00000000"
+          },
+          {
+            "offset": 4,
+            "size": 3,
+            "kind": "instruction",
+            "mnemonic": "MOV BX,5678",
+            "explanation": "Establish a different BX; preserve the locked setup.",
+            "bits": "10111011 01111000 01010110"
+          },
+          {
+            "offset": 7,
+            "size": 1,
+            "kind": "instruction",
+            "mnemonic": "PUSH AX",
+            "explanation": "One byte writes AX at SS:SP-2; stack RAM is a deliberate side effect.",
+            "bits": "01010000"
+          },
+          {
+            "offset": 8,
+            "size": 1,
+            "kind": "instruction",
+            "mnemonic": "POP BX",
+            "explanation": "One byte loads BX and restores SP; it leaves the written stack bytes in RAM.",
+            "bits": "01011011"
+          },
+          {
+            "offset": 9,
+            "size": 1,
+            "kind": "instruction",
+            "mnemonic": "HLT",
+            "explanation": "Stop with both registers forty-two; the goal requires balanced SP, not untouched stack RAM.",
+            "bits": "11110100"
+          }
+        ],
+        "text": "# Distinct ten-byte solution: PUSH/POP transfers through the established stack.\n11111010 # instruction | CLI | Keep the final native halt stopped.\n10111000 00101010 00000000 # instruction | MOV AX,42 | Establish the source value; preserve the locked setup.\n10111011 01111000 01010110 # instruction | MOV BX,5678 | Establish a different BX; preserve the locked setup.\n01010000 # instruction | PUSH AX | One byte writes AX at SS:SP-2; stack RAM is a deliberate side effect.\n01011011 # instruction | POP BX | One byte loads BX and restores SP; it leaves the written stack bytes in RAM.\n11110100 # instruction | HLT | Stop with both registers forty-two; the goal requires balanced SP, not untouched stack RAM.\n",
+        "sha256": "8ebbfeb187e17c5787114eb5c5bc6672699b70c0afdd0ad069b1418943399183"
+      }
+    ],
+    "startBytes": [
+      250,
+      184,
+      42,
+      0,
+      187,
+      120,
+      86,
+      187,
+      42,
+      0,
+      244
+    ],
+    "startAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final native halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,42",
+        "explanation": "Establish the source value; this setup remains locked.",
+        "bits": "10111000 00101010 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,5678",
+        "explanation": "Establish a different BX; this setup remains locked.",
+        "bits": "10111011 01111000 01010110"
+      },
+      {
+        "offset": 7,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,42",
+        "explanation": "Repeat the immediate in three bytes rather than reuse AX.",
+        "bits": "10111011 00101010 00000000"
+      },
+      {
+        "offset": 10,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with AX and BX equal to forty-two; the payload is eleven bytes.",
+        "bits": "11110100"
+      }
+    ],
+    "startText": "# Optimization seed: the first seven bytes establish AX=42 and a different BX.\n11111010 # instruction | CLI | Keep the final native halt stopped.\n10111000 00101010 00000000 # instruction | MOV AX,42 | Establish the source value; this setup remains locked.\n10111011 01111000 01010110 # instruction | MOV BX,5678 | Establish a different BX; this setup remains locked.\n10111011 00101010 00000000 # instruction | MOV BX,42 | Repeat the immediate in three bytes rather than reuse AX.\n11110100 # instruction | HLT | Stop with AX and BX equal to forty-two; the payload is eleven bytes.\n",
+    "startSha256": "afe310aa5bb51f4f0118b0523787daa09dfe69cd858757d2333e04cc55ebb016",
+    "solutionBytes": [
+      250,
+      184,
+      42,
+      0,
+      187,
+      120,
+      86,
+      137,
+      195,
+      244
+    ],
+    "solutionAnnotations": [
+      {
+        "offset": 0,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "CLI",
+        "explanation": "Keep the final native halt stopped.",
+        "bits": "11111010"
+      },
+      {
+        "offset": 1,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV AX,42",
+        "explanation": "Establish the source value; preserve the locked setup.",
+        "bits": "10111000 00101010 00000000"
+      },
+      {
+        "offset": 4,
+        "size": 3,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,5678",
+        "explanation": "Establish a different BX; preserve the locked setup.",
+        "bits": "10111011 01111000 01010110"
+      },
+      {
+        "offset": 7,
+        "size": 2,
+        "kind": "instruction",
+        "mnemonic": "MOV BX,AX",
+        "explanation": "Copy the existing value in two bytes without touching stack memory.",
+        "bits": "10001001 11000011"
+      },
+      {
+        "offset": 9,
+        "size": 1,
+        "kind": "instruction",
+        "mnemonic": "HLT",
+        "explanation": "Stop with AX and BX equal to forty-two and the stack pointer unchanged.",
+        "bits": "11110100"
+      }
+    ],
+    "solutionText": "# Reviewed ten-byte solution: reuse AX with a two-byte register transfer.\n11111010 # instruction | CLI | Keep the final native halt stopped.\n10111000 00101010 00000000 # instruction | MOV AX,42 | Establish the source value; preserve the locked setup.\n10111011 01111000 01010110 # instruction | MOV BX,5678 | Establish a different BX; preserve the locked setup.\n10001001 11000011 # instruction | MOV BX,AX | Copy the existing value in two bytes without touching stack memory.\n11110100 # instruction | HLT | Stop with AX and BX equal to forty-two and the stack pointer unchanged.\n",
+    "solutionSha256": "3824bcc96b61bec1d1d3ee399132662c36701edc93eab01a0e66c5846c15d4ed"
   }
 ]

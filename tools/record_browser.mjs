@@ -298,7 +298,22 @@ try {
   assert.equal(await page.locator('.editable-byte small').textContent(),'Starting source: CLD','immutable annotations must not claim to decode edited bytes');
   await capture('Flipped byte7 bit0 (the rightmost bit): FC becomes FD, selecting STD without changing any other byte.');
   await page.locator('#validate').click();assert.match(await page.locator('#result').textContent(),/Solved in 9/);
-  await page.locator('#result-panel').scrollIntoViewIfNeeded();await capture('The repaired model writes A at0600 and B at0601, restores DF=0 and halts after nine steps. This is browser footage, not native execution.');await encode();
+  await page.locator('#result-panel').scrollIntoViewIfNeeded();await capture('The repaired model writes A at0600 and B at0601, restores DF=0 and halts after nine steps. This is browser footage, not native execution.');
+  for(const id of ['clear-smaller','transfer-smaller']) {
+    await page.goto(new URL(`challenges/?id=${id}`,base).href);
+    await page.locator('#challenge-app').waitFor({state:'visible'});
+    for(const role of ['start','solution','alternative']) {
+      const source=await readFile(resolve(root,`challenges/${id}/${role}.bits`),'utf8');
+      const size=parseBits(source).length;
+      await page.locator('#binary-source').fill(source);await page.locator('#binary-source').scrollIntoViewIfNeeded();
+      await capture(`${id}: inspected the actual ${role} literal source, ${size} payload bytes; seven setup bytes stay locked.`);
+      await page.locator('#validate').click();await page.locator('#result-panel').scrollIntoViewIfNeeded();
+      if(role==='start')assert.match(await page.locator('.goal-checks .fail').textContent(),/payload bytes/);
+      else {assert.match(await page.locator('#result').textContent(),new RegExp(`${size} payload bytes`));assert.equal(await page.locator('.goal-checks .fail').count(),0);}
+      await capture(`${id}: ${role==='start'?'register goals met but byte budget failed':'distinct encoding met register, halt, balanced-SP and measured size goals'}. Browser simulation only; curated native tests are separate.`);
+    }
+  }
+  await encode();
   await begin('byte-order');await page.goto(base+'learn/');
   await page.waitForFunction(()=>document.querySelector('#lesson-branch').textContent.includes('JMP -6'));
   await page.locator('#byte-order-title').scrollIntoViewIfNeeded();
@@ -330,6 +345,9 @@ try {
   for(const name of ['program','control']) {const source=`examples/self-modifying/${name}.bits`;metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');}
   for(const name of ['short-branch','short-branch-inverse']) {const source=`docs/instruction-encoding/fixtures/${name}.bits`;metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');}
   for(const name of ['start','solution']) {const source=`challenges/direction-flag/${name}.bits`;metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');}
+  for(const id of ['clear-smaller','transfer-smaller'])for(const role of ['start','solution','alternative']) {
+    const source=`challenges/${id}/${role}.bits`;metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');
+  }
   for(const name of ['exit-code','exit-code-small']) {const source=`examples/${name}/program.bits`;metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');}
   for(const source of ['site/learn/index.html','site/learn/byte-order.mjs','site/learn/byte-order-source.mjs','docs/tutorials/byte-order.bits'])metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');
   const signedSourcePath='challenges/signed-overflow/solution.bits';metadata.sourceSha256[signedSourcePath]=createHash('sha256').update(await readFile(resolve(root,signedSourcePath))).digest('hex');

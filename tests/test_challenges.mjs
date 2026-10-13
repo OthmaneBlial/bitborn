@@ -6,9 +6,9 @@ import {parseBits,formatBits,bitChanges} from '../site/binary.mjs';
 import {decode} from '../site/simulator.mjs';
 
 const catalog = JSON.parse(await readFile(new URL('../site/challenges/catalog.json',import.meta.url),'utf8'));
-assert.equal(catalog.length,20);
-assert.equal(new Set(catalog.map(challenge => challenge.id)).size,20);
-for (const difficulty of ['beginner','intermediate','advanced','expert']) assert.equal(catalog.filter(challenge => challenge.difficulty === difficulty).length,5);
+assert.equal(catalog.length,22);
+assert.equal(new Set(catalog.map(challenge => challenge.id)).size,22);
+for (const difficulty of ['beginner','intermediate','advanced','expert']) assert.equal(catalog.filter(challenge => challenge.difficulty === difficulty).length,difficulty==='intermediate'?7:5);
 for (const challenge of catalog) {
   assert.equal(challenge.hints.length,3,`${challenge.id}: hints`);
   assert.ok(challenge.explanation.length > 80 && challenge.visual.length > 20,`${challenge.id}: educational explanation`);
@@ -35,7 +35,28 @@ for (const challenge of catalog) {
   assert.equal(evaluateChallenge(challenge,[-1,256,NaN]).success,false,'invalid byte array');
   assert.equal(evaluateChallenge(challenge,null).success,false,'invalid program value');
   const locked = Uint8Array.from(challenge.solutionBytes); locked[0] ^= 1;
-  assert.match(evaluateChallenge(challenge,formatBits(locked)).message,/locked byte/);
+  assert.match(evaluateChallenge(challenge,formatBits(locked)).message,challenge.optimization?/setup bytes/:/locked byte/);
+  if(challenge.optimization) {
+    assert.equal(solution.payloadSize,challenge.solutionBytes.length);
+    assert.equal(solution.changedBits,null,'variable-length programs are measured in bytes, not positional bit changes');
+    const starting=evaluateChallenge(challenge,challenge.startText);
+    assert.ok(starting.checks.filter(check=>!check.pass).every(check=>check.label.includes('payload bytes')),'the seed already reaches its register goals but exceeds the byte budget');
+    assert.match(solution.message,new RegExp(`${challenge.solutionBytes.length} payload bytes, ${challenge.startBytes.length-challenge.solutionBytes.length} fewer`));
+    for(const alternate of challenge.alternatives) {
+      const canonical=await readFile(new URL('../'+alternate.source,import.meta.url),'utf8');
+      assert.equal(canonical,alternate.text);
+      assert.deepEqual([...parseBits(canonical)],alternate.bytes);
+      assert.equal(createHash('sha256').update(Uint8Array.from(alternate.bytes)).digest('hex'),alternate.sha256);
+      assert.notDeepEqual(alternate.bytes,challenge.solutionBytes);
+      for(const annotation of alternate.annotations)assert.equal(decode(Uint8Array.from(alternate.bytes),annotation.offset).size,annotation.size);
+      assert.equal(evaluateChallenge(challenge,alternate.text).success,true,'distinct reviewed encoding reaches the same goals');
+    }
+    const padded=Uint8Array.from([...challenge.solutionBytes,...Array(512-challenge.solutionBytes.length).fill(0)]);
+    assert.equal(evaluateChallenge(challenge,padded).success,false,'unreachable trailing bytes still count toward payload size');
+    assert.equal(evaluateChallenge(challenge,Uint8Array.from(challenge.startBytes.slice(0,6))).state,undefined,'truncated locked setup never executes');
+    assert.equal(evaluateChallenge(challenge,Uint8Array.from([...challenge.startBytes.slice(0,7),0xF4])).success,false,'a shorter halt with wrong registers cannot solve optimization');
+    assert.equal(evaluateChallenge(challenge,Uint8Array.from([...challenge.startBytes.slice(0,7),0xEB,0xFE])).state.steps,96,'size-valid endless loops remain bounded');
+  }
 }
 const addition = catalog.find(challenge => challenge.id === 'addition');
 const alternative = Uint8Array.from(addition.solutionBytes); alternative[2] = 34; alternative[5] = 8;
@@ -52,4 +73,4 @@ assert.equal(evaluateChallenge(catalog.find(challenge => challenge.id === 'escap
 for (const raw of [null,'invalid','[]','{"version":2}','{"version":1,"completed":[],"attempts":null}']) assert.deepEqual(parseProgress(raw,catalog),{version:1,completed:[],attempts:{}});
 const stored = parseProgress(JSON.stringify({version:1,completed:['return-42','return-42','<script>','missing',42],attempts:{'return-42':7,'little-endian':-1,'choose-register':1e100,'high-low':'1','print-character':0,'missing':99}}),catalog);
 assert.deepEqual(stored,{version:1,completed:['return-42'],attempts:{'return-42':7,'print-character':0}});
-console.log('20 challenges passed: reviewed hashes, canonical sources, decode boundaries, positive solutions, negative seeds, bounded loops, alternate solution, edit rules, malformed input and validated local progress.');
+console.log('22 challenges passed: reviewed hashes, canonical sources, decode boundaries, positive solutions, negative seeds, bounded loops, distinct optimization solutions, measured byte budgets and trailing bytes, locked setup, edit rules, malformed input and validated local progress.');

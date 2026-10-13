@@ -71,7 +71,7 @@ and SP=`7C00`. This challenge starts at **7E00**, so its saved return bytes are
 `node tests/test_stack_lesson.mjs` verifies every table row, the exact source and
 independent disassembly, retained stack bytes, and complete model RAM/state
 rewind/replay. Browser checks inspect the actual stack and memory controls at
-desktop and 320px. `python3 -m unittest tests.test_challenges.ChallengeTests.test_all_twenty_solutions_on_real_qemu`
+desktop and 320px. `python3 -m unittest tests.test_challenges.ChallengeTests.test_all_curated_solutions_on_real_qemu`
 boots the existing curated solutions and checks their final registers and return
 words through QMP. That native evidence is separate from the preset's model
 trace; it does not establish a native instruction-by-instruction history.

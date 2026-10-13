@@ -1,0 +1,6 @@
+# Reviewed ten-byte solution: reuse AX with a two-byte register transfer.
+11111010 # instruction | CLI | Keep the final native halt stopped.
+10111000 00101010 00000000 # instruction | MOV AX,42 | Establish the source value; preserve the locked setup.
+10111011 01111000 01010110 # instruction | MOV BX,5678 | Establish a different BX; preserve the locked setup.
+10001001 11000011 # instruction | MOV BX,AX | Copy the existing value in two bytes without touching stack memory.
+11110100 # instruction | HLT | Stop with AX and BX equal to forty-two and the stack pointer unchanged.

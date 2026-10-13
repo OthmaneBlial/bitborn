@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add two measured optimization challenges with two distinct literal solutions
+  each: register clearing saves two payload bytes, value transfer saves one.
+  Preserve seven setup bytes, check complete size and register/stack goals,
+  and document flags and stack-RAM differences. Add curated native starts and
+  alternatives, independent disassembly and variable-length browser checks.
+
 - Extend the shared CPU keyboard regression through actual Tab/Shift+Tab
   navigation, Enter activation, timeline Arrow/Home/End restoration, invalid
   source focus/selection and labeled raw-file import with a visible focus ring.

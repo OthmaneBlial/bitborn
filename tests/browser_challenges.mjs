@@ -3,6 +3,7 @@ import {createServer} from 'node:http';
 import {readFile,mkdir,stat} from 'node:fs/promises';
 import {resolve,dirname,extname} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
+import {checkOptimizationChallenges} from './optimization_browser_checks.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const {chromium} = await import(process.env.PLAYWRIGHT_MODULE ? pathToFileURL(resolve(process.env.PLAYWRIGHT_MODULE)).href : 'playwright');
@@ -32,7 +33,7 @@ try {
     await page.locator('#challenge-app').waitFor({state:'visible'});
   };
   await open('return-42');
-  assert.equal(await page.locator('#challenge-list a').count(),20);
+  assert.equal(await page.locator('#challenge-list a').count(),22);
   await page.locator('#validate').click();
   assert.match(await page.locator('#result').textContent(),/goal is still unmet/);
   for (let count = 0; count < 3; count++) await page.locator('#hint').click();
@@ -60,14 +61,15 @@ try {
     assert.equal(await page.locator('.goal-checks .fail').count(),0);
     assert.equal(await page.locator('#result-panel').evaluate(panel => getComputedStyle(panel).animationName),'none','reduced motion');
   }
-  assert.match(await page.locator('#completion-count').textContent(),/^20 \/ 20$/);
-  assert.equal(await page.locator('.completed-mark').filter({hasText:'✓'}).count(),20);
-  assert.equal(await page.locator('#attempt-count').textContent(),'21 validation attempts');
+  assert.match(await page.locator('#completion-count').textContent(),/^22 \/ 22$/);
+  assert.equal(await page.locator('.completed-mark').filter({hasText:'✓'}).count(),22);
+  assert.equal(await page.locator('#attempt-count').textContent(),'23 validation attempts');
   await page.reload(); await page.locator('#challenge-app').waitFor({state:'visible'});
-  assert.match(await page.locator('#completion-count').textContent(),/^20 \/ 20$/,'progress survives reload');
+  assert.match(await page.locator('#completion-count').textContent(),/^22 \/ 22$/,'progress survives reload');
   const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('bitborn.challenges.v1')));
-  assert.equal(stored.completed.length,20);
-  assert.equal(Object.values(stored.attempts).reduce((sum,value) => sum+value,0),21);
+  assert.equal(stored.completed.length,22);
+  assert.equal(Object.values(stored.attempts).reduce((sum,value) => sum+value,0),23);
+  await open('repair-boot');
   await page.locator('.explanation summary').click();
   assert.ok((await page.locator('#visual-explanation').textContent()).includes('EB → EA'));
   await mkdir(resolve(root,'build'),{recursive:true});
@@ -84,11 +86,11 @@ try {
   assert.match(await page.locator('#result').textContent(),/512|limit|large|maximum/i);
   await page.evaluate(() => localStorage.setItem('bitborn.challenges.v1','{"version":1,"completed":["missing","return-42","return-42","<img>"],"attempts":{"return-42":-5,"addition":1e100,"print-character":2}}'));
   await page.reload(); await page.locator('#challenge-app').waitFor({state:'visible'});
-  assert.match(await page.locator('#completion-count').textContent(),/^1 \/ 20$/);
+  assert.match(await page.locator('#completion-count').textContent(),/^1 \/ 22$/);
   assert.equal(await page.locator('#attempt-count').textContent(),'2 validation attempts');
   await page.evaluate(() => localStorage.setItem('bitborn.challenges.v1','corrupt json'));
   await page.reload(); await page.locator('#challenge-app').waitFor({state:'visible'});
-  assert.match(await page.locator('#completion-count').textContent(),/^0 \/ 20$/);
+  assert.match(await page.locator('#completion-count').textContent(),/^0 \/ 22$/);
   for (const width of [390,320]) {
     await page.setViewportSize({width,height:844});
     for (const id of ['return-42','repair-boot']) {
@@ -101,6 +103,8 @@ try {
     }
   }
   await page.screenshot({path:resolve(root,'build/challenges-mobile.png'),fullPage:true});
+  await checkOptimizationChallenges(page,base);
+  await page.screenshot({path:resolve(root,'build/optimization-challenges-mobile.png'),fullPage:true});
   await page.addInitScript(() => {
     Storage.prototype.getItem = () => { throw new Error('Storage denied'); };
     Storage.prototype.setItem = () => { throw new Error('Storage denied'); };
@@ -109,5 +113,5 @@ try {
   await page.locator('#binary-source').fill(catalog[0].solutionText); await page.locator('#validate').click();
   assert.match(await page.locator('#result').textContent(),/Solved in/,'denied storage still permits completion');
   assert.deepEqual(errors,[],'browser errors and failed assets');
-  console.log('Real-browser challenge checks passed: all 20 solutions, negative seed, hints, keyboard bits, shared links, reload/counts, malformed input, XSS-safe text, invalid/denied storage, reduced motion and 1440/390/320px layouts. Screenshots: build/challenges-{desktop,mobile}.png');
+  console.log('Real-browser challenge checks passed: all 22 solutions, distinct optimization alternatives and measured sizes, locked setup, negative seeds, hints, keyboard bits, shared links, reload/counts, malformed input, XSS-safe text, invalid/denied storage, reduced motion and 1440/390/320px layouts. Screenshots in build/.');
 } finally { await browser?.close(); await new Promise(resolve => server.close(resolve)); }

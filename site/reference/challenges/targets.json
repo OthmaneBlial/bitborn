@@ -339,5 +339,11 @@
     "environment": "bios-real-mode",
     "bios": true,
     "bootable": true
-  }
+  },
+  {"source":"challenges/clear-smaller/start.bits","output":"challenges/clear-smaller-start.bin","size":14,"sha256":"f254577a12e0e60b485d413e908a26c7108e5da88cd13805423ee310fe3113a6","architecture":"x86-real-mode","environment":"bios-real-mode","loader":"boot/loader.bits"},
+  {"source":"challenges/clear-smaller/solution.bits","output":"challenges/clear-smaller-solution.bin","size":12,"sha256":"7494b72f070efa529684448d5c9656aaf35675c5bb5570b9bb56df49b92f4480","architecture":"x86-real-mode","environment":"bios-real-mode","loader":"boot/loader.bits"},
+  {"source":"challenges/clear-smaller/alternative.bits","output":"challenges/clear-smaller-alternative.bin","size":12,"sha256":"64327d9d391dff23dbb9502d88f5b919f4749d49621d34c238b726fafdc826ce","architecture":"x86-real-mode","environment":"bios-real-mode","loader":"boot/loader.bits"},
+  {"source":"challenges/transfer-smaller/start.bits","output":"challenges/transfer-smaller-start.bin","size":11,"sha256":"afe310aa5bb51f4f0118b0523787daa09dfe69cd858757d2333e04cc55ebb016","architecture":"x86-real-mode","environment":"bios-real-mode","loader":"boot/loader.bits"},
+  {"source":"challenges/transfer-smaller/solution.bits","output":"challenges/transfer-smaller-solution.bin","size":10,"sha256":"3824bcc96b61bec1d1d3ee399132662c36701edc93eab01a0e66c5846c15d4ed","architecture":"x86-real-mode","environment":"bios-real-mode","loader":"boot/loader.bits"},
+  {"source":"challenges/transfer-smaller/alternative.bits","output":"challenges/transfer-smaller-alternative.bin","size":10,"sha256":"8ebbfeb187e17c5787114eb5c5bc6672699b70c0afdd0ad069b1418943399183","architecture":"x86-real-mode","environment":"bios-real-mode","loader":"boot/loader.bits"}
 ]

@@ -20,7 +20,7 @@ Then boot a real **512-byte BIOS image** written directly as binary digits.
 
 Every opcode, operand and branch displacement is authored in `.bits` files.
 The packer preserves those bytes; no assembler chooses them for us. Around that
-small beginning are **19 examples, 20 challenges, a boot builder and a visual CPU
+small beginning are **19 examples, 22 challenges, a boot builder and a visual CPU
 lab** for following the machine one instruction at a time.
 
 ![Actual QEMU boot captured from guest VGA frames](assets/boot.gif)
@@ -62,13 +62,12 @@ macOS skips their native test and Ubuntu CI executes all six.
 
 Updated **2026-10-13**. **[v0.4.0 is public](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.4.0)**,
 with verified downloads, source and checksums. The boot tools, interactive labs,
-challenges and one-bit native experiments are working; recent lessons cover
-byte order, stack calls and flags. A new [guarded native allocator](examples/bounded-allocator/README.md)
-shows how one request bit changes final-byte ownership, in QEMU and the CPU lab.
-The [native timer experiment](examples/timer-irq/README.md) now records actual
-interrupt frames and exposes a one-bit EOI failure. A new [paging experiment](examples/paging/README.md)
-repairs a protected write and retries its exact bytes. Keyboard regression now
-covers timeline navigation, imports and error focus. General handlers and user-mode proof remain next.
+challenges and one-bit native experiments are working. New [optimization puzzles](docs/tutorials/optimization.md)
+measure **14 → 12** and **11 → 10** payload bytes, with distinct valid solutions.
+[Keyboard checks](docs/cpu-lab/keyboard.md) cover timeline navigation, imports and
+error focus. Native research now includes a guarded allocator, timer interrupt
+frames and a [paging write repair](examples/paging/README.md). General handlers,
+a text-mode game and user-mode proof remain next.
 
 **[Read the full roadmap, completed milestones and evidence →](ROADMAP.md)**
 The [live roadmap](https://othmaneblial.github.io/bitborn/roadmap/) follows that same

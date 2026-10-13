@@ -1,0 +1,7 @@
+# Optimization seed: the first seven bytes establish nonzero AX and BX.
+11111010 # instruction | CLI | Keep the final native halt stopped.
+10111000 00110100 00010010 # instruction | MOV AX,1234 | Establish a nonzero AX; this setup remains locked.
+10111011 01111000 01010110 # instruction | MOV BX,5678 | Establish a nonzero BX; this setup remains locked.
+10111000 00000000 00000000 # instruction | MOV AX,0 | Three immediate bytes clear AX without changing flags.
+10111011 00000000 00000000 # instruction | MOV BX,0 | Three immediate bytes clear BX without changing flags.
+11110100 # instruction | HLT | Stop with both registers zero; the payload is fourteen bytes.

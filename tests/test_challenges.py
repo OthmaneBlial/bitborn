@@ -1,6 +1,8 @@
 """Boot only curated reviewed solutions; browser edits never run on the host."""
 import json
 import re
+import shutil
+import subprocess
 import tempfile
 import time
 import unittest
@@ -15,10 +17,10 @@ from tests.qemu import Guest
 class ChallengeTests(unittest.TestCase):
     def test_packaging_is_reproducible_and_reviewed(self):
         first = build_challenges()
-        self.assertEqual(len(first), 20)
+        self.assertEqual(len(first), 22)
         self.assertEqual(first, build_challenges())
         reviewed = json.loads((ROOT / "challenges/targets.json").read_text())
-        self.assertEqual(len(reviewed), 40)
+        self.assertEqual(len(reviewed), 46)
         for target in reviewed:
             with self.subTest(source=target["source"]):
                 data, annotations = read_bits(ROOT / target["source"])
@@ -29,13 +31,53 @@ class ChallengeTests(unittest.TestCase):
         solution, _ = read_bits(ROOT / "challenges/repair-boot/solution.bits")
         self.assertEqual(boot, solution)
 
-    def test_all_twenty_solutions_on_real_qemu(self):
+    def test_optimization_packaging_and_independent_boundaries(self):
         catalog = build_challenges()
+        for challenge in catalog:
+            if not challenge.get("optimization"):
+                continue
+            for source in [challenge["source"], challenge["solution"]] + [item["source"] for item in challenge["alternatives"]]:
+                data, annotations = read_bits(ROOT / source)
+                with tempfile.TemporaryDirectory(prefix="bitborn-optimization-golden-") as temporary:
+                    path = Path(temporary) / "payload.bin"
+                    path.write_bytes(data)
+                    lines = subprocess.check_output(["ndisasm", "-b", "16", str(path)], text=True).splitlines()
+                self.assertEqual(len(lines), len(annotations))
+                for line, annotation in zip(lines, annotations):
+                    offset, encoded = line.split()[:2]
+                    self.assertEqual(int(offset, 16), annotation["offset"])
+                    self.assertEqual(bytes.fromhex(encoded), data[annotation["offset"]:annotation["offset"] + annotation["size"]])
+        with tempfile.TemporaryDirectory(prefix="bitborn-optimization-rules-") as temporary:
+            root = Path(temporary)
+            shutil.copytree(ROOT / "challenges", root / "challenges")
+            original = json.loads((root / "challenges/catalog.json").read_text())
+            for mutation in [
+                {"optimization": {"editableFrom": 7, "maxBytes": 14}},
+                {"optimization": {"editableFrom": 8, "maxBytes": 12}},
+                {"optimization": {"editableFrom": 7, "maxBytes": True}},
+                {"alternatives": ["challenges/clear-smaller/solution.bits"]},
+                {"alternatives": ["../boot/boot.bits"]},
+            ]:
+                with self.subTest(mutation=mutation):
+                    catalog = json.loads(json.dumps(original))
+                    next(item for item in catalog if item["id"] == "clear-smaller").update(mutation)
+                    (root / "challenges/catalog.json").write_text(json.dumps(catalog))
+                    with self.assertRaises(ValueError):
+                        build_challenges(root)
+
+    def test_all_curated_solutions_on_real_qemu(self):
+        catalog = build_challenges()
+        cases = []
+        for challenge in catalog:
+            sources = [challenge["solution"]] + [item["source"] for item in challenge.get("alternatives", [])]
+            if challenge.get("optimization"):
+                sources.append(challenge["source"])
+            cases.extend((challenge, source) for source in sources)
         loader, _ = read_bits(ROOT / "boot/loader.bits")
         with tempfile.TemporaryDirectory(prefix="bitborn-challenge-proof-") as temporary:
-            for challenge in catalog:
-                with self.subTest(challenge=challenge["id"]):
-                    data, _ = read_bits(ROOT / challenge["solution"])
+            for challenge, source in cases:
+                with self.subTest(challenge=challenge["id"], source=source):
+                    data, _ = read_bits(ROOT / source)
                     if challenge["id"] == "repair-boot":
                         image = data
                     else:
@@ -68,6 +110,11 @@ class ChallengeTests(unittest.TestCase):
                             screen = guest.memory(0xB8000, 80*25*2)[::2]
                             for row, line in enumerate(challenge["goals"]["output"].splitlines()):
                                 self.assertEqual(screen[row*80:row*80+len(line)], line.encode("ascii"))
+                        if challenge.get("optimization"):
+                            self.assertFalse(int(flags[1], 16) & (1 << 9), "CLI keeps the native halt stopped")
+                            self.assertEqual(guest.memory(0x7E00, len(data)), data, "instruction RAM is unchanged")
+                            if source == "challenges/transfer-smaller/alternative.bits":
+                                self.assertEqual(guest.memory(0x7BFE, 2), b"\x2a\x00", "balanced PUSH/POP leaves its documented stack-RAM effect")
 
 
 if __name__ == "__main__":

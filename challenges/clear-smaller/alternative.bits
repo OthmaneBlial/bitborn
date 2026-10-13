@@ -1,0 +1,7 @@
+# Distinct twelve-byte solution: clear AX once, then copy its zero into BX.
+11111010 # instruction | CLI | Keep the final native halt stopped.
+10111000 00110100 00010010 # instruction | MOV AX,1234 | Establish a nonzero AX; preserve the locked setup.
+10111011 01111000 01010110 # instruction | MOV BX,5678 | Establish a nonzero BX; preserve the locked setup.
+00110001 11000000 # instruction | XOR AX,AX | Clear AX with a two-byte encoding.
+10001001 11000011 # instruction | MOV BX,AX | Copy zero into BX; this encoding preserves the flags from XOR.
+11110100 # instruction | HLT | Stop with AX and BX zero and the initial stack pointer unchanged.

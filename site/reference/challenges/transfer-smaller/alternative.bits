@@ -1,0 +1,7 @@
+# Distinct ten-byte solution: PUSH/POP transfers through the established stack.
+11111010 # instruction | CLI | Keep the final native halt stopped.
+10111000 00101010 00000000 # instruction | MOV AX,42 | Establish the source value; preserve the locked setup.
+10111011 01111000 01010110 # instruction | MOV BX,5678 | Establish a different BX; preserve the locked setup.
+01010000 # instruction | PUSH AX | One byte writes AX at SS:SP-2; stack RAM is a deliberate side effect.
+01011011 # instruction | POP BX | One byte loads BX and restores SP; it leaves the written stack bytes in RAM.
+11110100 # instruction | HLT | Stop with both registers forty-two; the goal requires balanced SP, not untouched stack RAM.

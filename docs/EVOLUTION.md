@@ -6,6 +6,32 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 
 ## Current execution record
 
+Measured optimization challenges (2026-10-13): six new literal sources establish
+different nonzero registers in seven locked bytes. Two reviewed encodings clear
+AX/BX in 12 bytes rather than 14; two transfer AX=42 into BX in 10 rather than 11.
+The evaluator measures all payload bytes, including unreachable trailing data,
+and checks halt, registers and balanced SP instead of preferred-byte equality.
+Existing fixed-length bit budgets remain enforced. Alternate sources stay in
+their canonical folders and have reviewed hashes, size/prefix checks and distinct
+bytes. All 26 curated QEMU cases and independent boundaries pass, including
+unchanged instruction RAM and PUSH/POP's actual 2A 00 stack word. Node and Chrome
+checks pass; complete Firefox 157 and WebKit 27.2 suites also pass. The full
+native suite passes 103 tests with one expected macOS native-Linux skip. Its
+first run hit a ten-second Node timeout in the unchanged signed-branch fixture;
+the immediate unchanged repeat passed in 0.27 seconds, and the full repeat
+passes without timeout or assertion changes. Publication remains pending.
+The refreshed seven GIFs contain 133 actual browser frames, with 23 challenge
+frames. All 79 source hashes, seven GIF hashes and 133 raw PNG hashes match.
+A direct package audit counts 66 reviewed targets and 110 derived artifacts,
+including twelve primary BIOS images, 26 challenge images and one shell control
+image. At `273096a`, the same audit yields 98 artifacts; the previous paging
+entry's 96 was an undercount. The six new sources add twelve packaged files.
+
+Keyboard publication `97e90ad` passes CI `38370707697` and deployment
+`38371502894`. All six checked public progress/README/roadmap/changelog/guide
+files match that commit, and live Chrome passes the keyboard workflow at 320px.
+The central mirror `3baaf05` changes only six paths under `bitborn/`.
+
 Keyboard workflow regression (2026-10-13): the shared execution check reaches
 Step, Back, Forward, Reset, timeline, binary editor and import through native
 Tab/Shift+Tab traversal. Enter activates controls; Arrow/Home/End restore the
@@ -708,7 +734,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 26 | 2 | Guided stack/calling-convention lesson with return-address inspection | H | H | 02,10 | Low | Complete: original preset checkpoints, return-word overwrite/retention, full recorded RAM rewind/replay and separate native challenge proof |
 | 27 | 2 | Flags lesson separating signed overflow, carry, parity and undefined AF | H | H | 04 | Medium | Complete: canonical checkpoint table, six defined native/model ADD flags, low-byte parity and accessible unknown-AF history |
 | 28 | 2 | Meaningful bit-diff explanations tied to instruction boundaries and execution mode | H | M | 05,07 | Medium | Complete: positional changes and linear field roles; no execution/control-flow/alignment claim |
-| 29 | 2 | New optimization challenges with alternate valid solutions and actual size measurements | H | M | Challenge evaluator | Medium | Open |
+| 29 | 2 | New optimization challenges with alternate valid solutions and actual size measurements | H | M | Challenge evaluator | Medium | Complete: two puzzles, distinct reviewed encodings, locked setup and measured 14-to-12/11-to-10 payload sizes; curated QEMU, independent boundaries and three-browser workflows |
 | 30 | 2 | Curated broken-program debugging walkthrough with recorded repair and native proof | H | H | 02 | Low | Complete: direction-flag seed/repair, intermediate model journals, both native controls and genuine browser repair frames |
 | 31 | 2 | Stable English introduction as the maintained translation source | H | H | Existing README | Low | Complete |
 | 32 | 2 | Simplified Chinese README/introduction and working command/link checks | H | H | 31 | Medium | Complete |
