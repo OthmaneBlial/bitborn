@@ -27,6 +27,7 @@ site-test: site
 	node tests/test_timer_irq_scope.mjs
 	node tests/test_paging_scope.mjs
 	node tests/test_exception_dispatch_scope.mjs
+	node tests/test_bit_hunt_scope.mjs
 	node tests/test_memory_encoding.mjs
 	node tests/test_elf.mjs
 	node tests/test_hex.mjs

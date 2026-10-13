@@ -20,7 +20,7 @@ Then boot a real **512-byte BIOS image** written directly as binary digits.
 
 Every opcode, operand and branch displacement is authored in `.bits` files.
 The packer preserves those bytes; no assembler chooses them for us. Around that
-small beginning are **20 examples, 22 challenges, a boot builder and a visual CPU
+small beginning are **21 examples, 22 challenges, a boot builder and a visual CPU
 lab** for following the machine one instruction at a time.
 
 ![Actual QEMU boot captured from guest VGA frames](assets/boot.gif)
@@ -67,8 +67,9 @@ measure **14 → 12** and **11 → 10** payload bytes, with distinct valid solut
 [Keyboard checks](docs/cpu-lab/keyboard.md) cover timeline navigation, imports and
 error focus. Native research now includes a guarded allocator, timer interrupt
 frames, a [paging write repair](examples/paging/README.md) and
-[shared exception frames](examples/exception-dispatch/README.md). A text-mode
-game, general recovery and user-mode proof remain next.
+[shared exception frames](examples/exception-dispatch/README.md).
+[Bit Hunt](examples/bit-hunt/README.md) adds a native maze, a one-bit victory
+control and actual QEMU footage. General recovery and user-mode proof remain next.
 
 **[Read the full roadmap, completed milestones and evidence →](ROADMAP.md)**
 The [live roadmap](https://othmaneblial.github.io/bitborn/roadmap/) follows that same

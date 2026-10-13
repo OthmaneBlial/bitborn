@@ -169,6 +169,19 @@ guards, source RAM and mixed-mode goldens are captured and revalidated. Other
 native delivery, general recovery, privilege transitions and modern vectors
 remain unverified; the bounded model stops before protection at LGDT.
 
+## Native text-game state
+
+[Bit Hunt](../../examples/bit-hunt/README.md) keeps eight initialized state bytes
+between A5/5A guards. Candidates are bounded before immutable map reads and wall
+tests. The player overlays sixty literal cells in actual VGA RAM; it never
+rewrites the map. Movement saturates at FF, victory is sticky until reset, and
+the processed-key word wraps intentionally without indexing memory. A coordinate
+oracle verifies native input/state/display, including 260 moves; a one-bit goal
+predicate changes only victory on the identical route. Twenty actual QEMU screens
+are cropped/enlarged and encoded with every GIF pixel checked against its source
+capture. The 492-byte payload fits the model input limit but stops atomically at
+the first C6 store before keyboard play.
+
 ## Technical references
 
 - [Intel Software Developer's Manuals](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html): instruction encodings, real mode and flags.

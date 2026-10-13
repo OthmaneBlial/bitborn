@@ -47,6 +47,7 @@ exact source revision, generated copies and every artifact hash across builds.
 | [Direction-flag repair lesson](docs/tutorials/repair-direction.md) | `challenges/direction-flag/`, `tests/test_direction_repair.py` | `python3 -m unittest tests.test_direction_repair` |
 | [Measured optimization puzzles](docs/tutorials/optimization.md) | `challenges/*-smaller/`, `tools/build_challenges.py`, `tests/optimization_browser_checks.mjs` | `node tests/test_challenges.mjs` and `python3 -m unittest tests.test_challenges` |
 | [Shared native exception frames](examples/exception-dispatch/README.md) | `examples/exception-dispatch/`, `tests/exception_dispatch_checks.py`, `tools/record_exception_dispatch.py` | `python3 -m unittest tests.test_exception_dispatch` |
+| [Bit Hunt native game](examples/bit-hunt/README.md) | `examples/bit-hunt/`, `tests/bit_hunt_checks.py`, `tools/record_bit_hunt.py` | `python3 -m unittest tests.test_bit_hunt` |
 | Shared browser CPU and history | `site/simulator.mjs`, `site/history.mjs` | `node tests/test_cpu.mjs` and `node tests/test_history.mjs` |
 | Register-copy execution | `site/simulator.mjs`, `tests/fixtures/register-mov.bits` | `node tests/test_register_mov.mjs` and `python3 -m unittest tests.test_register_mov` |
 | [Word-register ADD](docs/architecture/register-add.md) | Shared decoder/flags, `tests/fixtures/register-add.bits` | `node tests/test_flags_properties.mjs`, `python3 -m unittest tests.test_register_add` and allocator browser checks |

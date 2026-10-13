@@ -246,6 +246,10 @@
       "progress": "\u2705 736 literal bytes normalize error/no-error entry, preserve PUSHAD context and DF, distinguish fault/trap EIP and guard four records; four native vectors, three one-bit controls, twenty mapped slots and actual snapshots; other delivery and general recovery remain unverified"
     },
     {
+      "milestone": "Bit Hunt native text game",
+      "progress": "\u2705 492 literal bytes, real keyboard movement, walls, star, sticky win, restart and quit; independent VGA/state checks, 260-move saturation, one-bit no-victory control and twenty pixel-exact QEMU frames; browser play and hardware remain unverified"
+    },
+    {
       "milestone": "Short branch field microscope",
       "progress": "\u2705 Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged"
     },

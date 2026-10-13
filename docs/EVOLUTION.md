@@ -6,6 +6,32 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 
 ## Current execution record
 
+Bit Hunt native game (2026-10-13): 492 literal bytes implement a five-row maze
+with BIOS keyboard input, bounds/wall checks, immutable map, sticky star victory,
+restart and deliberate quit. An independent coordinate oracle verifies every
+VGA cell/attribute, title/status, eight state bytes and guards. Native tests cover
+collisions, unknown input, a complete route, sticky victory, reset/quit and 260
+moves proving saturation at FF. One literal operand bit changes star to colon:
+the same route reaches cell 46 after eleven moves but WIN remains N. Twenty actual
+QEMU frames from two boots have raw state/VGA/source/frame/image hashes; every
+decoded GIF pixel matches the cropped/enlarged native capture. No overlays,
+inferred frames, browser play or timing claims are introduced. Both model imports
+stop atomically at C6 after fourteen setup steps. Counts become 68 reviewed targets,
+114 derived artifacts, fourteen primary BIOS images and twenty-one gallery entries.
+The full native suite passes 110 tests with one expected macOS native-Linux skip;
+site/model/doc checks, Chrome routes and complete Firefox 157/WebKit 27.2 suites
+pass. Browser checks verify exact source/image/GIF/record bytes, 1440/320px layout
+and both actual imports stopping before native game behavior. The first Chrome
+check compared transient change highlights; the corrected assertion compares
+machine values, RAM and output, while the core check covers all state and RAM.
+Publication remains pending.
+
+Dispatcher publication `71dfda2` passes CI `38386015517` and deployment
+`38386797951`. All 33 checked public source/image/guide/capture/progress files
+match, and live Chrome passes exact downloads, native scope and 1440/320px layout.
+One initial capture request differed transiently; its unchanged retry matches.
+Central mirror `4311a98` changes only 62 paths under `bitborn/`.
+
 Shared native exception dispatch (2026-10-13): 736 literal bytes map eighteen
 legacy gates and normalize hardware-error/synthetic-zero frames through one
 handler. Native DE, BP, UD and GP verify actual frame shape, selector error 18,
@@ -785,7 +811,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 51 | 0 | Release-provenance manifest tying reviewed source, packaged output and commit | H | H | Existing releases | Medium | Complete: v0.3 public bytes, checksums and commit verified |
 | 52 | 0 | Clean-checkout reproduction and platform-specific validation documentation | H | H | CI | Low | Complete: fresh remote accecee install, 77 Python/site checks, all 88 hashes across two builds and clean tracked tree; platform gates explicit |
 | 53 | 3 | Real VGA bitmap experiment with manually authored pixel/instruction bytes | H | M | BIOS target | High | Complete: 142 authored bytes, full native index/RGB proof, exact actual GIF pixels and three-browser download/model-boundary checks; hardware remains untested |
-| 54 | 3 | Tiny text-mode game with deterministic input and genuine QEMU recording | H | M | Shell keyboard helpers | High | Open |
+| 54 | 3 | Tiny text-mode game with deterministic input and genuine QEMU recording | H | M | Shell keyboard helpers | High | Complete: 492-byte maze, real WASD/collision/victory/reset/quit, guarded state and 260-move saturation, one-bit goal control and twenty pixel-exact native frames; browser game and hardware remain unverified |
 | 55 | 3 | Bounded native allocator with memory-map, ownership and overflow evidence | H | M | Reviewed BIOS target | High | Complete: fixed real-mode arena, two native five-request logs, one-bit ownership control, zero/exact-fit/exhaustion/wrap checks and guarded immutable code/disk proof; free, isolation and paging remain open |
 | 56 | 3 | Protected-mode exception handlers with controlled fault injection | H | M | IDT target | High | Complete: shared legacy dispatcher, native DE/BP/UD/GP error/no-error frames, trap/fault EIP and three one-bit controls; other delivery and arbitrary recovery remain open |
 | 57 | 3 | Timer IRQ experiment with explicit PIC setup and deterministic QEMU assertions | H | M | 56 | High | Complete: explicit PIC/PIT setup, 3/2 native frame logs, guarded untouched IRETD frames, wrong-EOI pending/ISR proof and source/image integrity; timing, general handlers and physical hardware remain open |

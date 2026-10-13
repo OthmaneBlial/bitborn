@@ -1,0 +1,156 @@
+# Literal standalone BIOS text game; host framing supplies zero fill and 55 AA.
+11111010 # instruction | CLI | Establish a stack before enabling BIOS keyboard interrupts.
+11101010 00000110 01111100 00000000 00000000 # instruction | JMP 0000:7C06 | Normalize the code segment.
+00110001 11000000 # instruction | XOR AX,AX | Prepare segment zero.
+10001110 11011000 # instruction | MOV DS,AX | Address game state and literal map through DS zero.
+10001110 11010000 # instruction | MOV SS,AX | Establish the stack segment.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Place the stack below the boot source.
+11111100 # instruction | CLD | Establish forward rendering.
+11111011 # instruction | STI | Enable firmware keyboard interrupts.
+10111000 00000011 00000000 # instruction | MOV AX,3 | Select VGA text mode.
+11001101 00010000 # instruction | INT 10 | Initialize the actual text display.
+00110001 11000000 # instruction | XOR AX,AX | Reestablish data segment zero after firmware setup.
+10001110 11011000 # instruction | MOV DS,AX | Address the bounded game state.
+10111000 00000000 10111000 # instruction | MOV AX,B800 | Address VGA text memory.
+10001110 11000000 # instruction | MOV ES,AX | Select actual display RAM.
+11000110 00000110 11111111 00011111 10100101 # instruction | MOV byte [1FFF],A5 | Guard below the eight-byte game state.
+11000110 00000110 00001000 00100000 01011010 # instruction | MOV byte [2008],5A | Guard above the game state.
+11000111 00000110 00000110 00100000 00000000 00000000 # instruction | MOV word [2006],0 | Initialize the modulo-65536 processed-key counter.
+11000111 00000110 00000000 00100000 00001101 00000000 # instruction | MOV word [2000],13 | Reset the player to row one, column one.
+11000111 00000110 00000010 00100000 00000000 00000000 # instruction | MOV word [2002],0 | Clear the saturating move count and its spare byte.
+11000111 00000110 00000100 00100000 00000000 00000000 # instruction | MOV word [2004],0 | Clear the win flag and its spare byte.
+11101000 10011100 00000000 # instruction | CALL render | Render at source offset 224.
+00110001 11000000 # instruction | XOR AX,AX | Select BIOS keyboard service zero.
+00011110 # instruction | PUSH DS | Preserve data addressing across firmware input.
+00000110 # instruction | PUSH ES | Preserve display addressing across firmware input.
+11001101 00010110 # instruction | INT 16 | Read one actual keyboard character.
+00000111 # instruction | POP ES | Restore VGA addressing.
+00011111 # instruction | POP DS | Restore game-state addressing.
+00100100 11011111 # instruction | AND AL,DF | Accept upper and lower ASCII letters through one comparison path.
+11111111 00000110 00000110 00100000 # instruction | INC word [2006] | Count every processed key, including collisions and unknown input.
+00111100 01010001 # instruction | CMP AL,Q | Recognize quit.
+01110100 01011010 # instruction | JE quit | Branch to the controlled halt at offset 176.
+00111100 01010010 # instruction | CMP AL,R | Recognize restart.
+01110100 11010101 # instruction | JE reset | Restore position, move count and win flag at offset 47.
+10001011 00011110 00000000 00100000 # instruction | MOV BX,[2000] | Begin a candidate move from the current map index.
+00111100 01010111 # instruction | CMP AL,W | Recognize upward movement.
+01110101 00000101 # instruction | JNE left | Try the next direction when this is not W.
+10000011 11101011 00001100 # instruction | SUB BX,12 | Move up one twelve-cell row.
+11101011 00010101 # instruction | JMP validate | Validate the candidate index before any map access.
+00111100 01000001 # instruction | CMP AL,A | Recognize left movement.
+01110101 00000011 # instruction | JNE down | Try the next direction when this is not A.
+01001011 # instruction | DEC BX | Move left by one cell.
+11101011 00001110 # instruction | JMP validate | Share bounds and wall checks.
+00111100 01010011 # instruction | CMP AL,S | Recognize downward movement.
+01110101 00000101 # instruction | JNE right | Try the next direction when this is not S.
+10000011 11000011 00001100 # instruction | ADD BX,12 | Move down one twelve-cell row.
+11101011 00000101 # instruction | JMP validate | Share bounds and wall checks.
+00111100 01000100 # instruction | CMP AL,D | Recognize right movement.
+01110101 11001001 # instruction | JNE read | Ignore unknown input without changing position.
+01000011 # instruction | INC BX | Move right by one cell.
+10000011 11111011 00111100 # instruction | CMP BX,60 | Bound the candidate to the sixty-byte map.
+01110011 11000011 # instruction | JAE read | Reject out-of-range or wrapped candidates before reading map RAM.
+10000000 10111111 10001000 01111101 00100011 # instruction | CMP byte [BX+7D88],23 | Check the immutable literal wall character.
+01110100 10111100 # instruction | JE read | Leave game state unchanged on collision.
+10001001 00011110 00000000 00100000 # instruction | MOV [2000],BX | Commit an in-bounds non-wall candidate.
+10000000 00111110 00000010 00100000 11111111 # instruction | CMP byte [2002],FF | Saturate the visible move counter at 255.
+01110100 00000100 # instruction | JE goal | Do not wrap the move counter.
+11111110 00000110 00000010 00100000 # instruction | INC byte [2002] | Count a successful move.
+10000000 10111111 10001000 01111101 00111010 # instruction | CMP byte [BX+7D88],3A | This one-bit control recognizes colon instead of star; no literal map cell matches.
+01110101 00000101 # instruction | JNE redraw | Preserve the sticky win flag for ordinary cells.
+11000110 00000110 00000100 00100000 00000001 # instruction | MOV byte [2004],1 | Mark that the star has been collected.
+11101000 00111010 00000000 # instruction | CALL render | Redraw the map, player and status.
+11101011 10011100 # instruction | JMP read | Wait for the next key at offset 68.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | ALIGN | Begin quit at offset 176.
+11111010 # instruction | CLI | Keep the final halt stopped.
+10111000 11101111 10111110 # instruction | MOV AX,BEEF | Mark deliberate quit.
+11110100 # instruction | HLT | Halt at offset 180 with state retained for inspection.
+11101011 11111101 # instruction | JMP halt | Return to the controlled halt if execution resumes.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | ALIGN | Place rendering at offset 224.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | ALIGN | Continue fixed-layout padding.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | ALIGN | Complete forty-one padding bytes.
+01100000 # instruction | PUSHA | Preserve the sixteen-bit caller registers while rendering.
+00011110 # instruction | PUSH DS | Preserve data segment state.
+00000110 # instruction | PUSH ES | Preserve display segment state.
+00110001 11000000 # instruction | XOR AX,AX | Select the literal source's data segment.
+10001110 11011000 # instruction | MOV DS,AX | Read the immutable map and game state.
+10111000 00000000 10111000 # instruction | MOV AX,B800 | Select VGA text RAM.
+10001110 11000000 # instruction | MOV ES,AX | Write actual character/attribute words.
+11111100 # instruction | CLD | Render forward independent of incoming direction.
+10111110 10001000 01111101 # instruction | MOV SI,7D88 | Read sixty literal map bytes at offset 392.
+10111111 01100100 00000011 # instruction | MOV DI,0364 | Place the map at display row five, column thirty-four.
+10111010 00000101 00000000 # instruction | MOV DX,5 | Render five rows.
+10111001 00001100 00000000 # instruction | MOV CX,12 | Render twelve characters in this row.
+10101100 # instruction | LODSB | Read the next immutable map cell.
+10110100 00001010 # instruction | MOV AH,0A | Use green text on black.
+10101011 # instruction | STOSW | Write the map character and attribute.
+11100010 11111010 # instruction | LOOP cell | Render every cell in the row.
+10000001 11000111 10001000 00000000 # instruction | ADD DI,136 | Skip the remaining sixty-eight screen columns.
+01001010 # instruction | DEC DX | Count the completed row.
+01110101 11110000 # instruction | JNZ row | Render the next row with a fresh twelve-cell count.
+10100001 00000000 00100000 # instruction | MOV AX,[2000] | Read the committed player index.
+00110001 11010010 # instruction | XOR DX,DX | Prepare the unsigned row/column division.
+10111011 00001100 00000000 # instruction | MOV BX,12 | Divide the index by map width.
+11110111 11110011 # instruction | DIV BX | AX becomes row and DX becomes column.
+01101001 11111000 10100000 00000000 # instruction | IMUL DI,AX,160 | Convert the row to an eighty-column text offset.
+11010001 11100010 # instruction | SHL DX,1 | Convert the column to a character/attribute byte offset.
+00000001 11010111 # instruction | ADD DI,DX | Combine row and column offsets.
+10000001 11000111 01100100 00000011 # instruction | ADD DI,0364 | Add the fixed map origin.
+10111000 01000000 00001111 # instruction | MOV AX,0F40 | Select a bright-white player character.
+10101011 # instruction | STOSW | Overlay the player without modifying the map source.
+10111110 11000100 01111101 # instruction | MOV SI,7DC4 | Read the twenty-four literal title bytes.
+10111111 00011100 00000010 # instruction | MOV DI,021C | Place the control legend above the map.
+10111001 00011000 00000000 # instruction | MOV CX,24 | Render the complete fixed-length title.
+10101100 # instruction | LODSB | Read the next title character.
+10110100 00001111 # instruction | MOV AH,0F | Use bright-white title text.
+10101011 # instruction | STOSW | Write the title character and attribute.
+11100010 11111010 # instruction | LOOP title | Render all twenty-four characters.
+10111111 00100100 00000111 # instruction | MOV DI,0724 | Place the status below the map.
+10111000 01010111 00001010 # instruction | MOV AX,0A57 | Begin the WIN label.
+10101011 # instruction | STOSW | Write W and its attribute.
+10111000 01001001 00001010 # instruction | MOV AX,0A49 | Select I.
+10101011 # instruction | STOSW | Write I and its attribute.
+10111000 01001110 00001010 # instruction | MOV AX,0A4E | Select N.
+10101011 # instruction | STOSW | Write N and its attribute.
+10111000 00111010 00001010 # instruction | MOV AX,0A3A | Select the colon.
+10101011 # instruction | STOSW | Write the status separator.
+10111000 00100000 00001010 # instruction | MOV AX,0A20 | Select a space.
+10101011 # instruction | STOSW | Leave room before the state marker.
+10110000 01001110 # instruction | MOV AL,N | Select the not-yet-collected marker.
+10000000 00111110 00000100 00100000 00000000 # instruction | CMP byte [2004],0 | Read the sticky win flag.
+01110100 00000010 # instruction | JE marker | Keep N before collecting the star.
+10110000 01011001 # instruction | MOV AL,Y | Select the collected marker.
+10110100 00001111 # instruction | MOV AH,0F | Use bright-white status text.
+10101011 # instruction | STOSW | Write the actual win state.
+10111000 00100000 00001010 # instruction | MOV AX,0A20 | Separate the move counter.
+10101011 # instruction | STOSW | Write a space.
+10111000 01001101 00001010 # instruction | MOV AX,0A4D | Begin the M label.
+10101011 # instruction | STOSW | Write M.
+10111000 00111010 00001010 # instruction | MOV AX,0A3A | Select the counter separator.
+10101011 # instruction | STOSW | Write the colon.
+10100000 00000010 00100000 # instruction | MOV AL,[2002] | Read the saturating move count.
+00110001 11011011 # instruction | XOR BX,BX | Clear the hexadecimal lookup index.
+10001000 11000011 # instruction | MOV BL,AL | Copy the counter into the lookup register.
+11000000 11101011 00000100 # instruction | SHR BL,4 | Select the high hexadecimal nibble.
+10001010 10000111 11011100 01111101 # instruction | MOV AL,[BX+7DDC] | Read a literal hexadecimal glyph.
+10110100 00001111 # instruction | MOV AH,0F | Use bright-white counter text.
+10101011 # instruction | STOSW | Write the high counter digit.
+10100000 00000010 00100000 # instruction | MOV AL,[2002] | Read the counter again for its low nibble.
+00100100 00001111 # instruction | AND AL,0F | Select the low hexadecimal nibble.
+00110001 11011011 # instruction | XOR BX,BX | Clear the lookup index.
+10001000 11000011 # instruction | MOV BL,AL | Address the low-nibble glyph.
+10001010 10000111 11011100 01111101 # instruction | MOV AL,[BX+7DDC] | Read the literal low-digit glyph.
+10110100 00001111 # instruction | MOV AH,0F | Use bright-white counter text.
+10101011 # instruction | STOSW | Write the low counter digit.
+00000111 # instruction | POP ES | Restore the caller's display segment.
+00011111 # instruction | POP DS | Restore the caller's data segment.
+01100001 # instruction | POPA | Restore caller registers after rendering.
+11000011 # instruction | RET | Return to the keyboard loop or reset path.
+00000000 00000000 00000000 # padding | ALIGN | Place the map at source offset 392.
+00100011 00100011 00100011 00100011 00100011 00100011 00100011 00100011 00100011 00100011 00100011 00100011 # data | MAP ROW 0 | Twelve immutable border walls.
+00100011 00100000 00100000 00100000 00100000 00100000 00100000 00100000 00100000 00100000 00100000 00100011 # data | MAP ROW 1 | Start at column one inside the border.
+00100011 00100000 00100000 00100000 00100011 00100000 00100000 00100000 00100011 00100000 00100000 00100011 # data | MAP ROW 2 | Interior walls at columns four and eight.
+00100011 00100000 00100000 00100000 00100000 00100000 00100000 00100000 00100000 00100000 00101010 00100011 # data | MAP ROW 3 | The star at column ten is the goal.
+00100011 00100011 00100011 00100011 00100011 00100011 00100011 00100011 00100011 00100011 00100011 00100011 # data | MAP ROW 4 | Twelve immutable bottom walls.
+01000010 01001001 01010100 00100000 01001000 01010101 01001110 01010100 00100000 01111100 00100000 01010111 01000001 01010011 01000100 00100000 01111100 00100000 01010010 00100000 01111100 00100000 01010001 00100000 # data | TITLE | BIT HUNT, movement, reset and quit controls with a trailing space.
+00110000 00110001 00110010 00110011 00110100 00110101 00110110 00110111 00111000 00111001 01000001 01000010 01000011 01000100 01000101 01000110 # data | HEX DIGITS | Literal hexadecimal glyphs for the move counter.

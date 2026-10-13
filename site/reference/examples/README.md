@@ -28,6 +28,7 @@ example uses the canonical source in `boot/`, avoiding a second divergent copy.
 | Returning disk application | x86 BIOS payload | Load at 9000, calculate 7×6, store 2A, return | [shell-app](shell-app/README.md) |
 | Protected-mode experiment | BIOS → 32-bit ring zero | GDT, flat RAM, software interrupt/IRETD and green PM | [protected-mode](protected-mode/README.md) |
 | Shared legacy exception frames | BIOS → 32-bit ring zero | Four native vectors, normalized error/no-error frames, trap/fault EIP, retained contexts and bounded log controls | [exception-dispatch](exception-dispatch/README.md) |
+| Bit Hunt maze | x86 BIOS / QEMU | WASD, walls, star, reset and quit; one-bit no-victory control and actual native footage | [bit-hunt](bit-hunt/README.md) |
 
 Native Linux examples run in CI on Ubuntu x86-64; macOS does not execute them.
 BIOS examples run in QEMU TCG, including on Apple Silicon. All binary outputs

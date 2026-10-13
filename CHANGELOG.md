@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add Bit Hunt, a 492-byte literal BIOS maze with real WASD input, walls, star
+  collection, sticky victory, reset, quit and a saturating move counter. One
+  operand bit disables collection on the identical route. Check actual VGA/state,
+  guards and immutable source/disk; record twenty pixel-exact QEMU frames from two
+  boots. The bounded browser model stops at C6 and does not emulate the game.
+
 - Add a 736-byte literal legacy exception dispatcher: normalize hardware-error
   and synthetic-zero frames, preserve general registers/DF and distinguish
   fault/trap return EIPs for DE, BP, UD and GP. Three one-bit controls avoid DE,
