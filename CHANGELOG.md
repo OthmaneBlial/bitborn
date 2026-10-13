@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add a 696-byte literal user/kernel INT gate research fixture. Check the actual
+  five-word privilege frame, TSS-selected stack, preserved registers/DF and
+  return to user code. One gate DPL bit denies entry with #GP(0102), the original
+  INT EIP and an unchanged six-word error frame; after-call code remains blocked.
+  Flat memory is shared, and no Linux syscall ABI or scheduler is advertised.
+
 - Add a 496-byte literal ring-three privilege research fixture: outward IRETD,
   forbidden user HLT, native #GP(0), TSS-selected kernel stack, captured original
   and repaired frames, register/DF restoration and return to the user stack.

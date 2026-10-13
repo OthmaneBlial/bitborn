@@ -1,0 +1,127 @@
+# Literal legacy user/kernel INT 20 gate probe. Shared loader enters 0000:7E00.
+11111010 # instruction | CLI | External maskable interrupts remain disabled.
+00110001 11000000 # instruction | XOR AX,AX | Normalize real-mode data and stack.
+10001110 11011000 # instruction | MOV DS,AX | Descriptor pointers use segment zero.
+10001110 11010000 # instruction | MOV SS,AX | Explicit bootstrap stack segment.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Keep bootstrap stack below both disk stages.
+11000110 00000110 00100000 01100000 00000000 # instruction | MOV byte [6020],0 | Initialize the exact handler-selection marker.
+00001111 00000001 00010110 00110000 01111111 # instruction | LGDT [7F30] | Six descriptors at physical 7F00.
+00001111 00100000 11000000 # instruction | MOV EAX,CR0 | Read current control state.
+01100110 10000011 11001000 00000001 # instruction | OR EAX,1 | Enable protected mode using a 32-bit operand.
+00001111 00100010 11000000 # instruction | MOV CR0,EAX | Paging remains disabled.
+01100110 11101010 00101000 01111110 00000000 00000000 00001000 00000000 # instruction | JMP 0008:7E28 | Flat ring-zero 32-bit code entry.
+00000000 00000000 # padding | Protected entry alignment | Entry is byte 40.
+10111000 00010000 00000000 00000000 00000000 # instruction | MOV EAX,10 | Kernel data/stack selector.
+10001110 11011000 # instruction | MOV DS,AX | Flat kernel data.
+10001110 11000000 # instruction | MOV ES,AX | Flat kernel destination.
+10001110 11010000 # instruction | MOV SS,AX | Flat kernel stack.
+10111100 00000000 10010000 00000000 00000000 # instruction | MOV ESP,9000 | Initial stack top equals TSS.ESP0.
+00001111 00000001 00011101 00110110 01111111 00000000 00000000 # instruction | LIDT [7F36] | Thirty-three literal entries include GP and INT 20.
+01100110 10111000 00101000 00000000 # instruction | MOV AX,28 | Available 32-bit TSS selector.
+00001111 00000000 11011000 # instruction | LTR AX | Load the TSS and mark its descriptor busy.
+10111000 00100011 00000000 00000000 00000000 # instruction | MOV EAX,23 | Ring-three flat writable data selector.
+10001110 11011000 # instruction | MOV DS,AX | User-visible shared data mapping.
+10001110 11000000 # instruction | MOV ES,AX | User-visible shared destination mapping.
+10111110 01000100 00110011 00100010 00010001 # instruction | MOV ESI,11223344 | Known caller register overwritten by the service.
+00110001 11111111 # instruction | XOR EDI,EDI | Known zero caller register and initialization value.
+10001001 00111101 10000100 01100000 00000000 00000000 # instruction | MOV [6084],EDI | Explicitly zero the after-call marker.
+01101010 00100011 # instruction | PUSH 23 | Outward IRETD frame: user SS.
+01101000 00000000 10100000 00000000 00000000 # instruction | PUSH A000 | User ESP.
+01101000 00000010 00000100 00000000 00000000 # instruction | PUSH 402 | DF one, IF and IOPL zero, reserved bit set.
+01101010 00011011 # instruction | PUSH 1B | Ring-three code selector and RPL.
+01101000 01110000 01111110 00000000 00000000 # instruction | PUSH 7E70 | User instruction entry.
+11001111 # instruction | IRETD enter user | Restore outer CS, flags and SS:ESP.
+11000111 00000101 10000000 01100000 00000000 00000000 01000100 00110011 00100010 00010001 # instruction | MOV dword [6080],11223344 | Before-call user marker.
+10111001 11011111 10011011 01010111 00010011 # instruction | MOV ECX,13579BDF | Known caller register overwritten by the service.
+11001101 00100000 # instruction | INT 20 user call | Byte 127: gate DPL is checked against CPL three.
+11000111 00000101 10000100 01100000 00000000 00000000 10001000 01110111 01100110 01010101 # instruction | MOV dword [6084],55667788 | Proves successful return to user code.
+11101011 11111110 # instruction | JMP user checkpoint | Stable non-halting user checkpoint at 7E8B.
+00000000 00000000 00000000 # padding | Service alignment | Service begins at byte 144, 7E90.
+01100000 # instruction | PUSHAD | Preserve the original eight general-register words.
+11000110 00000101 00100000 01100000 00000000 00000000 00000001 # instruction | MOV byte [6020],1 | Record permitted service entry.
+10001001 11100110 # instruction | MOV ESI,ESP | Point to saved general registers.
+10000011 11000110 00100000 # instruction | ADD ESI,32 | Reach the five-word hardware privilege frame at 8FEC.
+10111111 00000000 01100000 00000000 00000000 # instruction | MOV EDI,6000 | Service frame log.
+10111001 00000101 00000000 00000000 00000000 # instruction | MOV ECX,5 | EIP, CS, EFLAGS, old ESP and old SS; INT adds no error word.
+11111100 # instruction | CLD | Copy forward without changing saved user flags.
+11110011 10100101 # instruction | REP MOVSD | Capture the five real hardware-frame words.
+01100110 10001100 11001000 # instruction | MOV AX,CS | Sample actual kernel CS.
+01100110 10100011 00010100 01100000 00000000 00000000 # instruction | MOV [6014],AX | Expected kernel selector 0008.
+01100110 10001100 11010000 # instruction | MOV AX,SS | Sample TSS-selected kernel SS.
+01100110 10100011 00010110 01100000 00000000 00000000 # instruction | MOV [6016],AX | Expected kernel selector 0010.
+10001001 00110101 00011000 01100000 00000000 00000000 # instruction | MOV [6018],ESI | Copy end equals TSS.ESP0=9000.
+01100001 # instruction | POPAD | Restore actual caller general registers.
+11001111 # instruction | IRETD service return | Resume after INT 20 and restore the outer user stack.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | GP stop alignment | Stop handler begins at byte 208, 7ED0.
+11000110 00000101 00100000 01100000 00000000 00000000 00000010 # instruction | MOV byte [6020],2 | Record denied software-gate fault instead of service entry.
+10001001 11100110 # instruction | MOV ESI,ESP | Point to the real six-word GP error/privilege frame.
+10111111 01000000 01100000 00000000 00000000 # instruction | MOV EDI,6040 | Separate denied-gate frame log.
+10111001 00000110 00000000 00000000 00000000 # instruction | MOV ECX,6 | Capture error, EIP, CS, EFLAGS, old ESP and old SS.
+11111100 # instruction | CLD | Capture forward; the saved caller DF remains untouched.
+11110011 10100101 # instruction | REP MOVSD | Capture the actual denied-call frame.
+01100110 10001100 11001000 # instruction | MOV AX,CS | Sample actual GP handler CS.
+01100110 10100011 01011000 01100000 00000000 00000000 # instruction | MOV [6058],AX | Kernel selector 0008.
+01100110 10001100 11010000 # instruction | MOV AX,SS | Sample actual GP handler SS.
+01100110 10100011 01011010 01100000 00000000 00000000 # instruction | MOV [605A],AX | Kernel stack selector 0010.
+11110100 # instruction | HLT denied gate | Controlled privileged halt; next EIP is 7EF9.
+11101011 11111101 # instruction | JMP denied halt | Re-enter HLT if deliberately resumed.
+00000000 00000000 00000000 00000000 00000000 # padding | GDT alignment | GDT begins at byte 256, 7F00.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | GDT null | Unusable selector zero.
+11111111 11111111 00000000 00000000 00000000 10011010 11001111 00000000 # data | GDT kernel code | Selector 08, flat 32-bit ring-zero code.
+11111111 11111111 00000000 00000000 00000000 10010010 11001111 00000000 # data | GDT kernel data | Selector 10, flat ring-zero writable stack/data.
+11111111 11111111 00000000 00000000 00000000 11111010 11001111 00000000 # data | GDT user code | Selector 1B, flat 32-bit ring-three code.
+11111111 11111111 00000000 00000000 00000000 11110010 11001111 00000000 # data | GDT user data | Selector 23, flat ring-three shared writable stack/data.
+01100111 00000000 01000000 01111111 00000000 10001001 00000000 00000000 # data | GDT TSS | Selector 28, available 32-bit TSS, base 7F40, limit 67.
+00101111 00000000 00000000 01111111 00000000 00000000 # data | GDTR | Inclusive limit 47, base 7F00.
+00000111 00000001 10110000 01111111 00000000 00000000 # data | IDTR | Inclusive limit 263, base 7FB0.
+00000000 00000000 00000000 00000000 # padding | TSS alignment | TSS begins at byte 320, 7F40.
+00000000 00000000 00000000 00000000 # data | TSS link | No hardware task switch is performed.
+00000000 10010000 00000000 00000000 # data | TSS ESP0 | Kernel stack top 9000.
+00010000 00000000 00000000 00000000 # data | TSS SS0 | Flat kernel stack selector 0010.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 12-19 | Unused fields are literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 20-27 | Literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 28-35 | Literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 36-43 | Literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 44-51 | Literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 52-59 | Literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 60-67 | Literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 68-75 | Literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 76-83 | Literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 84-91 | Literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 92-99 | Literal zero.
+00000000 00000000 # data | TSS debug trap | Disabled.
+01101000 00000000 # data | TSS I/O map base | Offset 104 exceeds the inclusive TSS limit.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | IDT alignment | IDT begins at byte 432, 7FB0.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 0 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 1 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 2 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 3 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 4 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 5 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 6 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 7 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 8 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 9 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 10 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 11 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 12 | Not present.
+11010000 01111110 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT vector 13 | Hardware GP gate to 7ED0; gate DPL is ignored for hardware faults.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 14 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 15 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 16 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 17 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 18 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 19 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 20 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 21 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 22 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 23 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 24 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 25 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 26 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 27 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 28 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 29 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 30 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 31 | Not present.
+10010000 01111110 00001000 00000000 00000000 11101110 00000000 00000000 # data | IDT vector 32 | DPL-three interrupt gate to 7E90; byte 693 bit five makes DPL two.

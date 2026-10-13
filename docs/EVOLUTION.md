@@ -6,6 +6,24 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 
 ## Current execution record
 
+Ring-three research milestone two (2026-10-13): 696 literal bytes use the shared
+loader, TSS and a DPL-three INT 20 gate to enter kernel code, record the actual
+five-word privilege frame and selectors, preserve general registers/DF, and
+return to the original user stack. One IDT attribute bit lowers gate DPL to two:
+native #GP(0102) retains the original INT EIP and six-word frame, enters the
+separate kernel stop and prevents the explicitly initialized after-call marker.
+Four focused tests pass both gate boots and both prior HLT/CMC boots, independent
+encoding/pointer goldens, retained frames/registers, source/TSS/loader RAM and
+read-only disk checks. The service only logs its fixed call frame. Flat memory
+remains shared; user/supervisor page permissions are the next native boundary.
+The complete native suite passes 118 tests with one expected macOS native-Linux
+skip; the complete site/model/doc checks and clean diff review pass.
+
+First privilege source `e59c76f` passes CI `38403520153` and deployment
+`38404381729`. All five checked live README/roadmap/privilege-guide/evolution/
+progress files match that commit. Mirror `ab164e6` changes only eight `bitborn/`
+paths. The new gate fixture is a separate unreleased source milestone.
+
 Ring-three research milestone one (2026-10-13): 496 literal bytes enter CPL three
 through an outward IRETD frame. HLT raises native #GP(0), selects TSS.SS0:ESP0,
 records the actual six-word privilege/error frame and sampled kernel selectors,
@@ -916,7 +934,8 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 68 | 0 | Align executable quickstart dependencies across README, beginner guide and eight introductions | H | H | Native capture test | Low | Complete: NASM/FFmpeg install commands, localized host-tool roles, English source tracking and eight-page browser/link checks; native-speaker review remains separate |
 | 69 | 0 | Preserve recorded release staging when source advances without a version bump | H | H | Release provenance | Low | Complete: reject different revision/version before writes; isolated preservation regressions and all 31 frozen v0.4.0 staging files verified unchanged |
 | 70 | 1 | Publish the five newer native experiments as a verified v0.5 distribution | H | H | 68,69 and native proofs | Medium | Complete: main/tag CI, clean-source 114-test/three-engine reproduction, 112 exact artifacts and all 89 anonymous attachment downloads verified; precise scope and publication notes updated |
-| 71 | 1 | Prove a curated protected-mode user/kernel privilege transition with explicit native frames and controls | H | M | GDT, exception frames, IRETD | High | In progress: ring-three entry, TSS-selected #GP frame/IRETD return and one-bit HLT/CMC control pass native checks; callable syscall gate and gate-permission control remain; no memory-isolation or scheduling claim |
+| 71 | 1 | Prove a curated protected-mode user/kernel privilege transition with explicit native frames and controls | H | M | GDT, exception frames, IRETD | High | Complete: ring-three entry, TSS-selected HLT/GP return and CMC control; callable INT gate/IRETD and one-bit DPL denial pass four native cases with exact frames; no memory-isolation, Linux ABI or scheduling claim |
+| 72 | 1 | Prove a bounded user/supervisor page-permission boundary with native PF frames and a one-bit control | H | M | 71, native paging | High | Pending: explicit user/code/stack permissions and denied user access; prove exact CR2/error/context and source integrity before advertising memory protection |
 
 Large tasks are divided into useful verified milestones. Native experiments only
 become capabilities after literal source review and real QEMU checks; hardware

@@ -76,12 +76,13 @@ with CF zero. This comparison explicitly includes the differing carry flag.
 The flat user descriptors deliberately share the address space: user code can
 write the markers also read by the kernel. There is **no memory isolation** here.
 Only one authored privilege fault is handled; other IDT entries are absent.
-There is no syscall gate, scheduler, arbitrary recovery, user I/O execution,
+There is no callable kernel gate, scheduler, arbitrary recovery, user I/O execution,
 modern long-mode TSS, physical-hardware result or UEFI support in this fixture.
 The final checkpoint spins until the test stops the guest through QMP.
 
-The next milestone is a separately proved callable user/kernel gate and a
-gate-permission control. See [the roadmap](../../ROADMAP.md).
+The separate [user/kernel gate fixture](user-gate.md) now proves a permitted
+software INT/IRETD return and a one-bit gate-permission fault. Those additional
+claims belong to that fixture; memory protection remains in [the roadmap](../../ROADMAP.md).
 
 Normative reference: [Intel SDM Volume 3A, revision 093](https://cdrdv2-public.intel.com/929359/253668-093-sdm-vol-3a.pdf),
 sections 6.9 (privileged instructions), 7.12.1 (exception-handler procedures)

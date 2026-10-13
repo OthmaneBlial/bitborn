@@ -2,6 +2,10 @@
   "updated": "2026-10-13",
   "milestones": [
     {
+      "milestone": "Native callable user/kernel gate",
+      "progress": "\u2705 Literal 696-byte fixture passes QEMU: five-word INT/IRETD return, preserved caller registers/DF and TSS stack; one DPL bit denies entry with GP error 0102 and retained six-word frame; flat memory remains shared"
+    },
+    {
       "milestone": "Native ring-three privilege research",
       "progress": "\u2705 Literal 496-byte fixture and F4\u2192F5 control pass QEMU: outward IRETD, HLT #GP(0), TSS kernel stack, six-word frame, register/DF restoration and returned user stack; no memory isolation, syscall gate or scheduling proof"
     },

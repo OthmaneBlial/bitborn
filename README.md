@@ -75,7 +75,8 @@ frames, a [paging write repair](examples/paging/README.md) and
 [shared exception frames](examples/exception-dispatch/README.md).
 [Bit Hunt](examples/bit-hunt/README.md) adds a native maze, a one-bit victory
 control and actual QEMU footage. A [ring-three research fixture](docs/architecture/user-privilege.md)
-proves a native privilege fault and return; syscall gates and general recovery remain next.
+proves a native privilege fault and return. A [user/kernel gate](docs/architecture/user-gate.md)
+checks one permission bit; protected user pages and general recovery remain next.
 
 **[Read the full roadmap, completed milestones and evidence →](ROADMAP.md)**
 The [live roadmap](https://othmaneblial.github.io/bitborn/roadmap/) follows that same
