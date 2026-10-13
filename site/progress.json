@@ -190,6 +190,10 @@
       "progress": "\u2705 Visible shortcut switch preserves state and native buttons; editable/composing/repeated keys are ignored; manual steps report location and automatic ticks keep the live status quiet"
     },
     {
+      "milestone": "Keyboard workflow regression",
+      "progress": "\u2705 Tab/Shift+Tab traversal and Enter activation, timeline Arrow/Home/End with retained focus, invalid-token selection and labeled raw import pass three engines; macOS WebKit uses native Option+Tab; OS picker and live assistive technology remain separate"
+    },
+    {
       "milestone": "Literal address references",
       "progress": "\u2705 bitinspect checks explicitly declared absolute/far/relative fields, including six original boot references; exhaustive word/displacement/alias checks, bounded reads and no byte rewriting"
     },

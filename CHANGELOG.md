@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Extend the shared CPU keyboard regression through actual Tab/Shift+Tab
+  navigation, Enter activation, timeline Arrow/Home/End restoration, invalid
+  source focus/selection and labeled raw-file import with a visible focus ring.
+  Native file-picker and assistive-technology sessions remain separate checks.
+
 - Add a 424-byte literal paging experiment: build a legacy directory/table,
   record a native supervisor write #PF, repair PTE.RW, invalidate the translation
   and retry the unchanged store with IRETD. Two independent permission/WP bit

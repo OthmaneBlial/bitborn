@@ -2,11 +2,24 @@ import assert from 'node:assert/strict';
 
 export async function checkExecutionKeyboard(page) {
   const speed=await page.locator('#speed').inputValue();
-  const snapshot=()=>page.evaluate(()=>JSON.stringify({steps:document.getElementById('step-count').textContent,
+  const tabModifier=process.platform==='darwin'&&page.context().browser().browserType().name()==='webkit'?'Alt+':'';
+  const focused=()=>page.evaluate(()=>document.activeElement.id);
+  const tabTo=async id=>{
+    const {key,limit}=await page.evaluate(id=>({
+      key:document.getElementById(id).compareDocumentPosition(document.activeElement)&Node.DOCUMENT_POSITION_FOLLOWING?'Shift+Tab':'Tab',
+      limit:document.querySelectorAll('a,button,input,select,textarea,summary,[tabindex]').length+1,
+    }),id);
+    for(let attempt=0;attempt<limit;attempt++) {
+      if(await focused()===id)return;
+      await page.keyboard.press(tabModifier+key);
+    }
+    assert.fail(`${id} is unreachable with Tab`);
+  };
+  const snapshot=(includeChanges=true)=>page.evaluate(includeChanges=>JSON.stringify({steps:document.getElementById('step-count').textContent,
     history:document.getElementById('history-position').textContent,state:document.getElementById('run-state').textContent,
-    registers:document.getElementById('registers').textContent,memory:document.getElementById('memory').textContent,
+    registers:includeChanges?document.getElementById('registers').textContent:Array.from(document.querySelectorAll('#registers .register-value'),value=>value.textContent),memory:document.getElementById('memory').textContent,
     source:document.getElementById('binary-editor').value,bytes:document.getElementById('byte-count').textContent,
-    screen:document.getElementById('screen-output').textContent,serial:document.getElementById('serial-output').textContent}));
+    screen:document.getElementById('screen-output').textContent,serial:document.getElementById('serial-output').textContent}),includeChanges);
   try {
     await page.locator('#preset').selectOption('immediates');
     assert.equal(await page.locator('#execution-shortcuts').isChecked(),true);
@@ -45,6 +58,40 @@ export async function checkExecutionKeyboard(page) {
     assert.equal(await page.locator('#status').textContent(),running,'running ticks do not flood the live status with per-instruction messages');
     await page.keyboard.press('Space');assert.match(await page.locator('#status').textContent(),/^Paused at/);
     await page.locator('#step').click();await page.locator('#step').click();assert.match(await page.locator('#status').textContent(),/HLT reached after 4 steps/);
+    const last=await snapshot(false);
+    await tabTo('timeline');await page.keyboard.press('Home');
+    assert.equal(await page.locator('#step-count').textContent(),'0000');
+    assert.equal(await focused(),'timeline','restoring a state keeps timeline focus');
+    assert.match(await page.locator('#timeline').getAttribute('aria-valuetext'),/^Recorded state 0 of 4/);
+    await page.keyboard.press('ArrowRight');assert.equal(await page.locator('#step-count').textContent(),'0001');
+    await page.keyboard.press('ArrowLeft');assert.equal(await page.locator('#step-count').textContent(),'0000');
+    await page.keyboard.press('End');assert.equal(await snapshot(false),last,'keyboard replay restores the recorded final state');
+    await tabTo('reset');await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#timeline').isDisabled(),true);
+    await tabTo('step');await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#step-count').textContent(),'0001');
+    await page.keyboard.press(tabModifier+'Tab');assert.equal(await focused(),'back');await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#step-count').textContent(),'0000');
+    await tabTo('forward');await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#step-count').textContent(),'0001');
+    const registers=await page.locator('#registers').textContent(),history=await page.locator('#history-position').textContent();
+    await tabTo('binary-editor');await page.keyboard.press('ControlOrMeta+A');await page.keyboard.type('badtoken');
+    await tabTo('load-program');await page.keyboard.press('Enter');
+    assert.equal(await focused(),'binary-editor','keyboard submission returns focus to the invalid source');
+    assert.equal(await page.locator('#binary-editor').getAttribute('aria-invalid'),'true');
+    assert.equal(await page.locator('#binary-editor').evaluate(input=>input.value.slice(input.selectionStart,input.selectionEnd)),'badtoken');
+    assert.equal(await page.locator('#registers').textContent(),registers);
+    assert.equal(await page.locator('#history-position').textContent(),history);
+    await tabTo('import-program');
+    assert.ok(await page.locator('#import-program').evaluate(input=>input.labels.length),'file import has an accessible label');
+    assert.equal(await page.locator('#import-program').evaluate(input=>getComputedStyle(input.closest('label')).outlineStyle),'solid','the transparent file control has a visible label focus ring');
+    // File selection is supplied by Playwright; the native OS picker is outside this browser regression.
+    await page.locator('#import-program').setInputFiles({name:'keyboard.bin',mimeType:'application/octet-stream',buffer:Buffer.from([0xB8,0x2A,0,0xF4])});
+    await page.waitForFunction(()=>document.getElementById('byte-count').textContent==='4 BYTES');
+    assert.equal(await page.locator('#binary-editor').getAttribute('aria-invalid'),null);
+    assert.equal(await page.locator('#step-count').textContent(),'0000');
+    await tabTo('step');await page.keyboard.press('Enter');
+    assert.match(await page.locator('#status').textContent(),/MOV AX, 42 executed/);
   } finally {
     await page.locator('#pause').evaluate(button=>{if(!button.disabled)button.click();});
     await page.locator('#keyboard-test-editable').evaluateAll(elements=>elements.forEach(element=>element.remove()));

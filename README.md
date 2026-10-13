@@ -67,7 +67,8 @@ byte order, stack calls and flags. A new [guarded native allocator](examples/bou
 shows how one request bit changes final-byte ownership, in QEMU and the CPU lab.
 The [native timer experiment](examples/timer-irq/README.md) now records actual
 interrupt frames and exposes a one-bit EOI failure. A new [paging experiment](examples/paging/README.md)
-repairs a protected write and retries its exact bytes. General handlers and user-mode proof remain next.
+repairs a protected write and retries its exact bytes. Keyboard regression now
+covers timeline navigation, imports and error focus. General handlers and user-mode proof remain next.
 
 **[Read the full roadmap, completed milestones and evidence →](ROADMAP.md)**
 The [live roadmap](https://othmaneblial.github.io/bitborn/roadmap/) follows that same

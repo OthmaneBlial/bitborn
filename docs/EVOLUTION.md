@@ -6,6 +6,21 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 
 ## Current execution record
 
+Keyboard workflow regression (2026-10-13): the shared execution check reaches
+Step, Back, Forward, Reset, timeline, binary editor and import through native
+Tab/Shift+Tab traversal. Enter activates controls; Arrow/Home/End restore the
+recorded timeline without losing focus, and its accessible value follows the
+selected state. Invalid keyboard submission selects the bad token and preserves
+loaded registers/history. The labeled import retains a visible focus ring;
+valid raw bytes clear the error and reset the program. Targeted Chromium,
+Firefox and WebKit checks pass. macOS WebKit uses native Option+Tab rather than
+changing browser preferences. Playwright supplies the selected file; native OS
+picker, speech input and screen-reader speech remain unverified.
+Complete Firefox 157 and WebKit 27.2 suites pass, as do the Chrome CPU-lab
+suite, site build, routes and documentation checks. The keyboard regression
+preserves the existing displayed-change checks; timeline replay compares actual
+register values because change markers describe the state just left.
+
 Native paging (2026-10-13): 424 literal bytes build the directory and table as
 runtime data, identity map the low 4 MiB, enable PG/WP and record one native #PF
 with error 3, EIP=7C99 and CR2=B000. The handler repairs PTE.RW, uses INVLPG,
@@ -20,6 +35,12 @@ The full native suite passes 102 tests with one expected macOS native-Linux skip
 site/model/doc checks and complete Chrome, Firefox 157 and WebKit 27.2 routes
 pass locally. Browser checks verify the three literal imports, unchanged state
 at the unsupported LGDT boundary, exact native downloads and gallery layout.
+Publication `273096a` passes CI `38368375348`. The first Pages run
+`38369071559` could not see its uploaded artifact; retrying that job exposed
+duplicate artifact names. Fresh deployment `38369452074` succeeds without
+source changes. All 17 checked public files match the verified bytes, and live
+Chrome passes the three imports, native downloads and 1440/320px gallery checks.
+The central Pages mirror `38924f7` changes only 45 paths under `bitborn/`.
 
 Native timer IRQ (2026-10-13): 568 literal bytes remap PIC/PIT IRQ0, install one
 32-bit interrupt gate and record CPU-generated frames. Three separate QEMU boots
@@ -700,7 +721,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 39 | 0 | Translation freshness manifest with explicit source revisions and consistency checks | H | H | 31–38 | Medium | Complete |
 | 40 | 2 | Localized introductory site routes with lang/dir/canonical/hreflang metadata | H | M | 31–39 | Medium | Complete |
 | 41 | 2 | Print-friendly lessons with readable code and source attribution | M | H | 25–27 | Low | Complete: ten pages in three browser print modes, actual 13-page Chromium PDF QA, RTL/LTR code and source URLs; physical printers untested |
-| 42 | 0 | Keyboard accessibility regression for timeline, imports, controls and error focus | H | H | 12 | Low | Open |
+| 42 | 0 | Keyboard accessibility regression for timeline, imports, controls and error focus | H | H | 12 | Low | Complete: three-engine native Tab/Shift+Tab and Enter workflow, focused timeline Arrow/Home/End, invalid-token selection and labeled import focus; OS picker and live AT remain separate |
 | 43 | 0 | Contrast and narrow-screen checks for changed-bit and flag indicators | H | H | Existing CSS | Low | Complete: real tablet overflow fixed; four widths/eight states, 11,072 samples per browser, contrast/local geometry and non-color cues; full-site/animated/live AT review separate |
 | 44 | 2 | Explicit shortcuts guide and screen-reader-friendly execution announcements | M | H | 12,42 | Low | Complete: switch, editable/event guards, atomic manual status and quiet Run ticks; live AT review remains separate |
 | 45 | 2 | CODE_OF_CONDUCT with real, usable reporting paths | H | H | Maintainer/profile evidence | Low | Complete |

@@ -20,6 +20,11 @@ button remains available through Tab and Enter, including Back and Forward.
 Timeline arrow/Home/End navigation is a native focused-control interaction and
 remains available with execution shortcuts off.
 
+In Safari's default Mac settings, use **Option+Tab** (and Option+Shift+Tab
+backwards) to reach buttons and range controls. You can enable **Press Tab to
+highlight each item on a webpage** in Safari's Advanced settings to use plain
+Tab instead; see [Apple's keyboard guidance](https://support.apple.com/en-gb/guide/safari/cpsh003/mac).
+
 Shortcuts ignore form controls, buttons, links, disclosure summaries and
 contenteditable text. Repeated keydown events, text composition, events already
 consumed by another control, and Ctrl/Alt/Meta combinations also do not invoke
@@ -50,3 +55,13 @@ The shared browser check covers all five disabled shortcuts, native button
 activation, enabled Step/Reset/Back/Forward/Run/Pause, editor/contenteditable
 typing, repeat/composition/modifier/consumed events, manual-step location text,
 quiet automatic ticks and final halt status.
+
+It also traverses the page with Tab and Shift+Tab (Option in macOS WebKit) to activate Step, Back,
+Forward and Reset with Enter. A focused timeline accepts ArrowLeft/ArrowRight
+and Home/End without executing new instructions or losing focus; its accessible
+value describes the selected recorded state. Submitting invalid binary through
+the keyboard selects the bad token in the source editor and keeps the loaded
+registers and history. The labeled import field has a visible focus ring, and
+loading a valid raw file clears that error and resets the loaded program.
+Playwright supplies the selected file; the native operating-system picker,
+screen-reader speech and speech input are outside this regression's scope.
