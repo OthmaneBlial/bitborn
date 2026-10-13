@@ -70,7 +70,9 @@ with verified downloads, source and checksums. The boot tools, interactive labs,
 [Native research](docs/architecture/README.md) now spans allocation, interrupts,
 paging and user/kernel privilege boundaries. The latest
 [user-page probes](docs/architecture/user-page.md) check private reads/writes and
-code protection. Native capture provenance and general recovery remain next.
+code protection, with [six recorded native states](assets/user-page-recording.json)
+and checked source/frame/table hashes. A captured-state viewer and broader recovery
+remain next.
 
 **[Read the full roadmap, completed milestones and evidence →](ROADMAP.md)**
 The [live roadmap](https://othmaneblial.github.io/bitborn/roadmap/) follows that same

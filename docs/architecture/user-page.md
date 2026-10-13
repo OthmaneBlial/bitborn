@@ -115,6 +115,39 @@ six privilege-frame words, restores known and saved registers, and returns with
 only saved EIP advanced by ten. Every permitted case leaves the fault log/marker
 zero. The permitted read's changed EAX is checked explicitly.
 
+## Record and recheck the native states
+
+[Capture metadata](../../assets/user-page-recording.json) describes six independent
+QEMU boots. Each case supplies eleven actual files: HMP registers, the fault log,
+kernel stack bytes, complete page directory and table, source RAM, boot loader,
+user stack word, target word, completion word and fault marker. The 66 raw files
+have exact sizes and SHA-256 hashes. Metadata also records nine producer-input
+hashes, the packed 712-byte payload and 1,536-byte BIOS image hashes, QEMU version
+and capture host.
+
+```sh
+python3 tools/record_user_page.py
+python3 -m unittest tests.test_user_page
+```
+
+The recorder boots each curated image, waits for the actual user completion word,
+stops QEMU and reads registers and physical memory through QMP/HMP. It checks each
+snapshot before writing it and confirms the input files and disk stayed unchanged.
+It never generates target instructions or executes imported machine code.
+
+Denied cases retain PUSHAD bytes and the repaired six-word page-fault return
+frame. Permitted cases never enter the fault handler: their kernel stack bytes
+are residue from the initial outward IRETD, **not a page-fault frame**. The
+`stackKind` field makes that distinction explicit.
+
+Stored replay verifies input/file/payload/image hashes, final registers, fault
+logs, applicable frames, all 2,048 paging entries and source RAM with the same
+oracle used for fresh native boots. Corrupted page permissions, fault error codes
+and source RAM are rejected. Replay checks recorded data; it does not re-execute
+the CPU or reconstruct intermediate instruction states. Run the native matrix
+test for fresh execution evidence. These captures are an unreleased source
+milestone and do not change the frozen v0.5.0 release artifacts.
+
 ## Scope
 
 This proves three fixed read/write/code permission probes plus allowed user code,

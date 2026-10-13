@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Record all six native permission states from independent QEMU boots: 66 raw
+  register/memory files and a manifest with nine producer-input hashes, exact
+  payload/image hashes, sizes and capture environment. Recheck stored snapshots
+  with the same native oracle and reject corrupted tables, fault logs and source
+  RAM. Label permitted stack bytes as initial IRETD residue, not a fault frame.
+
 - Extend the user-page proof to six native cases: private reads/writes and
   code-page writes, each denied and narrowly permission-enabled. Use independent
   literal ten-byte read/code-write slots with no relocation or instruction

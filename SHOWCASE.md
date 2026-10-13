@@ -1,5 +1,15 @@
 # Make one bit count
 
+## Inspect the bytes behind a native page fault
+
+The [six permission probes](docs/architecture/user-page.md) now have
+[actual captured states](assets/user-page-recording.json): native register text,
+fault logs, retained stack bytes, complete directory/table pages and source RAM.
+Compare a denied read's PF(5) with a denied write's PF(7), or follow the single
+permission bit that allows each operation. Each file has a size and SHA-256;
+tests recheck the bytes against the literal inputs. These are final QEMU
+snapshots, not a browser simulation or instruction-by-instruction trace.
+
 ## Let one instruction rewrite another
 
 ![Actual first VGA cells from separate QEMU boots: A, then a](assets/self-modifying-demo.gif)

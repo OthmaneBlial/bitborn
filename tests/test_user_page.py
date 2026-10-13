@@ -1,12 +1,12 @@
 """Native CPL3 page permission, exact page tables and retained PF frame proof."""
-import re
+import json
 import struct
 import tempfile
 import unittest
 from pathlib import Path
 from tools.bitborn import ROOT, read_bits, digest
-from tools.build import bios_sector
 from tests.qemu import Guest
+from tests.user_page_checks import CASES, SOURCE_FILES, MEMORY, make_case, capture_guest, check_snapshot
 
 
 class UserPageTests(unittest.TestCase):
@@ -40,96 +40,60 @@ class UserPageTests(unittest.TestCase):
         self.assertEqual(data[6] ^ 2, 7, 'the code-page writable control is one permission bit')
 
     def test_native_permission_probe_matrix(self):
-        path = ROOT / 'tests/fixtures/user-page.bits'
-        paths = [path, ROOT / 'tests/fixtures/user-page-read-slot.bits',
-                 ROOT / 'tests/fixtures/user-page-code-write-slot.bits']
+        paths = [ROOT / name for name in SOURCE_FILES if name.endswith('.bits')]
         source_text = {item: item.read_bytes() for item in paths}
-        source, _ = read_bits(path)
-        slots = {'write': source[273:283], 'read': read_bits(paths[1])[0], 'code-write': read_bits(paths[2])[0]}
-        self.assertTrue(all(len(slot) == 10 for slot in slots.values()))
-        loader, _ = read_bits(ROOT / 'boot/loader.bits')
-        for probe, permitted in ((probe, allowed) for probe in slots for allowed in (False, True)):
+        for probe, permitted in CASES:
             with self.subTest(probe=probe, permitted=permitted), tempfile.TemporaryDirectory() as directory:
-                data = bytearray(source)
-                data[273:283] = slots[probe]  # Copy literal source bytes; no instruction generation or relocation.
-                code_permission = probe == 'code-write' and permitted
-                private_permission = probe != 'code-write' and permitted
-                target = 0x7E00 if probe == 'code-write' else 0xB000
-                if permitted:
-                    if probe == 'code-write':
-                        data[119] ^= 2  # Authored control: user code page becomes writable.
-                    else:
-                        data[149] ^= 4  # Authored control: private page becomes user-accessible.
-                image = Path(directory) / 'user-page.img'
-                expected_disk = bios_sector(loader) + data + bytes(1024 - len(data))
+                data, expected_disk = make_case(probe, permitted)
                 self.assertEqual(len(expected_disk), 1536)
+                image = Path(directory) / 'user-page.img'
                 image.write_bytes(expected_disk)
                 with Guest(image) as guest:
-                    guest.wait_for(lambda _: guest.memory(0x20000, 4) == struct.pack('<I', 0x55667788))
-                    guest.command('stop')
-                    registers = guest.hmp('info registers')
-                    def value(name):
-                        return int(re.search(rf'\b{name}=([0-9a-f]+)', registers).group(1), 16)
-                    self.assertIn('CPL=3', registers)
-                    self.assertIn('HLT=0', registers)
-                    self.assertEqual(value('EIP'), 0x7F25)
-                    self.assertEqual(value('ESP'), 0xA800)
-                    expected_ax = 0xDEADBEEF if probe == 'read' and permitted else 0x23
-                    for name, expected in [('EAX', expected_ax), ('ECX', 0x13579BDF), ('ESI', 0x11223344),
-                                           ('EDI', 0x55667788), ('EDX', 0x11223344)]:
-                        self.assertEqual(value(name), expected)
-                    self.assertEqual(value('EFL') & 0x3601, 0x400)
-                    self.assertRegex(registers, r'CS\s*=001b .*CS32')
-                    for segment in ('DS', 'ES', 'SS'):
-                        self.assertRegex(registers, rf'{segment}\s*=0023 00000000 ffffffff')
-                    self.assertRegex(registers, r'TR\s*=0028 00007fe0 00000067')
-                    self.assertEqual(value('CR0') & 0x80010001, 0x80010001)
-                    self.assertEqual(value('CR3'), 0x4000)
-                    self.assertEqual(value('CR4') & 0x20, 0, 'legacy non-PAE paging')
-                    self.assertEqual(guest.memory(0xA7FC, 4), struct.pack('<I', 0x11223344), 'user PUSH/POP actually use writable page A')
-                    self.assertEqual(guest.memory(0xB000, 4), struct.pack('<I',
-                                     0x11223344 if probe == 'write' and permitted else 0xDEADBEEF))
-                    self.assertEqual(guest.memory(0x6020, 1), bytes([not permitted]))
-                    log = guest.memory(0x6000, 32)
-                    if permitted:
-                        self.assertEqual(log, bytes(32), 'no PF handler delivery in the permission control')
-                    else:
-                        error, eip, cs, flags, esp, ss, cr2, kernel_cs, kernel_ss = struct.unpack('<7IHH', log)
-                        self.assertEqual((error, eip, cs, esp, ss, cr2, kernel_cs, kernel_ss),
-                                         (5 if probe == 'read' else 7, 0x7F11, 0x1B, 0xA800, 0x23, target, 8, 0x10))
-                        self.assertEqual(value('CR2'), target)
-                        self.assertEqual(flags & 0x3601, 0x400)
-                        self.assertEqual(struct.unpack('<6I', guest.memory(0x8FE8, 24)),
-                                         (error, eip + 10, cs, flags, esp, ss), 'only the authored probe slot is skipped')
-                        retained = struct.unpack('<8I', guest.memory(0x8FC8, 32))
-                        self.assertEqual(retained, tuple(value(name) for name in ('EDI', 'ESI', 'EBP')) +
-                                         (0x8FE8,) + tuple(value(name) for name in ('EBX', 'EDX', 'ECX', 'EAX')))
-                    directory_words = struct.unpack('<1024I', guest.memory(0x4000, 4096))
-                    self.assertEqual(directory_words[0] & ~0x60, 0x5007)
-                    self.assertTrue(directory_words[0] & 0x20)
-                    self.assertEqual(directory_words[1:], (0,) * 1023)
-                    pages = struct.unpack('<1024I', guest.memory(0x5000, 4096))
-                    for index, actual in enumerate(pages):
-                        permissions = {7: 7 if code_permission else 5, 10: 7, 32: 7,
-                                       11: 7 if private_permission else 3}.get(index, 3)
-                        self.assertEqual(actual & ~0x60, index * 4096 | permissions, (index, actual))
-                    self.assertTrue(pages[7] & 0x20)
-                    self.assertEqual(bool(pages[7] & 0x40), code_permission, 'denied code write leaves code page clean')
-                    self.assertEqual(pages[10] & 0x60, 0x60)
-                    self.assertEqual(pages[32] & 0x60, 0x60)
-                    self.assertEqual(bool(pages[11] & 0x40), probe == 'write' and permitted,
-                                     'only an allowed private-page write dirties that page')
-                    if private_permission:
-                        self.assertTrue(pages[11] & 0x20, 'permitted private read/write sets accessed')
-                    actual = bytearray(guest.memory(0x7E00, len(data)))
-                    self.assertEqual(actual[461], 0x8B)
-                    actual[461] &= 0xFD
-                    expected_ram = bytearray(data)
-                    if code_permission:
-                        expected_ram[:4] = struct.pack('<I', 0x11223344)
-                    self.assertEqual(actual, expected_ram,
-                                     'only TSS busy and the explicit allowed four-byte code write may change source RAM')
-                    self.assertEqual(guest.memory(0x7C00, 512), expected_disk[:512])
+                    capture = capture_guest(guest)
+                    check_snapshot(self, data, expected_disk, probe, permitted, capture)
                 self.assertEqual(image.read_bytes(), expected_disk)
         for item, original in source_text.items():
             self.assertEqual(item.read_bytes(), original)
+
+    def test_actual_capture_sources_assets_and_snapshot_replay(self):
+        record = json.loads((ROOT / 'assets/user-page-recording.json').read_text())
+        self.assertEqual(record['schema'], 1)
+        self.assertIn('not an instruction trace', record['kind'])
+        self.assertEqual(set(record['sourceSha256']), set(SOURCE_FILES))
+        for source in SOURCE_FILES:
+            self.assertEqual(record['sourceSha256'][source], digest((ROOT / source).read_bytes()), source)
+        self.assertEqual([(item['probe'], item['permitted']) for item in record['captures']], list(CASES))
+        for item in record['captures']:
+            probe, permitted = item['probe'], item['permitted']
+            name = f'{probe}-{"permitted" if permitted else "denied"}'
+            self.assertEqual(item['name'], name)
+            data, image = make_case(probe, permitted)
+            self.assertEqual(item['payloadSize'], len(data))
+            self.assertEqual(item['payloadSha256'], digest(data))
+            self.assertEqual(item['imageSize'], len(image))
+            self.assertEqual(item['imageSha256'], digest(image))
+            self.assertEqual(item['stackKind'], 'retained PF return frame and PUSHAD' if not permitted else
+                             'initial outward-IRETD residue; no page fault frame')
+            self.assertEqual(set(item['assets']), {'registers.txt', *MEMORY})
+            capture = {}
+            for label, asset in item['assets'].items():
+                expected_path = f'assets/user-page-{name}-{label}'
+                self.assertEqual(asset['file'], expected_path)
+                capture[label] = (ROOT / expected_path).read_bytes()
+                self.assertEqual(asset['size'], len(capture[label]))
+                self.assertEqual(asset['sha256'], digest(capture[label]))
+            check_snapshot(self, data, image, probe, permitted, capture)
+
+    def test_snapshot_replay_rejects_wrong_permission_and_frame(self):
+        record = json.loads((ROOT / 'assets/user-page-recording.json').read_text())
+        item = next(value for value in record['captures'] if value['name'] == 'read-denied')
+        captured = {label: (ROOT / asset['file']).read_bytes() for label, asset in item['assets'].items()}
+        data, image = make_case('read', False)
+        for label, offset, replacement in [('table.bin', 12, 7), ('log.bin', 0, 7), ('ram.bin', 300, 0xFF)]:
+            with self.subTest(label=label):
+                malformed = dict(captured)
+                value = bytearray(malformed[label])
+                value[offset] = replacement
+                malformed[label] = bytes(value)
+                with self.assertRaises(AssertionError):
+                    check_snapshot(self, data, image, 'read', False, malformed)

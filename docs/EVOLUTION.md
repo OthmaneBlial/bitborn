@@ -6,6 +6,22 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 
 ## Current execution record
 
+Permission capture provenance (2026-10-13): six independent QEMU boots produce
+66 actual register/memory files and a manifest with nine producer-input hashes,
+exact payload/image hashes, sizes and capture environment. Shared native/stored
+checks cover registers, logs, applicable privilege frames, all 2,048 paging
+entries and source/loader RAM. Three corrupted snapshots are rejected. Permitted
+kernel stack bytes are explicitly initial outward-IRETD residue, never a fault
+frame. Five focused tests pass; stored replay is data validation, not CPU
+re-execution or an invented instruction trace.
+The full native suite passes 123 tests with one expected macOS native-Linux skip.
+The complete site/model/doc suite passes; all 67 capture/metadata files match
+their two generated site copies byte for byte. Source fixtures remain unchanged.
+
+Permission-matrix source `b4cfd9a` passes CI `38411237016` and deployment
+`38412325428`; five checked live README/roadmap/page-guide/evolution/progress
+files match. Mirror `cf23f40` changes only eight `bitborn/` paths.
+
 Permission matrix (2026-10-13): two independent literal ten-byte slots extend
 the unchanged 712-byte template with private read and code-write probes. Hosts
 copy those exact authored bytes into the declared slot without instruction
@@ -974,7 +990,8 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 71 | 1 | Prove a curated protected-mode user/kernel privilege transition with explicit native frames and controls | H | M | GDT, exception frames, IRETD | High | Complete: ring-three entry, TSS-selected HLT/GP return and CMC control; callable INT gate/IRETD and one-bit DPL denial pass four native cases with exact frames; no memory-isolation, Linux ABI or scheduling claim |
 | 72 | 1 | Prove a bounded user/supervisor page-permission boundary with native PF frames and a one-bit control | H | M | 71, native paging | High | Complete: native denied write PF(7)/CR2, protected word, privilege-frame return and one-bit user permission; all entries, user stack/data, dirty bits and source integrity checked; no general sandbox claim |
 | 73 | 1 | Extend the bounded permission proof with actual negative user-read and code-write probes | H | M | 72 | High | Complete: two literal slots and six native denied/permitted cases; PF 5/7, exact CR2/frames, explicit read EAX and four-byte code control, all tables/dirty bits and source/disk integrity; no general isolation claim |
-| 74 | 1 | Record all six native permission snapshots with source/frame/table hashes and replayable provenance | H | H | 73, native recorder patterns | Medium | Pending: actual registers, logs, stack, directory/table and source RAM; independently recheck stored captures and distinguish native data from browser emulation |
+| 74 | 1 | Record all six native permission snapshots with source/frame/table hashes and replayable provenance | H | H | 73, native recorder patterns | Medium | Complete: six real boots, 66 raw files, nine input hashes, exact payload/image hashes and stored-state oracle; corruptions rejected and permitted initial-stack residue labeled explicitly |
+| 75 | 1 | Add a read-only viewer for the recorded native permission states | H | M | 74, native state viewer patterns | Medium | Pending: compare actual fault/no-fault logs, register effects and selected paging entries with clear provenance and no invented execution trace |
 
 Large tasks are divided into useful verified milestones. Native experiments only
 become capabilities after literal source review and real QEMU checks; hardware

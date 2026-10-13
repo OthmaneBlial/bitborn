@@ -1,0 +1,426 @@
+{
+  "schema": 1,
+  "kind": "Actual final QMP/HMP register and physical-memory snapshots from six independent QEMU boots; not an instruction trace or arbitrary-process isolation claim",
+  "qemu": "QEMU emulator version 11.1.1",
+  "host": {
+    "system": "Darwin",
+    "machine": "arm64"
+  },
+  "registerTextFormat": "Native HMP output, LF endings and trailing whitespace removed",
+  "sourceSha256": {
+    "tools/record_user_page.py": "75fbd3dc25257f819e5943e5e3037250e038b0aac941e04d7dddc4c26393dceb",
+    "tools/build.py": "0d7fccd1a6be5c7336dbd8bd9f56bd0d05999cf1c5a3ae3e454b4303ced67509",
+    "tools/bitborn.py": "06a1bc8ae1aeefd572a0e7755d0976fbc15247841157f531d56e74269f6ae609",
+    "tests/qemu.py": "30bccf107c84c82d2045de4c605d5e8104eaa682b3e8e0b165ff16e0eb5315c2",
+    "tests/user_page_checks.py": "9d8d60245b0089fe118a04ac608737f7497097ce9252f2cef8ae5906fc35fde9",
+    "boot/loader.bits": "4553161a5d37d3f3d7a4fae75c7d61f277163601e7f4b65986a0de37f5b1b539",
+    "tests/fixtures/user-page.bits": "8f2ba52e64a672693078c70fe8fb2fb144921e4e69a759ea2db1fd1bc01f1ad3",
+    "tests/fixtures/user-page-read-slot.bits": "bd13c2ea60ff0f88752574e2bfa38032454b31a7689fe26d3be69c3080f82d92",
+    "tests/fixtures/user-page-code-write-slot.bits": "8749c264727c9dddf410cc57af427d71b5d738da96f9636a60c5f7e6fa6591fb"
+  },
+  "captures": [
+    {
+      "name": "write-denied",
+      "probe": "write",
+      "permitted": false,
+      "payloadSize": 712,
+      "payloadSha256": "ea2f4c2cae715588a7a39ef0b2128706b11fc546f089f3221042ec4a21ecdf99",
+      "imageSize": 1536,
+      "imageSha256": "04c104cfa929cfd2df8f86fadfdc5ed125f030496c8878ee7f358a52bf23aeb5",
+      "stackKind": "retained PF return frame and PUSHAD",
+      "assets": {
+        "registers.txt": {
+          "file": "assets/user-page-write-denied-registers.txt",
+          "size": 1380,
+          "sha256": "391db9d698f0d593a23457239affea5388be30b5b8cb86784d9dcdfa0a105508"
+        },
+        "log.bin": {
+          "file": "assets/user-page-write-denied-log.bin",
+          "size": 32,
+          "sha256": "6bc87c4bf57fbcfbe4d351aaefa4d9d08b715a914ff4fd0603944b2204b6267b"
+        },
+        "stack.bin": {
+          "file": "assets/user-page-write-denied-stack.bin",
+          "size": 56,
+          "sha256": "c8674097f9459aefd5c46ce5958483578e5e8d161a669c8728a64cfe6e9c77b1"
+        },
+        "directory.bin": {
+          "file": "assets/user-page-write-denied-directory.bin",
+          "size": 4096,
+          "sha256": "2afc76f88a4d72d8dbf6c0204816dbe51d17a454c42fc03342e936b3981d719f"
+        },
+        "table.bin": {
+          "file": "assets/user-page-write-denied-table.bin",
+          "size": 4096,
+          "sha256": "5dbdbc9ce15e061749ed4e6f157cc94bfd36c9f6179d13ecec4e04068dd7ab21"
+        },
+        "ram.bin": {
+          "file": "assets/user-page-write-denied-ram.bin",
+          "size": 712,
+          "sha256": "8810153dcddb22c00dc11aa6aa0b8e00e0285f0ae03ceb961cd32ae6a0124f4c"
+        },
+        "loader.bin": {
+          "file": "assets/user-page-write-denied-loader.bin",
+          "size": 512,
+          "sha256": "29d71afa4f3c621536f51e135c097fce28f80039de3553b4b8c5a4fdabbbc9eb"
+        },
+        "user-stack.bin": {
+          "file": "assets/user-page-write-denied-user-stack.bin",
+          "size": 4,
+          "sha256": "c832fbe8a69c8694f85d3f3d6bdace5b99c4c4153c4f5ca5e3d21e22eb218ce3"
+        },
+        "target.bin": {
+          "file": "assets/user-page-write-denied-target.bin",
+          "size": 4,
+          "sha256": "d9e0d4c3850aa130f909e1bcafebea98a16700e02171c1df5a2fe31789d94b0f"
+        },
+        "completion.bin": {
+          "file": "assets/user-page-write-denied-completion.bin",
+          "size": 4,
+          "sha256": "157d490c2239fd0f26f3258501ee7384a1225a2d45b8b6b60c23900db29d187a"
+        },
+        "fault-marker.bin": {
+          "file": "assets/user-page-write-denied-fault-marker.bin",
+          "size": 1,
+          "sha256": "4bf5122f344554c53bde2ebb8cd2b7e3d1600ad631c385a5d7cce23c7785459a"
+        }
+      }
+    },
+    {
+      "name": "write-permitted",
+      "probe": "write",
+      "permitted": true,
+      "payloadSize": 712,
+      "payloadSha256": "9b2518df99d2f7c26179ccc085fafaf1a16024f4aa4a3943ba55765d23778b1e",
+      "imageSize": 1536,
+      "imageSha256": "6f52c4665432d7b32bc506928e3ea94253767fbcbcc5e2b05250c17ac14bd5f4",
+      "stackKind": "initial outward-IRETD residue; no page fault frame",
+      "assets": {
+        "registers.txt": {
+          "file": "assets/user-page-write-permitted-registers.txt",
+          "size": 1380,
+          "sha256": "c85f78fc10570318d63a51d302ba389c3bdb4d1f5f80dd9a4e5f8f73e939a34d"
+        },
+        "log.bin": {
+          "file": "assets/user-page-write-permitted-log.bin",
+          "size": 32,
+          "sha256": "66687aadf862bd776c8fc18b8e9f8e20089714856ee233b3902a591d0d5f2925"
+        },
+        "stack.bin": {
+          "file": "assets/user-page-write-permitted-stack.bin",
+          "size": 56,
+          "sha256": "5f7da75662c3d786f2012d8ec406301f274e90cb66503d580718f0fa826cf158"
+        },
+        "directory.bin": {
+          "file": "assets/user-page-write-permitted-directory.bin",
+          "size": 4096,
+          "sha256": "2afc76f88a4d72d8dbf6c0204816dbe51d17a454c42fc03342e936b3981d719f"
+        },
+        "table.bin": {
+          "file": "assets/user-page-write-permitted-table.bin",
+          "size": 4096,
+          "sha256": "e458b412ac320667a0939392dcd4ebb1ef8539fb47ed43c402b67300c3a126d3"
+        },
+        "ram.bin": {
+          "file": "assets/user-page-write-permitted-ram.bin",
+          "size": 712,
+          "sha256": "b59fc3b3019e883ea986dd8da96bcd5c0729221f4d98e3b354ac0cf55e28f21d"
+        },
+        "loader.bin": {
+          "file": "assets/user-page-write-permitted-loader.bin",
+          "size": 512,
+          "sha256": "29d71afa4f3c621536f51e135c097fce28f80039de3553b4b8c5a4fdabbbc9eb"
+        },
+        "user-stack.bin": {
+          "file": "assets/user-page-write-permitted-user-stack.bin",
+          "size": 4,
+          "sha256": "c832fbe8a69c8694f85d3f3d6bdace5b99c4c4153c4f5ca5e3d21e22eb218ce3"
+        },
+        "target.bin": {
+          "file": "assets/user-page-write-permitted-target.bin",
+          "size": 4,
+          "sha256": "c832fbe8a69c8694f85d3f3d6bdace5b99c4c4153c4f5ca5e3d21e22eb218ce3"
+        },
+        "completion.bin": {
+          "file": "assets/user-page-write-permitted-completion.bin",
+          "size": 4,
+          "sha256": "157d490c2239fd0f26f3258501ee7384a1225a2d45b8b6b60c23900db29d187a"
+        },
+        "fault-marker.bin": {
+          "file": "assets/user-page-write-permitted-fault-marker.bin",
+          "size": 1,
+          "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+        }
+      }
+    },
+    {
+      "name": "read-denied",
+      "probe": "read",
+      "permitted": false,
+      "payloadSize": 712,
+      "payloadSha256": "cc6eb8931d08efd3daea02fd96a1a8c99627b06c4dc37a8335efaa5e6ba892e0",
+      "imageSize": 1536,
+      "imageSha256": "112af134ec5c31c19fabf8a54c9bc2f99d656dd584b61efe3be3b30f83e5f6e1",
+      "stackKind": "retained PF return frame and PUSHAD",
+      "assets": {
+        "registers.txt": {
+          "file": "assets/user-page-read-denied-registers.txt",
+          "size": 1380,
+          "sha256": "391db9d698f0d593a23457239affea5388be30b5b8cb86784d9dcdfa0a105508"
+        },
+        "log.bin": {
+          "file": "assets/user-page-read-denied-log.bin",
+          "size": 32,
+          "sha256": "3a875f31e85bc7c5bb6329e1ac895de9185c2c92ada00bece3a04e3a83eb7de3"
+        },
+        "stack.bin": {
+          "file": "assets/user-page-read-denied-stack.bin",
+          "size": 56,
+          "sha256": "2da1f66e8764c00d2d39d18d4e30c660f694db0e7d868fa8fc55f0940376f57d"
+        },
+        "directory.bin": {
+          "file": "assets/user-page-read-denied-directory.bin",
+          "size": 4096,
+          "sha256": "2afc76f88a4d72d8dbf6c0204816dbe51d17a454c42fc03342e936b3981d719f"
+        },
+        "table.bin": {
+          "file": "assets/user-page-read-denied-table.bin",
+          "size": 4096,
+          "sha256": "5dbdbc9ce15e061749ed4e6f157cc94bfd36c9f6179d13ecec4e04068dd7ab21"
+        },
+        "ram.bin": {
+          "file": "assets/user-page-read-denied-ram.bin",
+          "size": 712,
+          "sha256": "c9c16690b3d78f15303e8b8a736ac42b917536ee20fbb90a73af54701fb5df43"
+        },
+        "loader.bin": {
+          "file": "assets/user-page-read-denied-loader.bin",
+          "size": 512,
+          "sha256": "29d71afa4f3c621536f51e135c097fce28f80039de3553b4b8c5a4fdabbbc9eb"
+        },
+        "user-stack.bin": {
+          "file": "assets/user-page-read-denied-user-stack.bin",
+          "size": 4,
+          "sha256": "c832fbe8a69c8694f85d3f3d6bdace5b99c4c4153c4f5ca5e3d21e22eb218ce3"
+        },
+        "target.bin": {
+          "file": "assets/user-page-read-denied-target.bin",
+          "size": 4,
+          "sha256": "d9e0d4c3850aa130f909e1bcafebea98a16700e02171c1df5a2fe31789d94b0f"
+        },
+        "completion.bin": {
+          "file": "assets/user-page-read-denied-completion.bin",
+          "size": 4,
+          "sha256": "157d490c2239fd0f26f3258501ee7384a1225a2d45b8b6b60c23900db29d187a"
+        },
+        "fault-marker.bin": {
+          "file": "assets/user-page-read-denied-fault-marker.bin",
+          "size": 1,
+          "sha256": "4bf5122f344554c53bde2ebb8cd2b7e3d1600ad631c385a5d7cce23c7785459a"
+        }
+      }
+    },
+    {
+      "name": "read-permitted",
+      "probe": "read",
+      "permitted": true,
+      "payloadSize": 712,
+      "payloadSha256": "1768d6949819c8fed0b2c49f6c97747c929b25a3d99daf6e21a2acc474d8f303",
+      "imageSize": 1536,
+      "imageSha256": "65ef421ddbd486bbdf9a696890da5ff6211ca29946e33794d5c53b26f5c1c29c",
+      "stackKind": "initial outward-IRETD residue; no page fault frame",
+      "assets": {
+        "registers.txt": {
+          "file": "assets/user-page-read-permitted-registers.txt",
+          "size": 1380,
+          "sha256": "41c4714d94e2cf09d836921f56d7fb2d71de124d3e1a688f4188a5213740cf4e"
+        },
+        "log.bin": {
+          "file": "assets/user-page-read-permitted-log.bin",
+          "size": 32,
+          "sha256": "66687aadf862bd776c8fc18b8e9f8e20089714856ee233b3902a591d0d5f2925"
+        },
+        "stack.bin": {
+          "file": "assets/user-page-read-permitted-stack.bin",
+          "size": 56,
+          "sha256": "5f7da75662c3d786f2012d8ec406301f274e90cb66503d580718f0fa826cf158"
+        },
+        "directory.bin": {
+          "file": "assets/user-page-read-permitted-directory.bin",
+          "size": 4096,
+          "sha256": "2afc76f88a4d72d8dbf6c0204816dbe51d17a454c42fc03342e936b3981d719f"
+        },
+        "table.bin": {
+          "file": "assets/user-page-read-permitted-table.bin",
+          "size": 4096,
+          "sha256": "1474bae1e8811fe82eb80d22e44fe95a105b357cf32b9e5a2cd863026596132a"
+        },
+        "ram.bin": {
+          "file": "assets/user-page-read-permitted-ram.bin",
+          "size": 712,
+          "sha256": "0c2c369e80c591f14472b3fa6aaa0c3f4f9f9cc80833b25862a74da3c8ff056e"
+        },
+        "loader.bin": {
+          "file": "assets/user-page-read-permitted-loader.bin",
+          "size": 512,
+          "sha256": "29d71afa4f3c621536f51e135c097fce28f80039de3553b4b8c5a4fdabbbc9eb"
+        },
+        "user-stack.bin": {
+          "file": "assets/user-page-read-permitted-user-stack.bin",
+          "size": 4,
+          "sha256": "c832fbe8a69c8694f85d3f3d6bdace5b99c4c4153c4f5ca5e3d21e22eb218ce3"
+        },
+        "target.bin": {
+          "file": "assets/user-page-read-permitted-target.bin",
+          "size": 4,
+          "sha256": "d9e0d4c3850aa130f909e1bcafebea98a16700e02171c1df5a2fe31789d94b0f"
+        },
+        "completion.bin": {
+          "file": "assets/user-page-read-permitted-completion.bin",
+          "size": 4,
+          "sha256": "157d490c2239fd0f26f3258501ee7384a1225a2d45b8b6b60c23900db29d187a"
+        },
+        "fault-marker.bin": {
+          "file": "assets/user-page-read-permitted-fault-marker.bin",
+          "size": 1,
+          "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+        }
+      }
+    },
+    {
+      "name": "code-write-denied",
+      "probe": "code-write",
+      "permitted": false,
+      "payloadSize": 712,
+      "payloadSha256": "241f4bd16c8c122c32f111b5aad37621edc558db0f51124f4c6705a33da79af9",
+      "imageSize": 1536,
+      "imageSha256": "a5af9e2cbf9de83fa5c248063f3dfe39910393053dec7a964f2f16f5339352c7",
+      "stackKind": "retained PF return frame and PUSHAD",
+      "assets": {
+        "registers.txt": {
+          "file": "assets/user-page-code-write-denied-registers.txt",
+          "size": 1380,
+          "sha256": "b3849a91e1d1b103cce0fdfc2392b4da5fe2c5139b7162ba7aa06a5560fc4886"
+        },
+        "log.bin": {
+          "file": "assets/user-page-code-write-denied-log.bin",
+          "size": 32,
+          "sha256": "19aa34921ca0e9d9eaa40bcd51e3cf563d6fe27d8cf8d21a827efcd8326ff2b1"
+        },
+        "stack.bin": {
+          "file": "assets/user-page-code-write-denied-stack.bin",
+          "size": 56,
+          "sha256": "c8674097f9459aefd5c46ce5958483578e5e8d161a669c8728a64cfe6e9c77b1"
+        },
+        "directory.bin": {
+          "file": "assets/user-page-code-write-denied-directory.bin",
+          "size": 4096,
+          "sha256": "2afc76f88a4d72d8dbf6c0204816dbe51d17a454c42fc03342e936b3981d719f"
+        },
+        "table.bin": {
+          "file": "assets/user-page-code-write-denied-table.bin",
+          "size": 4096,
+          "sha256": "5dbdbc9ce15e061749ed4e6f157cc94bfd36c9f6179d13ecec4e04068dd7ab21"
+        },
+        "ram.bin": {
+          "file": "assets/user-page-code-write-denied-ram.bin",
+          "size": 712,
+          "sha256": "bfe30950877dabe2aa986697506385434d8c404fb0416826a00889ab7365dacd"
+        },
+        "loader.bin": {
+          "file": "assets/user-page-code-write-denied-loader.bin",
+          "size": 512,
+          "sha256": "29d71afa4f3c621536f51e135c097fce28f80039de3553b4b8c5a4fdabbbc9eb"
+        },
+        "user-stack.bin": {
+          "file": "assets/user-page-code-write-denied-user-stack.bin",
+          "size": 4,
+          "sha256": "c832fbe8a69c8694f85d3f3d6bdace5b99c4c4153c4f5ca5e3d21e22eb218ce3"
+        },
+        "target.bin": {
+          "file": "assets/user-page-code-write-denied-target.bin",
+          "size": 4,
+          "sha256": "d9e0d4c3850aa130f909e1bcafebea98a16700e02171c1df5a2fe31789d94b0f"
+        },
+        "completion.bin": {
+          "file": "assets/user-page-code-write-denied-completion.bin",
+          "size": 4,
+          "sha256": "157d490c2239fd0f26f3258501ee7384a1225a2d45b8b6b60c23900db29d187a"
+        },
+        "fault-marker.bin": {
+          "file": "assets/user-page-code-write-denied-fault-marker.bin",
+          "size": 1,
+          "sha256": "4bf5122f344554c53bde2ebb8cd2b7e3d1600ad631c385a5d7cce23c7785459a"
+        }
+      }
+    },
+    {
+      "name": "code-write-permitted",
+      "probe": "code-write",
+      "permitted": true,
+      "payloadSize": 712,
+      "payloadSha256": "b89fa4e2849001d66e4a5a3c246b3aa9b5a59dcfbd1457cf514ed5592011434d",
+      "imageSize": 1536,
+      "imageSha256": "1fd9b5fe7d4f4946adcc3985e6c369a817cfd1acf5d35f737cfa5735d55fce11",
+      "stackKind": "initial outward-IRETD residue; no page fault frame",
+      "assets": {
+        "registers.txt": {
+          "file": "assets/user-page-code-write-permitted-registers.txt",
+          "size": 1380,
+          "sha256": "c85f78fc10570318d63a51d302ba389c3bdb4d1f5f80dd9a4e5f8f73e939a34d"
+        },
+        "log.bin": {
+          "file": "assets/user-page-code-write-permitted-log.bin",
+          "size": 32,
+          "sha256": "66687aadf862bd776c8fc18b8e9f8e20089714856ee233b3902a591d0d5f2925"
+        },
+        "stack.bin": {
+          "file": "assets/user-page-code-write-permitted-stack.bin",
+          "size": 56,
+          "sha256": "5f7da75662c3d786f2012d8ec406301f274e90cb66503d580718f0fa826cf158"
+        },
+        "directory.bin": {
+          "file": "assets/user-page-code-write-permitted-directory.bin",
+          "size": 4096,
+          "sha256": "2afc76f88a4d72d8dbf6c0204816dbe51d17a454c42fc03342e936b3981d719f"
+        },
+        "table.bin": {
+          "file": "assets/user-page-code-write-permitted-table.bin",
+          "size": 4096,
+          "sha256": "7097fb9b06939586a8348485f286ea60bb8923b4f0c5105b794b5022c65b9039"
+        },
+        "ram.bin": {
+          "file": "assets/user-page-code-write-permitted-ram.bin",
+          "size": 712,
+          "sha256": "400982060dd740e4fb37a98ccd7c97b285717e71092210057450f0460f6e14f2"
+        },
+        "loader.bin": {
+          "file": "assets/user-page-code-write-permitted-loader.bin",
+          "size": 512,
+          "sha256": "29d71afa4f3c621536f51e135c097fce28f80039de3553b4b8c5a4fdabbbc9eb"
+        },
+        "user-stack.bin": {
+          "file": "assets/user-page-code-write-permitted-user-stack.bin",
+          "size": 4,
+          "sha256": "c832fbe8a69c8694f85d3f3d6bdace5b99c4c4153c4f5ca5e3d21e22eb218ce3"
+        },
+        "target.bin": {
+          "file": "assets/user-page-code-write-permitted-target.bin",
+          "size": 4,
+          "sha256": "d9e0d4c3850aa130f909e1bcafebea98a16700e02171c1df5a2fe31789d94b0f"
+        },
+        "completion.bin": {
+          "file": "assets/user-page-code-write-permitted-completion.bin",
+          "size": 4,
+          "sha256": "157d490c2239fd0f26f3258501ee7384a1225a2d45b8b6b60c23900db29d187a"
+        },
+        "fault-marker.bin": {
+          "file": "assets/user-page-code-write-permitted-fault-marker.bin",
+          "size": 1,
+          "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+        }
+      }
+    }
+  ],
+  "reproduce": "python3 tools/record_user_page.py"
+}
