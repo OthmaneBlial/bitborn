@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add a 496-byte literal ring-three privilege research fixture: outward IRETD,
+  forbidden user HLT, native #GP(0), TSS-selected kernel stack, captured original
+  and repaired frames, register/DF restoration and return to the user stack.
+  One bit changes HLT to CMC, removing the fault while explicitly changing CF.
+  Flat memory remains shared; syscall gates and scheduling are separate work.
+
 ## 0.5.0 — 2026-10-13
 
 Published from `f5b444a0ebb6c4dd52592c41443141a34f77e066`; main/tag CI and

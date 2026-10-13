@@ -184,6 +184,10 @@ the first C6 store before keyboard play.
 
 ## Technical references
 
+The [ring-three privilege research fixture](user-privilege.md) proves outward
+IRETD, a native HLT privilege fault, TSS-selected kernel stack and return to user
+code. Its flat memory remains shared; syscall gates and scheduling are separate.
+
 - [Intel Software Developer's Manuals](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html): instruction encodings, real mode and flags.
 - [QEMU invocation reference](https://www.qemu.org/docs/master/system/invocation.html): floppy, serial, TCG and QMP options.
 - [QEMU monitor reference](https://www.qemu.org/docs/master/system/monitor.html): register/memory inspection and real screendumps.

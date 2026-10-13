@@ -11,6 +11,7 @@ website progress; the [README](README.md) keeps a short summary.
 
 | Milestone | Progress |
 | --- | --- |
+| [Native ring-three privilege research](docs/architecture/user-privilege.md) | ✅ Literal 496-byte fixture and F4→F5 control pass QEMU: outward IRETD, HLT #GP(0), TSS kernel stack, six-word frame, register/DF restoration and returned user stack; no memory isolation, syscall gate or scheduling proof |
 | [v0.5.0 distribution](docs/release-v0.5.0.md) | ✅ Main/tag CI passed; clean source archive passes 114 Python tests and three browser engines, with 112 rebuilt hashes and 1,021 unchanged source files; all 89 public attachments re-downloaded anonymously, with 88 listed checksums and 14 primary BIOS images |
 | Release staging preserves its recorded revision | ✅ Different version/source commits rejected before writes; same-revision repacking retained, isolated regressions pass and 31 frozen v0.4.0 files remain unchanged |
 | 512-byte handwritten boot program and four byte tools | ✅ QEMU-tested, public |

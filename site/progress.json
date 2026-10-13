@@ -2,6 +2,10 @@
   "updated": "2026-10-13",
   "milestones": [
     {
+      "milestone": "Native ring-three privilege research",
+      "progress": "\u2705 Literal 496-byte fixture and F4\u2192F5 control pass QEMU: outward IRETD, HLT #GP(0), TSS kernel stack, six-word frame, register/DF restoration and returned user stack; no memory isolation, syscall gate or scheduling proof"
+    },
+    {
       "milestone": "v0.5.0 distribution",
       "progress": "\u2705 Main/tag CI passed; clean source archive passes 114 Python tests and three browser engines, with 112 rebuilt hashes and 1,021 unchanged source files; all 89 public attachments re-downloaded anonymously, with 88 listed checksums and 14 primary BIOS images"
     },
