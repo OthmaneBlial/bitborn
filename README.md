@@ -64,7 +64,8 @@ Updated **2026-10-13**. **[v0.4.0 is public](https://github.com/OthmaneBlial/bit
 with verified downloads, source and checksums. The boot tools, interactive labs,
 challenges and one-bit native experiments are working; recent lessons cover
 byte order, stack calls and flags. A new [guarded native allocator](examples/bounded-allocator/README.md)
-shows how one request bit changes final-byte ownership. Next comes interrupt and paging research.
+shows how one request bit changes final-byte ownership, in QEMU and the CPU lab.
+Next comes interrupt and paging research.
 
 **[Read the full roadmap, completed milestones and evidence →](ROADMAP.md)**
 The [live roadmap](https://othmaneblial.github.io/bitborn/roadmap/) follows that same

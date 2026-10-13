@@ -255,7 +255,25 @@ try {
   for(let count=0;count<3;count++)await page.locator('#step').click();
   assert.equal(await page.locator('[data-register="AX"] .register-value').textContent(),'8000');
   assert.equal(await page.locator('[data-flag="CF"] strong').textContent(),'0');assert.equal(await page.locator('[data-flag="OF"] strong').textContent(),'1');
-  await page.locator('#flags').scrollIntoViewIfNeeded();await capture('The reviewed 7FFF +1 source gives8000 with CF=0 and OF=1 in the model; native QEMU flag checks are separate.');await encode();
+  await page.locator('#flags').scrollIntoViewIfNeeded();await capture('The reviewed 7FFF +1 source gives8000 with CF=0 and OF=1 in the model; native QEMU flag checks are separate.');
+  for(const [name,steps,lastByte] of [['program',135,'00'],['control',137,'44']]) {
+    const source=await readFile(resolve(root,`examples/bounded-allocator/${name}.bits`),'utf8');
+    await page.locator('#binary-editor').fill(source);await page.locator('#load-program').click();
+    for(let count=0;count<steps;count++)await page.locator('#step').click();
+    assert.equal(await page.locator('#run-state').textContent(),'HALTED');
+    await page.locator('#memory-address').fill('01FFF');await page.locator('#memory-form').evaluate(form=>form.requestSubmit());
+    assert.equal(await page.locator('[data-address="0200F"]').textContent(),lastByte);
+    assert.equal(await page.locator('[data-address="01FFF"]').textContent(),'A5');
+    assert.equal(await page.locator('[data-address="02010"]').textContent(),'5A');
+    await page.locator('#memory').scrollIntoViewIfNeeded();await capture(`Actual model ${name} halt after ${steps} instructions: last arena byte ${lastByte}, both guards intact. Separate QEMU snapshots verify the native result.`);
+  }
+  await page.locator('#timeline').focus();await page.keyboard.press('Home');
+  assert.equal(await page.locator('[data-address="0200F"]').textContent(),'00');
+  await page.locator('#memory').scrollIntoViewIfNeeded();await capture('Recorded model rewind restores the empty arena and initial state. Native halt captures do not provide rewind.');
+  await page.locator('#timeline').focus();await page.keyboard.press('End');
+  await page.locator('#memory-address').fill('02100');await page.locator('#memory-form').evaluate(form=>form.requestSubmit());
+  assert.equal(await page.locator('[data-address="02100"]').textContent(),'FF');
+  await page.locator('#memory').scrollIntoViewIfNeeded();await capture('Recorded model replay restores the control halt and five request log entries; the literal source remains unchanged.');await encode();
 
   await begin('challenges');
   await page.goto(new URL('challenges/?id=repair-boot',base).href);
@@ -315,6 +333,7 @@ try {
   for(const name of ['exit-code','exit-code-small']) {const source=`examples/${name}/program.bits`;metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');}
   for(const source of ['site/learn/index.html','site/learn/byte-order.mjs','site/learn/byte-order-source.mjs','docs/tutorials/byte-order.bits'])metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');
   const signedSourcePath='challenges/signed-overflow/solution.bits';metadata.sourceSha256[signedSourcePath]=createHash('sha256').update(await readFile(resolve(root,signedSourcePath))).digest('hex');
+  for(const name of ['program','control']) {const source=`examples/bounded-allocator/${name}.bits`;metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');}
   await writeFile(resolve(root,'assets/browser-demo-recording.json'),JSON.stringify(metadata,null,2)+'\n');
   console.log(`Recorded ${captures.length} genuine browser GIFs with frame/source hashes and explicit inspection/simulation provenance.`);
 } finally {await browser?.close();await new Promise(resolve=>server.close(resolve));}

@@ -47,6 +47,7 @@ exact source revision, generated copies and every artifact hash across builds.
 | [Direction-flag repair lesson](docs/tutorials/repair-direction.md) | `challenges/direction-flag/`, `tests/test_direction_repair.py` | `python3 -m unittest tests.test_direction_repair` |
 | Shared browser CPU and history | `site/simulator.mjs`, `site/history.mjs` | `node tests/test_cpu.mjs` and `node tests/test_history.mjs` |
 | Register-copy execution | `site/simulator.mjs`, `tests/fixtures/register-mov.bits` | `node tests/test_register_mov.mjs` and `python3 -m unittest tests.test_register_mov` |
+| [Word-register ADD](docs/architecture/register-add.md) | Shared decoder/flags, `tests/fixtures/register-add.bits` | `node tests/test_flags_properties.mjs`, `python3 -m unittest tests.test_register_add` and allocator browser checks |
 | Mode/bit/address inspection | `site/encoding.mjs`, `docs/instruction-encoding/fixtures/` | `node tests/test_encoding.mjs` and `node tests/test_memory_encoding.mjs` |
 | [Linux syscall inspection](docs/instruction-encoding/linux-syscalls.md) | `site/encoding.mjs`, `tools/site_build.py`, canonical exit payloads | `node tests/test_linux_encoding.mjs` and `npm run test:cross-browser` |
 | [Progressive byte-order lesson](docs/tutorials/byte-order.md) | `docs/tutorials/byte-order.bits`, `site/learn/byte-order.mjs`, shared decoder | `node tests/test_byte_order.mjs`, `node tests/browser_routes.mjs` and `npm run test:cross-browser` |

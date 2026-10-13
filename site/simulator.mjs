@@ -52,6 +52,14 @@ export function decode(bytes, offset = 0) {
       {width,register:registers[width===2?destination:destination%4],source:registers[width===2?source:source%4],high:width===1&&destination>=4,sourceHigh:width===1&&source>=4});
     result.fields[1]='ModR/M';return result;
   }
+  if (opcode===0x01 || opcode===0x03) {
+    const modrm=byte(1);
+    if(modrm<0xC0)throw new Error('Memory-form ADD is outside this limited simulator. No instruction was executed.');
+    const reg=registers[(modrm>>3)&7],rm=registers[modrm&7];
+    const register=opcode===0x03?reg:rm,source=opcode===0x03?rm:reg;
+    const result=instruction(2,`ADD ${register}, ${source}`,'Add the two original 16-bit register values. The direction bit chooses the destination; all arithmetic status flags are updated, while IF and DF are preserved.','addRegister',{register,source});
+    result.fields[1]='ModR/M';return result;
+  }
   if ([0x05, 0x2D, 0x3D].includes(opcode)) return instruction(3, `${({5:'ADD',45:'SUB',61:'CMP'})[opcode]} AX, ${word(1)}`, 'A 16-bit immediate follows the opcode in little-endian order. CMP updates flags without changing AX.', ({5:'add',45:'sub',61:'cmp'})[opcode], {value: word(1)});
   if ([0x14,0x15,0x1C,0x1D].includes(opcode)) {
     const subtract=Boolean(opcode&8),width=opcode&1?16:8,value=width===16?word(1):byte(1),name=subtract?'SBB':'ADC';
@@ -183,6 +191,7 @@ export function step(bytes, state) {
     case 'segment': state[instruction.segment] = state[instruction.source]; break;
     case 'xor': state[instruction.register] ^= state[instruction.source]; logicFlags(state[instruction.register], 16); break;
     case 'add': state.AX = arithmeticFlags(state, state.AX, instruction.value, false); break;
+    case 'addRegister': state[instruction.register] = arithmeticFlags(state,state[instruction.register],state[instruction.source],false);break;
     case 'adc': case 'sbb': {
       const result=arithmeticFlags(state,instruction.width===8?state.AX&255:state.AX,instruction.value,instruction.operation==='sbb',Number(state.cf),instruction.width);
       if(instruction.width===8)low(result);else state.AX=result;

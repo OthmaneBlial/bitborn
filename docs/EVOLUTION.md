@@ -6,13 +6,35 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 
 ## Current execution record
 
+Register ADD (2026-10-13): both unprefixed word-register directions execute
+through the shared decoder and existing arithmetic flags. All 128 selector
+combinations, 160,896 independent cases and six native result/defined-flags
+probes cover aliases, SP and strict scope. The unchanged allocator sources halt
+after 135/137 model steps; every full RAM/state checkpoint rewinds/replays and
+the final logs/guards/registers/flags agree with native captures. Browser links
+in the gallery load those exact bytes; memory/prefixed/wider ADD is unsupported.
+The refreshed browser recording has 73 source hashes, seven GIFs and 121 actual
+PNG frames (57 CPU-lab states), with zero source/GIF/frame hash mismatches.
+The full native suite passes 96 tests with the expected macOS native-Linux skip;
+native agreement covers AX/BX/DI/SP, CS/DS/SS, halt IP and defined flags.
+Chrome, Firefox 157 and WebKit 27.2 pass the actual allocator-link runs, displayed
+logs/guards, timeline restoration and 320px layout checks. Next research is the
+native timer/PIC/PIT interrupt experiment already tracked as backlog item 57.
+
+Native publication `1d43eb7` passed CI `38354429025` and deployment `38354835984`;
+mirror `43bbd6b` changes only 29 `bitborn/` paths. Public source/control, payload,
+512-byte image, guide, capture record, README, ROADMAP and progress bytes match.
+The earlier compact README commit `4e92c4c` passed CI `38353424581` and deployment
+`38353919733`, with its two new SVGs and public progress source verified live.
+
 Native allocator (2026-10-13): 220 literal real-mode bytes own one fixed
 sixteen-byte arena. Two QEMU boots verify five native-written request logs each,
 zero/exact-fit/exhaustion/wrap behavior, both guards, balanced calls and unchanged
 code/source/images. Byte 103 bit 0 changes the third request from 13 to 12,
 leaving the final byte for the next call. Final QMP snapshots and independent
 disassembly are committed with hashes; they are not a native instruction trace.
-The model stops honestly at offset 202 after 65 steps. Current counts become
+At its first native publication the model stopped at offset 202 after 65 steps.
+The subsequent register ADD milestone above completes model execution. Counts become
 58 reviewed targets, 92 derived artifacts, ten BIOS images and 17 gallery entries.
 Paging, free/reuse, isolation and physical hardware remain separate research.
 

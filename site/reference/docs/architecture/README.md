@@ -131,7 +131,9 @@ real-mode byte ownership in one fixed sixteen-byte arena. QMP reads five
 native-written request logs and both guards after each boot halts. Carry rejects
 address wrap before the upper-bound comparison; the caller checks CF before
 writing a marker. This cooperative bump allocation has no free or memory
-isolation. The browser model stops at its unsupported register ADD.
+isolation. Both sources also halt in the model with the same logs, guards and
+defined flags; [word-register ADD](register-add.md) has independent arithmetic
+and sampled native evidence. Model RAM/state rewind is checked separately.
 
 ## Technical references
 

@@ -1,0 +1,50 @@
+11111010 # instruction | CLI | Mask interrupts before establishing SS:SP.
+11101010 00000110 01111100 00000000 00000000 # instruction | JMP 0000:7C06 | Normalize the boot code segment.
+00110001 11000000 # instruction | XOR AX,AX | Prepare segment zero.
+10001110 11010000 # instruction | MOV SS,AX | Set the stack segment before its pointer.
+10001110 11011000 # instruction | MOV DS,AX | Use physical log offsets.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Establish the stack below the source.
+11111100 # instruction | CLD | Make DF zero in every sampled flag word.
+10111000 11111111 11111111 # instruction | MOV AX,FFFF | Unsigned maximum.
+10111011 00000001 00000000 # instruction | MOV BX,1 | Add one.
+00000001 11011000 # instruction | ADD AX,BX | Carry with a zero result.
+10100011 00000000 00100010 # instruction | MOV [2200],AX | Preserve the arithmetic result without changing flags.
+10011100 # instruction | PUSHF | Save all native flags immediately after ADD.
+01011010 # instruction | POP DX | Restore SP and retrieve that native word.
+10001001 00010110 00000010 00100010 # instruction | MOV [2202],DX | Store the sampled flags.
+10111001 11111111 01111111 # instruction | MOV CX,7FFF | Signed positive maximum.
+10111010 00000001 00000000 # instruction | MOV DX,1 | Add one in the opposite direction encoding.
+00000011 11001010 # instruction | ADD CX,DX | Signed overflow without unsigned carry.
+10001001 00001110 00000100 00100010 # instruction | MOV [2204],CX | Store the result.
+10011100 # instruction | PUSHF | Capture the native status flags.
+01011011 # instruction | POP BX | Balance the stack.
+10001001 00011110 00000110 00100010 # instruction | MOV [2206],BX | Store native flags.
+10111011 00000000 10000000 # instruction | MOV BX,8000 | Signed minimum.
+10111101 00000000 10000000 # instruction | MOV BP,8000 | Add the same signed minimum.
+00000001 11101011 # instruction | ADD BX,BP | Both unsigned carry and signed overflow.
+10001001 00011110 00001000 00100010 # instruction | MOV [2208],BX | Store zero.
+10011100 # instruction | PUSHF | Capture the real flags.
+01011000 # instruction | POP AX | Restore the call-free stack.
+10100011 00001010 00100010 # instruction | MOV [220A],AX | Store flags.
+10111110 00001111 00000000 # instruction | MOV SI,000F | Low-nibble boundary.
+10111111 00000001 00000000 # instruction | MOV DI,1 | Add one to the index register.
+00000011 11110111 # instruction | ADD SI,DI | Auxiliary carry without low-byte even parity.
+10001001 00110110 00001100 00100010 # instruction | MOV [220C],SI | Store 0010.
+10011100 # instruction | PUSHF | Capture status after the register ADD.
+01011000 # instruction | POP AX | Balance the stack.
+10100011 00001110 00100010 # instruction | MOV [220E],AX | Store native flags.
+10111101 00000000 01000000 # instruction | MOV BP,4000 | An aliased source and destination.
+00000001 11101101 # instruction | ADD BP,BP | Read both original operands before writing BP.
+10001001 00101110 00010000 00100010 # instruction | MOV [2210],BP | Store 8000.
+10011100 # instruction | PUSHF | Capture overflow and sign.
+01011000 # instruction | POP AX | Retrieve the flags.
+10100011 00010010 00100010 # instruction | MOV [2212],AX | Store flags.
+10111100 11111110 00111111 # instruction | MOV SP,3FFE | A controlled stack-register operand; no call is active.
+00000011 11100100 # instruction | ADD SP,SP | Double the original stack pointer to 7FFC.
+10001001 00100110 00010100 00100010 # instruction | MOV [2214],SP | Store the result before PUSHF uses it.
+10011100 # instruction | PUSHF | Use the new pointer to save flags below the code.
+01011010 # instruction | POP DX | Return SP to the ADD result.
+10001001 00010110 00010110 00100010 # instruction | MOV [2216],DX | Store the sampled flags.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Restore the original initialized pointer.
+11110100 # instruction | HLT | Native QMP reads the six result/flag pairs here.
+11101011 11111101 # instruction | JMP -3 | Return to HLT if resumed.

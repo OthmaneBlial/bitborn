@@ -28,7 +28,8 @@ The execution model accepts unprefixed 16-bit forms only:
 
 - MOV register immediates, register copies, 16-bit-address ModR/M memory copies,
   accumulator absolute loads/stores, and register-to-ES/SS/DS segment loads.
-- Register-direct word XOR; ADD/SUB/CMP AX immediates; ADC/SBB AL/AX immediates;
+- Register-direct word XOR and [ADD in both directions](architecture/register-add.md);
+  ADD/SUB/CMP AX immediates; ADC/SBB AL/AX immediates;
   INC/DEC word registers; TEST AL,AL and TEST AL immediates.
 - Word register/immediate PUSH, register POP, near CALL/RET, short/near JMP,
   immediate far JMP, all sixteen short Jcc conditions and LOOP.

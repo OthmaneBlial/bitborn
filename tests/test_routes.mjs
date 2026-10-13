@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import {readFileSync,existsSync,statSync,readdirSync} from 'node:fs';
 import {dirname,resolve,join} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {parseProgramFragment,programFragment} from '../site/program-link.mjs';
+import {parseBits} from '../site/binary.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const routes = ['playground','examples','learn','architecture','roadmap','elf','bit-diff'];
@@ -25,13 +27,20 @@ for (const route of routes) {
     assert.ok(existsSync(file),`${route} local link exists: ${url}`);
     if (statSync(file).isDirectory()) file = join(file,'index.html');
     assert.ok(existsSync(file),`${route} directory index exists: ${url}`);
-    if (fragment) assert.ok(readFileSync(file,'utf8').includes(`id="${fragment}"`),`${route} local fragment ${url}`);
+    if(fragment?.startsWith('program=')) {
+      assert.equal(relative,'../cpu-lab/','program links open the CPU lab');
+      assert.ok(parseProgramFragment('#'+fragment),'program fragment validates before any execution');
+    } else if (fragment) assert.ok(readFileSync(file,'utf8').includes(`id="${fragment}"`),`${route} local fragment ${url}`);
   }
 }
 assert.equal(new Set(titles).size,routes.length,'unique route titles');
 assert.equal(new Set(descriptions).size,routes.length,'unique route descriptions');
 const examples = readFileSync(resolve(root,'site/examples/index.html'),'utf8');
 assert.equal([...examples.matchAll(/data-example="/g)].length,17);
+for(const name of ['program','control']) {
+  const bytes=parseBits(readFileSync(resolve(root,`examples/bounded-allocator/${name}.bits`),'utf8'));
+  assert.ok(examples.includes(`href="../cpu-lab/${programFragment(bytes)}"`),'allocator links preserve exact canonical bytes');
+}
 const targets = [
   ...JSON.parse(readFileSync(resolve(root,'targets.json'),'utf8')),
   ...JSON.parse(readFileSync(resolve(root,'examples/shell/targets.json'),'utf8')),

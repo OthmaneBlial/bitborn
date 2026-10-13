@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import {createState, step} from '../site/simulator.mjs';
+import {createState, step, decode} from '../site/simulator.mjs';
+import {inspectEncoding} from '../site/encoding.mjs';
 
 // Independent bit-by-bit adder; subtraction adds the complement and a carry-in.
 function oracle(left, right, subtract) {
@@ -25,8 +26,9 @@ function execute(instruction, left, register = 'AX', carry = false) {
   state.memory.set(bytes, state.loadAddress);
   Object.assign(state, {ip: 0, steps: 0, halted: false, cf: carry, af: null,
     zf: true, sf: true, of: true, pf: false, df: true, interrupts: true, [register]: left});
-  step(bytes, state); count++;
+  const result=step(bytes, state); count++;
   assert.equal(state.df, true); assert.equal(state.interrupts, true);
+  return result;
 }
 function check(expected, register = 'AX', preserve = {}) {
   assert.equal(state[register], expected.result);
@@ -47,6 +49,30 @@ for (const [left, right] of pairs) {
   }
 }
 const registers = ['AX', 'CX', 'DX', 'BX', 'SP', 'BP', 'SI', 'DI'];
+for(const opcode of [0x01,0x03])for(let reg=0;reg<8;reg++)for(let rm=0;rm<8;rm++) {
+  const destination=registers[opcode===0x03?reg:rm],source=registers[opcode===0x03?rm:reg];
+  const instruction=[opcode,0xC0+reg*8+rm];
+  for(const [left,right] of [...edges.flatMap(left=>edges.map(right=>[left,right])),...Array.from({length:8},()=>[randomWord(),randomWord()])]) {
+    for(const name of registers)state[name]=randomWord();
+    state[source]=right;state[destination]=left;
+    const before=Object.fromEntries(registers.map(name=>[name,state[name]]));
+    const result=execute(instruction,left,destination,true);
+    assert.deepEqual(result.memoryChanges,[]);
+    check(oracle(left,before[source],false),destination);
+    for(const name of registers)if(name!==destination)assert.equal(state[name],before[name],`${name} is not the destination`);
+    assert.equal(decode(instruction).mnemonic,inspectEncoding(instruction,16).mnemonic);
+    assert.equal(state.ip,2);assert.equal(state.steps,1);
+  }
+}
+for(let left=0;left<65536;left++)for(const right of [1,0x7FFF]) {
+  state.BX=right;execute([0x01,0xD8],left);check(oracle(left,right,false));
+}
+for(const opcode of [0x01,0x03]) {
+  assert.throws(()=>decode([opcode]),/Truncated/);
+  for(let modrm=0;modrm<0xC0;modrm++)assert.throws(()=>decode([opcode,modrm,0,0]),/Memory-form ADD.*outside/);
+  for(const mode of [32,64])assert.throws(()=>inspectEncoding([opcode,0xD8],mode),/outside/);
+  assert.throws(()=>inspectEncoding([0x66,opcode,0xD8],16),/outside/);
+}
 for (const [index, register] of registers.entries()) {
   for (const left of edges) for (const carry of [false, true]) for (const subtract of [false, true]) {
     execute([(subtract ? 0x48 : 0x40) + index], left, register, carry);
@@ -60,4 +86,4 @@ for (let left = 0; left < 256; left++) for (let right = 0; right < 256; right++)
   for (const flag of ['zf', 'sf', 'pf']) assert.equal(state[flag], expected[flag]);
   assert.equal(state.cf, false); assert.equal(state.of, false); assert.equal(state.af, null);
 }
-console.log(`Flag properties passed: ${count.toLocaleString('en-US')} modeled instructions; ripple-carry ADD/SUB/CMP, all INC/DEC registers and CF preservation, exhaustive 8-bit TEST masks, undefined AF and preserved IF/DF. Seed 0xB17B0A; no native execution.`);
+console.log(`Flag properties passed: ${count.toLocaleString('en-US')} modeled instructions; ripple-carry immediate and register ADD/SUB/CMP, all 128 word-register ADD selectors/directions and aliases, exhaustive word boundary additions, all INC/DEC registers and CF preservation, exhaustive 8-bit TEST masks, undefined AF and preserved IF/DF. Seed 0xB17B0A; no native execution.`);

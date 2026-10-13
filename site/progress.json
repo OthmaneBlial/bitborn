@@ -219,7 +219,11 @@
     },
     {
       "milestone": "Guarded native allocator",
-      "progress": "\u2705 220 literal bytes, five native-written request logs in each of two boots, exact-fit ownership, zero/exhaustion/wrap rejection, both guards and immutable code/disk checks; one fixed real-mode arena, no free or memory isolation; browser model stops at unsupported ADD"
+      "progress": "\u2705 220 literal bytes, five native-written request logs in each of two boots, exact-fit ownership, zero/exhaustion/wrap rejection, both guards and immutable code/disk checks; same sources agree with the model after 135/137 steps and every RAM/state checkpoint rewinds/replays; one fixed arena, no free or memory isolation"
+    },
+    {
+      "milestone": "Word-register ADD execution",
+      "progress": "\u2705 Both unprefixed register-direct directions, 128 selector combinations, 160,896 independent arithmetic cases and six native result/defined-flags probes; aliases, SP, IF/DF and strict unsupported-form state preservation checked; wider forms remain unsupported"
     },
     {
       "milestone": "Short branch field microscope",

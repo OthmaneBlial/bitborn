@@ -27,6 +27,7 @@ import {checkExecutionKeyboard} from './execution_keyboard_browser_checks.mjs';
 import {checkByteOrder} from './byte_order_browser_checks.mjs';
 import {checkStackLesson} from './stack_lesson_browser_checks.mjs';
 import {checkFlagLesson} from './flag_lesson_browser_checks.mjs';
+import {checkAllocator} from './allocator_browser_checks.mjs';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..'),site=resolve(root,'site');
 const playwright=await import(process.env.PLAYWRIGHT_MODULE ? pathToFileURL(resolve(process.env.PLAYWRIGHT_MODULE)).href : 'playwright');
@@ -212,6 +213,7 @@ try {
       await checkExecutionKeyboard(page);
       await open('cpu-lab/');await checkStackLesson(page);
       await checkFlagLesson(page,base);
+      await checkAllocator(page,base);
       await checkByteOrder(page, base);
       assert.deepEqual(errors,[],`${engine}: page errors and HTTP asset failures`);
       console.log(`${engine} ${browser.version()} passed locally: 8 dedicated routes + optimization, home/docs, eight localized introductions with RTL/LTR code and keyboard navigation, 16/32/64 inspection with exact imm64 and read-only bit/context changes, desktop/320px reduced motion, real H→h binary downloads, CPU state/flags/memory/breakpoint resume, three bit-button challenges and local progress, generated roadmap, optimization byte inspection.`);

@@ -8,7 +8,7 @@
   "presentationFps": 1,
   "alterations": "960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.",
   "sourceSha256": {
-    "tools/record_browser.mjs": "afd92570046d3ab37631e619c59dcdef0dd73aaf041555af24db660e210eced3",
+    "tools/record_browser.mjs": "2a82e7f7dca071519e72da9c50c69e92d12af9b68d31471a4b4a5ac67a0ac829",
     "boot/boot.bits": "230bbafbfa02abd62dc964efbad02db0431f0efa263216bba02146cd164262b8",
     "site/elf.mjs": "552aabb816be8add70c470c951f0110697d491d0a0e926c3bd9e6001e623832b",
     "site/elf/index.html": "767e441bc2b8d9e29a626d264b2d437bce24c296196a5b37c33d09cf6f58f29b",
@@ -40,7 +40,7 @@
     "docs/instruction-encoding/fixtures/mov-memory-positive.bits": "7d598be8c8bf024e8301fe40c688078139b9c8b61e5a8ceb23fb34b2722db31b",
     "docs/instruction-encoding/fixtures/mov32-next.bits": "246005943e5c9914c9b4f820829fa6dc851b173ffb6a59d702593c46d95b421a",
     "site/address16.mjs": "dd980d19e332cb5a30af20f60a0efb23bbfe527f784bc9699593d0607b0ef263",
-    "site/simulator.mjs": "c17d610691857a488b7183b6b51e2f1163f845fea65f52a9b90436e9e7ded358",
+    "site/simulator.mjs": "78c2579e05eef40ba6385e12aa8a43fea4a1c766ec59ff32ca73658fccdb1be1",
     "site/binary.mjs": "bb95784e041ee340d9143ef3b8047de4a774eb407a059bf6a14a641798460952",
     "site/history.mjs": "45cbd1d494fe7b1f0867c1dc1978ebf2b1a0fce3599f1a704bff75dbe399e321",
     "site/program-link.mjs": "df9a7ad9924dcd19b137407e62557c664b833b5e13a191e9b86b3ca964fe0b40",
@@ -78,7 +78,9 @@
     "site/learn/byte-order.mjs": "16d1bc306a8ddd2d35e4b398813e6d797d8f73bde2f840b18f42b62de51ffdf0",
     "site/learn/byte-order-source.mjs": "03142e5e9c7a0361cf411c315c84b10538726ae9df34ea4b33b76319d263cab2",
     "docs/tutorials/byte-order.bits": "b1ec8a35bc7388757d0e7bff1c3b225b037c83ca77f1e8d55d17e84a6c02fc0d",
-    "challenges/signed-overflow/solution.bits": "ff4843cf65ef3014279df10512e48301f55b7e127d738881875e35cd846d24f9"
+    "challenges/signed-overflow/solution.bits": "ff4843cf65ef3014279df10512e48301f55b7e127d738881875e35cd846d24f9",
+    "examples/bounded-allocator/program.bits": "ce56898e89448ad8f0c57de58756f4b7a609426a0323952e3d75b76be8c7cddf",
+    "examples/bounded-allocator/control.bits": "cea606a00a2c03460ace0cc897d276d4d65fe42529523836f502cb1007d82123"
   },
   "captures": [
     {
@@ -223,10 +225,10 @@
     },
     {
       "file": "assets/cpu-lab-demo.gif",
-      "sha256": "d8ec870bbce47fb740676320fdc618d4e3edb67242236413df79a5416ea332d8",
-      "capturedFrames": 53,
-      "encodedFrames": 53,
-      "durationSeconds": 53,
+      "sha256": "f6150c43ea9b1cdfa7bb9c86dda87f337c3407b647fc60a3e35522cb181ee3d8",
+      "capturedFrames": 57,
+      "encodedFrames": 57,
+      "durationSeconds": 57,
       "actions": [
         "Disabled execution shortcuts; pressing S leaves loaded model state untouched. Native controls remain available.",
         "Manual Step reports its instruction number and next CS:IP in the atomic status region; automatic Run ticks are checked separately.",
@@ -280,11 +282,15 @@
         "Correcting the binary draft clears stale error indicators; the new program replaces the loaded state only when Load is pressed.",
         "FFFF +1 wraps to0000 with unsigned CF=1 and signed OF=0; zero low-byte parity is even.",
         "INC changes AX to0001 while retaining the preceding carry; condition flags are not recomputed from the register alone.",
-        "The reviewed 7FFF +1 source gives8000 with CF=0 and OF=1 in the model; native QEMU flag checks are separate."
+        "The reviewed 7FFF +1 source gives8000 with CF=0 and OF=1 in the model; native QEMU flag checks are separate.",
+        "Actual model program halt after 135 instructions: last arena byte 00, both guards intact. Separate QEMU snapshots verify the native result.",
+        "Actual model control halt after 137 instructions: last arena byte 44, both guards intact. Separate QEMU snapshots verify the native result.",
+        "Recorded model rewind restores the empty arena and initial state. Native halt captures do not provide rewind.",
+        "Recorded model replay restores the control halt and five request log entries; the literal source remains unchanged."
       ],
       "sourceFrameSha256": [
         "e28df926c169bfa1c82a6899f6a12ff3c3456934e002bf311b70e67d650ccfcc",
-        "9bd9c675623c5000ae0e9396f34cc9d8975850def07038555d28ff1884e186a4",
+        "00f71ae9886ecb13fcfa2c386e33d3975326b0a77f216f6e54f4baa541727a58",
         "07c24a8f2b66198bb12bc2a1cc7a36a50621b2336a9369d7092f53cd206abb35",
         "e6f99c7900cbe40c5f3b114ef2b6cc4ef350f528302dcbadc4c54ba003323faf",
         "4c58f56c5adf3404425170605525d0abd4339befa253f0f6c38df1713e99e2ad",
@@ -302,10 +308,10 @@
         "e549e88cb4e5d64e697f81da55763fb9fffacb334407f58c1d9a50e279ffc14b",
         "ecd86e3e6822a254366b00f9db3f0cc9ddddfcaebebd4b361929921c3e99f81f",
         "36dc147f036820e517c0483041dbb96b081d565b99ab17a5a9e18671889cbe46",
-        "c25792ea5e81382e2f5d8bffead6e2a1e85e910bffed587451ec4a72d261cde7",
+        "97b1c85dfd38acef82e6dabd8e4008c4e8a7dd557956379c995c87dedc7093bf",
         "5fd156e5bd7125867bdae7d2aefbab1f7a71028679f7c336ffa0a07867d0f059",
         "507b4ccd866863aa32f5e3ed1e6090651e895459eb8add1e938dd2095b16c3c7",
-        "ed2ee9f37f9d98864ab423e3c5f4050d78dabc7b366a2b8b8feb5e765473a976",
+        "fcd3f335051f556119c12817d12addaf94a1dd19e07b97a0d107845f60e38628",
         "07c24a8f2b66198bb12bc2a1cc7a36a50621b2336a9369d7092f53cd206abb35",
         "a990cb7d957e83c1efbdaa59c573596663867592b6eeaf4bdd6a6cff19ad7ea7",
         "f35e6f67a16e2a76cfe106256d1eee23f791a2c381a923769aec2047373d071d",
@@ -335,7 +341,11 @@
         "bb8245ec0da6599707d8af20f3cc10c605ee12d534b8736e7bd8c1150d7ff139",
         "14c5d2495a570e2b5b19e184011be627b2bb799e98e08e3b10896ea9a1527dde",
         "386ad982590d432cad9e49a07364f0c5c051b8716a0e41d31abd5d767752dfe1",
-        "7714a9a4cc4abdd6912e6a246192c0167e65042a903d115773d9200d54d4a26b"
+        "7714a9a4cc4abdd6912e6a246192c0167e65042a903d115773d9200d54d4a26b",
+        "e5abca50792df8fcb85984befa3690c1bdcef2b01f346567a5841c1afd675e4c",
+        "59dcfe84433b9e77b12a916a4d0096b9052d8f194dc1f3b62e4a065265114c59",
+        "b2721d4ab24cc6b53d1f74e6c57bdb650b5e04f397bfd433759cb57dfdd626f5",
+        "d94239760c75a291f1e5c00691967e0129899cd344ffd95d3759d52be883b897"
       ]
     },
     {

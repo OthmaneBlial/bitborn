@@ -48,7 +48,7 @@ try {
   assert.match(await page.locator('[data-example="shell-app"]').textContent(),/not independently bootable/);
   assert.equal(await page.locator('[data-example="shell-app"] a[download]').getAttribute('href'),'../downloads/shell-app.bin');
   const allocator=page.locator('[data-example="bounded-allocator"]');
-  assert.match(await allocator.textContent(),/browser model stops at unsupported register ADD/);
+  assert.match(await allocator.textContent(),/CPU lab can run both sources/);
   assert.match(await allocator.locator('pre').textContent(),/\[200F,2010\)/);
   for(const file of ['downloads/bounded-allocator.img','reference/examples/bounded-allocator/program.bits','reference/examples/bounded-allocator/control.bits','assets/bounded-allocator-recording.json']) {
     const response=await page.request.get(new URL(file,base).href);assert.ok(response.ok(),file);

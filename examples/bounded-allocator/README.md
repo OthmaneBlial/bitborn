@@ -87,10 +87,17 @@ The primary payload is reviewed and exported as `bounded-allocator.bin` and
 second reviewed release artifact. Tagged public releases retain their original
 contents; this newer example belongs to current development until a later release.
 
-## Browser model boundary
+## Follow the same bytes in the browser
 
-The current model executes initialization and the first zero-size rejection,
-then stops after 65 completed instructions at source offset **202**: register
-`ADD AX,BX` (`01 D8`) is unsupported. It leaves the first log as FFFF/2000/1,
-the guards intact, and the second call in progress. That partial model state is
-not the native five-request result. Native guest snapshots never claim rewind.
+The CPU lab now supports the [register ADD used here](../../docs/architecture/register-add.md).
+Import either literal payload, or use its link in the
+[live gallery](https://othmaneblial.github.io/bitborn/examples/#allocator-title).
+The program halts after **135** model instructions; the control takes **137**.
+Inspect physical `01FFF` for both guards and the arena, then `02100` for all
+five log entries. Timeline Home/End restores the initial/final recorded state.
+
+AX/BX/DI/SP, CS/DS/SS, defined flags, guarded bytes, logs and unchanged code RAM agree with
+the separate QEMU captures. Every model state and the full 1 MiB of RAM are
+checked through rewind and replay. Memory/prefixed/wider register ADD remains
+outside the model; unsupported forms preserve the loaded state. Model playback
+is distinct from native execution: the QMP halt snapshots never claim rewind.
