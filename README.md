@@ -108,6 +108,7 @@ for exact evidence and remaining gates.
 | [Actionable source errors](docs/source-diagnostics.md) | ✅ Exact UTF-16 token/excess-byte ranges, 704 location cases and focused binary/hex selection; invalid drafts preserve loaded state/history and corrections clear stale errors |
 | [Bit comparison error recovery](docs/bit-diff.md) | ✅ Both invalid sides are identified; failed notation conversion focuses/selects the first offending token while keeping drafts, notation and the last valid comparison |
 | [Clean-checkout reproduction](docs/reproduction.md) | ✅ Fresh remote checkout passes install, 77 Python tests and all site/model checks; all 88 artifact hashes match across two builds with a clean Git tree; macOS native-Linux skip is explicit |
+| [Print-friendly lessons](docs/printing.md) | ✅ Manual, learning path and eight introductions use white paper, readable unchanged code, RTL/LTR direction and exact source attribution; print checks and actual PDF QA captures |
 | CPU Lab program downloads and imports | ✅ Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks |
 | Share loaded CPU Lab programs | ✅ Versioned URL fragments preserve 1–512 loaded bytes and open paused; 1,000 seeded round trips, malformed-link preservation, history navigation and clipboard fallback verified in three browsers |
 | Binary and hexadecimal drafts | ✅ Literal byte views, explicit hex loading and comment preservation; all byte values and 1,000 seeded round trips pass; CLI .bits remains binary |

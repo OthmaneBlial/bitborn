@@ -186,6 +186,10 @@
       "progress": "\u2705 Fresh remote checkout passes install, 77 Python tests and all site/model checks; all 88 artifact hashes match across two builds with a clean Git tree; macOS native-Linux skip is explicit"
     },
     {
+      "milestone": "Print-friendly lessons",
+      "progress": "\u2705 Manual, learning path and eight introductions use white paper, readable unchanged code, RTL/LTR direction and exact source attribution; print checks and actual PDF QA captures"
+    },
+    {
       "milestone": "CPU Lab program downloads and imports",
       "progress": "\u2705 Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks"
     },

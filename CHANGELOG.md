@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Add print-only lesson layouts for the manual, learning path and eight
+  introductions, preserving literal code, Arabic direction and source URLs.
+  Verify light page margins and capture actual A4 PDFs for visual QA.
+
 - Document verified fresh-checkout reproduction with exact source/environment,
   all 88 reviewed artifact hashes across two builds, clean generated copies and
   explicit macOS/Linux/browser validation boundaries.

@@ -279,13 +279,32 @@ recovery, excess bytes, empty drafts and preset reset. All site/module checks
 pass. Its genuine browser recording now contains ten frames, including three
 error/recovery states. Assistive-technology review remains separate.
 Comparison commit `accecee` is pushed; its Pages mirror `704c071` changes only
-15 `bitborn/` paths. CI `38329145675` is running at this checkpoint.
+15 `bitborn/` paths. CI `38329145675` and deployment `38329520716` passed; the
+deployment actually checked out `accecee` even though the workflow-run display
+head reflects the later default branch. Public comparison module/page, guide and
+progress match exact source bytes.
 A fresh remote clone at that exact source revision passed `npm ci`, 77 Python
 tests (one expected macOS native-Linux skip), and all site/model/generated-copy
 checks. Every one of the 88 reviewed artifact hashes matches across two builds;
 the Git tree remains clean. The reproduction guide records the actual source,
 environment, map fingerprint, commands and distinct Linux/browser/native gates.
-Next: print-friendly lessons that retain source attribution and readable bits.
+Reproduction commit `0b58b21` passed CI `38329421110` and deployment
+`38329709932`; mirror `160bff3` changes only seven `bitborn/` paths. Public README,
+roadmap, progress and reproduction guide match the committed source.
+Print-only styles now cover the manual, learning path and eight introductions.
+Actual PDF QA caught dark page margins despite a white body; the print root now
+forces a light color scheme and white background. Literal code stays unchanged,
+Arabic prose stays RTL, code/URLs stay LTR and exact source attribution appears
+on paper. Chromium, Firefox and WebKit verify print media on all ten pages;
+three focused introduction/translation tests and all site/module checks pass.
+The four actual Chromium PDF QA captures contain 13 pages (manual seven;
+learning path, English and Arabic two each). All final pages were rendered and
+visually inspected; corner pixels are white and extracted source URLs/literal
+tokens are preserved. Monospaced code and paragraph widow/orphan controls improve
+paper readability; the stale fourteen-example manual link now correctly says
+fifteen. Physical printers and live assistive technology remain separate gates.
+Next: inspect remaining accessibility/contrast gates without substituting CSS
+assertions for live assistive-technology evidence.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -351,7 +370,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 38 | 2 | Arabic README/introduction; preserve left-to-right code and verify RTL layout | H | M | 31 | Medium | Complete |
 | 39 | 0 | Translation freshness manifest with explicit source revisions and consistency checks | H | H | 31–38 | Medium | Complete |
 | 40 | 2 | Localized introductory site routes with lang/dir/canonical/hreflang metadata | H | M | 31–39 | Medium | Complete |
-| 41 | 2 | Print-friendly lessons with readable code and source attribution | M | H | 25–27 | Low | Open |
+| 41 | 2 | Print-friendly lessons with readable code and source attribution | M | H | 25–27 | Low | Complete: ten pages in three browser print modes, actual 13-page Chromium PDF QA, RTL/LTR code and source URLs; physical printers untested |
 | 42 | 0 | Keyboard accessibility regression for timeline, imports, controls and error focus | H | H | 12 | Low | Open |
 | 43 | 0 | Contrast and narrow-screen checks for changed-bit and flag indicators | H | H | Existing CSS | Low | Open |
 | 44 | 2 | Explicit shortcuts guide and screen-reader-friendly execution announcements | M | H | 12,42 | Low | Open |

@@ -1,0 +1,28 @@
+@page { size: A4; margin: 16mm; }
+:root { color-scheme: light !important; background: #fff !important; }
+* { color: #111 !important; background: transparent !important; box-shadow: none !important; text-shadow: none !important; }
+body { background: #fff !important; font: 10pt/1.6 system-ui, sans-serif !important; }
+.header, .intro-header, .skip-link, .docs-sidebar, .route-links, .copy-button { display: none !important; }
+.wrap, .intro-article, .intro-footer { width: 100% !important; margin: 0 !important; }
+.docs-layout { display: block !important; padding: 0 !important; }
+.docs-hero, .route-intro { padding: 0 0 16pt !important; }
+.intro-article, .docs-content { padding: 0 !important; font-size: inherit !important; }
+h1 { font-size: 26pt !important; letter-spacing: -.025em !important; margin-bottom: 14pt !important; }
+h2 { font-size: 17pt !important; letter-spacing: -.015em !important; margin: 20pt 0 10pt !important; }
+h3 { font-size: 13pt !important; }
+h1, h2, h3 { break-after: avoid; }
+p { margin-bottom: 10pt !important; orphans: 3; widows: 3; }
+a { text-decoration: underline !important; overflow-wrap: anywhere; }
+pre { white-space: pre-wrap !important; overflow: visible !important; overflow-wrap: anywhere; font-size: 9pt !important; direction: ltr; text-align: left; }
+pre, code { font-family: var(--mono) !important; }
+pre, table { break-inside: avoid; }
+.code-block { padding: 10pt !important; border: 1px solid #aaa !important; }
+.code-block pre { padding: 0 !important; }
+table { width: 100% !important; font-size: 9pt !important; border-collapse: collapse; }
+th, td { padding: 6pt !important; border-color: #aaa !important; }
+thead { display: table-header-group; }
+.docs-content section, .route-section { margin: 0 0 16pt !important; padding: 0 !important; }
+.learning-path { padding: 0 !important; }
+footer { display: block !important; padding: 10pt 0 0 !important; border-top: 1px solid #aaa !important; }
+footer > :not(.print-source) { display: none !important; }
+.print-source[hidden] { display: block !important; direction: ltr; text-align: left; font-size: 8pt !important; overflow-wrap: anywhere; }

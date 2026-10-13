@@ -54,6 +54,7 @@ exact source revision, generated copies and every artifact hash across builds.
 | Builder and CPU Lab | `site/boot-builder/`, `site/cpu-lab/` | `node tests/browser_builder.mjs` or `node tests/browser_cpu_lab.mjs` |
 | Challenges | `challenges/`, `site/challenges/challenges.mjs` | `node tests/test_challenges.mjs` and `python3 -m unittest tests.test_challenges` |
 | Docs, routes and progress | `README.md`, `ROADMAP.md`, `docs/`, `tools/site_build.py` | `make site-test` |
+| [Print-friendly lessons](docs/printing.md) | `site/print.css`, `tools/introduction_pages.py`, `tests/print_browser_checks.mjs` | `node tests/browser_print.mjs` and `npm run test:cross-browser` |
 
 Run full relevant checks before sharing a change. Browser scripts serve their own
 test site; they do not need the development server. Focused checks complement the

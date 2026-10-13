@@ -79,13 +79,13 @@ def build_introductions(root):
 <link rel="alternate" hreflang="x-default" href="{base}en/">
 <meta property="og:type" content="article"><meta property="og:title" content="{html.escape(title, quote=True)}"><meta property="og:description" content="{html.escape(description, quote=True)}"><meta property="og:url" content="{canonical}"><meta property="og:image" content="https://othmaneblial.github.io/bitborn/assets/social-preview.png">
 <meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#080a08">
-<link rel="icon" type="image/svg+xml" href="../../favicon.svg"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../intro.css">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../intro.css"><link rel="stylesheet" href="../../print.css" media="print">
 </head>
 <body>
 <a class="skip-link" href="#main">{html.escape(language['skip'])}</a>
 <header class="intro-header"><a class="brand" href="../../" dir="ltr">bitborn ↗</a><nav aria-label="Languages">{links}</nav></header>
 <main class="intro-article" id="main" tabindex="-1">{article(text, source, root)}</main>
-<footer class="intro-footer"><a href="../../reference/docs/i18n/{language['path']}">{html.escape(language['name'])} · .md</a><a href="https://github.com/OthmaneBlial/bitborn">GitHub ↗</a></footer>
+<footer class="intro-footer"><a href="../../reference/docs/i18n/{language['path']}">{html.escape(language['name'])} · .md</a><a href="https://github.com/OthmaneBlial/bitborn">GitHub ↗</a><p class="print-source" hidden dir="ltr">https://github.com/OthmaneBlial/bitborn/blob/main/docs/i18n/{language['path']}<br>{canonical}</p></footer>
 </body>
 </html>
 '''
