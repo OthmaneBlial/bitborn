@@ -11,6 +11,7 @@ website progress; the [README](README.md) keeps a short summary.
 
 | Milestone | Progress |
 | --- | --- |
+| Release staging preserves its recorded revision | ✅ Different version/source commits rejected before writes; same-revision repacking retained, isolated regressions pass and 31 frozen v0.4.0 files remain unchanged |
 | 512-byte handwritten boot program and four byte tools | ✅ QEMU-tested, public |
 | Linux exit, arithmetic, text, loops and comparisons | ✅ Native execution passed in Linux CI |
 | BIOS keyboard and direct VGA memory writes | ✅ QEMU-tested |

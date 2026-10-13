@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Refuse release-staging overwrites when recorded version/source provenance differs
+  from the current checkout. Preserve deterministic repacking of the same revision;
+  check both isolated fixtures and all 31 untouched local v0.4.0 staging files.
+- Keep native test install commands synchronized with CI across the README,
+  contributor setup, beginner guide and eight introductions. Add a regression
+  check for missing QEMU, NDISASM/NASM or FFmpeg packages.
+
 - Add Bit Hunt, a 492-byte literal BIOS maze with real WASD input, walls, star
   collection, sticky victory, reset, quit and a saturating move counter. One
   operand bit disables collection on the identical route. Check actual VGA/state,

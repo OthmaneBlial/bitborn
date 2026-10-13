@@ -2,6 +2,10 @@
   "updated": "2026-10-13",
   "milestones": [
     {
+      "milestone": "Release staging preserves its recorded revision",
+      "progress": "\u2705 Different version/source commits rejected before writes; same-revision repacking retained, isolated regressions pass and 31 frozen v0.4.0 files remain unchanged"
+    },
+    {
       "milestone": "512-byte handwritten boot program and four byte tools",
       "progress": "\u2705 QEMU-tested, public"
     },

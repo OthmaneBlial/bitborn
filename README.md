@@ -126,6 +126,8 @@ examples. Independent encoding/property checks and Chrome, Firefox and WebKit
 tests cover the browser tools. Recordings include source and frame provenance.
 See the [roadmap evidence](ROADMAP.md), [validation notes](docs/validation.md) and
 [reproducible showcase](SHOWCASE.md).
+The [reproduction guide](docs/reproduction.md) covers deterministic builds and
+release staging that protects its recorded version and source revision.
 
 The browser has explicit unsupported-encoding errors, a 4,096-step ceiling and
 1 MiB of modeled memory. Native execution and browser simulation are separate

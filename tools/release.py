@@ -43,7 +43,7 @@ def provenance(root, version, commit, destination):
                              if path.name not in {'SHA256SUMS', 'release-provenance.json'}}}
 
 
-def check_staging(destination, version):
+def check_staging(destination, version, commit):
     allowed = {f'bitborn-v{version}-images.tar.gz', f'bitborn-v{version}-source.tar.gz',
                *IMAGES, *EVIDENCE, 'release-provenance.json', 'SHA256SUMS'}
     if destination.is_symlink():
@@ -52,6 +52,11 @@ def check_staging(destination, version):
         for path in destination.iterdir():
             if path.name not in allowed or path.is_symlink() or not path.is_file():
                 raise ValueError(f'unexpected release staging entry: {path.name}; nothing was overwritten')
+        manifest = destination / 'release-provenance.json'
+        if manifest.exists():
+            recorded = json.loads(manifest.read_text())
+            if not isinstance(recorded, dict) or recorded.get('version') != version or recorded.get('sourceCommit') != commit:
+                raise ValueError('release staging belongs to a different version or source commit; nothing was overwritten')
 
 
 def prepare():
@@ -63,7 +68,7 @@ def prepare():
     destination = ROOT / "build" / f"release-v{version}"
     if not destination.resolve().is_relative_to(ROOT.resolve()):
         raise ValueError('release staging must remain inside the project')
-    check_staging(destination, version)
+    check_staging(destination, version, commit)
     destination.mkdir(exist_ok=True)
     files = {path.as_posix(): (ROOT / 'build' / path).read_bytes() for path in artifact_paths()}
     files["README.txt"] = (f"bitborn v{version} — Software born from raw bits.\n"

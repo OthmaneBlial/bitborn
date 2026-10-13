@@ -4,6 +4,11 @@ Use a new directory to check that results come from committed source. Record the
 commit before running any commands; `main` continues to evolve, while release
 tags identify immutable published snapshots.
 
+Release staging also records its version and exact source commit. The release
+packager refuses to overwrite a completed staging directory from a different
+revision; publish newer source under a new version. Rebuilding the same recorded
+revision remains supported. This local guard does not modify GitHub release assets.
+
 ```sh
 git clone https://github.com/OthmaneBlial/bitborn.git bitborn-repro
 cd bitborn-repro

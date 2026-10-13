@@ -21,11 +21,11 @@ class ReleaseTests(unittest.TestCase):
             destination = Path(directory)
             for name in IMAGES + EVIDENCE:
                 (destination / name).write_bytes(b'allowed staging placeholder')
-            check_staging(destination, '0.4.0')
+            check_staging(destination, '0.4.0', 'a' * 40)
             stale = destination / 'bitborn-v0.3.0-source.tar.gz'
             stale.write_bytes(b'older archive must not enter new checksums')
             with self.assertRaisesRegex(ValueError, 'unexpected release staging'):
-                check_staging(destination, '0.4.0')
+                check_staging(destination, '0.4.0', 'a' * 40)
             self.assertEqual(stale.read_bytes(), b'older archive must not enter new checksums')
     def test_staging_rejects_unreviewed_files_and_aliases_without_overwriting(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -35,19 +35,40 @@ class ReleaseTests(unittest.TestCase):
             unknown = destination / 'unreviewed.img'
             unknown.write_bytes(b'preserve me')
             with self.assertRaisesRegex(ValueError, 'unexpected release staging'):
-                check_staging(destination, '0.3.0')
+                check_staging(destination, '0.3.0', 'a' * 40)
             self.assertEqual(unknown.read_bytes(), b'preserve me')
             unknown.unlink()
             protected = root / 'protected.txt'
             protected.write_bytes(b'outside the release')
             (destination / 'boot.img').symlink_to(protected)
             with self.assertRaisesRegex(ValueError, 'unexpected release staging'):
-                check_staging(destination, '0.3.0')
+                check_staging(destination, '0.3.0', 'a' * 40)
             self.assertEqual(protected.read_bytes(), b'outside the release')
             alias = root / 'alias'
             alias.symlink_to(destination, target_is_directory=True)
             with self.assertRaisesRegex(ValueError, 'must not be a symlink'):
-                check_staging(alias, '0.3.0')
+                check_staging(alias, '0.3.0', 'a' * 40)
+
+    def test_staging_cannot_overwrite_a_different_recorded_source(self):
+        with tempfile.TemporaryDirectory() as directory:
+            destination = Path(directory)
+            image = destination / 'boot.img'
+            image.write_bytes(b'preserve frozen release bytes')
+            manifest = destination / 'release-provenance.json'
+            manifest.write_text(json.dumps({'version': '0.4.0', 'sourceCommit': 'a' * 40}))
+            before = {path.name: path.read_bytes() for path in destination.iterdir()}
+            check_staging(destination, '0.4.0', 'a' * 40)
+            for version, commit in [('0.4.0', 'b' * 40), ('0.5.0', 'a' * 40)]:
+                with self.subTest(version=version, commit=commit):
+                    with self.assertRaisesRegex(ValueError, 'different version or source commit'):
+                        check_staging(destination, version, commit)
+                    self.assertEqual({path.name: path.read_bytes() for path in destination.iterdir()}, before)
+
+            manifest.write_text('[]')
+            with self.assertRaisesRegex(ValueError, 'different version or source commit'):
+                check_staging(destination, '0.4.0', 'a' * 40)
+            self.assertEqual(image.read_bytes(), before['boot.img'])
+            self.assertEqual(manifest.read_text(), '[]')
 
     def test_provenance_ties_sources_outputs_and_release_files_to_commit(self):
         with tempfile.TemporaryDirectory() as directory:

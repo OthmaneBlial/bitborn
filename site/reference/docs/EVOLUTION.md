@@ -6,6 +6,14 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 
 ## Current execution record
 
+Release staging audit (2026-10-13): recognized filenames alone previously allowed
+the release packager to overwrite a completed staging directory after source
+changed without a version bump. Staging now checks the recorded version and source
+commit before writing archives, images, evidence or checksums. An independent
+temporary-directory test proves that different commits/versions leave every file
+unchanged, while the same recorded revision remains eligible for deterministic
+repacking. No published tags, assets, version or frozen staging bytes are changed.
+
 Setup audit (2026-10-13): the original mission requires executable, synchronized
 quickstarts. The README, beginner guide and eight introductions ran `make test`
 but installed only QEMU, omitting read-only NDISASM and native GIF pixel decoding.
@@ -20,6 +28,9 @@ The documentation regression check now compares the README, contributor setup,
 beginner guide and all eight introductions against the native CI install packages,
 including their macOS package equivalents. The beginner Ubuntu recipe is a complete
 copyable install command; contributor setup installs the same tools together.
+Setup source `c277229` passes CI `38394601310` and deployment `38395334429`;
+all twenty-one checked live introduction/source/setup files match. Live Chrome
+also passes all eight introductions, desktop/320px, RTL/LTR and keyboard checks.
 
 Game publication `0bc0296` passes corrected CI `38391619063` and deployment
 `38392408626`. All eighteen checked live source/image/GIF/screenshot/guide/progress
@@ -854,6 +865,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 66 | 0 | Audit native boot fixtures for explicit stack initialization before their first BIOS call | H | H | Native boot fixtures | Medium | Complete: seven reviewed boot/control setup guards, prior-source regression, corrected 82-byte fixture, native/model and three-browser proof, refreshed captures; hardware and full BIOS emulation remain separate |
 | 67 | 0 | Validate optional bitinspect annotation metadata and preserve structured errors before rendering | H | H | Existing host inspection | Medium | Complete: bounded JSON, typed non-overlapping ranges, literal-bit matches, terminal-safe labels and structured late-failure diagnostics; canonical targets remain valid |
 | 68 | 0 | Align executable quickstart dependencies across README, beginner guide and eight introductions | H | H | Native capture test | Low | Complete: NASM/FFmpeg install commands, localized host-tool roles, English source tracking and eight-page browser/link checks; native-speaker review remains separate |
+| 69 | 0 | Preserve recorded release staging when source advances without a version bump | H | H | Release provenance | Low | Complete: reject different revision/version before writes; isolated preservation regressions and all 31 frozen v0.4.0 staging files verified unchanged |
 
 Large tasks are divided into useful verified milestones. Native experiments only
 become capabilities after literal source review and real QEMU checks; hardware
