@@ -16,6 +16,10 @@ Translation freshness/shared byte examples, complete byte tables and local links
 pass. The real introduction browser check passes all eight pages, desktop/320px,
 Arabic RTL prose/LTR code, keyboard navigation and assets. Native-speaker review
 remains separate. The correction changes no target bytes or capture inputs.
+The documentation regression check now compares the README, contributor setup,
+beginner guide and all eight introductions against the native CI install packages,
+including their macOS package equivalents. The beginner Ubuntu recipe is a complete
+copyable install command; contributor setup installs the same tools together.
 
 Game publication `0bc0296` passes corrected CI `38391619063` and deployment
 `38392408626`. All eighteen checked live source/image/GIF/screenshot/guide/progress

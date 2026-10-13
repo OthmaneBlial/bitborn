@@ -14,17 +14,15 @@ the [private security reporting path](SECURITY.md), rather than a public issue.
 ## Development setup and source map
 
 Python 3.10+, Make and QEMU are needed for the native checks. Node.js 22+ is the
-CI baseline for browser tooling. On macOS, install QEMU with `brew install qemu`;
-on Ubuntu, use `sudo apt-get install python3 make qemu-system-x86`.
+CI baseline for browser tooling. Install the native test dependencies together:
+on macOS, use `brew install qemu nasm ffmpeg`; on Ubuntu, use
+`sudo apt-get install python3 make qemu-system-x86 nasm ffmpeg`.
 
-The independent disassembly checks in `make site-test` also require `ndisasm`:
-install `nasm` with Homebrew on macOS or `sudo apt-get install nasm` on Ubuntu.
-The native game recording test also requires FFmpeg to decode the GIF and check
-every captured pixel: `brew install ffmpeg` on macOS or
-`sudo apt-get install ffmpeg` on Ubuntu. It is a host test/recording tool;
-the Python bit-packing commands and native payloads do not depend on it.
-This package supplies a read-only verification tool; the build never invokes an
-assembler to generate target instructions. Both CI and Pages install it explicitly.
+NASM supplies `ndisasm` for read-only inspection of existing instruction bytes.
+FFmpeg decodes the native game GIF so tests can check every captured pixel.
+These are host verification tools; the build never invokes an assembler to
+generate target instructions. CI installs both; Pages needs only NDISASM for
+its site checks.
 
 ```sh
 make test                 # build, reviewed artifacts, unit tests and headless QEMU

@@ -4,8 +4,9 @@ Use a Linux x86-64 host or macOS with Python 3.10+ and QEMU installed. Target
 instructions do not need a compiler or assembler. The full checks below also
 use NDISASM from NASM for read-only disassembly and FFmpeg for captured GIF pixels.
 On macOS, run `brew install qemu nasm ffmpeg`; on Ubuntu, install
-`python3 make qemu-system-x86 nasm ffmpeg`. Linux executable examples need
-a Linux x86-64 kernel. QEMU TCG handles the BIOS targets even on Apple Silicon.
+them with `sudo apt-get install python3 make qemu-system-x86 nasm ffmpeg`.
+Linux executable examples need a Linux x86-64 kernel. QEMU TCG handles the BIOS
+targets even on Apple Silicon.
 
 ```sh
 git clone https://github.com/OthmaneBlial/bitborn.git

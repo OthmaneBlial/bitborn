@@ -5,6 +5,25 @@ from tools.bitborn import ROOT, read_bits
 
 
 class DocsTests(unittest.TestCase):
+    def test_native_setup_commands_cover_ci_dependencies(self):
+        workflow = (ROOT / ".github/workflows/test.yml").read_text()
+        install = re.search(r"apt-get install ([^\n]+)", workflow).group(1).split()
+        packages = set(install) - {"-y"}
+        self.assertTrue({"qemu-system-x86", "nasm", "ffmpeg"} <= packages)
+        paths = [ROOT / name for name in (
+            "README.md", "CONTRIBUTING.md", "docs/tutorials/from-bits-to-boot.md",
+        )] + list((ROOT / "docs/i18n").glob("*/README.md"))
+        for path in paths:
+            with self.subTest(document=str(path.relative_to(ROOT))):
+                text = path.read_text()
+                ubuntu = re.findall(r"`sudo apt-get install ([^`]+)`", text)
+                macos = re.findall(r"`brew install ([^`]+)`", text)
+                self.assertTrue(any(packages <= set(command.split()) for command in ubuntu),
+                                "Ubuntu quickstart must install the native CI tools")
+                brew_packages = (packages - {"qemu-system-x86"}) | {"qemu"}
+                self.assertTrue(any(brew_packages <= set(command.split()) for command in macos),
+                                "macOS quickstart must install the native CI tools")
+
     def test_local_markdown_links(self):
         paths = [ROOT / name for name in ("README.md", "ROADMAP.md", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md", "SECURITY.md", "CHANGELOG.md")]
         paths += list((ROOT / "docs").rglob("*.md")) + list((ROOT / "examples").rglob("*.md"))
