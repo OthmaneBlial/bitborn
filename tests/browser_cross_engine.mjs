@@ -209,8 +209,9 @@ try {
       await checkELF(page,base);
       await checkBitDiff(page,base);
       await checkPrintLessons(page,base);
-      await checkVGABitmap(page,base);
+      // VGA returns to the CPU lab required by the following indicator checks.
       await checkTimerIRQ(page,base);
+      await checkVGABitmap(page,base);
       await checkIndicators(page);
       await checkExecutionKeyboard(page);
       await open('cpu-lab/');await checkStackLesson(page);

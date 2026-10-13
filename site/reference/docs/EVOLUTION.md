@@ -23,6 +23,13 @@ site/model/doc checks pass. Chrome routes and targeted Firefox 157/WebKit 27.2
 checks verify exact source/image/provenance bytes and 1440/320px timer layout.
 One initial Chrome run timed out on the unchanged learning-page load under high
 host load; the fresh-browser repeat passed without changing timeouts or source.
+Initial publication `1d32487` failed CI `38362521510`: the new timer gallery
+check left the cross-engine page outside the CPU lab, so the following indicator
+check waited for a nonexistent preset control. The correction orders the timer
+check before the existing VGA check, which deliberately returns to the CPU lab.
+Native and Chrome CI checks had passed; the gated project deployment was skipped.
+The corrected complete Firefox 157 and WebKit 27.2 suites pass locally, including
+all routes, timer downloads/scope, CPU indicators and existing interactions.
 
 Previous register-ADD publication `15252da` passed CI `38356560057` and deployment
 `38357183331`; mirror `b13d77d` changes only 16 `bitborn/` paths. Public module,
