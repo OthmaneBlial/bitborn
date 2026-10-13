@@ -127,7 +127,7 @@ for exact evidence and remaining gates.
 | [Protected-mode fault research](docs/architecture/protected-fault.md) | ✅ 200 literal bytes: actual UD2/#UD gate, saved EIP adjustment, IRETD and CPU-managed descriptor accessed bits checked in QEMU; one controlled fault only |
 | [Native selector error-code research](docs/architecture/selector-fault.md) | ✅ 256 literal bytes: #GP selector code, extra frame doubleword, preserved DS and correct IRETD stack cleanup checked in QEMU; one invalid load only |
 | [v0.3.0 release and provenance](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.3.0) | ✅ Exact-commit CI passed; all 14 public files re-downloaded anonymously, bytes/checksums and source/artifact provenance verified |
-| [v0.4.0 release preparation](docs/release-v0.4.0.md) | In validation: nine BIOS images, new native/browser evidence, source/artifact archives and exact-commit provenance; public release verification remains a gate |
+| [v0.4.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.4.0) | ✅ Main/tag CI passed; independent source archive passes 92 tests and three-browser checks; all 31 public files, 30 checksums and 90 artifact hashes verified |
 | [v0.2.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0) | ✅ Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified |
 | Paging, exception/hardware interrupt handling and physical hardware | Future research; no working claim |
 

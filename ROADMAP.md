@@ -309,8 +309,12 @@ The v0.2 milestone is published and verified. The following research remains ope
 - [x] Prepare v0.4 version/notes and explicit staging for all nine BIOS images,
   actual native crops/GIFs, six browser recordings, source/artifact archives and
   deterministic provenance. Older staging archives are rejected without overwrite.
-- [ ] Publish and re-download v0.4.0 after exact-commit CI, clean-source reproduction,
-  attachment/checksum/provenance verification and three-browser validation.
+- [x] Publish and re-download [v0.4.0](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.4.0)
+  at immutable `c8d151b62ff7c6ec5c6124087f3a3e75f3d9ab6d`, after main CI
+  `38344949598` and tag CI `38345402463` passed. Independent archive reproduction
+  passes 92 Python/native tests (one macOS Linux skip), site and three-browser
+  checks; all 90 rebuilt artifact hashes, 31 anonymous downloads and 30 checksums
+  match staged provenance. Preparing the same source twice produces identical bytes.
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## 0.4.0 — release preparation, 2026-10-13
+## 0.4.0 — 2026-10-13
 
 - Extend literal reference checking with manually authored maps for self-modifying
   and VGA bitmap controls and the independently loaded CALL/RET challenge. Verify

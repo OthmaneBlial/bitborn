@@ -3,7 +3,7 @@
 Current main validates `bitinspect --annotations JSON` before printing byte rows.
 Malformed entries produce a readable error or an `ANNOTATION_ERROR` diagnostic
 with `--json-errors`, rather than an uncaught type/key traceback. This host-tool
-change is included in v0.4 release preparation; target source and executable bytes are unchanged.
+change is included in v0.4.0; target source and executable bytes are unchanged.
 
 ```sh
 make build

@@ -1,6 +1,6 @@
 # Check the addresses you wrote by hand
 
-This capability is included in the v0.4 release preparation; archives through
+This capability is included in v0.4.0; archives through
 v0.3 do not include this option or the reference maps.
 
 `bitinspect --references JSON` checks declared numeric fields against expected

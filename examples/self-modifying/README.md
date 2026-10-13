@@ -75,7 +75,7 @@ python3 tools/record_self_modifying.py
 ```
 
 The [complete byte table](bytes.md) explains every literal byte. This is an
-Unreleased native experiment, with actual emulator evidence and no performance
+v0.4.0 native experiment, with actual emulator evidence and no performance
 or physical-hardware claim.
 
 The [literal reference map](references.json) checks the future operand pointer

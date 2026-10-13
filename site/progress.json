@@ -262,8 +262,8 @@
       "progress": "\u2705 Exact-commit CI passed; all 14 public files re-downloaded anonymously, bytes/checksums and source/artifact provenance verified"
     },
     {
-      "milestone": "v0.4.0 release preparation",
-      "progress": "In validation: nine BIOS images, new native/browser evidence, source/artifact archives and exact-commit provenance; public release verification remains a gate"
+      "milestone": "v0.4.0 release",
+      "progress": "\u2705 Main/tag CI passed; independent source archive passes 92 tests and three-browser checks; all 31 public files, 30 checksums and 90 artifact hashes verified"
     },
     {
       "milestone": "v0.2.0 release",

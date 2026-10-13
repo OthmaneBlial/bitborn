@@ -468,6 +468,17 @@ Map commit `227f902` passed CI `38344180742` and deployment `38344549223`.
 Mirror `9a6f2db` changes only eleven `bitborn/` paths. Public experiment/challenge
 maps, reference guide and progress match that exact source. The full 92-test
 Python/native suite passes locally with one expected macOS native-Linux skip.
+v0.4.0 is public at immutable `c8d151b62ff7c6ec5c6124087f3a3e75f3d9ab6d`.
+Main CI `38344949598` and tag CI `38345402463` pass. Independent source extraction
+outside any Git repository passes 92 Python/native checks (one expected macOS
+Linux skip), site checks and complete Chrome/Firefox/WebKit suites. All 90 rebuilt
+artifact hashes match staged provenance, and preparing the same clean source
+twice yields identical 31-file staging. Authenticated draft and anonymous public
+downloads match every attachment; all 30 checksum entries pass. Public requests
+disable curl configuration to avoid inherited authentication. The 13 actual A4
+QA pages were rendered and visually reviewed, including Arabic RTL/LTR code.
+Older public releases and tags remain intact; no hardware or full-AT claim added.
+Next: resume native/model research after the verified release and public progress sync.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
