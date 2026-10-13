@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Add a visible CPU execution-shortcut switch, contenteditable/composition/
+  consumed-event guards and atomic manual-step status with the next CS:IP.
+  Automatic Run ticks update the machine without flooding the live status;
+  buttons and halt/pause/breakpoint/error outcomes remain available.
+
 - Add a one-bit direction-flag debugging walkthrough using existing reviewed
   challenge sources. Compare the failed seed and repaired literal bytes in QEMU
   and the model, with actual browser seed/edit/result capture frames.

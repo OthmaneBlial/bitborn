@@ -139,6 +139,10 @@ try {
 
   await begin('cpu-lab');
   await page.goto(new URL('cpu-lab/',base).href);
+  await page.locator('#execution-shortcuts').uncheck();await page.locator('#lab-title').click();await page.keyboard.press('s');
+  assert.equal(await page.locator('#step-count').textContent(),'0000');await capture('Disabled execution shortcuts; pressing S leaves loaded model state untouched. Native controls remain available.');
+  await page.locator('#execution-shortcuts').check();await page.locator('#step').click();
+  assert.match(await page.locator('#status').textContent(),/^Step 1:.*Next 0000:7C03/);await capture('Manual Step reports its instruction number and next CS:IP in the atomic status region; automatic Run ticks are checked separately.');
   await page.locator('#preset').selectOption('stack');await capture('Loaded the literal stack/CALL/RET preset.');
   await page.locator('#step').scrollIntoViewIfNeeded();
   for(let index=0;index<8;index++){

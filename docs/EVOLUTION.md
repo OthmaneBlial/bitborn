@@ -392,6 +392,26 @@ frame hashes, including the four direction seed/edit/repair frames.
 Firefox and WebKit also verify the failing direction seed, actual one-bit button
 repair, starting-source caption and all successful goal checks.
 Next: remaining keyboard execution shortcuts and screen-reader announcements.
+Debugging lesson `6ccb6a3` passed CI `38338290145` and deployment `38338697338`.
+Mirror `cc28126` changes only fourteen `bitborn/` paths. Public challenge module,
+GIF/provenance, lesson, README, roadmap and progress match that exact commit.
+CPU Lab now exposes a visible execution-shortcut switch, with all five key
+actions listed beside it and a linked guide. Disabling keys preserves loaded
+state/history and native buttons. Contenteditable text, composition, consumed
+events, key repeats and modifiers cannot invoke execution commands. The atomic
+status reports manual-step numbers and next CS:IP; automatic ticks update the
+machine without per-instruction status messages, retaining pause/halt/errors
+and breakpoint outcomes. Chromium exercises the switch through native keyboard
+activation, all disabled/enabled actions, source/contenteditable typing from a
+nonzero recorded state, event guards and quiet Run ticks. This is DOM/key evidence;
+live speech-input and screen-reader review remains separate.
+Firefox and WebKit pass the same execution-keyboard/status checks, including
+native checkbox/button activation and protected editing from a nonzero state.
+Refreshed genuine browser captures include the disabled-S and manual-step
+states; all 64 source hashes, six GIF hashes and 98 actual PNG frame hashes
+match. The CPU recording has 47 frames. Tablet/mobile checks and actual frame
+review retain readable controls; canonical instruction sources remain unchanged.
+Next: explicit literal pointer/reference inspection without generating target bytes.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -460,7 +480,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 41 | 2 | Print-friendly lessons with readable code and source attribution | M | H | 25–27 | Low | Complete: ten pages in three browser print modes, actual 13-page Chromium PDF QA, RTL/LTR code and source URLs; physical printers untested |
 | 42 | 0 | Keyboard accessibility regression for timeline, imports, controls and error focus | H | H | 12 | Low | Open |
 | 43 | 0 | Contrast and narrow-screen checks for changed-bit and flag indicators | H | H | Existing CSS | Low | Complete: real tablet overflow fixed; four widths/eight states, 11,072 samples per browser, contrast/local geometry and non-color cues; full-site/animated/live AT review separate |
-| 44 | 2 | Explicit shortcuts guide and screen-reader-friendly execution announcements | M | H | 12,42 | Low | Open |
+| 44 | 2 | Explicit shortcuts guide and screen-reader-friendly execution announcements | M | H | 12,42 | Low | Complete: switch, editable/event guards, atomic manual status and quiet Run ticks; live AT review remains separate |
 | 45 | 2 | CODE_OF_CONDUCT with real, usable reporting paths | H | H | Maintainer/profile evidence | Low | Complete |
 | 46 | 0 | SECURITY policy with scoped supported versions and verified private reporting | H | H | GitHub repository settings | Medium | Complete |
 | 47 | 2 | Contributor source map and focused per-component development commands | H | H | Existing CONTRIBUTING | Low | Complete |

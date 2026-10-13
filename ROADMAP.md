@@ -293,6 +293,10 @@ The v0.2 milestone is published and verified. The following research remains ope
 - [x] Add a [one-bit debugging walkthrough](docs/tutorials/repair-direction.md)
   with the actual failing direction seed, intermediate modeled write addresses,
   both native controls and genuine browser repair frames.
+- [x] Add [execution-keyboard guidance](docs/cpu-lab/keyboard.md), a visible
+  shortcut switch and editable/composition guards. Preserve native buttons and
+  loaded state; report manual-step locations without live-status timer spam.
+  Live assistive-technology review remains a separate gate.
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

@@ -2,6 +2,8 @@
 
 See [execution scope and proof levels](../execution-scope.md) for supported
 encoding families, simplified BIOS/I/O behavior and the matching validation path.
+The [keyboard and status guide](keyboard.md) explains the shortcut switch,
+focused-control behavior and manual/automatic execution announcements.
 
 Every selectable CPU Lab preset reads one manually authored `.bits` file. The site
 build copies literal text into its browser data module and publishes the same

@@ -189,7 +189,7 @@ function performStep() {
     memoryChanges = instruction.memoryChanges;
     stoppedAtBreakpoint = null;
     if (state.halted) pause(`HLT reached after ${state.steps} steps. Reset to restart.`);
-    else {setStatus(`${instruction.mnemonic} executed. ${instruction.explanation}`); render();}
+    else {if(!running)setStatus(`Step ${state.steps}: ${instruction.mnemonic} executed. Next ${location(state)}. ${instruction.explanation}`); render();}
     return true;
   } catch (error) {
     before = null; memoryChanges = []; failed = true;
@@ -354,13 +354,14 @@ $('import-program').addEventListener('change',async event => {
   } finally {if(event.target.files[0]===file)event.target.value='';}
 });
 document.addEventListener('keydown',event => {
-  if (event.altKey || event.ctrlKey || event.metaKey || event.repeat || event.target.closest('input,textarea,select,button,a,summary')) return;
+  if (!$('execution-shortcuts').checked || event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.repeat || event.target.isContentEditable || event.target.closest('input,textarea,select,button,a,summary')) return;
   if (event.key.toLowerCase() === 's') {event.preventDefault(); if (!running) performStep();}
   else if (event.code === 'Space') {event.preventDefault(); if (running) pause(`Paused at ${location(state)}.`); else run();}
   else if (event.key.toLowerCase() === 'r') {event.preventDefault(); reset();}
   else if (event.key.toLowerCase() === 'b') {event.preventDefault();travel('rewind');}
   else if (event.key.toLowerCase() === 'f') {event.preventDefault();travel('replay');}
 });
+$('execution-shortcuts').addEventListener('change',()=>setStatus(`Execution shortcuts ${$('execution-shortcuts').checked?'enabled':'disabled'}. Buttons remain available with Tab and Enter; loaded state and history are unchanged.`));
 $('preset').value=presets[0].id; $('binary-editor').value=presets[0].source; $('lesson').textContent=presets[0].lesson; loadSource();
 function loadProgramFragment() {
   try {

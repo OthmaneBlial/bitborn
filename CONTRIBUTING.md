@@ -53,6 +53,7 @@ exact source revision, generated copies and every artifact hash across builds.
 | [Native self-modification](examples/self-modifying/README.md) | `examples/self-modifying/`, `tools/record_self_modifying.py` | `node tests/test_self_modifying.mjs` and `python3 -m unittest tests.test_self_modifying_native` |
 | Pre-BIOS stack setup | Reviewed standalone sources in `targets.json`, `tests/test_boot_stack.mjs` | `node tests/test_boot_stack.mjs`; native/model proof for edited sources |
 | [CPU indicator readability](docs/indicator-readability.md) | `site/cpu-lab/lab.css`, `tests/contrast.mjs`, `tests/indicator_browser_checks.mjs` | `node tests/test_contrast.mjs` and `node tests/browser_cpu_lab.mjs` |
+| [Execution keyboard controls](docs/cpu-lab/keyboard.md) | `site/cpu-lab/`, `tests/execution_keyboard_browser_checks.mjs` | `node tests/browser_cpu_lab.mjs` and `npm run test:cross-browser` |
 | [Native VGA bitmap](examples/vga-bitmap/README.md) | `examples/vga-bitmap/`, `tests/vga_bitmap_checks.py`, `tools/record_vga_bitmap.py` | `python3 -m unittest tests.test_vga_bitmap` and `node tests/test_vga_bitmap_scope.mjs` |
 | [Short Jcc fields](docs/instruction-encoding/short-branches.md) | `site/simulator.mjs`, `site/encoding.mjs`, `docs/instruction-encoding/fixtures/short-branch*.bits` | `node tests/test_branch_encoding.mjs` and `node tests/test_encoding.mjs` |
 | [Instruction-bit keyboard navigation](docs/instruction-encoding/keyboard.md) | `site/app.js`, `tests/bit_keyboard_browser_checks.mjs` | `node tests/browser_site.mjs` and `npm run test:cross-browser` |
