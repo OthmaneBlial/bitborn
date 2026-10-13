@@ -65,6 +65,7 @@ website progress; the [README](README.md) keeps a short summary.
 | [One byte, one word, one branch](docs/tutorials/byte-order.md) | ✅ Interactive learning path connects bit weights, little-endian immediates and signed branch targets from six handwritten bytes; all word/displacement values and three browser engines checked; [actual browser recording](assets/byte-order-demo.gif); inspection only |
 | [Guided stack and call lesson](docs/tutorials/stack-and-calls.md) | ✅ Inspect saved values and return addresses through nine verified checkpoints; full RAM/state rewind and replay, retained POP bytes, native challenge load-address differences, browser memory checks and [actual CALL rewind footage](assets/cpu-lab-demo.gif) |
 | [Carry, overflow and undefined flags](docs/tutorials/flags.md) | ✅ Guided flag checkpoints, signed/unsigned boundary comparison, low-byte parity and AF=? replay; two reviewed QEMU programs check all six defined ADD flags against expected masks and the model |
+| [Guarded native allocator](examples/bounded-allocator/README.md) | ✅ 220 literal bytes, five native-written request logs in each of two boots, exact-fit ownership, zero/exhaustion/wrap rejection, both guards and immutable code/disk checks; one fixed real-mode arena, no free or memory isolation; browser model stops at unsupported ADD |
 | [Short branch field microscope](docs/instruction-encoding/short-branches.md) | ✅ Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged |
 | [Keyboard instruction-bit editing](docs/instruction-encoding/keyboard.md) | ✅ One Tab stop, arrows, row/global Home/End, Enter/Space and stable edit focus; fixture shortening preserves selector focus and navigation never executes bytes |
 | [Actionable source errors](docs/source-diagnostics.md) | ✅ Exact UTF-16 token/excess-byte ranges, 704 location cases and focused binary/hex selection; invalid drafts preserve loaded state/history and corrections clear stale errors |
@@ -430,7 +431,10 @@ dependencies, risks and the current execution record. It is not a feature list.
   with complete word/displacement checks and keyboard/browser regression coverage.
   The six-byte learning fragment remains read-only inspection, without native claims.
 
-- [ ] Paging or a bounded allocator with explicit memory-map evidence.
+- [x] A bounded allocator with explicit memory-map evidence: one real-mode arena,
+  five requests per native boot, one request-bit control and unchanged guards.
+  See [the ownership and scope guide](examples/bounded-allocator/README.md).
+- [ ] Paging with inspected page tables and deliberate fault evidence.
 - [ ] General exception handlers and hardware interrupt delivery.
 - [ ] Physical-hardware calibration and broader boot compatibility.
 

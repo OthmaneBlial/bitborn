@@ -1,0 +1,16 @@
+{
+  "loadAddress": 31744,
+  "references": [
+    {"name": "normalize CS", "kind": "far16", "offset": 2, "targetOffset": 6},
+    {"name": "zero arena loop", "kind": "rel8", "offset": 27, "segment": 0, "originOffset": 28, "targetOffset": 22},
+    {"name": "zero request call", "kind": "rel16", "offset": 46, "segment": 0, "originOffset": 48, "targetOffset": 195},
+    {"name": "three-byte request call", "kind": "rel16", "offset": 76, "segment": 0, "originOffset": 78, "targetOffset": 195},
+    {"name": "remaining-capacity request call", "kind": "rel16", "offset": 106, "segment": 0, "originOffset": 108, "targetOffset": 195},
+    {"name": "final-byte request call", "kind": "rel16", "offset": 136, "segment": 0, "originOffset": 138, "targetOffset": 195},
+    {"name": "wraparound request call", "kind": "rel16", "offset": 166, "segment": 0, "originOffset": 168, "targetOffset": 195},
+    {"name": "defensive halt loop", "kind": "rel8", "offset": 194, "segment": 0, "originOffset": 195, "targetOffset": 192},
+    {"name": "reject zero", "kind": "rel8", "offset": 199, "segment": 0, "originOffset": 200, "targetOffset": 215},
+    {"name": "reject arithmetic wrap", "kind": "rel8", "offset": 205, "segment": 0, "originOffset": 206, "targetOffset": 215},
+    {"name": "reject beyond arena", "kind": "rel8", "offset": 210, "segment": 0, "originOffset": 211, "targetOffset": 215}
+  ]
+}

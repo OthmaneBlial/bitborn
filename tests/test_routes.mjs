@@ -31,7 +31,7 @@ for (const route of routes) {
 assert.equal(new Set(titles).size,routes.length,'unique route titles');
 assert.equal(new Set(descriptions).size,routes.length,'unique route descriptions');
 const examples = readFileSync(resolve(root,'site/examples/index.html'),'utf8');
-assert.equal([...examples.matchAll(/data-example="/g)].length,16);
+assert.equal([...examples.matchAll(/data-example="/g)].length,17);
 const targets = [
   ...JSON.parse(readFileSync(resolve(root,'targets.json'),'utf8')),
   ...JSON.parse(readFileSync(resolve(root,'examples/shell/targets.json'),'utf8')),
@@ -85,4 +85,4 @@ const readme=readFileSync(resolve(root,'README.md'),'utf8');
 assert.ok(!readme.includes('| Milestone | Progress |'),'README keeps only the summary and roadmap link');
 assert.match(readme,/Read the full roadmap.*\]\(ROADMAP\.md\)/);
 assert.ok(progress.milestones.every(item => typeof item.milestone === 'string' && typeof item.progress === 'string'));
-console.log(`route checks passed: ${routes.length} portable routes, unique metadata, local source/tutorial/download links, sixteen real example sizes, generated repository progress data`);
+console.log(`route checks passed: ${routes.length} portable routes, unique metadata, local source/tutorial/download links, seventeen real example sizes, generated repository progress data`);

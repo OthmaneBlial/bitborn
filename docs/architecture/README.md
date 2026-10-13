@@ -124,6 +124,15 @@ one-bit source control changes displayed RGB while all 64,000 stored indices
 stay identical. Full QEMU framebuffer/screen checks accompany genuine captures;
 graphics-mode BIOS, REP MOVSB and palette hardware are outside the browser model.
 
+## Native guarded allocation
+
+The [guarded allocator](../../examples/bounded-allocator/README.md) demonstrates
+real-mode byte ownership in one fixed sixteen-byte arena. QMP reads five
+native-written request logs and both guards after each boot halts. Carry rejects
+address wrap before the upper-bound comparison; the caller checks CF before
+writing a marker. This cooperative bump allocation has no free or memory
+isolation. The browser model stops at its unsupported register ADD.
+
 ## Technical references
 
 - [Intel Software Developer's Manuals](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html): instruction encodings, real mode and flags.

@@ -5,7 +5,7 @@ import {createState,step} from '../site/simulator.mjs';
 
 const root=new URL('../',import.meta.url),targets=JSON.parse(readFileSync(new URL('targets.json',root),'utf8'));
 const sources=targets.filter(target=>target.bios||target.bootable).map(target=>target.source);
-sources.push('examples/self-modifying/control.bits');
+sources.push('examples/self-modifying/control.bits','examples/bounded-allocator/control.bits');
 let checked=0;
 for(const source of sources) {
   const bytes=parseBits(readFileSync(new URL(source,root),'utf8')),state=createState(bytes);
@@ -24,5 +24,5 @@ for(const source of sources) {
   assert.equal(state.SP,0x7C00,`${source}: establish SP before calling BIOS`);
   checked++;
 }
-assert.equal(checked,7);
-console.log('Boot-stack checks passed: seven reviewed standalone boot/control headers establish SS:SP with interrupts masked during setup, before their first BIOS call, from deliberately perturbed model entry registers. Later STI remains allowed. This checks setup ordering, not BIOS emulation or physical hardware.');
+assert.equal(checked,9);
+console.log('Boot-stack checks passed: nine reviewed standalone boot/control headers establish SS:SP with interrupts masked during setup, before their first BIOS call or near call, from deliberately perturbed model entry registers. Later STI remains allowed. This checks setup ordering, not BIOS emulation or physical hardware.');

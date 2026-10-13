@@ -6,6 +6,16 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 
 ## Current execution record
 
+Native allocator (2026-10-13): 220 literal real-mode bytes own one fixed
+sixteen-byte arena. Two QEMU boots verify five native-written request logs each,
+zero/exact-fit/exhaustion/wrap behavior, both guards, balanced calls and unchanged
+code/source/images. Byte 103 bit 0 changes the third request from 13 to 12,
+leaving the final byte for the next call. Final QMP snapshots and independent
+disassembly are committed with hashes; they are not a native instruction trace.
+The model stops honestly at offset 202 after 65 steps. Current counts become
+58 reviewed targets, 92 derived artifacts, ten BIOS images and 17 gallery entries.
+Paging, free/reuse, isolation and physical hardware remain separate research.
+
 README priority (2026-10-13): keep a short progress summary and roadmap link,
 with playful static SVGs and emoji navigation. The detailed milestone ledger
 now lives in ROADMAP.md and drives website progress; route checks enforce that
@@ -635,7 +645,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 52 | 0 | Clean-checkout reproduction and platform-specific validation documentation | H | H | CI | Low | Complete: fresh remote accecee install, 77 Python/site checks, all 88 hashes across two builds and clean tracked tree; platform gates explicit |
 | 53 | 3 | Real VGA bitmap experiment with manually authored pixel/instruction bytes | H | M | BIOS target | High | Complete: 142 authored bytes, full native index/RGB proof, exact actual GIF pixels and three-browser download/model-boundary checks; hardware remains untested |
 | 54 | 3 | Tiny text-mode game with deterministic input and genuine QEMU recording | H | M | Shell keyboard helpers | High | Open |
-| 55 | 3 | Bounded native allocator with memory-map, ownership and overflow evidence | H | M | Protected-mode target | High | Open |
+| 55 | 3 | Bounded native allocator with memory-map, ownership and overflow evidence | H | M | Reviewed BIOS target | High | Complete: fixed real-mode arena, two native five-request logs, one-bit ownership control, zero/exact-fit/exhaustion/wrap checks and guarded immutable code/disk proof; free, isolation and paging remain open |
 | 56 | 3 | Protected-mode exception handlers with controlled fault injection | H | M | IDT target | High | Partial: native #UD and selector #GP/error-code fixtures; general dispatch open |
 | 57 | 3 | Timer IRQ experiment with explicit PIC setup and deterministic QEMU assertions | H | M | 56 | High | Open |
 | 58 | 3 | Paging experiment with inspected page tables and deliberate page-fault evidence | H | L | 55,56 | High | Open |

@@ -1,0 +1,151 @@
+{
+  "kind": "Final QMP halt snapshots and native-written allocation logs from two separate boots; not a native instruction trace",
+  "qemu": "QEMU emulator version 11.1.1",
+  "memoryMap": {
+    "arenaStart": 8192,
+    "arenaEndExclusive": 8208,
+    "lowerGuard": 8191,
+    "upperGuard": 8208,
+    "logStart": 8448,
+    "logSize": 30,
+    "codeStart": 31744
+  },
+  "changedSourceByte": 103,
+  "changedBitMask": 1,
+  "sourceSha256": {
+    "tools/record_allocator.py": "e41fb4b372b8aa35605da910b0d4260539316e17d73e73cb76deb7958c207340",
+    "tools/build.py": "0d7fccd1a6be5c7336dbd8bd9f56bd0d05999cf1c5a3ae3e454b4303ced67509",
+    "tests/qemu.py": "30bccf107c84c82d2045de4c605d5e8104eaa682b3e8e0b165ff16e0eb5315c2",
+    "tests/bounded_allocator_checks.py": "8a09a5a9079db4855617462c793ba813d6b593f84735ca9406dc504099e9a21f",
+    "examples/bounded-allocator/program.bits": "ce56898e89448ad8f0c57de58756f4b7a609426a0323952e3d75b76be8c7cddf",
+    "examples/bounded-allocator/control.bits": "cea606a00a2c03460ace0cc897d276d4d65fe42529523836f502cb1007d82123",
+    "examples/bounded-allocator/references.json": "ab59f2bab8cb07143cef3d13588a69044bf235b89a32296fb4e9571d678b316e"
+  },
+  "captures": [
+    {
+      "source": "examples/bounded-allocator/program.bits",
+      "payloadSize": 220,
+      "payloadSha256": "260fc5187fe5a244751b37898d9c2bbef07c885fe6e6801d03303e4c6346cceb",
+      "imageSize": 512,
+      "imageSha256": "b7af0605701d2502ff21f5e7ad214908d110cce16c951f501210914907918b0c",
+      "registerFile": "assets/bounded-allocator-program-registers.txt",
+      "registerFileSha256": "0f80266878d91234fe86d4a71d2c5c25d22eb64e156b3124b6ab4cb91ba80bcf",
+      "disassemblyFile": "assets/bounded-allocator-program-disassembly.txt",
+      "disassemblyFileSha256": "d3ee67f4df796d9081af9c8900e090d721f0b60b5acbc1124d82e4d2066fd8a2",
+      "snapshot": {
+        "registers": {
+          "AX": 1,
+          "BX": 8208,
+          "DI": 65535,
+          "SP": 31744
+        },
+        "segments": {
+          "CS": 0,
+          "DS": 0,
+          "SS": 0
+        },
+        "flags": 2,
+        "definedFlagsMask": 3797,
+        "haltIP": 31937,
+        "nativeLogHex": "ffff00200100002003200000032010200000ffff10200100ffff10200100",
+        "arenaAndGuardsHex": "a5420000430000000000000000000000005a",
+        "sourceRamSha256": "260fc5187fe5a244751b37898d9c2bbef07c885fe6e6801d03303e4c6346cceb",
+        "requests": [
+          {
+            "requested": 0,
+            "pointer": 65535,
+            "cursor": 8192,
+            "failed": true
+          },
+          {
+            "requested": 3,
+            "pointer": 8192,
+            "cursor": 8195,
+            "failed": false
+          },
+          {
+            "requested": 13,
+            "pointer": 8195,
+            "cursor": 8208,
+            "failed": false
+          },
+          {
+            "requested": 1,
+            "pointer": 65535,
+            "cursor": 8208,
+            "failed": true
+          },
+          {
+            "requested": 65535,
+            "pointer": 65535,
+            "cursor": 8208,
+            "failed": true
+          }
+        ]
+      }
+    },
+    {
+      "source": "examples/bounded-allocator/control.bits",
+      "payloadSize": 220,
+      "payloadSha256": "5e00f90035bb4e4be7d199048c5537ba499482c12e364c99ac3f181453f2b55b",
+      "imageSize": 512,
+      "imageSha256": "2c723462dc6fc3cbfedf2b7279c2295222297be1008471e9454204fa6792283b",
+      "registerFile": "assets/bounded-allocator-control-registers.txt",
+      "registerFileSha256": "0f80266878d91234fe86d4a71d2c5c25d22eb64e156b3124b6ab4cb91ba80bcf",
+      "disassemblyFile": "assets/bounded-allocator-control-disassembly.txt",
+      "disassemblyFileSha256": "140e5fdb4164d80cab683ac511f9dd8c9e3584365411c6228b61bfab62542d3d",
+      "snapshot": {
+        "registers": {
+          "AX": 1,
+          "BX": 8208,
+          "DI": 65535,
+          "SP": 31744
+        },
+        "segments": {
+          "CS": 0,
+          "DS": 0,
+          "SS": 0
+        },
+        "flags": 2,
+        "definedFlagsMask": 3797,
+        "haltIP": 31937,
+        "nativeLogHex": "ffff0020010000200320000003200f2000000f2010200000ffff10200100",
+        "arenaAndGuardsHex": "a5420000430000000000000000000000445a",
+        "sourceRamSha256": "5e00f90035bb4e4be7d199048c5537ba499482c12e364c99ac3f181453f2b55b",
+        "requests": [
+          {
+            "requested": 0,
+            "pointer": 65535,
+            "cursor": 8192,
+            "failed": true
+          },
+          {
+            "requested": 3,
+            "pointer": 8192,
+            "cursor": 8195,
+            "failed": false
+          },
+          {
+            "requested": 12,
+            "pointer": 8195,
+            "cursor": 8207,
+            "failed": false
+          },
+          {
+            "requested": 1,
+            "pointer": 8207,
+            "cursor": 8208,
+            "failed": false
+          },
+          {
+            "requested": 65535,
+            "pointer": 65535,
+            "cursor": 8208,
+            "failed": true
+          }
+        ]
+      }
+    }
+  ],
+  "reproduce": "python3 tools/record_allocator.py"
+}

@@ -1,0 +1,84 @@
+00000000  FA                cli
+00000001  EA067C0000        jmp word 0x0:word 0x7c06
+00000006  31C0              xor ax,ax
+00000008  8ED0              mov ss,ax
+0000000A  8ED8              mov ds,ax
+0000000C  BC007C            mov sp,0x7c00
+0000000F  FC                cld
+00000010  BF0020            mov di,0x2000
+00000013  B90800            mov cx,0x8
+00000016  8905              mov [di],ax
+00000018  47                inc di
+00000019  47                inc di
+0000001A  E2FA              loop 0x16
+0000001C  B05A              mov al,0x5a
+0000001E  8805              mov [di],al
+00000020  BFFF1F            mov di,0x1fff
+00000023  B0A5              mov al,0xa5
+00000025  8805              mov [di],al
+00000027  BB0020            mov bx,0x2000
+0000002A  B80000            mov ax,0x0
+0000002D  E89300            call 0xc3
+00000030  7204              jc 0x36
+00000032  B041              mov al,0x41
+00000034  8805              mov [di],al
+00000036  B80000            mov ax,0x0
+00000039  150000            adc ax,0x0
+0000003C  893E0021          mov [0x2100],di
+00000040  891E0221          mov [0x2102],bx
+00000044  89060421          mov [0x2104],ax
+00000048  B80300            mov ax,0x3
+0000004B  E87500            call 0xc3
+0000004E  7204              jc 0x54
+00000050  B042              mov al,0x42
+00000052  8805              mov [di],al
+00000054  B80000            mov ax,0x0
+00000057  150000            adc ax,0x0
+0000005A  893E0621          mov [0x2106],di
+0000005E  891E0821          mov [0x2108],bx
+00000062  89060A21          mov [0x210a],ax
+00000066  B80D00            mov ax,0xd
+00000069  E85700            call 0xc3
+0000006C  7204              jc 0x72
+0000006E  B043              mov al,0x43
+00000070  8805              mov [di],al
+00000072  B80000            mov ax,0x0
+00000075  150000            adc ax,0x0
+00000078  893E0C21          mov [0x210c],di
+0000007C  891E0E21          mov [0x210e],bx
+00000080  89061021          mov [0x2110],ax
+00000084  B80100            mov ax,0x1
+00000087  E83900            call 0xc3
+0000008A  7204              jc 0x90
+0000008C  B044              mov al,0x44
+0000008E  8805              mov [di],al
+00000090  B80000            mov ax,0x0
+00000093  150000            adc ax,0x0
+00000096  893E1221          mov [0x2112],di
+0000009A  891E1421          mov [0x2114],bx
+0000009E  89061621          mov [0x2116],ax
+000000A2  B8FFFF            mov ax,0xffff
+000000A5  E81B00            call 0xc3
+000000A8  7204              jc 0xae
+000000AA  B045              mov al,0x45
+000000AC  8805              mov [di],al
+000000AE  B80000            mov ax,0x0
+000000B1  150000            adc ax,0x0
+000000B4  893E1821          mov [0x2118],di
+000000B8  891E1A21          mov [0x211a],bx
+000000BC  89061C21          mov [0x211c],ax
+000000C0  F4                hlt
+000000C1  EBFD              jmp 0xc0
+000000C3  3D0000            cmp ax,0x0
+000000C6  740F              jz 0xd7
+000000C8  89DF              mov di,bx
+000000CA  01D8              add ax,bx
+000000CC  7209              jc 0xd7
+000000CE  3D1020            cmp ax,0x2010
+000000D1  7704              ja 0xd7
+000000D3  89C3              mov bx,ax
+000000D5  F8                clc
+000000D6  C3                ret
+000000D7  BFFFFF            mov di,0xffff
+000000DA  F9                stc
+000000DB  C3                ret

@@ -18,6 +18,7 @@ example uses the canonical source in `boot/`, avoiding a second divergent copy.
 | Display VGA characters | x86 BIOS / QEMU | Green B at first text cell | [vga](vga/README.md) |
 | Modify a future instruction | x86 BIOS / QEMU | One writer bit changes A to a; exact code RAM, serial and VGA proof | [self-modifying](self-modifying/README.md) |
 | Recolor a literal bitmap | x86 BIOS / QEMU | One palette bit changes native RGB while all 64,000 pixel indices stay identical | [vga-bitmap](vga-bitmap/README.md) |
+| Allocate a guarded arena | x86 BIOS / QEMU | One request bit changes final-byte ownership; zero, exhaustion and wraparound leave the cursor unchanged | [bounded-allocator](bounded-allocator/README.md) |
 | Boot from one sector | x86 BIOS / QEMU | Full bitborn greeting, halt | [boot-sector](boot-sector/README.md) |
 | Interactive monitor | x86 BIOS / QEMU | Exact help/clear/about/reboot/peek commands | [monitor](monitor/README.md) |
 | Read additional sectors | x86 BIOS / QEMU | Sector 2 loaded! | [disk-read](disk-read/README.md) |

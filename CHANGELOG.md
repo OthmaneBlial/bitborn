@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add a 220-byte literal real-mode allocator with a guarded sixteen-byte arena.
+  Two QEMU boots check five native-written request logs, exact fits, zero,
+  exhaustion and wraparound, balanced calls and immutable code/image bytes.
+  One request bit changes ownership of the last byte. Publish the source,
+  byte table, image and final-snapshot provenance; browser ADD remains unsupported.
+
 - Shorten the README to a progress summary and roadmap link, with emoji
   navigation and two accessible SVG illustrations. Keep the complete milestone
   ledger in ROADMAP.md and generate website progress from that single source.

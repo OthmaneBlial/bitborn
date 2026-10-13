@@ -218,6 +218,10 @@
       "progress": "\u2705 Guided flag checkpoints, signed/unsigned boundary comparison, low-byte parity and AF=? replay; two reviewed QEMU programs check all six defined ADD flags against expected masks and the model"
     },
     {
+      "milestone": "Guarded native allocator",
+      "progress": "\u2705 220 literal bytes, five native-written request logs in each of two boots, exact-fit ownership, zero/exhaustion/wrap rejection, both guards and immutable code/disk checks; one fixed real-mode arena, no free or memory isolation; browser model stops at unsupported ADD"
+    },
+    {
       "milestone": "Short branch field microscope",
       "progress": "\u2705 Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged"
     },

@@ -43,10 +43,17 @@ try {
   assert.match(await page.locator('#play-registers').textContent(),/ZF1/);
   await checkEncoding(page);
   await page.goto(new URL('examples/',base).href);
-  assert.equal(await page.locator('[data-example]').count(),16);
-  assert.equal(await page.locator('[data-example] a[download]').count(),16);
+  assert.equal(await page.locator('[data-example]').count(),17);
+  assert.equal(await page.locator('[data-example] a[download]').count(),17);
   assert.match(await page.locator('[data-example="shell-app"]').textContent(),/not independently bootable/);
   assert.equal(await page.locator('[data-example="shell-app"] a[download]').getAttribute('href'),'../downloads/shell-app.bin');
+  const allocator=page.locator('[data-example="bounded-allocator"]');
+  assert.match(await allocator.textContent(),/browser model stops at unsupported register ADD/);
+  assert.match(await allocator.locator('pre').textContent(),/\[200F,2010\)/);
+  for(const file of ['downloads/bounded-allocator.img','reference/examples/bounded-allocator/program.bits','reference/examples/bounded-allocator/control.bits','assets/bounded-allocator-recording.json']) {
+    const response=await page.request.get(new URL(file,base).href);assert.ok(response.ok(),file);
+    assert.deepEqual(await response.body(),await readFile(resolve(root,'site',file)),`${file} serves exact reviewed bytes`);
+  }
   await page.goto(new URL('roadmap/',base).href);
   const progress = JSON.parse(await readFile(resolve(root,'site/progress.json'),'utf8'));
   await page.waitForFunction(() => document.querySelectorAll('.milestone-row').length > 0);
@@ -78,5 +85,5 @@ try {
   }
   await checkVGABitmap(page,base);
   assert.deepEqual(errors,[],'route console / failed assets');
-  console.log('dedicated-route browser checks passed: nested playground editing/keyboard/flags, sixteen example downloads and app payload boundary, native bitmap/GIF/image bytes and graphics rejection, exact generated roadmap, safe text rendering and invalid-data handling, all five routes at 1440/768/390/320px; screenshots in build/');
+  console.log('dedicated-route browser checks passed: nested playground editing/keyboard/flags, seventeen example downloads and app payload boundary, native bitmap/GIF/image bytes and graphics rejection, exact generated roadmap, safe text rendering and invalid-data handling, all five routes at 1440/768/390/320px; screenshots in build/');
 } finally {await browser?.close();await new Promise(resolve => server.close(resolve));}

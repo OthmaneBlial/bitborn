@@ -13,5 +13,6 @@
   {"source": "examples/exit-code-small/program.bits", "output": "exit-code-small.bin", "size": 8, "environment": "linux-x86_64", "sha256": "a0a5759b059d498f6567d39d2553b296ddc4b53b4fd9fde067fc8a1f7364b60b"},
   {"source": "examples/protected-mode/program.bits", "output": "protected-mode.bin", "size": 568, "loader": "boot/loader.bits", "sha256": "358e284ead6a98bd0bf9dd024e943abc2acd271fb5ff8659df67399c14d6e2ac"},
   {"source": "examples/self-modifying/program.bits", "output": "self-modifying.bin", "size": 82, "bootable": true, "sha256": "39682d778b4924ef7c8c2843b3c8dff9d9d6d9254320d7099e8d33e8b2dbb9af"},
-  {"source": "examples/vga-bitmap/program.bits", "output": "vga-bitmap.bin", "size": 142, "bootable": true, "sha256": "7e00752e2334ab6aa28a6769fc289c5f31a90b37f4e804f22f5f4481427925bc"}
+  {"source": "examples/vga-bitmap/program.bits", "output": "vga-bitmap.bin", "size": 142, "bootable": true, "sha256": "7e00752e2334ab6aa28a6769fc289c5f31a90b37f4e804f22f5f4481427925bc"},
+  {"source": "examples/bounded-allocator/program.bits", "output": "bounded-allocator.bin", "size": 220, "bootable": true, "sha256": "260fc5187fe5a244751b37898d9c2bbef07c885fe6e6801d03303e4c6346cceb"}
 ]
