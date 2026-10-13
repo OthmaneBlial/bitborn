@@ -34,7 +34,8 @@
 <p>オペランドサイズが 16 ビットの場合、この 3 バイトは <code dir="ltr">MOV AX,42</code> を表します。 <code dir="ltr">B8</code> がレジスターを選び、<code dir="ltr">2A 00</code> が下位バイトから順に 42 を格納します。 実行モードが重要です。オペランドサイズが 32 ビットなら、<code dir="ltr">B8</code> の後には即値の バイトが 2 個ではなく 4 個必要です。ブラウザーの CPU Lab が実行するのは、 文書に記載された 16 ビット命令の一部だけです。</p>
 <h2>試してみる</h2>
 <p><a href="https://othmaneblial.github.io/bitborn/cpu-lab/">CPU Lab</a> では、命令を 1 ステップずつ 実行し、レジスター、フラグ、スタック、メモリーを確認できます。Back と Forward で記録済みの状態を復元できます。<a href="https://othmaneblial.github.io/bitborn/boot-builder/">ブートセクターの編集ツール</a> では、512 バイトの完全なイメージを編集して書き出せます。チャレンジでは実際の バイトを変更しながら学びます。進捗はブラウザー内に保存されます。</p>
-<p>実際のブートプログラムを作成・検証するには Python 3.10+、Make、QEMU が必要です。 macOS では <code dir="ltr">brew install qemu</code>、Ubuntu では <code dir="ltr">sudo apt-get install python3 make qemu-system-x86</code> を実行します。</p>
+<p>実際のブートプログラムを作成・検証するには Python 3.10+、Make、QEMU が必要です。 macOS では <code dir="ltr">brew install qemu nasm ffmpeg</code>、Ubuntu では <code dir="ltr">sudo apt-get install python3 make qemu-system-x86 nasm ffmpeg</code> を実行します。</p>
+<p>全検証では、NASM に付属する NDISASM で既存の命令バイトを読み、FFmpeg で収録した GIF のピクセルを検証します。どちらも対象プログラムの命令を生成しません。</p>
 <pre dir="ltr"><code>git clone https://github.com/OthmaneBlial/bitborn.git
 cd bitborn
 make test

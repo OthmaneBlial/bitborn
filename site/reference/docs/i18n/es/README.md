@@ -30,8 +30,10 @@ permite editar y exportar una imagen completa de 512 bytes. Los retos enseñan a
 modificar bytes literales; el progreso se guarda en tu navegador.
 
 Para construir el paquete y probar los programas de arranque reales necesitas
-Python 3.10+, Make y QEMU. En macOS: `brew install qemu`. En Ubuntu:
-`sudo apt-get install python3 make qemu-system-x86`.
+Python 3.10+, Make y QEMU. En macOS: `brew install qemu nasm ffmpeg`. En Ubuntu:
+`sudo apt-get install python3 make qemu-system-x86 nasm ffmpeg`.
+
+Las comprobaciones completas también usan NDISASM (incluido en NASM) para leer los bytes de instrucciones existentes y FFmpeg para verificar los píxeles de los GIF capturados. Ninguna herramienta genera las instrucciones del programa.
 
 ```sh
 git clone https://github.com/OthmaneBlial/bitborn.git

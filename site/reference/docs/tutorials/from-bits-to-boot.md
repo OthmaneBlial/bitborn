@@ -1,8 +1,10 @@
 # Your first program, without an assembler
 
-Use a Linux x86-64 host or macOS with Python 3.10+ and QEMU installed. No compiler
-or assembler is needed. On macOS, `brew install qemu` supplies system emulation;
-on Ubuntu, install `python3 make qemu-system-x86`. Linux executable examples need
+Use a Linux x86-64 host or macOS with Python 3.10+ and QEMU installed. Target
+instructions do not need a compiler or assembler. The full checks below also
+use NDISASM from NASM for read-only disassembly and FFmpeg for captured GIF pixels.
+On macOS, run `brew install qemu nasm ffmpeg`; on Ubuntu, install
+`python3 make qemu-system-x86 nasm ffmpeg`. Linux executable examples need
 a Linux x86-64 kernel. QEMU TCG handles the BIOS targets even on Apple Silicon.
 
 ```sh

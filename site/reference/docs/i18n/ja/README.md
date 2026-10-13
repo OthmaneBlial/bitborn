@@ -29,8 +29,10 @@ x86 プログラムの実際のバイトを、0 と 1 で直接書きます。Bi
 バイトを変更しながら学びます。進捗はブラウザー内に保存されます。
 
 実際のブートプログラムを作成・検証するには Python 3.10+、Make、QEMU が必要です。
-macOS では `brew install qemu`、Ubuntu では
-`sudo apt-get install python3 make qemu-system-x86` を実行します。
+macOS では `brew install qemu nasm ffmpeg`、Ubuntu では
+`sudo apt-get install python3 make qemu-system-x86 nasm ffmpeg` を実行します。
+
+全検証では、NASM に付属する NDISASM で既存の命令バイトを読み、FFmpeg で収録した GIF のピクセルを検証します。どちらも対象プログラムの命令を生成しません。
 
 ```sh
 git clone https://github.com/OthmaneBlial/bitborn.git

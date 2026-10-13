@@ -11,7 +11,9 @@ git rev-parse HEAD
 git status --short
 ```
 
-Python 3.10+, Make and `qemu-system-i386` are required for the native checks.
+Python 3.10+, Make, `qemu-system-i386`, NDISASM (from NASM) and FFmpeg are
+required for the complete native checks. NDISASM reads existing instructions;
+FFmpeg decodes native capture pixels. Neither generates target instructions.
 Node.js 22 is the CI baseline. The host packages literal `.bits` bytes; no target
 assembler or compiler is needed. See [development setup](../CONTRIBUTING.md) for
 QEMU installation and browser dependencies.
@@ -23,6 +25,8 @@ python3 --version
 node --version
 npm --version
 qemu-system-i386 --version
+ndisasm -v
+ffmpeg -version
 npm ci
 make test
 make site-test

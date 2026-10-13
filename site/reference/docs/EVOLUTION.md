@@ -6,6 +6,23 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 
 ## Current execution record
 
+Setup audit (2026-10-13): the original mission requires executable, synchronized
+quickstarts. The README, beginner guide and eight introductions ran `make test`
+but installed only QEMU, omitting read-only NDISASM and native GIF pixel decoding.
+Install commands now include NASM/FFmpeg, with each introduction explaining that
+those host tools do not generate target instructions. English source tracking is
+updated after reviewing the same technical change in all eight introductions.
+Translation freshness/shared byte examples, complete byte tables and local links
+pass. The real introduction browser check passes all eight pages, desktop/320px,
+Arabic RTL prose/LTR code, keyboard navigation and assets. Native-speaker review
+remains separate. The correction changes no target bytes or capture inputs.
+
+Game publication `0bc0296` passes corrected CI `38391619063` and deployment
+`38392408626`. All eighteen checked live source/image/GIF/screenshot/guide/progress
+files match, and Chrome passes actual GIF dimensions, exact downloads, native-only
+scope and both C6-stopping imports at 1440/320px. Dependency-fix mirror `8100237`
+changes only three paths under `bitborn/`.
+
 Bit Hunt native game (2026-10-13): 492 literal bytes implement a five-row maze
 with BIOS keyboard input, bounds/wall checks, immutable map, sticky star victory,
 restart and deliberate quit. An independent coordinate oracle verifies every
@@ -832,6 +849,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 65 | 0 | Identify both invalid comparison sides and focus failed notation conversion without losing drafts/results | H | H | 15,64 | Low | Complete: independent invalid markers, full token/excess selection and partial correction in three browsers; live AT review open |
 | 66 | 0 | Audit native boot fixtures for explicit stack initialization before their first BIOS call | H | H | Native boot fixtures | Medium | Complete: seven reviewed boot/control setup guards, prior-source regression, corrected 82-byte fixture, native/model and three-browser proof, refreshed captures; hardware and full BIOS emulation remain separate |
 | 67 | 0 | Validate optional bitinspect annotation metadata and preserve structured errors before rendering | H | H | Existing host inspection | Medium | Complete: bounded JSON, typed non-overlapping ranges, literal-bit matches, terminal-safe labels and structured late-failure diagnostics; canonical targets remain valid |
+| 68 | 0 | Align executable quickstart dependencies across README, beginner guide and eight introductions | H | H | Native capture test | Low | Complete: NASM/FFmpeg install commands, localized host-tool roles, English source tracking and eight-page browser/link checks; native-speaker review remains separate |
 
 Large tasks are divided into useful verified milestones. Native experiments only
 become capabilities after literal source review and real QEMU checks; hardware

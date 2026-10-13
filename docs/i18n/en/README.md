@@ -28,8 +28,10 @@ lets you edit and export a complete 512-byte image. Challenges teach changes to
 literal bytes; your progress stays in your browser.
 
 To build and test the actual boot programs, install Python 3.10+, Make and QEMU.
-On macOS use `brew install qemu`; on Ubuntu use
-`sudo apt-get install python3 make qemu-system-x86`.
+On macOS use `brew install qemu nasm ffmpeg`; on Ubuntu use
+`sudo apt-get install python3 make qemu-system-x86 nasm ffmpeg`.
+
+The full checks also use NDISASM (from NASM) to read existing instruction bytes and FFmpeg to verify captured GIF pixels. Neither tool generates target instructions.
 
 ```sh
 git clone https://github.com/OthmaneBlial/bitborn.git

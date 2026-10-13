@@ -34,7 +34,8 @@
 <p>在 16 位操作数大小的上下文中，这三个字节表示 <code dir="ltr">MOV AX,42</code>。<code dir="ltr">B8</code> 选择寄存器， <code dir="ltr">2A 00</code> 以低字节在前的顺序存储 42。执行模式很重要：在 32 位操作数大小的上下文中， <code dir="ltr">B8</code> 后面需要四个立即数字节，而不是两个。浏览器 CPU 实验室只执行文档中列出的 16 位指令子集。</p>
 <h2>动手试试</h2>
 <p>打开 <a href="https://othmaneblial.github.io/bitborn/cpu-lab/">CPU 实验室</a>，逐步执行程序， 查看寄存器、标志位、栈和内存，或用 Back 和 Forward 恢复已记录的状态。 <a href="https://othmaneblial.github.io/bitborn/boot-builder/">启动扇区构建器</a> 可编辑并导出 完整的 512 字节镜像。挑战题通过修改实际字节来帮助学习；进度保存在你的浏览器中。</p>
-<p>构建并测试真实启动程序需要 Python 3.10+、Make 和 QEMU。在 macOS 上运行 <code dir="ltr">brew install qemu</code>；在 Ubuntu 上运行 <code dir="ltr">sudo apt-get install python3 make qemu-system-x86</code>。</p>
+<p>构建并测试真实启动程序需要 Python 3.10+、Make 和 QEMU。在 macOS 上运行 <code dir="ltr">brew install qemu nasm ffmpeg</code>；在 Ubuntu 上运行 <code dir="ltr">sudo apt-get install python3 make qemu-system-x86 nasm ffmpeg</code>。</p>
+<p>完整检查还使用 NASM 提供的 NDISASM 读取现有指令字节，并用 FFmpeg 验证录制的 GIF 像素。这两个工具都不生成目标指令。</p>
 <pre dir="ltr"><code>git clone https://github.com/OthmaneBlial/bitborn.git
 cd bitborn
 make test

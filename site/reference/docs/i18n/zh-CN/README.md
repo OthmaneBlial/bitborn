@@ -26,7 +26,9 @@
 完整的 512 字节镜像。挑战题通过修改实际字节来帮助学习；进度保存在你的浏览器中。
 
 构建并测试真实启动程序需要 Python 3.10+、Make 和 QEMU。在 macOS 上运行
-`brew install qemu`；在 Ubuntu 上运行 `sudo apt-get install python3 make qemu-system-x86`。
+`brew install qemu nasm ffmpeg`；在 Ubuntu 上运行 `sudo apt-get install python3 make qemu-system-x86 nasm ffmpeg`。
+
+完整检查还使用 NASM 提供的 NDISASM 读取现有指令字节，并用 FFmpeg 验证录制的 GIF 像素。这两个工具都不生成目标指令。
 
 ```sh
 git clone https://github.com/OthmaneBlial/bitborn.git

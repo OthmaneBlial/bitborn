@@ -30,8 +30,10 @@ permet de modifier et d'exporter une image complète de 512 octets. Les défis
 enseignent la modification des octets ; votre progression reste dans le navigateur.
 
 Pour construire et tester les vrais programmes d'amorçage, installez Python 3.10+,
-Make et QEMU. Sur macOS : `brew install qemu`. Sur Ubuntu :
-`sudo apt-get install python3 make qemu-system-x86`.
+Make et QEMU. Sur macOS : `brew install qemu nasm ffmpeg`. Sur Ubuntu :
+`sudo apt-get install python3 make qemu-system-x86 nasm ffmpeg`.
+
+Les vérifications complètes utilisent aussi NDISASM (fourni par NASM) pour lire les octets des instructions existantes et FFmpeg pour vérifier les pixels des GIF capturés. Aucun de ces outils ne génère les instructions du programme.
 
 ```sh
 git clone https://github.com/OthmaneBlial/bitborn.git

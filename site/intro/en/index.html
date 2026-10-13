@@ -34,7 +34,8 @@
 <p>In a 16-bit operand-size context, these three bytes mean <code dir="ltr">MOV AX,42</code>. <code dir="ltr">B8</code> selects the register; <code dir="ltr">2A 00</code> stores 42 with the low byte first. Execution mode matters: in a 32-bit operand-size context, <code dir="ltr">B8</code> needs four immediate bytes instead of two. The browser CPU Lab executes only its documented 16-bit subset.</p>
 <h2>Try it</h2>
 <p>Open the <a href="https://othmaneblial.github.io/bitborn/cpu-lab/">CPU Lab</a> to step through a program, inspect registers, flags, stack and memory, or restore recorded states with Back and Forward. The <a href="https://othmaneblial.github.io/bitborn/boot-builder/">Boot Sector Builder</a> lets you edit and export a complete 512-byte image. Challenges teach changes to literal bytes; your progress stays in your browser.</p>
-<p>To build and test the actual boot programs, install Python 3.10+, Make and QEMU. On macOS use <code dir="ltr">brew install qemu</code>; on Ubuntu use <code dir="ltr">sudo apt-get install python3 make qemu-system-x86</code>.</p>
+<p>To build and test the actual boot programs, install Python 3.10+, Make and QEMU. On macOS use <code dir="ltr">brew install qemu nasm ffmpeg</code>; on Ubuntu use <code dir="ltr">sudo apt-get install python3 make qemu-system-x86 nasm ffmpeg</code>.</p>
+<p>The full checks also use NDISASM (from NASM) to read existing instruction bytes and FFmpeg to verify captured GIF pixels. Neither tool generates target instructions.</p>
 <pre dir="ltr"><code>git clone https://github.com/OthmaneBlial/bitborn.git
 cd bitborn
 make test

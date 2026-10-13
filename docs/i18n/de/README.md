@@ -31,8 +31,10 @@ Aufgaben vermitteln Änderungen an tatsächlichen Bytes; dein Fortschritt bleibt
 im Browser.
 
 Zum Erstellen und Testen der echten Bootprogramme benötigst du Python 3.10+, Make
-und QEMU. Unter macOS: `brew install qemu`. Unter Ubuntu:
-`sudo apt-get install python3 make qemu-system-x86`.
+und QEMU. Unter macOS: `brew install qemu nasm ffmpeg`. Unter Ubuntu:
+`sudo apt-get install python3 make qemu-system-x86 nasm ffmpeg`.
+
+Die vollständigen Prüfungen verwenden zusätzlich NDISASM (Teil von NASM), um vorhandene Befehlsbytes zu lesen, und FFmpeg, um die Pixel aufgezeichneter GIFs zu prüfen. Keines der Werkzeuge erzeugt die Zielbefehle.
 
 ```sh
 git clone https://github.com/OthmaneBlial/bitborn.git

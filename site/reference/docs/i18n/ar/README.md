@@ -35,11 +35,13 @@ Back وForward. يتيح [محرّر قطاع الإقلاع](https://othmanebli
 وتبقى بيانات تقدّمك في متصفحك.
 
 لبناء برامج الإقلاع الحقيقية واختبارها، تحتاج إلى Python 3.10+ وMake وQEMU.
-على macOS استخدم `brew install qemu`؛ وعلى Ubuntu استخدم
-`sudo apt-get install python3 make qemu-system-x86`.
+على macOS استخدم `brew install qemu nasm ffmpeg`؛ وعلى Ubuntu استخدم
+`sudo apt-get install python3 make qemu-system-x86 nasm ffmpeg`.
 
 </div>
 <div dir="ltr">
+
+تستخدم الفحوص الكاملة أيضًا NDISASM (ضمن NASM) لقراءة بايتات التعليمات الموجودة، وFFmpeg للتحقق من بكسلات ملفات GIF الملتقطة. لا تولّد أي من الأداتين تعليمات البرنامج الهدف.
 
 ```sh
 git clone https://github.com/OthmaneBlial/bitborn.git

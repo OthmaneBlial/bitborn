@@ -34,7 +34,8 @@
 <p>Avec des opérandes de 16 bits, ces trois octets signifient <code dir="ltr">MOV AX,42</code>. <code dir="ltr">B8</code> sélectionne le registre ; <code dir="ltr">2A 00</code> représente 42, octet de poids faible d&#x27;abord. Le mode d&#x27;exécution compte : avec des opérandes de 32 bits, <code dir="ltr">B8</code> attend quatre octets de valeur immédiate au lieu de deux. Le CPU Lab du navigateur exécute uniquement son sous-ensemble documenté de 16 bits.</p>
 <h2>Essayer</h2>
 <p>Le <a href="https://othmaneblial.github.io/bitborn/cpu-lab/">CPU Lab</a> permet d&#x27;avancer pas à pas, d&#x27;inspecter registres, indicateurs, pile et mémoire, puis de restaurer les états enregistrés avec Back et Forward. Le <a href="https://othmaneblial.github.io/bitborn/boot-builder/">constructeur de secteur d&#x27;amorçage</a> permet de modifier et d&#x27;exporter une image complète de 512 octets. Les défis enseignent la modification des octets ; votre progression reste dans le navigateur.</p>
-<p>Pour construire et tester les vrais programmes d&#x27;amorçage, installez Python 3.10+, Make et QEMU. Sur macOS : <code dir="ltr">brew install qemu</code>. Sur Ubuntu : <code dir="ltr">sudo apt-get install python3 make qemu-system-x86</code>.</p>
+<p>Pour construire et tester les vrais programmes d&#x27;amorçage, installez Python 3.10+, Make et QEMU. Sur macOS : <code dir="ltr">brew install qemu nasm ffmpeg</code>. Sur Ubuntu : <code dir="ltr">sudo apt-get install python3 make qemu-system-x86 nasm ffmpeg</code>.</p>
+<p>Les vérifications complètes utilisent aussi NDISASM (fourni par NASM) pour lire les octets des instructions existantes et FFmpeg pour vérifier les pixels des GIF capturés. Aucun de ces outils ne génère les instructions du programme.</p>
 <pre dir="ltr"><code>git clone https://github.com/OthmaneBlial/bitborn.git
 cd bitborn
 make test

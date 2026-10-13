@@ -34,7 +34,8 @@
 <p>عندما يكون حجم المعامل 16 بتًا، تعني هذه البايتات الثلاثة <code dir="ltr">MOV AX,42</code>. يختار <code dir="ltr">B8</code> المسجّل، وتمثّل <code dir="ltr">2A 00</code> العدد 42 بدءًا بالبايت الأقل أهمية. وضع التنفيذ مهم: مع حجم معامل يبلغ 32 بتًا، يحتاج <code dir="ltr">B8</code> إلى أربعة بايتات للقيمة الفورية بدلًا من اثنين. ينفّذ مختبر المعالج في المتصفح مجموعة موثّقة محدودة من تعليمات 16 بتًا فقط.</p>
 <h2>جرّبه بنفسك</h2>
 <p>افتح <a href="https://othmaneblial.github.io/bitborn/cpu-lab/">مختبر المعالج</a> لتنفيذ البرنامج خطوة بخطوة وفحص المسجّلات والأعلام والمكدّس والذاكرة، أو لاستعادة الحالات المسجّلة باستخدام Back وForward. يتيح <a href="https://othmaneblial.github.io/bitborn/boot-builder/">محرّر قطاع الإقلاع</a> تعديل صورة كاملة بحجم 512 بايتًا وتصديرها. تعلّمك التحديات تعديل البايتات الفعلية، وتبقى بيانات تقدّمك في متصفحك.</p>
-<p>لبناء برامج الإقلاع الحقيقية واختبارها، تحتاج إلى Python 3.10+ وMake وQEMU. على macOS استخدم <code dir="ltr">brew install qemu</code>؛ وعلى Ubuntu استخدم <code dir="ltr">sudo apt-get install python3 make qemu-system-x86</code>.</p>
+<p>لبناء برامج الإقلاع الحقيقية واختبارها، تحتاج إلى Python 3.10+ وMake وQEMU. على macOS استخدم <code dir="ltr">brew install qemu nasm ffmpeg</code>؛ وعلى Ubuntu استخدم <code dir="ltr">sudo apt-get install python3 make qemu-system-x86 nasm ffmpeg</code>.</p>
+<p>تستخدم الفحوص الكاملة أيضًا NDISASM (ضمن NASM) لقراءة بايتات التعليمات الموجودة، وFFmpeg للتحقق من بكسلات ملفات GIF الملتقطة. لا تولّد أي من الأداتين تعليمات البرنامج الهدف.</p>
 <pre dir="ltr"><code>git clone https://github.com/OthmaneBlial/bitborn.git
 cd bitborn
 make test

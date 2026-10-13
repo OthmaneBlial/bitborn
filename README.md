@@ -42,9 +42,12 @@ then follow the [learning path](https://othmaneblial.github.io/bitborn/learn/).
 
 ## 🚀 Boot your first image
 
-You need **Python 3.10+, Make and QEMU**.
-On macOS: `brew install qemu`. On Ubuntu:
-`sudo apt-get install python3 make qemu-system-x86`.
+For the checks below, you need **Python 3.10+, Make, QEMU, NDISASM and FFmpeg**.
+On macOS: `brew install qemu nasm ffmpeg`. On Ubuntu:
+`sudo apt-get install python3 make qemu-system-x86 nasm ffmpeg`.
+NASM supplies read-only NDISASM checks; FFmpeg verifies captured GIF pixels.
+Neither generates the target instructions. Packing and booting alone require
+only Python/Make/QEMU; the commands here also run the complete native test suite.
 
 ```sh
 git clone https://github.com/OthmaneBlial/bitborn.git

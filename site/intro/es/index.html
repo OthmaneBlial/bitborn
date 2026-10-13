@@ -34,7 +34,8 @@
 <p>Con un tamaño de operando de 16 bits, estos tres bytes significan <code dir="ltr">MOV AX,42</code>. <code dir="ltr">B8</code> selecciona el registro y <code dir="ltr">2A 00</code> almacena 42 empezando por el byte menos significativo. El modo importa: con operandos de 32 bits, <code dir="ltr">B8</code> necesita cuatro bytes de valor inmediato en lugar de dos. El laboratorio del navegador ejecuta solo el subconjunto documentado de instrucciones de 16 bits.</p>
 <h2>Pruébalo</h2>
 <p>En el <a href="https://othmaneblial.github.io/bitborn/cpu-lab/">CPU Lab</a> puedes ejecutar paso a paso, observar registros, indicadores, pila y memoria, y recuperar estados grabados con Back y Forward. El <a href="https://othmaneblial.github.io/bitborn/boot-builder/">constructor de sectores de arranque</a> permite editar y exportar una imagen completa de 512 bytes. Los retos enseñan a modificar bytes literales; el progreso se guarda en tu navegador.</p>
-<p>Para construir el paquete y probar los programas de arranque reales necesitas Python 3.10+, Make y QEMU. En macOS: <code dir="ltr">brew install qemu</code>. En Ubuntu: <code dir="ltr">sudo apt-get install python3 make qemu-system-x86</code>.</p>
+<p>Para construir el paquete y probar los programas de arranque reales necesitas Python 3.10+, Make y QEMU. En macOS: <code dir="ltr">brew install qemu nasm ffmpeg</code>. En Ubuntu: <code dir="ltr">sudo apt-get install python3 make qemu-system-x86 nasm ffmpeg</code>.</p>
+<p>Las comprobaciones completas también usan NDISASM (incluido en NASM) para leer los bytes de instrucciones existentes y FFmpeg para verificar los píxeles de los GIF capturados. Ninguna herramienta genera las instrucciones del programa.</p>
 <pre dir="ltr"><code>git clone https://github.com/OthmaneBlial/bitborn.git
 cd bitborn
 make test

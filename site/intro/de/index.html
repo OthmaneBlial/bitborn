@@ -34,7 +34,8 @@
 <p>Bei einer Operandengröße von 16 Bit bedeuten diese drei Bytes <code dir="ltr">MOV AX,42</code>. <code dir="ltr">B8</code> wählt das Register; <code dir="ltr">2A 00</code> speichert 42 mit dem niederwertigen Byte zuerst. Der Ausführungsmodus zählt: Bei 32-Bit-Operanden benötigt <code dir="ltr">B8</code> vier unmittelbare Operandenbytes statt zwei. Das CPU Lab im Browser führt nur die dokumentierte Teilmenge der 16-Bit-Befehle aus.</p>
 <h2>Ausprobieren</h2>
 <p>Im <a href="https://othmaneblial.github.io/bitborn/cpu-lab/">CPU Lab</a> kannst du schrittweise ausführen, Register, Flags, Stack und Speicher ansehen und aufgezeichnete Zustände mit Back und Forward wiederherstellen. Im <a href="https://othmaneblial.github.io/bitborn/boot-builder/">Bootsektor-Editor</a> lässt sich ein vollständiges 512-Byte-Abbild bearbeiten und exportieren. Aufgaben vermitteln Änderungen an tatsächlichen Bytes; dein Fortschritt bleibt im Browser.</p>
-<p>Zum Erstellen und Testen der echten Bootprogramme benötigst du Python 3.10+, Make und QEMU. Unter macOS: <code dir="ltr">brew install qemu</code>. Unter Ubuntu: <code dir="ltr">sudo apt-get install python3 make qemu-system-x86</code>.</p>
+<p>Zum Erstellen und Testen der echten Bootprogramme benötigst du Python 3.10+, Make und QEMU. Unter macOS: <code dir="ltr">brew install qemu nasm ffmpeg</code>. Unter Ubuntu: <code dir="ltr">sudo apt-get install python3 make qemu-system-x86 nasm ffmpeg</code>.</p>
+<p>Die vollständigen Prüfungen verwenden zusätzlich NDISASM (Teil von NASM), um vorhandene Befehlsbytes zu lesen, und FFmpeg, um die Pixel aufgezeichneter GIFs zu prüfen. Keines der Werkzeuge erzeugt die Zielbefehle.</p>
 <pre dir="ltr"><code>git clone https://github.com/OthmaneBlial/bitborn.git
 cd bitborn
 make test
