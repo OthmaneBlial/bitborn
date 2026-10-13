@@ -70,6 +70,10 @@ Imports validate the textarea's normalized text so selection agrees with the
 displayed newline positions. File-size/UTF-8 failures before an editable draft
 remain file-level errors, without inventing a token range.
 
+The [bit-diff workbench](bit-diff.md) uses the same token ranges to focus a
+failed notation conversion. Both Before/After drafts are validated independently;
+inline input retains typing focus and the last valid comparison remains intact.
+
 The 658-case seeded Python/JavaScript corpus compares accepted binary bytes
 and rejected-source codes/locations. Separate tests cover hexadecimal input,
 browser limits, CLI JSON and preservation of existing output on failure:

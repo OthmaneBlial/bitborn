@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Identify invalid Before/After bit-comparison drafts independently and select
+  the first offending token on failed notation conversion. Preserve both drafts,
+  notation and the last valid comparison; clear each corrected error marker.
+
 - Add exact UTF-16 token ranges to browser source diagnostics without changing
   grammar or readable messages. Focus/select the invalid or excess token on CPU
   Lab load failures, preserve inline caret and loaded state, normalize imported

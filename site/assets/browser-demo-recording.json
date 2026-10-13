@@ -8,7 +8,7 @@
   "presentationFps": 1,
   "alterations": "960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.",
   "sourceSha256": {
-    "tools/record_browser.mjs": "02de26d340a76d1e47a9c251dbe2bd6d93d2327cc2bd0993dab66a623019af51",
+    "tools/record_browser.mjs": "ae7b24a66bfb9ec918f8a9ce290a6844000028527adcd457ef17a42b37629e2f",
     "boot/boot.bits": "230bbafbfa02abd62dc964efbad02db0431f0efa263216bba02146cd164262b8",
     "site/elf.mjs": "552aabb816be8add70c470c951f0110697d491d0a0e926c3bd9e6001e623832b",
     "site/elf/index.html": "767e441bc2b8d9e29a626d264b2d437bce24c296196a5b37c33d09cf6f58f29b",
@@ -21,8 +21,8 @@
     "site/learn/routes.css": "f77ddb1b9b7187f92c69e594a8002543deed69c74d7954dfa670ef4bb85052d1",
     "site/app.js": "485804f0a0a3388b125854f60072b6fe99945e69906289f9868d317af5c075b3",
     "site/bit-diff.mjs": "4ba0be7d157650d7cb338925ac0f9496992242f93b6f52b9e54775c17c2ce940",
-    "site/bit-diff/index.html": "85d4abc7b728401799fe1c5f62169ee2ec225cebc9b4f27b83e731263bea044f",
-    "site/bit-diff/app.mjs": "90f0c7a4cfdd373ba6d8d8430b20757f3652a376ee5e42912d6bdc7fefd21293",
+    "site/bit-diff/index.html": "b447ffa63451bf4f9986f2c94db9ec9af80669ba9df254d2a5e0d9ed3dc4f3d7",
+    "site/bit-diff/app.mjs": "7dbcd36a42a7a3c63b6e11da8fe18b68eb43736a3eb73ee0bd83e08781f12e07",
     "site/bit-diff/diff.css": "aa0c4f672af2b9499586ffdce045e48d0cbb563af58971090d9903ddce990dca",
     "site/encoding.mjs": "8d696621dcdde60d7369d65bd8d40477aec47bd0fde0f9a8935dbb73814ed458",
     "site/encoding-presets.mjs": "04eb66e6d5b634f9cc6e4b777650af2895ab61b8301059573b22be669344384e",
@@ -93,10 +93,10 @@
     },
     {
       "file": "assets/bit-diff-demo.gif",
-      "sha256": "d727978cbdd17407e08761d65333ee5dc6eb28324140a3b8dff33b72d721872f",
-      "capturedFrames": 7,
-      "encodedFrames": 7,
-      "durationSeconds": 7,
+      "sha256": "bc0dd5c9c423446ad30de79d0764cf1c974488a348f93839458b47a82d37fb96",
+      "capturedFrames": 10,
+      "encodedFrames": 10,
+      "durationSeconds": 10,
       "actions": [
         "A one-bit MOV direction change modifies the opcode and reinterprets an unchanged ModR/M byte; counts keep those categories separate.",
         "Selected unchanged D8: its six source/destination selector-bit roles reverse although the raw byte does not change.",
@@ -104,7 +104,10 @@
         "Explicit32-bit context classifies a five-byte MOV immediate on both sides; comparison executes neither program.",
         "Switching to16-bit context consumes three bytes, then classification stops at the unsupported remaining byte without resynchronizing.",
         "An added zero byte is missing on the before side; it counts as one addition and zero flipped shared bits.",
-        "The two literal self-modification programs differ only at source writer byte50, bit5: 41 becomes61. This workbench performs no execution; native effects are verified separately."
+        "The two literal self-modification programs differ only at source writer byte50, bit5: 41 becomes61. This workbench performs no execution; native effects are verified separately.",
+        "Both invalid comparison sides are identified; failed notation conversion focuses/selects Before GG and preserves the last valid one-bit comparison.",
+        "Correcting Before clears its error marker; conversion now focuses/selects After ZZ without altering either draft or the original notation.",
+        "Both corrected F4 drafts convert to literal binary with zero byte differences; stale error markers clear and the read-only comparison resumes."
       ],
       "sourceFrameSha256": [
         "2cff10ccc05f896a5cea4819e982df75f53508922d1aeee6f7d8b2f59f96e048",
@@ -113,7 +116,10 @@
         "16dbfd8195fd108e1c9d7596abfd1e03cf7275c78c23033d1b551ad20deb1153",
         "cbff0fabf8c3b659f429c0769927e6dea5f5ea859a1262c5f3c7172e4f2aab53",
         "452cbfde562422f1e5ee211f7d5c2800ba87ddf331fb73e172e3853455ef0682",
-        "7958235dd44d77af9ffbb7bb52918fc1ae799a5ab0700f4fc65857876dbce9a3"
+        "7958235dd44d77af9ffbb7bb52918fc1ae799a5ab0700f4fc65857876dbce9a3",
+        "5a72644a252b5052b4a29a94d3e947b6c76728694fd8c413eb21c3638404293b",
+        "f9769ffb0e564f0e60f5cb246558d15a9ff37dcb35ba31accc8149f9a1be47d3",
+        "835aa4b815c169e5f265b63a917448cb69cf5af9bdb005684d126abdb7d207e6"
       ]
     },
     {
@@ -192,7 +198,7 @@
     },
     {
       "file": "assets/cpu-lab-demo.gif",
-      "sha256": "8a32271740f5986b7471e95f553c6d30291fd9c788f33958624ab218b631d174",
+      "sha256": "323784954530e78e63aa7dd66bd9ed2bdf90c9dcdce1d9755f236ca27753ed91",
       "capturedFrames": 45,
       "encodedFrames": 45,
       "durationSeconds": 45,
@@ -258,10 +264,10 @@
         "2efb5ff6eaec7f08bf8c1134b1f5a85495f80e51e84baa11222a6cd3cc56b28b",
         "c2d400aff5c3ac14fca255582a77bcf192612c583f711ca5154aedb531542816",
         "82d092ca2e2c61cf9dcab2f26d5eada4bcb7cac3ff01edc48847b66ccf4af18b",
-        "58c224f2685dbb3b226aa87d2010ff63023ad6709b7a429c517859dce3e1bce1",
+        "75055d8cc5269f15743483009ad0619aa5bcb546272d2bc24fb864f9fd6bc1e7",
         "98e831a33d23ac7979a10a9a8ea1353c87671ad7bdb8461f84df6b143ac26d9a",
         "11246b405b744a5ead64bc99eb8d8aaaef1bb88795ba4269a800591410e81ada",
-        "d559f06442d481b5d20713bac559fcc90e5dab09b364eb02315f613ecb1b4750",
+        "826784fd19f14c6f8ef4f5ff68ad128337353069b2bf78c3d8c87446e7ca39bf",
         "0bdbffd65ade2c80e9a60c04f019f0e3e9f2b67dd4ef8af9f43a5e96faada4b8",
         "7f82f7944631eca8aa5e65c2caa8610650c2cb567860b80394755ce3fecbee7f",
         "1b31443176ac58f0b086a0b5ad45f9930100de41153fda7d8e26152b1937c81d",
@@ -280,7 +286,7 @@
         "58da028d82a9aca1f409bbc5d283544759fd1db36502bb64cdd7a430eefa19af",
         "9f3c9ce45824c31dd55c4f536c883e1fb4373fc7c69c0ac6930cd8cb8b7720f1",
         "c1f2b109b53cbc642fb3ad20a710c8b66efec10d7658bccdc716279cf09824e9",
-        "5fce759694fbe494cb5c6b93eb3d4edbc26bf898e546718e22a06a496a1d952a",
+        "90b0c04887ddf1902e94eedf26c85e5393b04d8327228c5a5895919c545183b7",
         "745474f8d64f208c6dfa30522d09be6c26d883c6ddf947eff202b02e86741793",
         "82caebd55f8a631b5d11c718d5b1041cf4e7740222d1070e7cfee7dca1ab2e91",
         "1e4b4be6675e80dc46c4d82aec3135323d38d969cfe6ede3c37da278ecdda193",

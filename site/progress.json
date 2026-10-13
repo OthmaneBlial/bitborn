@@ -178,6 +178,10 @@
       "progress": "\u2705 Exact UTF-16 token/excess-byte ranges, 704 location cases and focused binary/hex selection; invalid drafts preserve loaded state/history and corrections clear stale errors"
     },
     {
+      "milestone": "Bit comparison error recovery",
+      "progress": "\u2705 Both invalid sides are identified; failed notation conversion focuses/selects the first offending token while keeping drafts, notation and the last valid comparison"
+    },
+    {
       "milestone": "CPU Lab program downloads and imports",
       "progress": "\u2705 Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks"
     },

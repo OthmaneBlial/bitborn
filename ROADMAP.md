@@ -262,6 +262,10 @@ The v0.2 milestone is published and verified. The following research remains ope
   loads, including excess bytes and imported newline normalization. Keep inline
   validation non-disruptive, preserve loaded state/history and clear corrected
   errors. 704 range cases complement parser parity; see [diagnostics](docs/source-diagnostics.md).
+- [x] Identify both invalid bit-comparison drafts and focus/select the first
+  offending token on failed notation conversion. Keep typing focus, original
+  drafts/notation and the last valid comparison; corrected sides clear their
+  own markers. See [comparison error recovery](docs/bit-diff.md).
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

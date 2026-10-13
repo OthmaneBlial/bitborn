@@ -265,8 +265,19 @@ The 77-test Python suite passes with one expected macOS native-Linux skip;
 all site/module checks pass. Six browser recordings were recaptured with source
 and frame hashes; the CPU recording has 45 actual frames, including three error
 and correction states. Live assistive-technology review remains open.
-Next: identify the invalid side of a bit comparison and focus it when notation
-conversion fails, while preserving the last valid comparison.
+Source-error commit `dbd0236` is pushed; its Pages mirror `e19610f` changes only
+14 paths inside `bitborn/`. CI `38328762513` is running; public-byte verification
+will follow its deployment.
+The bit-diff workbench now checks both drafts independently, identifies invalid
+Before/After sides and selects the first offending token on failed notation
+conversion. Typing focus, drafts, notation, selected row/roles and last valid
+results remain intact. Correcting one side clears its marker while retaining the
+other error; empty sources have no fabricated token range. Chromium, Firefox
+and WebKit cover both notations, Unicode token ranges, both-invalid/one-corrected
+recovery, excess bytes, empty drafts and preset reset. All site/module checks
+pass. Its genuine browser recording now contains ten frames, including three
+error/recovery states. Assistive-technology review remains separate.
+Next: fresh-checkout reproduction with platform-specific validation evidence.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -356,6 +367,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 62 | 1 | Execute unprefixed 16-bit ModR/M memory MOV using one shared address decoder and native/journal/boundary proof | H | M | 18,01,02 | High | Complete: 2,304 cases and identical model/native 71-byte exercise |
 | 63 | 0 | Roving keyboard focus for instruction-bit editors, field-aware labels and stable edits | H | H | 05,07 | Low | Complete: shared root/playground one-stop navigation and invalid/shortened fixture focus checks; full AT review remains open |
 | 64 | 0 | Exact source error ranges, relevant editor focus and preserved invalid-load state | H | H | 15,42 | Low | Complete: UTF-16 token spans, normalized imports, binary/hex focus and corrected-error cleanup; live AT review open |
+| 65 | 0 | Identify both invalid comparison sides and focus failed notation conversion without losing drafts/results | H | H | 15,64 | Low | Complete: independent invalid markers, full token/excess selection and partial correction in three browsers; live AT review open |
 
 Large tasks are divided into useful verified milestones. Native experiments only
 become capabilities after literal source review and real QEMU checks; hardware

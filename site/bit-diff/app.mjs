@@ -8,6 +8,23 @@ const selfmodOption=node('option','Self-writing letter / 41 → 61');selfmodOpti
 let format='binary',result=null,selected=null,sources=[null,null];
 const read=text=>(format==='binary'?parseBits:parseHex)(text,512);
 const print=bytes=>(format==='binary'?formatBits:formatHex)(bytes);
+function readInputs(focus=false) {
+  const values=[],errors=[];
+  for(const id of ['diff-before','diff-after']) {
+    const editor=$(id);
+    try {values.push(read(editor.value));editor.removeAttribute('aria-invalid');}
+    catch(error) {editor.setAttribute('aria-invalid','true');errors.push({editor,error});}
+  }
+  if(errors.length) {
+    const {editor,error}=errors[0];
+    if(focus) {
+      editor.focus();
+      if(Number.isInteger(error.start)&&Number.isInteger(error.end)&&error.start>=0&&error.end<=editor.value.length)editor.setSelectionRange(error.start,error.end);
+    }
+    throw new Error(errors.map(({editor,error})=>`${editor.id==='diff-before'?'Before':'After'}: ${error.message}`).join(' '));
+  }
+  return values;
+}
 function sourceLinks() {
   for(const [index,id] of ['before-source','after-source'].entries()){$(id).hidden=!sources[index];if(sources[index])$(id).href='../reference/'+sources[index];}
 }
@@ -33,7 +50,7 @@ function choose(row) {
 }
 function update() {
   try {
-    const before=read($('diff-before').value),after=read($('diff-after').value),next=comparePrograms(before,after,Number($('diff-mode').value));
+    const [before,after]=readInputs(),next=comparePrograms(before,after,Number($('diff-mode').value));
     result=next;
     for(const [key,id] of [['modified','modified-count'],['flippedBits','flipped-count'],['added','added-count'],['removed','removed-count'],['reinterpreted','reinterpreted-count']])$(id).textContent=String(result.totals[key]);
     $('before-classification').textContent=describe(result.before,result.beforeLength);$('after-classification').textContent=describe(result.after,result.afterLength);
@@ -60,7 +77,7 @@ function loadPair() {
 for(const [index,id] of ['diff-before','diff-after'].entries())$(id).addEventListener('input',()=>{sources[index]=null;sourceLinks();update();});
 $('diff-example').addEventListener('change',loadPair);$('diff-mode').addEventListener('change',update);
 $('diff-format').addEventListener('change',()=>{
-  try{const before=read($('diff-before').value),after=read($('diff-after').value);format=$('diff-format').value;$('diff-before').value=print(before);$('diff-after').value=print(after);update();}
+  try{const [before,after]=readInputs(true);format=$('diff-format').value;$('diff-before').value=print(before);$('diff-after').value=print(after);update();}
   catch(error){$('diff-format').value=format;$('diff-status').classList.add('error');$('diff-status').textContent=`${error.message} Notation and last valid comparison are kept.`;}
 });
 $('diff-swap').addEventListener('click',()=>{const before=$('diff-before').value;$('diff-before').value=$('diff-after').value;$('diff-after').value=before;sources.reverse();sourceLinks();update();});

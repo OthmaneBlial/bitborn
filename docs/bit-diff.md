@@ -6,6 +6,14 @@ shared binary/hex token syntax, comments and text limits. Valid notation changes
 preserve bytes and omit comments; invalid drafts/conversions retain the last
 valid comparison and identify that state explicitly.
 
+Invalid drafts name the **Before** or **After** side and mark each invalid editor.
+Typing keeps the current input focus. A failed notation change focuses the first
+invalid side and selects its exact invalid/excess token; both drafts, notation,
+selected comparison row and last valid results are kept. Both sides are checked,
+so correcting one clears its marker even if the other remains invalid. Empty
+sources have an editor-level error without an invented token selection. Choosing
+a valid preset clears stale errors. See [source diagnostic ranges](source-diagnostics.md).
+
 Byte positions are compared directly. The tool reports modified shared bytes,
 flipped bits at those shared offsets, added bytes and removed bytes separately.
 Missing bytes are not zeros: adding `00` does not count as eight flipped bits.
@@ -53,7 +61,8 @@ npm run test:cross-browser
 Unit checks use an independent bit-string oracle over 500 seeded comparisons,
 all length/change categories, scope stops, context-dependent boundaries and
 immutable inputs. Browser checks exercise actual selectors, field/byte roles,
-keyboard rows, binary/hex conversion, preserved invalid drafts, safe text,
+keyboard rows, binary/hex conversion, both-side invalid markers and focused
+token/excess-byte selection, corrected and empty drafts, preserved results, safe text,
 512-byte boundaries and 320px layouts. Preset bytes come from canonical `.bits`
 fixtures through generated metadata, not from assembling instruction names.
 
