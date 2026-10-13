@@ -459,6 +459,15 @@ commands. These are declared address contracts, not native device emulation or
 generated fixups; target bytes and native capture dependencies remain unchanged.
 The full 91-test Python/native suite passes, with one expected macOS Linux skip.
 Next: coherent release preparation from a clean tested source snapshot.
+Version 0.4 preparation expands the explicit release staging set to nine BIOS
+images, actual native crops/GIFs and six browser recordings, with capture records,
+source/artifact archives and exact-commit provenance. The 31-file plan keeps old
+tags/assets intact and rejects stale version archives before writing. Publication
+remains pending exact-commit CI, clean reproduction and public re-download checks.
+Map commit `227f902` passed CI `38344180742` and deployment `38344549223`.
+Mirror `9a6f2db` changes only eleven `bitborn/` paths. Public experiment/challenge
+maps, reference guide and progress match that exact source. The full 92-test
+Python/native suite passes locally with one expected macOS native-Linux skip.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide

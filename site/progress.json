@@ -262,6 +262,10 @@
       "progress": "\u2705 Exact-commit CI passed; all 14 public files re-downloaded anonymously, bytes/checksums and source/artifact provenance verified"
     },
     {
+      "milestone": "v0.4.0 release preparation",
+      "progress": "In validation: nine BIOS images, new native/browser evidence, source/artifact archives and exact-commit provenance; public release verification remains a gate"
+    },
+    {
       "milestone": "v0.2.0 release",
       "progress": "\u2705 Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified"
     },

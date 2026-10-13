@@ -5,11 +5,28 @@ import json
 import tempfile
 from pathlib import Path
 import unittest
-from tools.release import archive, provenance, check_staging
+from tools.release import archive, provenance, check_staging, IMAGES, EVIDENCE
 from tools.bitborn import artifact_paths, digest
 
 
 class ReleaseTests(unittest.TestCase):
+    def test_current_native_images_and_capture_evidence_are_explicit(self):
+        self.assertEqual(len(IMAGES), 9)
+        self.assertIn('self-modifying.img', IMAGES)
+        self.assertIn('vga-bitmap.img', IMAGES)
+        self.assertEqual(len(EVIDENCE), len(set(EVIDENCE)))
+        for name in EVIDENCE:
+            self.assertTrue((Path(__file__).resolve().parents[1] / 'assets' / name).is_file(), name)
+        with tempfile.TemporaryDirectory() as directory:
+            destination = Path(directory)
+            for name in IMAGES + EVIDENCE:
+                (destination / name).write_bytes(b'allowed staging placeholder')
+            check_staging(destination, '0.4.0')
+            stale = destination / 'bitborn-v0.3.0-source.tar.gz'
+            stale.write_bytes(b'older archive must not enter new checksums')
+            with self.assertRaisesRegex(ValueError, 'unexpected release staging'):
+                check_staging(destination, '0.4.0')
+            self.assertEqual(stale.read_bytes(), b'older archive must not enter new checksums')
     def test_staging_rejects_unreviewed_files_and_aliases_without_overwriting(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

@@ -306,6 +306,11 @@ The v0.2 milestone is published and verified. The following research remains ope
 - [x] Add explicit [experiment/fragment reference maps](docs/address-references.md)
   for both self-modifying and VGA controls plus the 7E00-loaded CALL/RET solution.
   Reject corrupted operands and the wrong CALL seed without rewriting bytes.
+- [x] Prepare v0.4 version/notes and explicit staging for all nine BIOS images,
+  actual native crops/GIFs, six browser recordings, source/artifact archives and
+  deterministic provenance. Older staging archives are rejected without overwrite.
+- [ ] Publish and re-download v0.4.0 after exact-commit CI, clean-source reproduction,
+  attachment/checksum/provenance verification and three-browser validation.
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

@@ -1,7 +1,7 @@
 # Check the addresses you wrote by hand
 
-This capability is on the current main branch under Unreleased; older release
-archives do not include this option or the new reference map.
+This capability is included in the v0.4 release preparation; archives through
+v0.3 do not include this option or the reference maps.
 
 `bitinspect --references JSON` checks declared numeric fields against expected
 locations in the same binary image. It reads the existing bytes and reports a
