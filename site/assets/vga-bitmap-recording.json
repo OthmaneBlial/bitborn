@@ -67,7 +67,7 @@
   "gif": "assets/vga-bitmap-demo.gif",
   "gifSha256": "89e1b285f4d2ccf9f7e5df9d662becbf8e47218214a94cbac5200ad24e2ea31e",
   "toolSha256": "52120f5b4bf4d90479b0c0d6942f068440452817c8c97d288eba426ae69a4755",
-  "harnessSha256": "86308121d5afa2eaa92a88c0b4b2f24686bbf2b177c112965b4fc19c5eb99fa8",
+  "harnessSha256": "30bccf107c84c82d2045de4c605d5e8104eaa682b3e8e0b165ff16e0eb5315c2",
   "oracleSha256": "9a5c96e7dbe8a26e7c216521c701bb62f414632314df0767248e98f027b8b83c",
   "reproduce": "make build && python3 tools/record_vga_bitmap.py"
 }

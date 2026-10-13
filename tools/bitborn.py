@@ -10,9 +10,9 @@ import tempfile
 from pathlib import Path
 
 if __package__:
-    from .address_references import inspect_references, read_reference_input, read_reference_map
+    from .address_references import inspect_references, read_reference_input, read_reference_map, _unique_object
 else:
-    from address_references import inspect_references, read_reference_input, read_reference_map
+    from address_references import inspect_references, read_reference_input, read_reference_map, _unique_object
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -196,12 +196,53 @@ def digest(data):
     return hashlib.sha256(data).hexdigest()
 
 
+class AnnotationError(ValueError):
+    code = "ANNOTATION_ERROR"
+
+
+def read_annotations(path):
+    try:
+        return json.loads(read_reference_input(path, 1 << 20).decode("utf-8"), object_pairs_hook=_unique_object)
+    except (ValueError, RecursionError) as error:
+        raise AnnotationError(f"invalid annotation JSON: {error}") from error
+
+
+def _annotation_text(text):
+    return "".join(character if character.isprintable() else f"\\u{ord(character):04x}" for character in text)
+
+
 def inspect(data, annotations=()):
+    if not isinstance(annotations, (list, tuple)):
+        raise AnnotationError("annotations must be an array")
+    ranges = []
+    required = {"offset", "size", "kind", "mnemonic", "explanation"}
+    for index, item in enumerate(annotations):
+        label = f"annotation {index + 1}"
+        if not isinstance(item, dict) or not required <= item.keys() or item.keys() - required - {"bits"}:
+            raise AnnotationError(f"{label}: expected offset, size, kind, mnemonic, explanation and optional bits")
+        offset, size = item["offset"], item["size"]
+        if type(offset) is not int or type(size) is not int or offset < 0 or size < 1 or offset + size > len(data):
+            raise AnnotationError(f"{label}: byte range must fit the binary")
+        if not isinstance(item["kind"], str) or item["kind"] not in {"instruction", "data", "padding", "signature"}:
+            raise AnnotationError(f"{label}: unknown annotation kind")
+        if any(not isinstance(item[key], str) for key in ("mnemonic", "explanation")):
+            raise AnnotationError(f"{label}: mnemonic and explanation must be text")
+        ranges.append((offset, offset + size, index))
+        if "bits" in item:
+            if not isinstance(item["bits"], str):
+                raise AnnotationError(f"{label}: bits must be text")
+            tokens = item["bits"].split()
+            if len(tokens) != size or any(token != f"{data[offset + position]:08b}" for position, token in enumerate(tokens)):
+                raise AnnotationError(f"{label}: bits must match the annotated binary bytes")
+    ordered = sorted(ranges)
+    for previous, current in zip(ordered, ordered[1:]):
+        if previous[1] > current[0]:
+            raise AnnotationError(f"annotation {current[2] + 1}: annotation ranges overlap")
     starts = {item["offset"]: item for item in annotations}
     rows = []
     for offset, byte in enumerate(data):
         item = starts.get(offset)
-        note = f"  [{item['kind']}, {item['size']} bytes] {item['mnemonic']}: {item['explanation']}" if item else ""
+        note = f"  [{item['kind']}, {item['size']} bytes] {_annotation_text(item['mnemonic'])}: {_annotation_text(item['explanation'])}" if item else ""
         rows.append(f"{offset:04x}  {byte:08b}  {byte:02x}{note}")
     return "\n".join(rows)
 
@@ -264,6 +305,8 @@ def main(command=None):
     args = parsed.args
     if parsed.references is not None and command != "bitinspect":
         parser.error("--references is only valid with bitinspect")
+    if parsed.annotations is not None and command != "bitinspect":
+        parser.error("--annotations is only valid with bitinspect")
     try:
         if command == "bitpack" and len(args) == 2:
             data, _ = read_bits(args[0])
@@ -273,7 +316,7 @@ def main(command=None):
             atomic_write(output, data)
             print(f"{len(data)} bytes → {args[1]} · sha256 {digest(data)}")
         elif command == "bitinspect" and len(args) == 1:
-            annotations = json.loads(parsed.annotations.read_text()) if parsed.annotations else []
+            annotations = read_annotations(parsed.annotations) if parsed.annotations else []
             data = read_reference_input(args[0], 1 << 20) if parsed.references else Path(args[0]).read_bytes()
             references = inspect_references(data, read_reference_map(parsed.references)) if parsed.references else None
             print(inspect(data, annotations))

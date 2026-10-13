@@ -21,7 +21,7 @@ def _unique_object(pairs):
     result = {}
     for key, value in pairs:
         if key in result:
-            raise AddressReferenceError("duplicate reference JSON key")
+            raise AddressReferenceError("duplicate JSON key")
         result[key] = value
     return result
 

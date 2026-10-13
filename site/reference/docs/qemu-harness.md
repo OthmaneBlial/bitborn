@@ -45,3 +45,9 @@ write exits without pipe blockage, and a child that ignores SIGTERM is killed
 and reaped after the graceful wait. They are test doubles, not guest machine-code
 execution. The complete native suite separately boots the curated `.bits` images
 in QEMU and checks the actual guest state.
+
+Socket-file existence is not connection readiness. Startup retries temporary
+connection refusal or a disappearing socket under the same absolute deadline,
+updating the remaining socket timeout for each attempt. Failure still closes
+all resources; a regression covers refusal/disappearance before a successful
+greeting and the bounded failure cleanup path.

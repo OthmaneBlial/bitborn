@@ -428,6 +428,27 @@ skip. Existing capture provenance reports no changed dependencies; executable
 sources and derived target bytes remain unchanged.
 Next: validate the legacy optional annotation JSON before rendering inspection,
 then add reference maps for independently loaded experiments and clean CLI proof.
+Reference checker `a7add2b` passed CI `38342489892` and deployment `38342843640`.
+Mirror `5a27ba3` changes only ten `bitborn/` paths. Public manual, canonical map,
+reference guide, README, roadmap and progress match the exact committed bytes.
+The legacy annotation path now rejects malformed shape/types, invalid byte ranges,
+overlaps and stale optional bits before rendering. All current target annotations
+pass, including generated bits and reversed ordering; partial ranges remain valid.
+Shared bounded descriptor reads reject FIFO/oversized JSON, duplicate keys are
+rejected and non-printing label text is escaped without losing readable Unicode.
+CLI failures use ANNOTATION_ERROR, produce no partial byte/reference rows and keep
+input bytes unchanged. No target instruction source or byte-generation path changed.
+Full-suite validation exposed a QMP socket-file/readiness race in a native VGA
+boot. Startup now retries temporary refusal/missing paths under the same absolute
+deadline, recomputing the remaining socket timeout. A mock regression covers
+refusal, disappearance and eventual readiness; deadline failures still unwind
+the socket, process, logs and temporary directory. Native comparison requires
+both controls before indexing frames, avoiding a secondary indexing error.
+The full 90-test Python/native suite passes with one expected macOS native-Linux
+skip. Self-modifying and VGA bitmap captures were recreated through the corrected
+harness; their records match its current hash and retain actual native pixel,
+memory, source/image and GIF assertions. Browser runtime inputs are unchanged.
+Next: reference maps for independently loaded experiments and a coherent new release.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -519,7 +540,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 64 | 0 | Exact source error ranges, relevant editor focus and preserved invalid-load state | H | H | 15,42 | Low | Complete: UTF-16 token spans, normalized imports, binary/hex focus and corrected-error cleanup; live AT review open |
 | 65 | 0 | Identify both invalid comparison sides and focus failed notation conversion without losing drafts/results | H | H | 15,64 | Low | Complete: independent invalid markers, full token/excess selection and partial correction in three browsers; live AT review open |
 | 66 | 0 | Audit native boot fixtures for explicit stack initialization before their first BIOS call | H | H | Native boot fixtures | Medium | Complete: seven reviewed boot/control setup guards, prior-source regression, corrected 82-byte fixture, native/model and three-browser proof, refreshed captures; hardware and full BIOS emulation remain separate |
-| 67 | 0 | Validate optional bitinspect annotation metadata and preserve structured errors before rendering | H | H | Existing host inspection | Medium | Open: malformed legacy annotation entries can currently raise uncaught type/key errors |
+| 67 | 0 | Validate optional bitinspect annotation metadata and preserve structured errors before rendering | H | H | Existing host inspection | Medium | Complete: bounded JSON, typed non-overlapping ranges, literal-bit matches, terminal-safe labels and structured late-failure diagnostics; canonical targets remain valid |
 
 Large tasks are divided into useful verified milestones. Native experiments only
 become capabilities after literal source review and real QEMU checks; hardware

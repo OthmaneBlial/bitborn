@@ -300,6 +300,9 @@ The v0.2 milestone is published and verified. The following research remains ope
 - [x] Add [literal address-reference checking](docs/address-references.md) to
   bitinspect: explicit segment/origin assumptions, six original boot fields,
   exhaustive word/displacement/alias tests, bounded read-only inputs and no fixups.
+- [x] Harden [inspection annotation metadata](docs/inspection-annotations.md) with
+  typed ranges, literal-bit matches, bounded regular JSON, terminal-safe text and
+  structured errors before rendering, while preserving all canonical annotations.
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

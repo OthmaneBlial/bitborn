@@ -37,8 +37,14 @@ class Guest:
                 time.sleep(0.02)
             self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
             self.resources.callback(self.socket.close)
-            self.socket.settimeout(max(0.001, deadline - time.monotonic()))
-            self.socket.connect(str(qmp))
+            while True:
+                try:
+                    self.socket.settimeout(max(0.001, deadline - time.monotonic()))
+                    self.socket.connect(str(qmp))
+                    break
+                except (ConnectionRefusedError, FileNotFoundError):
+                    self.alive(deadline)
+                    time.sleep(0.02)
             self.buffer = b''
             if 'QMP' not in self.response(deadline):
                 raise RuntimeError('Invalid QMP greeting')

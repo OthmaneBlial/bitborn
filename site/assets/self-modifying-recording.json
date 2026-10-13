@@ -65,6 +65,6 @@
   "gif": "assets/self-modifying-demo.gif",
   "gifSha256": "25f9e0cac7c5209564c24bba97738882e315e37ed685bf7e02bc40d5fb4606f7",
   "toolSha256": "6b6619772a5acf9a7999062ac0f6b4cb128d0a2625ffafd829c6a50c85f80390",
-  "harnessSha256": "86308121d5afa2eaa92a88c0b4b2f24686bbf2b177c112965b4fc19c5eb99fa8",
+  "harnessSha256": "30bccf107c84c82d2045de4c605d5e8104eaa682b3e8e0b165ff16e0eb5315c2",
   "reproduce": "make build && python3 tools/record_self_modifying.py"
 }

@@ -194,6 +194,10 @@
       "progress": "\u2705 bitinspect checks explicitly declared absolute/far/relative fields, including six original boot references; exhaustive word/displacement/alias checks, bounded reads and no byte rewriting"
     },
     {
+      "milestone": "Safe inspection annotations",
+      "progress": "\u2705 Typed ranges, non-overlap and literal bits are checked before rows print; bounded JSON, structured errors and escaped terminal controls preserve readable Unicode"
+    },
+    {
       "milestone": "Short branch field microscope",
       "progress": "\u2705 Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged"
     },

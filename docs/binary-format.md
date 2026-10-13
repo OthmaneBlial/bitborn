@@ -108,3 +108,8 @@ against target offsets in the same image. The [reference guide](address-referenc
 defines explicit segment/origin assumptions, bounded regular inputs and failure
 diagnostics. This validates existing bytes; it does not change source notation,
 resolve labels or generate replacement operands.
+
+The optional [inspection annotation JSON](inspection-annotations.md) is validated
+before rows print, including ranges, non-overlap and any supplied literal bits.
+Malformed metadata uses `ANNOTATION_ERROR` diagnostics; non-printing label text
+is escaped while readable Unicode remains intact.

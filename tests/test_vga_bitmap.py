@@ -27,4 +27,5 @@ class VGABitmapTests(unittest.TestCase):
                 frames.append(framebuffer)
                 self.assertEqual(image.read_bytes(), packed, 'read-only disk image is unchanged')
                 self.assertEqual(read_bits(ROOT / f'examples/vga-bitmap/{name}.bits')[0], data)
+        self.assertEqual(len(frames), 2, 'both native controls must complete before comparing their frames')
         self.assertEqual(frames[0], frames[1], 'palette surgery changes displayed RGB, not pixel indices')

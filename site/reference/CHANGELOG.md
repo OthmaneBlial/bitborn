@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Validate optional bitinspect annotation metadata before rendering: strict typed
+  ranges, known kinds, non-overlap and optional matching bits. Bound regular JSON
+  inputs, reject duplicate keys/FIFOs, escape terminal controls and emit structured
+  ANNOTATION_ERROR diagnostics without partial byte/reference output.
+  Fix a native-test startup race by waiting for QMP connection readiness within
+  the original deadline; retry temporary refusal/missing sockets and retain cleanup.
+
 - Add `bitinspect --references JSON` for declared abs16/far16/rel8/rel16 fields.
   Check six original boot addresses without resolving labels or rewriting bytes;
   validate bounded regular inputs, strict metadata, IP/A20 math and diagnostics

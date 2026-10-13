@@ -12,6 +12,22 @@ from tests.qemu import Guest
 
 
 class QemuHarnessTests(unittest.TestCase):
+    def test_socket_path_can_exist_before_qmp_is_listening(self):
+        guest = Guest('missing.img')
+        connection = Mock()
+        connection.connect.side_effect = [ConnectionRefusedError(), FileNotFoundError(), None]
+        with patch('tests.qemu.shutil.which', return_value='/fake/qemu'), \
+             patch('tests.qemu.subprocess.Popen'), patch('tests.qemu.Path.exists', return_value=True), \
+             patch('tests.qemu.socket.socket', return_value=connection), \
+             patch.object(guest, 'alive') as alive, patch.object(guest, 'stop'), \
+             patch.object(guest, 'response', return_value={'QMP': {}}), patch.object(guest, 'command'), \
+             patch('tests.qemu.time.sleep') as sleep:
+            with guest:
+                self.assertEqual(connection.connect.call_count, 3)
+                self.assertEqual(alive.call_count, 2)
+                self.assertEqual(sleep.call_count, 2)
+            connection.close.assert_called_once()
+
     def test_missing_executable_creates_no_resources(self):
         guest = Guest('missing.img')
         with patch('tests.qemu.shutil.which', return_value=None), patch('tests.qemu.tempfile.TemporaryDirectory') as temporary:
@@ -56,6 +72,7 @@ class QemuHarnessTests(unittest.TestCase):
         connection.recv.side_effect = chunks
         if connection_error:
             connection.connect.side_effect = connection_error
+            guest.alive = Mock(side_effect=AssertionError('QMP readiness deadline exceeded'))
 
         def launch(args, **kwargs):
             qmp = args[args.index('-qmp') + 1].split('unix:', 1)[1].split(',', 1)[0]
@@ -63,7 +80,7 @@ class QemuHarnessTests(unittest.TestCase):
             return process
 
         with patch('tests.qemu.shutil.which', return_value='/fake/qemu'), patch('tests.qemu.subprocess.Popen', side_effect=launch), patch('tests.qemu.socket.socket', return_value=connection):
-            with self.assertRaises((OSError, RuntimeError, ValueError)):
+            with self.assertRaises((OSError, RuntimeError, ValueError, AssertionError)):
                 guest.__enter__()
         connection.close.assert_called_once()
         process.terminate.assert_called_once()

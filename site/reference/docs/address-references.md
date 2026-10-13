@@ -73,6 +73,8 @@ On failure the tool exits with status 1 and prints no byte rows. Add
 `--json-errors` for a `REFERENCE_ERROR` diagnostic on stderr. Filesystem errors
 retain the existing `IO_ERROR` behavior. `--references` is specific to bitinspect;
 it does not add a fixup path to bitpack or bitverify.
+The optional `--annotations` input has its own
+[validation and text-rendering contract](inspection-annotations.md).
 
 ```sh
 python3 -m unittest tests.test_address_references -v
