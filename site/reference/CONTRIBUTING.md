@@ -19,6 +19,10 @@ on Ubuntu, use `sudo apt-get install python3 make qemu-system-x86`.
 
 The independent disassembly checks in `make site-test` also require `ndisasm`:
 install `nasm` with Homebrew on macOS or `sudo apt-get install nasm` on Ubuntu.
+The native game recording test also requires FFmpeg to decode the GIF and check
+every captured pixel: `brew install ffmpeg` on macOS or
+`sudo apt-get install ffmpeg` on Ubuntu. It is a host test/recording tool;
+the Python bit-packing commands and native payloads do not depend on it.
 This package supplies a read-only verification tool; the build never invokes an
 assembler to generate target instructions. Both CI and Pages install it explicitly.
 

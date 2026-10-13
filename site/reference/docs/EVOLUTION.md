@@ -26,6 +26,13 @@ check compared transient change highlights; the corrected assertion compares
 machine values, RAM and output, while the core check covers all state and RAM.
 Publication remains pending.
 
+Initial game publication `6e69633` failed CI `38391009677`: the new pixel-exact
+capture test required FFmpeg, but the Ubuntu setup did not install it. All other
+native checks had passed; gated deployment `38391140840` was skipped. The fix
+installs the existing host recording tool in CI and documents the native test
+dependency, retaining the full pixel comparison. Central mirror `a6f2dd3` changes
+only 26 paths under `bitborn/`; project deployment remains the live publication gate.
+
 Dispatcher publication `71dfda2` passes CI `38386015517` and deployment
 `38386797951`. All 33 checked public source/image/guide/capture/progress files
 match, and live Chrome passes exact downloads, native scope and 1440/320px layout.

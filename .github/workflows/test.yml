@@ -19,7 +19,7 @@ jobs:
           node-version: '22'
           cache: npm
       - name: Install QEMU and independent inspection tools
-        run: sudo apt-get update && sudo apt-get install -y qemu-system-x86 nasm
+        run: sudo apt-get update && sudo apt-get install -y qemu-system-x86 nasm ffmpeg
       - name: Pack, verify and boot handwritten bytes
         run: make test
       - name: Website and documentation checks
