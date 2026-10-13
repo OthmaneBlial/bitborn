@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Add a 712-byte literal user/supervisor page-permission fixture: deny a user
+  write with #PF(7)/CR2 B000, preserve the kernel word and return through the
+  captured privilege frame. One PTE user bit permits the same store. Check all
+  2,048 directory/table entries, actual user stack/data writes, dirty bits,
+  registers, source/TSS/loader integrity and disk bytes. Broader process isolation
+  and read/code-write negative probes remain outside this proof.
+
 - Add a 696-byte literal user/kernel INT gate research fixture. Check the actual
   five-word privilege frame, TSS-selected stack, preserved registers/DF and
   return to user code. One gate DPL bit denies entry with #GP(0102), the original

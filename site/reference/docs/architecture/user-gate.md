@@ -77,6 +77,8 @@ attempt arbitrary recovery or promise to preserve registers for a later return.
 This is one fixed software-interrupt service that logs its frame. It establishes
 the native gate-permission and return path, rather than an operating-system API.
 Flat user and kernel memory is shared; **memory isolation is not established**.
+The separate [user-page fixture](user-page.md) adds a bounded paging-permission
+proof; it does not extend this gate fixture's flat-memory claims.
 Only GP and vector 32 gates are present. There is no Linux syscall ABI, scheduler,
 hardware IRQ handling, general fault recovery, long-mode TSS, physical-hardware
 result or UEFI support in this fixture.

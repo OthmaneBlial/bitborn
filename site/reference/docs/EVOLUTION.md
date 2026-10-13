@@ -6,6 +6,26 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 
 ## Current execution record
 
+User-page research (2026-10-13): 712 literal bytes build legacy identity paging
+with explicit user code/stack/marker pages and a supervisor-only target word.
+CPL-three write raises actual PF(7), CR2 B000, captures the six-word privilege
+frame, preserves DEADBEEF and returns past only the authored ten-byte store.
+A one-bit PTE user-permission control writes 11223344 instead with no PF log.
+Both boots actually PUSH/POP the user stack and write user completion storage.
+Two focused tests check all 2,048 entries, dirty bits, source/GDT/TSS integrity,
+known/retained registers, exact original/repaired frames, CR0/CR3/CR4, kernel
+selectors, loader RAM and read-only disk. Code-page read-only and other supervisor
+mappings are structurally checked; negative read/code-write probes remain next.
+The README roadmap summary is compact again, with detailed evidence kept in the
+roadmap and linked guides.
+The full native suite passes 120 tests with one expected macOS native-Linux skip;
+the full site/model/doc suite and clean diff review pass.
+
+Gate source `cf11316` passes CI `38406310057` and deployment `38407114411`.
+All five checked live README/roadmap/gate-guide/evolution/progress files match.
+Mirror `489f8e7` changes only nine `bitborn/` paths. This page-permission fixture
+is a separate unreleased source milestone.
+
 Ring-three research milestone two (2026-10-13): 696 literal bytes use the shared
 loader, TSS and a DPL-three INT 20 gate to enter kernel code, record the actual
 five-word privilege frame and selectors, preserve general registers/DF, and
@@ -935,7 +955,8 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 69 | 0 | Preserve recorded release staging when source advances without a version bump | H | H | Release provenance | Low | Complete: reject different revision/version before writes; isolated preservation regressions and all 31 frozen v0.4.0 staging files verified unchanged |
 | 70 | 1 | Publish the five newer native experiments as a verified v0.5 distribution | H | H | 68,69 and native proofs | Medium | Complete: main/tag CI, clean-source 114-test/three-engine reproduction, 112 exact artifacts and all 89 anonymous attachment downloads verified; precise scope and publication notes updated |
 | 71 | 1 | Prove a curated protected-mode user/kernel privilege transition with explicit native frames and controls | H | M | GDT, exception frames, IRETD | High | Complete: ring-three entry, TSS-selected HLT/GP return and CMC control; callable INT gate/IRETD and one-bit DPL denial pass four native cases with exact frames; no memory-isolation, Linux ABI or scheduling claim |
-| 72 | 1 | Prove a bounded user/supervisor page-permission boundary with native PF frames and a one-bit control | H | M | 71, native paging | High | Pending: explicit user/code/stack permissions and denied user access; prove exact CR2/error/context and source integrity before advertising memory protection |
+| 72 | 1 | Prove a bounded user/supervisor page-permission boundary with native PF frames and a one-bit control | H | M | 71, native paging | High | Complete: native denied write PF(7)/CR2, protected word, privilege-frame return and one-bit user permission; all entries, user stack/data, dirty bits and source integrity checked; no general sandbox claim |
+| 73 | 1 | Extend the bounded permission proof with actual negative user-read and code-write probes | H | M | 72 | High | Pending: independent literal probe slots, exact PF addresses/errors and narrowly permitted controls; retain source integrity and avoid advertising arbitrary-process isolation |
 
 Large tasks are divided into useful verified milestones. Native experiments only
 become capabilities after literal source review and real QEMU checks; hardware

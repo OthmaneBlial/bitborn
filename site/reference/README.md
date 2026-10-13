@@ -65,18 +65,12 @@ macOS skips their native test and Ubuntu CI executes all six.
 
 Updated **2026-10-13**. **[v0.5.0 is public](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.5.0)**,
 with verified downloads, source and checksums. The boot tools, interactive labs,
-challenges and one-bit native experiments are working. The
-[release notes](docs/release-v0.5.0.md) cover fourteen BIOS images and verified evidence.
-New [optimization puzzles](docs/tutorials/optimization.md)
-measure **14 → 12** and **11 → 10** payload bytes, with distinct valid solutions.
-[Keyboard checks](docs/cpu-lab/keyboard.md) cover timeline navigation, imports and
-error focus. Native research now includes a guarded allocator, timer interrupt
-frames, a [paging write repair](examples/paging/README.md) and
-[shared exception frames](examples/exception-dispatch/README.md).
-[Bit Hunt](examples/bit-hunt/README.md) adds a native maze, a one-bit victory
-control and actual QEMU footage. A [ring-three research fixture](docs/architecture/user-privilege.md)
-proves a native privilege fault and return. A [user/kernel gate](docs/architecture/user-gate.md)
-checks one permission bit; protected user pages and general recovery remain next.
+22 challenges and one-bit native experiments are working. The
+[release notes](docs/release-v0.5.0.md) cover fourteen BIOS images and their evidence.
+[Native research](docs/architecture/README.md) now spans allocation, interrupts,
+paging and user/kernel privilege boundaries. The latest
+[user-page probe](docs/architecture/user-page.md) checks one protected write and
+its permission bit. Broader permission probes and general recovery remain next.
 
 **[Read the full roadmap, completed milestones and evidence →](ROADMAP.md)**
 The [live roadmap](https://othmaneblial.github.io/bitborn/roadmap/) follows that same

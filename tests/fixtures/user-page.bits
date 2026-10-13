@@ -1,0 +1,135 @@
+# Literal legacy user/supervisor page-permission probe; shared loader enters 0000:7E00.
+11111010 # instruction | CLI | Maskable external interrupts remain disabled.
+00110001 11000000 # instruction | XOR AX,AX | Normalize real-mode data and stack.
+10001110 11011000 # instruction | MOV DS,AX | Absolute descriptor-pointer addressing.
+10001110 11010000 # instruction | MOV SS,AX | Explicit bootstrap stack segment.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Bootstrap stack below the loaded stages.
+11000110 00000110 00100000 01100000 00000000 # instruction | MOV byte [6020],0 | Initialize the native page-fault marker.
+00001111 00000001 00010110 11010000 01111111 # instruction | LGDT [7FD0] | Six literal descriptors at 7FA0.
+00001111 00100000 11000000 # instruction | MOV EAX,CR0 | Read current control state.
+01100110 10000011 11001000 00000001 # instruction | OR EAX,1 | Enable protected mode with a 32-bit operand.
+00001111 00100010 11000000 # instruction | MOV CR0,EAX | Paging remains disabled during table setup.
+01100110 11101010 00101000 01111110 00000000 00000000 00001000 00000000 # instruction | JMP 0008:7E28 | Flat ring-zero 32-bit code entry.
+00000000 00000000 # padding | Protected entry alignment | Entry is byte 40.
+10111000 00010000 00000000 00000000 00000000 # instruction | MOV EAX,10 | Kernel data and stack selector.
+10001110 11011000 # instruction | MOV DS,AX | Flat supervisor data.
+10001110 11000000 # instruction | MOV ES,AX | Flat table-store destination.
+10001110 11010000 # instruction | MOV SS,AX | Flat supervisor stack.
+10111100 00000000 10010000 00000000 00000000 # instruction | MOV ESP,9000 | TSS kernel stack top.
+00001111 00000001 00011101 11010110 01111111 00000000 00000000 # instruction | LIDT [7FD6] | Fifteen entries with only PF vector fourteen present.
+01100110 10111000 00101000 00000000 # instruction | MOV AX,28 | Available 32-bit TSS selector.
+00001111 00000000 11011000 # instruction | LTR AX | Load the TSS and set its busy bit before source paging becomes read-only.
+11111100 # instruction | CLD | Page-table stores advance.
+00110001 11000000 # instruction | XOR EAX,EAX | Zero directory entries.
+10111111 00000000 01000000 00000000 00000000 # instruction | MOV EDI,4000 | Page-aligned directory base.
+10111001 00000000 00000100 00000000 00000000 # instruction | MOV ECX,1024 | Clear every directory entry.
+11110011 10101011 # instruction | REP STOSD | Clear 4096 bytes, leaving EDI at page-table base 5000.
+10111000 00000011 00000000 00000000 00000000 # instruction | MOV EAX,3 | Identity page zero, supervisor writable and present.
+10111001 00000000 00000100 00000000 00000000 # instruction | MOV ECX,1024 | Construct all low-four-MiB page entries as runtime data.
+10101011 # instruction | STOSD table entry | Store one identity-mapping entry at source byte 95.
+00000101 00000000 00010000 00000000 00000000 # instruction | ADD EAX,1000 | Advance the physical page while preserving P/RW bits.
+11100010 11111000 # instruction | LOOP -8 | Repeat the eight-byte table-store loop.
+11000111 00000101 00000000 01000000 00000000 00000000 00000111 01010000 00000000 00000000 # instruction | MOV dword [4000],5007 | PDE permits user access only when its selected PTE also permits it.
+11000111 00000101 00011100 01010000 00000000 00000000 00000101 01110000 00000000 00000000 # instruction | MOV dword [501C],7005 | Code/GDT page seven: user-readable/executable, read-only with WP enabled.
+11000111 00000101 00101000 01010000 00000000 00000000 00000111 10100000 00000000 00000000 # instruction | MOV dword [5028],A007 | Page A: writable user stack.
+11000111 00000101 10000000 01010000 00000000 00000000 00000111 00000000 00000010 00000000 # instruction | MOV dword [5080],20007 | Page twenty: writable user marker storage at 20000.
+11000110 00000101 00101100 01010000 00000000 00000000 00000011 # instruction | MOV byte [502C],3 | Page B remains supervisor writable; source byte 149 bit two gives user permission.
+11000111 00000101 00000000 10110000 00000000 00000000 11101111 10111110 10101101 11011110 # instruction | MOV dword [B000],DEADBEEF | Initialize the protected word before paging.
+11000111 00000101 00000000 00000000 00000010 00000000 00000000 00000000 00000000 00000000 # instruction | MOV dword [20000],0 | Initialize the user completion marker.
+10111111 00000000 01100000 00000000 00000000 # instruction | MOV EDI,6000 | Supervisor-only fault log.
+10111001 00001000 00000000 00000000 00000000 # instruction | MOV ECX,8 | Clear all eight log words.
+00110001 11000000 # instruction | XOR EAX,EAX | Zero the complete fault log.
+11110011 10101011 # instruction | REP STOSD | Clear exactly 32 supervisor log bytes.
+10111000 00000000 01000000 00000000 00000000 # instruction | MOV EAX,4000 | Physical directory root.
+00001111 00100010 11011000 # instruction | MOV CR3,EAX | Install the aligned legacy page directory.
+00001111 00100000 11000000 # instruction | MOV EAX,CR0 | Preserve protected-mode control bits.
+00001101 00000000 00000000 00000001 10000000 # instruction | OR EAX,80010000 | Enable PG and supervisor WP.
+00001111 00100010 11000000 # instruction | MOV CR0,EAX | Enable the exact authored page permissions.
+10111000 00100011 00000000 00000000 00000000 # instruction | MOV EAX,23 | Ring-three flat data selector; paging supplies memory permissions.
+10001110 11011000 # instruction | MOV DS,AX | Prepare user data selector.
+10001110 11000000 # instruction | MOV ES,AX | Prepare user destination selector.
+01101010 00100011 # instruction | PUSH 23 | Outward return frame: user SS.
+01101000 00000000 10101000 00000000 00000000 # instruction | PUSH A800 | User stack lies inside writable page A, not on its lower boundary.
+01101000 00000010 00000100 00000000 00000000 # instruction | PUSH 402 | DF one, IF/IOPL zero, reserved flag set.
+01101010 00011011 # instruction | PUSH 1B | Ring-three code selector.
+01101000 00000000 01111111 00000000 00000000 # instruction | PUSH 7F00 | User code entry at source byte 256.
+11001111 # instruction | IRETD enter user | Enter CPL three and restore the user stack.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | User alignment 1 | Skipped code padding.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | User alignment 2 | Skipped code padding.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | User alignment 3 | User entry is byte 256.
+10111001 11011111 10011011 01010111 00010011 # instruction | MOV ECX,13579BDF | Known caller register clobbered then restored by the fault handler.
+10111110 01000100 00110011 00100010 00010001 # instruction | MOV ESI,11223344 | Known source register.
+10111111 10001000 01110111 01100110 01010101 # instruction | MOV EDI,55667788 | Known destination register.
+01010110 # instruction | PUSH ESI user | Actually write the writable user stack at A7FC.
+01011010 # instruction | POP EDX user | Restore stack balance and sample the written word.
+11000111 00000101 00000000 10110000 00000000 00000000 01000100 00110011 00100010 00010001 # instruction | MOV dword [B000],11223344 user | Byte 273: denied user write raises PF(7); control permits the same store.
+11000111 00000101 00000000 00000000 00000010 00000000 10001000 01110111 01100110 01010101 # instruction | MOV dword [20000],55667788 user | Complete after either the scoped fault return or permitted store.
+11101011 11111110 # instruction | JMP user checkpoint | Stable CPL-three checkpoint at 7F25, source byte 293.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | Handler alignment 1 | Skipped code padding.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | Handler alignment 2 | Skipped code padding.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | Handler alignment 3 | Skipped code padding.
+00000000 # padding | Handler alignment 4 | PF handler is byte 320, 7F40.
+01100000 # instruction | PUSHAD | Preserve eight caller register words below the real error/privilege frame.
+11000110 00000101 00100000 01100000 00000000 00000000 00000001 # instruction | MOV byte [6020],1 | Record actual PF handler delivery.
+10001001 11100110 # instruction | MOV ESI,ESP | Point at saved general registers.
+10000011 11000110 00100000 # instruction | ADD ESI,32 | Reach the six hardware frame words at 8FE8.
+10111111 00000000 01100000 00000000 00000000 # instruction | MOV EDI,6000 | Supervisor-only log destination.
+10111001 00000110 00000000 00000000 00000000 # instruction | MOV ECX,6 | Error, EIP, CS, flags, old ESP and old SS.
+11111100 # instruction | CLD | Copy forward while leaving the saved caller flags untouched.
+11110011 10100101 # instruction | REP MOVSD | Capture the actual six-word page-fault frame.
+00001111 00100000 11010000 # instruction | MOV EAX,CR2 | Read the actual faulting linear address.
+10100011 00011000 01100000 00000000 00000000 # instruction | MOV [6018],EAX | Record native CR2.
+01100110 10001100 11001000 # instruction | MOV AX,CS | Sample actual handler code privilege.
+01100110 10100011 00011100 01100000 00000000 00000000 # instruction | MOV [601C],AX | Kernel CS is 0008.
+01100110 10001100 11010000 # instruction | MOV AX,SS | Sample the TSS-selected stack selector.
+01100110 10100011 00011110 01100000 00000000 00000000 # instruction | MOV [601E],AX | Kernel SS is 0010.
+01100001 # instruction | POPAD | Restore the exact caller general registers.
+10000011 01000100 00100100 00000100 00001010 # instruction | ADD dword [ESP+4],10 | Skip only this authored ten-byte user store; do not relax its page permission.
+10000011 11000100 00000100 # instruction | ADD ESP,4 | Discard the actual hardware error word.
+11001111 # instruction | IRETD resume user | Restore outer CS, EFLAGS and original user SS:ESP.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | GDT alignment 1 | Skipped code padding.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | GDT alignment 2 | Skipped code padding.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | GDT alignment 3 | Skipped code padding.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | GDT alignment 4 | Skipped code padding.
+00000000 00000000 # padding | GDT alignment 5 | GDT begins at byte 416, 7FA0.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | GDT null | Unusable selector zero.
+11111111 11111111 00000000 00000000 00000000 10011011 11001111 00000000 # data | GDT kernel code | Flat 32-bit DPL-zero code, accessed bit already set.
+11111111 11111111 00000000 00000000 00000000 10010011 11001111 00000000 # data | GDT kernel data | Flat DPL-zero stack/data, accessed bit already set.
+11111111 11111111 00000000 00000000 00000000 11111011 11001111 00000000 # data | GDT user code | Flat 32-bit DPL-three code, accessed bit preset before read-only paging.
+11111111 11111111 00000000 00000000 00000000 11110011 11001111 00000000 # data | GDT user data | Flat writable DPL-three data, accessed bit preset before read-only paging.
+01100111 00000000 11100000 01111111 00000000 10001001 00000000 00000000 # data | GDT TSS | Available 32-bit TSS, base 7FE0, inclusive limit 67.
+00101111 00000000 10100000 01111111 00000000 00000000 # data | GDTR | Inclusive limit 47, base 7FA0.
+01110111 00000000 01010000 10000000 00000000 00000000 # data | IDTR | Inclusive limit 119, base 8050.
+00000000 00000000 00000000 00000000 # padding | TSS alignment | TSS begins at byte 480, 7FE0.
+00000000 00000000 00000000 00000000 # data | TSS previous link | No hardware task switch.
+00000000 10010000 00000000 00000000 # data | TSS ESP0 | Kernel stack top 9000.
+00010000 00000000 00000000 00000000 # data | TSS SS0 | Kernel stack selector 0010.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 12-19 | Literal unused state.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 20-27 | Literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 28-35 | Literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 36-43 | Literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 44-51 | Literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 52-59 | Literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 60-67 | Literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 68-75 | Literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 76-83 | Literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 84-91 | Literal zero.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | TSS unused 92-99 | Literal zero.
+00000000 00000000 # data | TSS debug trap | Disabled.
+01101000 00000000 # data | TSS I/O map base | Beyond the inclusive TSS limit.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | IDT alignment | IDT begins at byte 592, 8050.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 0 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 1 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 2 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 3 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 4 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 5 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 6 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 7 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 8 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 9 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 10 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 11 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 12 | Not present.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vector 13 | Not present.
+01000000 01111111 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT vector 14 | Kernel PF interrupt gate to 7F40.

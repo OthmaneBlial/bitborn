@@ -47,6 +47,7 @@ exact source revision, generated copies and every artifact hash across builds.
 | [Inspection annotations](docs/inspection-annotations.md) | `tools/bitborn.py`, `tests/test_inspection_annotations.py` | `python3 -m unittest tests.test_inspection_annotations` |
 | Actual guest behavior | `tests/qemu.py`, `tests/test_boot.py`, example-specific tests | `make test` |
 | Native [ring-three privilege frames](docs/architecture/user-privilege.md) and [callable gate](docs/architecture/user-gate.md) | `tests/fixtures/user-privilege.bits`, `user-gate.bits`, corresponding Python tests | `python3 -m unittest tests.test_user_privilege tests.test_user_gate` |
+| [Native user/supervisor page permissions](docs/architecture/user-page.md) | `tests/fixtures/user-page.bits`, `tests/test_user_page.py` | `python3 -m unittest tests.test_user_page` |
 | [Direction-flag repair lesson](docs/tutorials/repair-direction.md) | `challenges/direction-flag/`, `tests/test_direction_repair.py` | `python3 -m unittest tests.test_direction_repair` |
 | [Measured optimization puzzles](docs/tutorials/optimization.md) | `challenges/*-smaller/`, `tools/build_challenges.py`, `tests/optimization_browser_checks.mjs` | `node tests/test_challenges.mjs` and `python3 -m unittest tests.test_challenges` |
 | [Shared native exception frames](examples/exception-dispatch/README.md) | `examples/exception-dispatch/`, `tests/exception_dispatch_checks.py`, `tools/record_exception_dispatch.py` | `python3 -m unittest tests.test_exception_dispatch` |
