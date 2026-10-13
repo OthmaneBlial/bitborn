@@ -3,6 +3,8 @@
 Start with [the tutorial](docs/tutorials/from-bits-to-boot.md), [architecture](docs/architecture/README.md)
 and [current roadmap](ROADMAP.md). Changes should improve a real tested program,
 an encoding explanation, the byte tools or the educational interface.
+Read [execution scope and proof levels](docs/execution-scope.md) before extending
+the inspector, model or native targets; the three have different boundaries.
 Use [GOOD_FIRST_ISSUES.md](GOOD_FIRST_ISSUES.md) for concrete small tasks and
 [SHOWCASE.md](SHOWCASE.md) to reproduce the current demonstrations. GitHub issue
 forms collect bug reports, feature ideas, binary examples and challenge proposals.

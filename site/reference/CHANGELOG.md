@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Add a linked execution-scope guide for contributors: encoding-specific
+  inspector/model support, simplified BIOS/I/O, separate native targets and
+  validation commands matched to the claim being made.
+
 - Fix 768px CPU register-bit overflow with two tablet register columns and a
   9px bit/flag-label floor. Add computed contrast, local geometry and underline/
   undefined-state checks for four widths and eight states in three browsers;

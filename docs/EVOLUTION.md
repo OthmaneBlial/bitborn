@@ -360,6 +360,12 @@ compositing and 1,000 seeded ratios. Actual tablet screenshot review confirms
 readable contained rows. This is scoped reduced-motion/flat-background evidence,
 not a whole-site accessibility certification or live AT session.
 Next: contributor-facing supported-instruction and proof-level navigation.
+The shared execution-scope guide now maps tools, encoding families, BIOS/I/O
+limits and proof levels to existing checks. README, contributor and preset guides
+link it; the website manual exposes it at the browser-simulation boundary.
+The guide was checked against the actual inspector and execution switch, including
+the distinction between rejected BIOS calls and port writes without device behavior.
+Next: a curated broken-program repair lesson with literal controls and native proof.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide

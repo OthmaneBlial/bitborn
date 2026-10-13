@@ -1,5 +1,8 @@
 # Canonical CPU Lab programs
 
+See [execution scope and proof levels](../execution-scope.md) for supported
+encoding families, simplified BIOS/I/O behavior and the matching validation path.
+
 Every selectable CPU Lab preset reads one manually authored `.bits` file. The site
 build copies literal text into its browser data module and publishes the same
 file under `site/reference/`. It does not assemble mnemonics, resolve labels or

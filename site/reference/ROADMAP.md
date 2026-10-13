@@ -287,6 +287,9 @@ The v0.2 milestone is published and verified. The following research remains ope
   local bounds and non-color change cues at 1440/768/390/320px. Include carry,
   undefined AF, stack/memory writes and timeline overlap. The scoped checks do
   not certify the whole site; see [indicator readability](docs/indicator-readability.md).
+- [x] Link a shared [execution-scope guide](docs/execution-scope.md) from the README,
+  contributor guide, CPU presets and website manual, with encoding boundaries,
+  simplified BIOS/I/O behavior and explicit proof levels.
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review
