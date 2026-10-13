@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Inspect all unprefixed short Jcc fields in 16/32/64 contexts with shared
+  condition predicates, selector/inversion roles and signed rel8 bit labels.
+  Add canonical complementary fixtures, 12,288 encoding cases and six independent
+  disassembly goldens. Browser bit edits preserve runtime state; execution and
+  unsupported prefix/near scope are unchanged.
+
 - Add an 80-byte native self-modifying program: one writer bit changes one future
   MOV operand bit, turning A into a on COM1 and VGA. A separate literal control,
   full model/native state checks, live code RAM and unchanged disk/source proof

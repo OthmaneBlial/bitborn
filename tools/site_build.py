@@ -52,8 +52,7 @@ def prepare():
         source = 'docs/instruction-encoding/fixtures/' + filename
         data, _ = read_bits(ROOT / source)
         encoding[name] = {'source': source, 'bytes': list(data), 'sha256': digest(data)}
-    for name, filename in (('selfModifyingControl', 'control.bits'), ('selfModifyingProgram', 'program.bits')):
-        source = 'examples/self-modifying/' + filename
+    for name, source in (('selfModifyingControl', 'examples/self-modifying/control.bits'), ('selfModifyingProgram', 'examples/self-modifying/program.bits'), ('shortBranch', 'docs/instruction-encoding/fixtures/short-branch.bits'), ('shortBranchInverse', 'docs/instruction-encoding/fixtures/short-branch-inverse.bits')):
         data, _ = read_bits(ROOT / source)
         encoding[name] = {'source': source, 'bytes': list(data), 'sha256': digest(data)}
     (ROOT / 'site/encoding-presets.mjs').write_text('export const encodingExamples = ' + json.dumps(encoding, indent=2) + ';\n')

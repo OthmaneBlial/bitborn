@@ -47,7 +47,7 @@ for(const opcode of opcodes) {
   assert.throws(()=>decode([opcode]),/Truncated/);
   assert.throws(()=>decode([0x66,opcode,0]),/outside/);
   assert.equal(inspectEncoding([opcode,0x80],16).size,2);
-  for(const mode of [32,64])assert.throws(()=>inspectEncoding([opcode,0x80],mode),/outside/);
+  for(const mode of [32,64])assert.equal(inspectEncoding([opcode,0x80],mode).size,2,'unprefixed short Jcc inspection is mode-independent; execution stays 16-bit');
 }
 for(const displacement of [0x80,0x7F,0,0xFE]) {
   const wrapBytes=Uint8Array.of(0x7C,displacement),wrap=createState(wrapBytes,0xFFFE);wrap.sf=true;wrap.of=false;

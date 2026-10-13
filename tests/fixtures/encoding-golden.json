@@ -30,6 +30,12 @@
     {"source":"movMemoryPositive","mode":16,"size":3,"disassembly":"mov ax,[bp+0x7e]"},
     {"source":"mov32Next","mode":16,"size":3,"disassembly":"mov ax,0x2b"},
     {"source":"mov32Next","mode":32,"size":5,"disassembly":"mov eax,0x2b"},
-    {"source":"mov32Next","mode":64,"size":5,"disassembly":"mov eax,0x2b"}
+    {"source":"mov32Next","mode":64,"size":5,"disassembly":"mov eax,0x2b"},
+    {"source":"shortBranch","mode":16,"size":2,"disassembly":"jl 0x0","relative":true},
+    {"source":"shortBranch","mode":32,"size":2,"disassembly":"jl 0x0","relative":true},
+    {"source":"shortBranch","mode":64,"size":2,"disassembly":"jl 0x0","relative":true},
+    {"source":"shortBranchInverse","mode":16,"size":2,"disassembly":"jnl 0x0","relative":true},
+    {"source":"shortBranchInverse","mode":32,"size":2,"disassembly":"jnl 0x0","relative":true},
+    {"source":"shortBranchInverse","mode":64,"size":2,"disassembly":"jnl 0x0","relative":true}
   ]
 }

@@ -75,6 +75,7 @@ if ($('bit-editor')) {
   $('decode-mode').setAttribute('aria-label','Decoding context, inspection only');
   const templates = {mov:[0xB8,0x2A,0x00],add:[0x05,0x07,0x00],cmp:[0x3D,0x2A,0x00],inc:[0x40],xor:[0x31,0xC0],nop:[0x90]};
   for(const [name,example] of Object.entries(encodingExamples))templates[name]=example.bytes;
+  for(const [value,title] of [['shortBranch','Short JL / condition and rel8'],['shortBranchInverse','Short JGE / inverse condition']]) {const option=document.createElement('option');option.value=value;option.textContent=title;$('instruction-select').append(option);}
   let bytes = [...templates.mov], cpu = createState();
   function renderEditor(focusBit) {
     let instruction, problem;

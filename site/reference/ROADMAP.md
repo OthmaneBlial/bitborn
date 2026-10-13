@@ -250,6 +250,10 @@ The v0.2 milestone is published and verified. The following research remains ope
   Capture actual native cells from separate boots and expose source/image guides.
   Current build: 56 reviewed targets, 88 artifacts and 15 gallery entries; immutable
   v0.3 release downloads remain unchanged. See [experiment](examples/self-modifying/README.md).
+- [x] Explain short Jcc condition-group, inversion and signed displacement bits
+  in 16/32/64 inspection. Check all 12,288 encodings and six independent
+  disassembly goldens; browser complement/sign edits preserve runtime state.
+  Execution stays 16-bit; see [field guide](docs/instruction-encoding/short-branches.md).
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

@@ -31,7 +31,12 @@ const golden=JSON.parse(readFileSync(new URL('./fixtures/encoding-golden.json',i
 for(const entry of golden.cases) {
   const expected=entry.disassembly.toUpperCase().replace(/0X([0-9A-F]+)/g,(_,value)=>BigInt(`0x${value}`).toString()).replace(/,\s*/g,', ');
   const result=inspectEncoding(encodingExamples[entry.source].bytes,entry.mode);
-  assert.equal(result.mnemonic,expected,'independent disassembly golden');assert.equal(result.size,entry.size);
+  if(entry.relative) {
+    const [name,address]=expected.split(' ');
+    assert.equal(result.operation.toUpperCase(),name==='JNL'?'JGE':name,'independent branch mnemonic/alias');
+    assert.equal(result.displacement,Number(address)-entry.size,'independent target at disassembler origin zero minus instruction end');
+  } else assert.equal(result.mnemonic,expected,'independent disassembly golden');
+  assert.equal(result.size,entry.size);
 }
 for(const mode of [16,32,64])for(const prefix of [[],[0x66]])for(let index=0;index<8;index++) {
   const width=prefix.length?(mode===16?32:16):mode===16?16:32;

@@ -29,6 +29,7 @@ site-test: site
 	node tests/test_register_mov.mjs
 	node tests/test_memory_mov.mjs
 	node tests/test_branches.mjs
+	node tests/test_branch_encoding.mjs
 	node tests/test_carry.mjs
 	node tests/test_self_modifying.mjs
 	node tests/test_bit_diff.mjs

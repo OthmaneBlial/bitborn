@@ -286,5 +286,21 @@ export const encodingExamples = {
       253
     ],
     "sha256": "3525e89a45fa14f092153f1a337b82af0e51a2a8b8f0cc78d5dd74c9b29f16dc"
+  },
+  "shortBranch": {
+    "source": "docs/instruction-encoding/fixtures/short-branch.bits",
+    "bytes": [
+      124,
+      254
+    ],
+    "sha256": "2ed679131412accc7a4faa8a9da042d741b98d86fd789459c2fa824c9dee315b"
+  },
+  "shortBranchInverse": {
+    "source": "docs/instruction-encoding/fixtures/short-branch-inverse.bits",
+    "bytes": [
+      125,
+      254
+    ],
+    "sha256": "11902ed159d26f3c5a6adefc18d4e7b8135214f0e4747edf46a2ca770f987e9a"
   }
 };

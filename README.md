@@ -103,6 +103,7 @@ for exact evidence and remaining gates.
 | [Carry and borrow arithmetic](docs/carry-borrow.md) | ✅ Byte/word ADC and SBB, 270,736 ripple-oracle cases and AH/IF/DF preservation; exact 81-byte multiword exercise plus eight native FLAGS samples |
 | [Canonical CPU teaching sources](docs/cpu-lab/README.md) | ✅ All six presets come from `.bits` files; editor/reference identity, original bytes, bounded build inputs and loaded-preset source links verified |
 | [Native one-bit self-modification](examples/self-modifying/README.md) | ✅ One writer bit changes one future operand bit and A→a; both literal controls match model/QEMU registers, code RAM, serial and VGA; actual native capture and immutable source/image checks |
+| [Short branch field microscope](docs/instruction-encoding/short-branches.md) | ✅ Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged |
 | CPU Lab program downloads and imports | ✅ Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks |
 | Share loaded CPU Lab programs | ✅ Versioned URL fragments preserve 1–512 loaded bytes and open paused; 1,000 seeded round trips, malformed-link preservation, history navigation and clipboard fallback verified in three browsers |
 | Binary and hexadecimal drafts | ✅ Literal byte views, explicit hex loading and comment preservation; all byte values and 1,000 seeded round trips pass; CLI .bits remains binary |

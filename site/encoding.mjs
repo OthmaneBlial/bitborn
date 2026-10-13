@@ -85,6 +85,14 @@ export function inspectEncoding(bytes,mode=16) {
     fields.push('opcode + register');bitFields.push(['Register selector','Register selector','Register selector',...Array(5).fill(`${operation} opcode`)]);
     return finish(offset+1,`${operation} ${register}`,`Context ${mode}; operand width ${width}. The low three opcode bits select the register. INC/DEC preserve CF. In 64-bit mode, 40–4F are REX prefixes instead of these one-byte instructions.`,{register});
   }
+  if(offset===0&&opcode>=0x70&&opcode<=0x7F) {
+    const instruction=decode(bytes);
+    return {...instruction,mode,width:8,displacementWidth:8,
+      fields:['opcode + condition','signed relative displacement'],
+      bitFields:[['Condition inversion (0 positive, 1 inverse)','Condition group selector','Condition group selector','Condition group selector',...Array(4).fill('Short Jcc opcode')],
+        [...Array.from({length:7},(_,bit)=>`Relative displacement bit ${bit}`),'Signed rel8 sign (-128)']],
+      explanation:`Context ${mode}; unprefixed short Jcc with an 8-bit displacement. Condition code ${instruction.conditionCode}: ${instruction.condition}. Opcode bits 3–1 select the flag-test group; bit 0 selects its inverse. Bit 7 of rel8 has weight -128; the displacement is relative to the instruction end. No target address was guessed and no flags were read or instructions executed.`};
+  }
   if(offset===0&&mode===16) {
     const instruction=decode(bytes);
     return {...instruction,mode,width,bitFields:instruction.fields.map(field=>bitNames(field))};

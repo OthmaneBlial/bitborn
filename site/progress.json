@@ -166,6 +166,10 @@
       "progress": "\u2705 One writer bit changes one future operand bit and A\u2192a; both literal controls match model/QEMU registers, code RAM, serial and VGA; actual native capture and immutable source/image checks"
     },
     {
+      "milestone": "Short branch field microscope",
+      "progress": "\u2705 Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged"
+    },
+    {
       "milestone": "CPU Lab program downloads and imports",
       "progress": "\u2705 Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks"
     },

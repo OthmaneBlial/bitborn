@@ -82,4 +82,19 @@ export async function checkEncoding(page) {
   await page.locator('#execute-instruction').click();
   assert.equal(await page.locator('#play-registers .register').filter({hasText:/^AX/}).locator('strong').textContent(),'0000','AH copied into AL while preserving AH');
   await page.locator('#reset-state').click();await page.locator('#instruction-select').selectOption('mov');
+  const beforeBranches=await page.locator('#play-registers').textContent();
+  for(const mode of ['16','32','64']) {
+    await page.locator('#instruction-select').selectOption('shortBranch');await page.locator('#decode-mode').selectOption(mode);
+    assert.equal(await page.locator('#decoded-instruction').textContent(),'JL -2');
+    assert.match(await page.locator('#encoding-explanation').textContent(),/SF != OF/);
+    assert.match(await page.locator('[data-bit="0-0"]').getAttribute('aria-label'),/Condition inversion/);
+    assert.match(await page.locator('[data-bit="0-2"]').getAttribute('aria-label'),/Condition group selector/);
+    assert.match(await page.locator('[data-bit="1-7"]').getAttribute('aria-label'),/Signed rel8 sign/);
+    assert.equal(await page.locator('#execute-instruction').isEnabled(),mode==='16');
+    await page.locator('[data-bit="0-0"]').click();assert.equal(await page.locator('#decoded-instruction').textContent(),'JGE -2');
+    assert.match(await page.locator('#encoding-explanation').textContent(),/SF = OF/);
+    await page.locator('[data-bit="1-7"]').click();assert.equal(await page.locator('#decoded-instruction').textContent(),'JGE +126');
+    assert.equal(await page.locator('#play-registers').textContent(),beforeBranches,'inspection of branch bits does not read/change runtime flags or registers');
+  }
+  await page.locator('#decode-mode').selectOption('16');await page.locator('#instruction-select').selectOption('mov');
 }

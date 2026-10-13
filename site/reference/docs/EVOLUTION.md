@@ -223,6 +223,20 @@ verify live code writes, fresh fetch, output and exact undo/replay. Native GIF
 self-checks verify visible/different frames and duration; hardware/SMP cache and
 performance claims remain outside scope. Next: accessibility and precise
 instruction-field explanations for changed code and source links.
+Native self-modification commit `52450b1` passed CI `38324997986` and deployment
+`38325367364`; Pages mirror `7c3af60` changes only `bitborn/`. Public gallery,
+bootable image, native GIF and literal source were anonymously fetched and match
+that exact milestone. GitHub topics now include self-modifying-code within 20
+relevant topics; the homepage remains the canonical `.io` route.
+Short-Jcc inspection now explains condition-group/inversion and signed-rel8 bit
+roles in 16/32/64 contexts. The model and inspector share exact predicates for
+all sixteen conditions; runtime execution remains the 16-bit subset. A 12,288-case
+inspection oracle covers every mode/condition/displacement without modifying
+inputs or reading flags. Six actual NDISASM observations bring the independent
+golden corpus to 34; relative targets and JNL/JGE aliases are handled explicitly.
+Browser complement/sign edits preserve runtime state and disable wider simulation.
+Full local Python/site/model checks pass; recording source/GIF hashes are refreshed.
+Next: roving keyboard focus and row navigation in the instruction bit editor.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide

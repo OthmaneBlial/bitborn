@@ -1,0 +1,1 @@
+01111100 11111110 # instruction | JL -2 | Condition code C tests SF != OF; signed FE returns to this instruction when taken.

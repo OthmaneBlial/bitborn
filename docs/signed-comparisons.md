@@ -7,8 +7,9 @@ The following branch chooses the interpretation.
 
 The model now executes all sixteen unprefixed short `Jcc` conditions in its
 16-bit subset. Displacements are signed eight-bit offsets from the next
-instruction. Near `0F 8x`, prefixed variants and wider-context Jcc inspection
-remain outside the current scope.
+instruction. The inspector explains unprefixed short Jcc fields in 16/32/64
+contexts; execution remains the separately tested 16-bit subset. Near `0F 8x`
+and prefixed variants remain outside the current scope.
 
 | Opcode | Branch | Condition | Interpretation after CMP |
 | --- | --- | --- | --- |

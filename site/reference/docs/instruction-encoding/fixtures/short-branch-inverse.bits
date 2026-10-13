@@ -1,0 +1,1 @@
+01111101 11111110 # instruction | JGE -2 | Only opcode bit 0 changes: the inverse condition tests SF = OF; displacement stays FE.

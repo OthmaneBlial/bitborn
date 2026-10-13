@@ -1,6 +1,7 @@
 // A bounded 286+ real-mode teaching model; it does not model CPU faults or a BIOS.
 import {decodeAddress16} from './address16.mjs';
 const registers = ['AX', 'CX', 'DX', 'BX', 'SP', 'BP', 'SI', 'DI'];
+const shortBranches=[['jo','OF = 1'],['jno','OF = 0'],['jb','CF = 1'],['jae','CF = 0'],['jz','ZF = 1'],['jnz','ZF = 0'],['jbe','CF = 1 or ZF = 1'],['ja','CF = 0 and ZF = 0'],['js','SF = 1'],['jns','SF = 0'],['jp','PF = 1'],['jnp','PF = 0'],['jl','SF != OF'],['jge','SF = OF'],['jle','ZF = 1 or SF != OF'],['jg','ZF = 0 and SF = OF']];
 const signed = value => value < 128 ? value : value - 256;
 export const binary = value => value.toString(2).padStart(8, '0');
 export const hex = (value, width = 2) => value.toString(16).toUpperCase().padStart(width, '0');
@@ -72,10 +73,13 @@ export function decode(bytes, offset = 0) {
   if (opcode === 0x84 && byte(1) === 0xC0) return instruction(2, 'TEST AL, AL', 'A bitwise AND updates ZF. AL itself is unchanged; ZF becomes 1 when AL is zero.', 'test');
   if (opcode === 0xA8) return instruction(2, `TEST AL, 0x${hex(byte(1))}`, 'Test the bits of AL against an 8-bit mask without changing AL. ZF reports whether any selected bit is set.', 'testImmediate', {value: byte(1)});
   if (opcode === 0xEA) return instruction(5, `JMP 0x${hex(word(3),4)}:0x${hex(word(1),4)}`, 'A far jump stores the little-endian offset first and the segment second. This boot image normalizes CS to zero.', 'farJump', {value: word(1), segment: word(3)});
-  const branches = {0xEB:'jmp',0x70:'jo',0x71:'jno',0x72:'jb',0x73:'jae',0x74:'jz',0x75:'jnz',0x76:'jbe',0x77:'ja',0x78:'js',0x79:'jns',0x7A:'jp',0x7B:'jnp',0x7C:'jl',0x7D:'jge',0x7E:'jle',0x7F:'jg',0xE2:'loop'};
+  if(opcode>=0x70&&opcode<=0x7F) {
+    const conditionCode=opcode&15,[operation,condition]=shortBranches[conditionCode],displacement=signed(byte(1));
+    return instruction(2,`${operation.toUpperCase()} ${displacement>=0?'+':''}${displacement}`,`Branch if ${condition}. The signed 8-bit displacement is measured from the end of this instruction; flags and registers are unchanged.`,operation,{displacement,conditionCode,condition});
+  }
+  const branches = {0xEB:'jmp',0xE2:'loop'};
   if (branches[opcode]) {
-    const conditions={jbe:'Unsigned below or equal: CF or ZF is set.',ja:'Unsigned above: CF and ZF are clear.',jl:'Signed less: SF differs from OF.',jge:'Signed greater or equal: SF equals OF.',jle:'Signed less or equal: ZF is set or SF differs from OF.',jg:'Signed greater: ZF is clear and SF equals OF.'};
-    return instruction(2, `${branches[opcode].toUpperCase()} ${signed(byte(1)) >= 0 ? '+' : ''}${signed(byte(1))}`, `${conditions[branches[opcode]]?conditions[branches[opcode]]+' ':''}The signed 8-bit displacement is measured from the end of this instruction.`, branches[opcode], {displacement: signed(byte(1))});
+    return instruction(2, `${branches[opcode].toUpperCase()} ${signed(byte(1)) >= 0 ? '+' : ''}${signed(byte(1))}`, 'The signed 8-bit displacement is measured from the end of this instruction.', branches[opcode], {displacement: signed(byte(1))});
   }
   if (opcode === 0xE9 || opcode === 0xE8) {
     const displacement = word(1) > 32767 ? word(1) - 65536 : word(1);

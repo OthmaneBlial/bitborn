@@ -114,7 +114,11 @@ try {
   await page.locator('#instruction-select').selectOption('movMemoryAbsolute');assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV DX, [32]');
   await capture('The mod00/rm110 exception selects an absolute little-endian offset in default DS, not BP.');
   await page.locator('#instruction-select').selectOption('movMemoryPair');assert.equal(await page.locator('#decoded-instruction').textContent(),'MOV CX, [BX+SI]');
-  await capture('Inspected BX+SI addressing in default DS; wider/overridden addressing remains unavailable.');await encode();
+  await capture('Inspected BX+SI addressing in default DS; wider/overridden addressing remains unavailable.');
+  await page.locator('#instruction-select').selectOption('shortBranch');assert.equal(await page.locator('#decoded-instruction').textContent(),'JL -2');await page.locator('#encoding-explanation').scrollIntoViewIfNeeded();await capture('Short JL exposes condition-group, inversion and signed-rel8 fields in16-bit inspection; no flags are read.');
+  await page.locator('#decode-mode').selectOption('64');assert.equal(await page.locator('#execute-instruction').isDisabled(),true);await capture('The same unprefixed short-Jcc fields are valid in64-bit inspection; execution remains disabled.');
+  await page.locator('[data-bit="0-0"]').click();assert.equal(await page.locator('#decoded-instruction').textContent(),'JGE -2');await page.locator('#encoding-explanation').scrollIntoViewIfNeeded();await capture('Toggling opcode bit0 selects the inverse condition: SF differing from OF becomes SF equal to OF.');
+  await page.locator('[data-bit="1-7"]').click();assert.equal(await page.locator('#decoded-instruction').textContent(),'JGE +126');await page.locator('#encoding-explanation').scrollIntoViewIfNeeded();await capture('Toggling rel8 bit7 changes FE (-2) to7E (+126); no absolute target or runtime flag state is guessed.');await encode();
 
   await begin('boot-builder');
   await page.goto(new URL('boot-builder/',base).href);
@@ -230,6 +234,7 @@ try {
   metadata.sourceSha256[carrySource]=createHash('sha256').update(await readFile(resolve(root,carrySource))).digest('hex');
   for(const preset of presets)metadata.sourceSha256[preset.sourcePath]=createHash('sha256').update(await readFile(resolve(root,preset.sourcePath))).digest('hex');
   for(const name of ['program','control']) {const source=`examples/self-modifying/${name}.bits`;metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');}
+  for(const name of ['short-branch','short-branch-inverse']) {const source=`docs/instruction-encoding/fixtures/${name}.bits`;metadata.sourceSha256[source]=createHash('sha256').update(await readFile(resolve(root,source))).digest('hex');}
   await writeFile(resolve(root,'assets/browser-demo-recording.json'),JSON.stringify(metadata,null,2)+'\n');
   console.log('Recorded six genuine browser GIFs with frame/source hashes and explicit inspection/simulation provenance.');
 } finally {await browser?.close();await new Promise(resolve=>server.close(resolve));}
