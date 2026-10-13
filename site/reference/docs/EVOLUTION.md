@@ -509,6 +509,12 @@ The completed browser recording set has 70 current source hashes, seven GIFs
 and 111 actual PNG frames; every source/GIF/frame hash is rechecked.
 No native executable, boot target or release asset changes. Native execution and
 live assistive-technology speech are separate evidence. Next: a stack/call lesson.
+Byte-order commit `fc5a715` passed local checks but CI `38348552085` failed because
+the new NDISASM subprocess was absent from the runner; deployment `38348637922`
+was correctly skipped. Mirror `ec617ff` changes only 20 `bitborn/` paths. Both
+validation and Pages jobs now explicitly install the inspection package, and
+the contributor guide records it. This is a test dependency, not target assembly;
+the fresh exact-commit CI/deployment result remains pending verification.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide

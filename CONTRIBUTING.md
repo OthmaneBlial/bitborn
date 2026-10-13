@@ -17,6 +17,11 @@ Python 3.10+, Make and QEMU are needed for the native checks. Node.js 22+ is the
 CI baseline for browser tooling. On macOS, install QEMU with `brew install qemu`;
 on Ubuntu, use `sudo apt-get install python3 make qemu-system-x86`.
 
+The independent disassembly checks in `make site-test` also require `ndisasm`:
+install `nasm` with Homebrew on macOS or `sudo apt-get install nasm` on Ubuntu.
+This package supplies a read-only verification tool; the build never invokes an
+assembler to generate target instructions. Both CI and Pages install it explicitly.
+
 ```sh
 make test                 # build, reviewed artifacts, unit tests and headless QEMU
 make site-test            # rebuild website references; model, route and link checks

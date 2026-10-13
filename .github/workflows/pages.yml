@@ -29,6 +29,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Install independent disassembler for site checks
+        run: sudo apt-get update && sudo apt-get install -y nasm
       - name: Build portable site from canonical source
         run: make site-test
       - uses: actions/configure-pages@v5
