@@ -20,7 +20,7 @@ Then boot a real **512-byte BIOS image** written directly as binary digits.
 
 Every opcode, operand and branch displacement is authored in `.bits` files.
 The packer preserves those bytes; no assembler chooses them for us. Around that
-small beginning are **17 examples, 20 challenges, a boot builder and a visual CPU
+small beginning are **18 examples, 20 challenges, a boot builder and a visual CPU
 lab** for following the machine one instruction at a time.
 
 ![Actual QEMU boot captured from guest VGA frames](assets/boot.gif)
@@ -65,7 +65,8 @@ with verified downloads, source and checksums. The boot tools, interactive labs,
 challenges and one-bit native experiments are working; recent lessons cover
 byte order, stack calls and flags. A new [guarded native allocator](examples/bounded-allocator/README.md)
 shows how one request bit changes final-byte ownership, in QEMU and the CPU lab.
-Next comes interrupt and paging research.
+The [native timer experiment](examples/timer-irq/README.md) now records actual
+interrupt frames and exposes a one-bit EOI failure. Next comes paging research.
 
 **[Read the full roadmap, completed milestones and evidence →](ROADMAP.md)**
 The [live roadmap](https://othmaneblial.github.io/bitborn/roadmap/) follows that same

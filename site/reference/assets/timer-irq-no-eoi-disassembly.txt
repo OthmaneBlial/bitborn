@@ -1,0 +1,79 @@
+00000000  FA                cli
+00000001  EA067E0000        jmp word 0x0:word 0x7e06
+00000006  31C0              xor ax,ax
+00000008  8ED8              mov ds,ax
+0000000A  8ED0              mov ss,ax
+0000000C  BC007C            mov sp,0x7c00
+0000000F  FC                cld
+00000010  0F0116187F        lgdt word [0x7f18]
+00000015  0F20C0            mov eax,cr0
+00000018  6683C801          or eax,0x1
+0000001C  0F22C0            mov cr0,eax
+0000001F  66EA287E00000800  jmp word 0x8:dword 0x7e28
+00000028  B810000000        mov eax,0x10
+0000002D  8ED8              mov ds,eax
+0000002F  8ED0              mov ss,eax
+00000031  BC00900000        mov esp,0x9000
+00000036  0F011D1E7F0000    lidt dword [0x7f1e]
+0000003D  C705004000000000  mov dword [0x4000],0x0
+         -0000
+00000047  BF00410000        mov edi,0x4100
+0000004C  BB03000000        mov ebx,0x3
+00000051  B90C000000        mov ecx,0xc
+00000056  31C0              xor eax,eax
+00000058  8907              mov [edi],eax
+0000005A  83C704            add edi,0x4
+0000005D  E2F9              loop 0x58
+0000005F  BF00410000        mov edi,0x4100
+00000064  C605FF400000A5    mov byte [0x40ff],0xa5
+0000006B  C605304100005A    mov byte [0x4130],0x5a
+00000072  B011              mov al,0x11
+00000074  E620              out byte 0x20,al
+00000076  E6A0              out byte 0xa0,al
+00000078  B020              mov al,0x20
+0000007A  E621              out byte 0x21,al
+0000007C  B028              mov al,0x28
+0000007E  E6A1              out byte 0xa1,al
+00000080  B004              mov al,0x4
+00000082  E621              out byte 0x21,al
+00000084  B002              mov al,0x2
+00000086  E6A1              out byte 0xa1,al
+00000088  B001              mov al,0x1
+0000008A  E621              out byte 0x21,al
+0000008C  E6A1              out byte 0xa1,al
+0000008E  B0FF              mov al,0xff
+00000090  E6A1              out byte 0xa1,al
+00000092  B036              mov al,0x36
+00000094  E643              out byte 0x43,al
+00000096  B09C              mov al,0x9c
+00000098  E640              out byte 0x40,al
+0000009A  B02E              mov al,0x2e
+0000009C  E640              out byte 0x40,al
+0000009E  B0FE              mov al,0xfe
+000000A0  E621              out byte 0x21,al
+000000A2  FA                cli
+000000A3  391D00400000      cmp [0x4000],ebx
+000000A9  7304              jnc 0xaf
+000000AB  FB                sti
+000000AC  F4                hlt
+000000AD  EBF3              jmp 0xa2
+000000AF  F4                hlt
+000000B0  EBFD              jmp 0xaf
+000000C0  8B0424            mov eax,[esp]
+000000C3  8907              mov [edi],eax
+000000C5  8B442404          mov eax,[esp+0x4]
+000000C9  894704            mov [edi+0x4],eax
+000000CC  8B442408          mov eax,[esp+0x8]
+000000D0  894708            mov [edi+0x8],eax
+000000D3  9C                pushf
+000000D4  58                pop eax
+000000D5  89470C            mov [edi+0xc],eax
+000000D8  83C710            add edi,0x10
+000000DB  FF0500400000      inc dword [0x4000]
+000000E1  391D00400000      cmp [0x4000],ebx
+000000E7  7204              jc 0xed
+000000E9  B0FF              mov al,0xff
+000000EB  E621              out byte 0x21,al
+000000ED  B020              mov al,0x20
+000000EF  E621              out byte 0x21,al
+000000F1  CF                iret

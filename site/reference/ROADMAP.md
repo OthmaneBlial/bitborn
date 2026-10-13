@@ -67,6 +67,7 @@ website progress; the [README](README.md) keeps a short summary.
 | [Carry, overflow and undefined flags](docs/tutorials/flags.md) | ✅ Guided flag checkpoints, signed/unsigned boundary comparison, low-byte parity and AF=? replay; two reviewed QEMU programs check all six defined ADD flags against expected masks and the model |
 | [Guarded native allocator](examples/bounded-allocator/README.md) | ✅ 220 literal bytes, five native-written request logs in each of two boots, exact-fit ownership, zero/exhaustion/wrap rejection, both guards and immutable code/disk checks; same sources agree with the model after 135/137 steps and every RAM/state checkpoint rewinds/replays; one fixed arena, no free or memory isolation |
 | [Word-register ADD execution](docs/architecture/register-add.md) | ✅ Both unprefixed register-direct directions, 128 selector combinations, 160,896 independent arithmetic cases and six native result/defined-flags probes; aliases, SP, IF/DF and strict unsupported-form state preservation checked; wider forms remain unsupported |
+| [Native timer IRQ and one-bit EOI failure](examples/timer-irq/README.md) | ✅ 568 literal bytes remap PIC/PIT IRQ0 to a protected-mode gate, record actual frames and return with IRETD; controls produce 3/2 entries or one blocked entry with ISR/pending-request proof; guards, unused slots, stack and immutable instructions/images checked; no browser hardware or timing claim |
 | [Short branch field microscope](docs/instruction-encoding/short-branches.md) | ✅ Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged |
 | [Keyboard instruction-bit editing](docs/instruction-encoding/keyboard.md) | ✅ One Tab stop, arrows, row/global Home/End, Enter/Space and stable edit focus; fixture shortening preserves selector focus and navigation never executes bytes |
 | [Actionable source errors](docs/source-diagnostics.md) | ✅ Exact UTF-16 token/excess-byte ranges, 704 location cases and focused binary/hex selection; invalid drafts preserve loaded state/history and corrections clear stale errors |
@@ -84,7 +85,7 @@ website progress; the [README](README.md) keeps a short summary.
 | [v0.3.0 release and provenance](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.3.0) | ✅ Exact-commit CI passed; all 14 public files re-downloaded anonymously, bytes/checksums and source/artifact provenance verified |
 | [v0.4.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.4.0) | ✅ Main/tag CI passed; independent source archive passes 92 tests and three-browser checks; all 31 public files, 30 checksums and 90 artifact hashes verified |
 | [v0.2.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0) | ✅ Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified |
-| Paging, exception/hardware interrupt handling and physical hardware | Future research; no working claim |
+| Paging, general exception/NMI/APIC handling and physical hardware | Future research; no working claim |
 
 
 ## Complete
@@ -436,7 +437,9 @@ dependencies, risks and the current execution record. It is not a feature list.
   five requests per native boot, one request-bit control and unchanged guards.
   See [the ownership and scope guide](examples/bounded-allocator/README.md).
 - [ ] Paging with inspected page tables and deliberate fault evidence.
-- [ ] General exception handlers and hardware interrupt delivery.
+- [x] Controlled PIC/PIT IRQ0 delivery to a protected-mode gate in QEMU,
+  with native frame logs, IRETD and a wrong-EOI port control.
+- [ ] General exception/NMI/APIC handlers and physical interrupt hardware.
 - [ ] Physical-hardware calibration and broader boot compatibility.
 
 These experiments require separate bootable targets, byte explanations and actual

@@ -113,8 +113,9 @@ documented instruction forms, simplified flags/BIOS/COM1, and bounded memory.
 Unknown or unsupported instructions stop with a diagnostic; it is not a complete
 x86 emulator, a security sandbox or evidence of native execution.
 Unprefixed register-direct MOV byte/word copies have independent byte-layout,
-history and [native sampled-flags evidence](register-mov.md); wider/prefixed and
-memory forms remain outside model execution.
+history and [native sampled-flags evidence](register-mov.md). Wider and prefixed
+forms remain outside model execution. Unprefixed memory MOV
+uses the shared 16-bit address decoder and native/model checks.
 
 ## Native indexed pixels
 
@@ -134,6 +135,15 @@ writing a marker. This cooperative bump allocation has no free or memory
 isolation. Both sources also halt in the model with the same logs, guards and
 defined flags; [word-register ADD](register-add.md) has independent arithmetic
 and sampled native evidence. Model RAM/state rewind is checked separately.
+
+## Native timer delivery
+
+The [native timer experiment](../../examples/timer-irq/README.md) remaps legacy
+PIC/PIT IRQ0 to one protected-mode interrupt gate. It records actual saved frames,
+compares saved IF with the handler's PUSHFD image, sends EOI and returns with
+IRETD. One count bit changes three entries to two; one port bit leaves an IRQ
+in service with another request pending. It has no general interrupt driver,
+APIC or browser hardware model, and makes no timing claim.
 
 ## Technical references
 

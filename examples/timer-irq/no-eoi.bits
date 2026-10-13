@@ -1,0 +1,105 @@
+# Literal protected-mode timer IRQ probe, loaded by boot/loader.bits at 0000:7E00.
+11111010 # instruction | CLI | Mask external interrupts during descriptor and device setup.
+11101010 00000110 01111110 00000000 00000000 # instruction | JMP 0000:7E06 | Normalize the real-mode code segment.
+00110001 11000000 # instruction | XOR AX,AX | Prepare segment zero.
+10001110 11011000 # instruction | MOV DS,AX | Address the descriptor pointers through DS zero.
+10001110 11010000 # instruction | MOV SS,AX | Establish the initial stack segment.
+10111100 00000000 01111100 # instruction | MOV SP,7C00 | Use a defined stack before changing modes.
+11111100 # instruction | CLD | Clear direction in both saved and handler flags.
+00001111 00000001 00010110 00011000 01111111 # instruction | LGDT [7F18] | Load the literal GDT pointer at payload offset 280.
+00001111 00100000 11000000 # instruction | MOV EAX,CR0 | Preserve existing control-register bits.
+01100110 10000011 11001000 00000001 # instruction | OR EAX,1 | Set protected-mode enable with 32-bit operand size.
+00001111 00100010 11000000 # instruction | MOV CR0,EAX | Enable protection without enabling paging.
+01100110 11101010 00101000 01111110 00000000 00000000 00001000 00000000 # instruction | JMP 0008:00007E28 | Enter the flat 32-bit code descriptor at offset 40.
+00000000 # padding | Protected entry alignment | One skipped byte.
+10111000 00010000 00000000 00000000 00000000 # instruction | MOV EAX,10 | Select the flat data descriptor.
+10001110 11011000 # instruction | MOV DS,AX | Load flat data selector 0010.
+10001110 11010000 # instruction | MOV SS,AX | Load the flat 32-bit stack descriptor.
+10111100 00000000 10010000 00000000 00000000 # instruction | MOV ESP,9000 | Put the actual IRQ frame below physical 9000.
+00001111 00000001 00011101 00011110 01111111 00000000 00000000 # instruction | LIDT [00007F1E] | Load the 33-gate table through its literal pointer.
+11000111 00000101 00000000 01000000 00000000 00000000 00000000 00000000 00000000 00000000 # instruction | MOV dword [4000],0 | Initialize the native IRQ count.
+10111111 00000000 01000001 00000000 00000000 # instruction | MOV EDI,4100 | Start the three-entry native frame log.
+10111011 00000011 00000000 00000000 00000000 # instruction | MOV EBX,3 | Accept exactly three IRQ entries; the control changes byte 77 bit zero to two.
+10111001 00001100 00000000 00000000 00000000 # instruction | MOV ECX,12 | Clear twelve log doublewords.
+00110001 11000000 # instruction | XOR EAX,EAX | Prepare the log's zero value.
+10001001 00000111 # instruction | MOV [EDI],EAX | Initialize one doubleword of the log.
+10000011 11000111 00000100 # instruction | ADD EDI,4 | Advance within the 48-byte log.
+11100010 11111001 # instruction | LOOP -7 | Repeat at offset 88 until all three entries are zero.
+10111111 00000000 01000001 00000000 00000000 # instruction | MOV EDI,4100 | Reset the handler-owned log cursor.
+11000110 00000101 11111111 01000000 00000000 00000000 10100101 # instruction | MOV byte [40FF],A5 | Guard the byte before the log.
+11000110 00000101 00110000 01000001 00000000 00000000 01011010 # instruction | MOV byte [4130],5A | Guard the byte after the third entry.
+10110000 00010001 # instruction | MOV AL,11 | Start edge-triggered cascaded PIC initialization, requesting ICW4.
+11100110 00100000 # instruction | OUT 20,AL | Initialize the master PIC command register.
+11100110 10100000 # instruction | OUT A0,AL | Initialize the slave PIC command register.
+10110000 00100000 # instruction | MOV AL,20 | Map master IRQ0 through IRQ7 to vectors 20 through 27.
+11100110 00100001 # instruction | OUT 21,AL | Write master ICW2.
+10110000 00101000 # instruction | MOV AL,28 | Map slave IRQs to vectors 28 through 2F.
+11100110 10100001 # instruction | OUT A1,AL | Write slave ICW2.
+10110000 00000100 # instruction | MOV AL,04 | Declare the slave on master IRQ2.
+11100110 00100001 # instruction | OUT 21,AL | Write master ICW3.
+10110000 00000010 # instruction | MOV AL,02 | Identify the slave's cascade input.
+11100110 10100001 # instruction | OUT A1,AL | Write slave ICW3.
+10110000 00000001 # instruction | MOV AL,01 | Select 8086 mode with explicit EOI, not automatic EOI.
+11100110 00100001 # instruction | OUT 21,AL | Write master ICW4.
+11100110 10100001 # instruction | OUT A1,AL | Write slave ICW4.
+10110000 11111111 # instruction | MOV AL,FF | Keep every slave IRQ masked.
+11100110 10100001 # instruction | OUT A1,AL | Install the slave mask.
+10110000 00110110 # instruction | MOV AL,36 | PIT counter zero, low then high byte, binary mode three.
+11100110 01000011 # instruction | OUT 43,AL | Program the PIT control word.
+10110000 10011100 # instruction | MOV AL,9C | Low byte of the literal reload value 2E9C.
+11100110 01000000 # instruction | OUT 40,AL | Write counter zero's low reload byte first.
+10110000 00101110 # instruction | MOV AL,2E | High reload byte; no measured timing claim.
+11100110 01000000 # instruction | OUT 40,AL | Complete counter zero's reload.
+10110000 11111110 # instruction | MOV AL,FE | Unmask only master IRQ0.
+11100110 00100001 # instruction | OUT 21,AL | Install the master mask while CPU IF is still zero.
+11111010 # instruction | CLI | Begin the wait loop with interrupts masked, preventing a check-to-HLT race.
+00111001 00011101 00000000 01000000 00000000 00000000 # instruction | CMP [4000],EBX | Compare the completed native count with the literal limit.
+01110011 00000100 # instruction | JAE +4 | Skip STI, wait HLT and the loop jump when the count has reached its limit.
+11111011 # instruction | STI | Enable delivery; the following HLT is inside the architectural interrupt shadow.
+11110100 # instruction | HLT wait | Wait for a real emulated device interrupt, not a software INT instruction.
+11101011 11110011 # instruction | JMP -13 | Recheck the count with CLI at offset 162 after returning.
+11110100 # instruction | HLT done | Finish with IF zero and the timer line masked.
+11101011 11111101 # instruction | JMP -3 | Return to the final halt if resumed.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | Handler alignment | Place the IRQ entry at offset 192.
+10001011 00000100 00100100 # instruction | MOV EAX,[ESP] | Read the actual hardware-saved EIP, with no error code for IRQ0.
+10001001 00000111 # instruction | MOV [EDI],EAX | Copy saved EIP into this log entry.
+10001011 01000100 00100100 00000100 # instruction | MOV EAX,[ESP+4] | Read the hardware-saved code selector doubleword.
+10001001 01000111 00000100 # instruction | MOV [EDI+4],EAX | Record saved CS.
+10001011 01000100 00100100 00001000 # instruction | MOV EAX,[ESP+8] | Read saved EFLAGS before changing arithmetic flags.
+10001001 01000111 00001000 # instruction | MOV [EDI+8],EAX | Record the interrupted flags, including IF one.
+10011100 # instruction | PUSHFD | Capture handler flags before any flag-changing instruction.
+01011000 # instruction | POP EAX | Balance this temporary push and retrieve entry flags.
+10001001 01000111 00001100 # instruction | MOV [EDI+12],EAX | Record entry flags; the interrupt gate clears IF.
+10000011 11000111 00010000 # instruction | ADD EDI,16 | Advance the persistent log cursor by one complete entry.
+11111111 00000101 00000000 01000000 00000000 00000000 # instruction | INC dword [4000] | Count this actual gate entry.
+00111001 00011101 00000000 01000000 00000000 00000000 # instruction | CMP [4000],EBX | Decide whether this is the last accepted timer entry.
+01110010 00000100 # instruction | JB +4 | Retain the timer mask until the limit is reached.
+10110000 11111111 # instruction | MOV AL,FF | Mask all master lines on the final entry.
+11100110 00100001 # instruction | OUT 21,AL | Prevent any fourth log entry.
+10110000 00100000 # instruction | MOV AL,20 | Non-specific end of interrupt for the master IRQ0.
+11100110 00100001 # instruction | OUT 21,AL | Deliberate port-bit failure: write a mask instead of EOI, leaving IRQ0 in service.
+11001111 # instruction | IRETD | Restore the untouched hardware EIP, CS and EFLAGS frame.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | GDT alignment | Put the descriptor table at offset 256.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | GDT null | Selector zero is unusable.
+11111111 11111111 00000000 00000000 00000000 10011010 11001111 00000000 # data | GDT code | Flat present ring-zero 32-bit code; the CPU may set its accessed bit.
+11111111 11111111 00000000 00000000 00000000 10010010 11001111 00000000 # data | GDT data | Flat writable data and a 32-bit stack.
+00010111 00000000 00000000 01111111 00000000 00000000 # data | GDTR | Limit 23 and physical base 00007F00.
+00000111 00000001 00110000 01111111 00000000 00000000 # data | IDTR | Limit 263 and physical base 00007F30.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # padding | IDT alignment | Place vector zero at offset 304.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 00 and 01 | Null gates outside this timer probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 02 and 03 | Null gates outside this timer probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 04 and 05 | Null gates outside this timer probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 06 and 07 | Null gates outside this timer probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 08 and 09 | Null gates outside this timer probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 0A and 0B | Null gates outside this timer probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 0C and 0D | Null gates outside this timer probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 0E and 0F | Null gates outside this timer probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 10 and 11 | Null gates outside this timer probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 12 and 13 | Null gates outside this timer probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 14 and 15 | Null gates outside this timer probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 16 and 17 | Null gates outside this timer probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 18 and 19 | Null gates outside this timer probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 1A and 1B | Null gates outside this timer probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 1C and 1D | Null gates outside this timer probe.
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 # data | IDT vectors 1E and 1F | Null gates outside this timer probe.
+11000000 01111110 00001000 00000000 00000000 10001110 00000000 00000000 # data | IDT vector 20 | Present DPL0 interrupt gate, selector 0008, entry 00007EC0; external IRQ0 supplies this vector.

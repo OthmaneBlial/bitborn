@@ -22,6 +22,7 @@ import {checkELF} from './elf_browser_checks.mjs';
 import {checkBitDiff} from './bit_diff_browser_checks.mjs';
 import {checkPrintLessons} from './print_browser_checks.mjs';
 import {checkVGABitmap} from './vga_bitmap_browser_checks.mjs';
+import {checkTimerIRQ} from './timer_irq_browser_checks.mjs';
 import {checkIndicators} from './indicator_browser_checks.mjs';
 import {checkExecutionKeyboard} from './execution_keyboard_browser_checks.mjs';
 import {checkByteOrder} from './byte_order_browser_checks.mjs';
@@ -209,6 +210,7 @@ try {
       await checkBitDiff(page,base);
       await checkPrintLessons(page,base);
       await checkVGABitmap(page,base);
+      await checkTimerIRQ(page,base);
       await checkIndicators(page);
       await checkExecutionKeyboard(page);
       await open('cpu-lab/');await checkStackLesson(page);

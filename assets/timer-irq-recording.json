@@ -1,0 +1,224 @@
+{
+  "kind": "Actual final QMP snapshots and native-written IRQ frame logs from three independent QEMU boots; not an instruction trace or timing benchmark",
+  "qemu": "QEMU emulator version 11.1.1",
+  "textFormat": "Native HMP output with LF line endings and trailing whitespace removed",
+  "goldenFormat": "Independent NDISASM instruction-only blocks: real-mode header then 32-bit kernel and handler; offsets relative to payload",
+  "memoryMap": {
+    "loadAddress": 32256,
+    "count": 16384,
+    "logStart": 16640,
+    "logSize": 48,
+    "lowerGuard": 16639,
+    "upperGuard": 16688,
+    "stackTop": 36864,
+    "gdtr": 32536,
+    "idtr": 32542,
+    "idtBase": 32560,
+    "irqVector": 32
+  },
+  "controls": {
+    "control": {
+      "changedByte": 77,
+      "mask": 1,
+      "effect": "Three accepted entries become two"
+    },
+    "no-eoi": {
+      "changedByte": 240,
+      "mask": 1,
+      "effect": "Wrong EOI port leaves one entry and a later pending IRQ behind IRQ0 in service"
+    }
+  },
+  "sourceSha256": {
+    "tools/record_timer_irq.py": "776af0931940e8b6491e05fa7a90d8a19431617a98233fd3caacc399fc252d1c",
+    "tools/build.py": "0d7fccd1a6be5c7336dbd8bd9f56bd0d05999cf1c5a3ae3e454b4303ced67509",
+    "tests/qemu.py": "30bccf107c84c82d2045de4c605d5e8104eaa682b3e8e0b165ff16e0eb5315c2",
+    "tests/timer_irq_checks.py": "5a152ef703032e09a72f5d1380667ecff30c5abe46190ceeba81926c280dae78",
+    "boot/loader.bits": "4553161a5d37d3f3d7a4fae75c7d61f277163601e7f4b65986a0de37f5b1b539",
+    "examples/timer-irq/program.bits": "31b720eb9960acee2c27721525a6bb73321ea0d76c3ee28f7e890fbf3c95ac04",
+    "examples/timer-irq/control.bits": "7038ff0d9d0ce9beb22d074c65e56db4120cc4542b0b6ad2b6326784dd09d066",
+    "examples/timer-irq/no-eoi.bits": "00e2758bd608121ce02c833697ef2bca0f29f7827f21a5891c61c67f30628e67"
+  },
+  "captures": [
+    {
+      "source": "examples/timer-irq/program.bits",
+      "payloadSize": 568,
+      "payloadSha256": "729cdeb4f8a691fee516645dd0ec96ed7eee330e391e2f24b64bebbe5f74e4e9",
+      "imageSize": 1536,
+      "imageSha256": "4dffa7784c0aac7ec4b1f22028ff0cd0fc17faafcede6a5c0a72a9300a01093c",
+      "assets": {
+        "registers": {
+          "file": "assets/timer-irq-program-registers.txt",
+          "sha256": "2d020a51d1293621e1791e980d435f26dda4b2aefbb1da35cde668999e737663"
+        },
+        "pic": {
+          "file": "assets/timer-irq-program-pic.txt",
+          "sha256": "ac773fece90cd812bc715909201e19ace961d3e2820d05970e554c319876f115"
+        },
+        "disassembly": {
+          "file": "assets/timer-irq-program-disassembly.txt",
+          "sha256": "a1de53c72cb210ed9fee07450c746b5d7114eb572513387775899eefd7b80ff7"
+        }
+      },
+      "snapshot": {
+        "count": 3,
+        "registers": {
+          "AX": 32,
+          "BX": 3,
+          "CX": 0,
+          "DI": 16688,
+          "SP": 36864
+        },
+        "segments": {
+          "CS": 8,
+          "DS": 16,
+          "SS": 16
+        },
+        "haltIP": 32432,
+        "flags": 70,
+        "cr0": 17,
+        "logHex": "ad7e0000080000009302010093000000ad7e0000080000009302010093000000ad7e0000080000009702010097000000",
+        "guardsHex": "a55a",
+        "remainingFrameHex": "ad7e00000800000097020100",
+        "entryPushHex": "97000000",
+        "payloadRamHex": "faea067e000031c08ed88ed0bc007cfc0f0116187f0f20c06683c8010f22c066ea287e0000080000b8100000008ed88ed0bc009000000f011d1e7f0000c7050040000000000000bf00410000bb03000000b90c00000031c0890783c704e2f9bf00410000c605ff400000a5c605304100005ab011e620e6a0b020e621b028e6a1b004e621b002e6a1b001e621e6a1b0ffe6a1b036e643b09ce640b02ee640b0fee621fa391d004000007304fbf4ebf3f4ebfd00000000000000000000000000008b042489078b4424048947048b4424088947089c5889470c83c710ff0500400000391d004000007204b0ffe621b020e620cf00000000000000000000000000000000000000000000ffff0000009acf00ffff00000093cf001700007f00000701307f000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c07e0800008e0000",
+        "payloadRamSha256": "047718508b6cc0b7a058f7fa0ea41bc284286a0f9b03fb0a80902c3c0532c90f",
+        "instructionRamSha256": "9b510814486bf93c451d893607f1dbecd4fd49699672069f0060394c4f81378d",
+        "pic": {
+          "0": {
+            "irr": 1,
+            "imr": 255,
+            "isr": 0,
+            "irq_base": 32
+          },
+          "1": {
+            "irr": 0,
+            "imr": 255,
+            "isr": 0,
+            "irq_base": 40
+          }
+        }
+      }
+    },
+    {
+      "source": "examples/timer-irq/control.bits",
+      "payloadSize": 568,
+      "payloadSha256": "161ecf6b621eeea7187a78590337246369bd786025ad386baaa1355d88b18192",
+      "imageSize": 1536,
+      "imageSha256": "5b522c61bb2b66fd23fee1345c18d5331c2bfec8d14677ff6ed33801e985b450",
+      "assets": {
+        "registers": {
+          "file": "assets/timer-irq-control-registers.txt",
+          "sha256": "ff23c5fa879491cfbe5204bf815694cf69ebed6a834e476ab9b11debd84f4f0d"
+        },
+        "pic": {
+          "file": "assets/timer-irq-control-pic.txt",
+          "sha256": "ac773fece90cd812bc715909201e19ace961d3e2820d05970e554c319876f115"
+        },
+        "disassembly": {
+          "file": "assets/timer-irq-control-disassembly.txt",
+          "sha256": "8f2f327e7786475b8433dc8bca7ceab06e6dd19bf5d828ae4b161f4da2ed2003"
+        }
+      },
+      "snapshot": {
+        "count": 2,
+        "registers": {
+          "AX": 32,
+          "BX": 2,
+          "CX": 0,
+          "DI": 16672,
+          "SP": 36864
+        },
+        "segments": {
+          "CS": 8,
+          "DS": 16,
+          "SS": 16
+        },
+        "haltIP": 32432,
+        "flags": 70,
+        "cr0": 17,
+        "logHex": "ad7e0000080000009302010093000000ad7e000008000000970201009700000000000000000000000000000000000000",
+        "guardsHex": "a55a",
+        "remainingFrameHex": "ad7e00000800000097020100",
+        "entryPushHex": "97000000",
+        "payloadRamHex": "faea067e000031c08ed88ed0bc007cfc0f0116187f0f20c06683c8010f22c066ea287e0000080000b8100000008ed88ed0bc009000000f011d1e7f0000c7050040000000000000bf00410000bb02000000b90c00000031c0890783c704e2f9bf00410000c605ff400000a5c605304100005ab011e620e6a0b020e621b028e6a1b004e621b002e6a1b001e621e6a1b0ffe6a1b036e643b09ce640b02ee640b0fee621fa391d004000007304fbf4ebf3f4ebfd00000000000000000000000000008b042489078b4424048947048b4424088947089c5889470c83c710ff0500400000391d004000007204b0ffe621b020e620cf00000000000000000000000000000000000000000000ffff0000009acf00ffff00000093cf001700007f00000701307f000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c07e0800008e0000",
+        "payloadRamSha256": "73ced001ed8c8227f4162839d4f6ae983bedf20f29c06bee205bae4213fe9ec3",
+        "instructionRamSha256": "d7fbb3ec536b5c2e9c07ecedc7dd66273d6ce32232858c729eb00a1ff0955140",
+        "pic": {
+          "0": {
+            "irr": 1,
+            "imr": 255,
+            "isr": 0,
+            "irq_base": 32
+          },
+          "1": {
+            "irr": 0,
+            "imr": 255,
+            "isr": 0,
+            "irq_base": 40
+          }
+        }
+      }
+    },
+    {
+      "source": "examples/timer-irq/no-eoi.bits",
+      "payloadSize": 568,
+      "payloadSha256": "482202182c66778e46e1e7bb09d7d02bd4fdba8bdf8b39ee65d8ec61d2558423",
+      "imageSize": 1536,
+      "imageSha256": "0dedb323f92b3c46ca53151e709467c89401f86ca9f9321f047c491615beb886",
+      "assets": {
+        "registers": {
+          "file": "assets/timer-irq-no-eoi-registers.txt",
+          "sha256": "9bccc97d7b9c36620b273aa0ea750040f5efc8ec80698c698f4dd446b2a94c6c"
+        },
+        "pic": {
+          "file": "assets/timer-irq-no-eoi-pic.txt",
+          "sha256": "43d0cc1600171be5d1f3974f9bc03dcb5acd1a1f3fd04d847292dcc3f493c7dd"
+        },
+        "disassembly": {
+          "file": "assets/timer-irq-no-eoi-disassembly.txt",
+          "sha256": "0a19a67634b1ab9392b1cc078e9342301cae3cdae66facf9d21f92955e5e2df2"
+        }
+      },
+      "snapshot": {
+        "count": 1,
+        "registers": {
+          "AX": 32,
+          "BX": 3,
+          "CX": 0,
+          "DI": 16656,
+          "SP": 36864
+        },
+        "segments": {
+          "CS": 8,
+          "DS": 16,
+          "SS": 16
+        },
+        "haltIP": 32429,
+        "flags": 659,
+        "cr0": 17,
+        "logHex": "ad7e00000800000093020100930000000000000000000000000000000000000000000000000000000000000000000000",
+        "guardsHex": "a55a",
+        "remainingFrameHex": "ad7e00000800000093020100",
+        "entryPushHex": "93000000",
+        "payloadRamHex": "faea067e000031c08ed88ed0bc007cfc0f0116187f0f20c06683c8010f22c066ea287e0000080000b8100000008ed88ed0bc009000000f011d1e7f0000c7050040000000000000bf00410000bb03000000b90c00000031c0890783c704e2f9bf00410000c605ff400000a5c605304100005ab011e620e6a0b020e621b028e6a1b004e621b002e6a1b001e621e6a1b0ffe6a1b036e643b09ce640b02ee640b0fee621fa391d004000007304fbf4ebf3f4ebfd00000000000000000000000000008b042489078b4424048947048b4424088947089c5889470c83c710ff0500400000391d004000007204b0ffe621b020e621cf00000000000000000000000000000000000000000000ffff0000009acf00ffff00000093cf001700007f00000701307f000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c07e0800008e0000",
+        "payloadRamSha256": "f5414832f6359092d50bf5db7f5671385d24b87bba5863c38c315c03a34803c7",
+        "instructionRamSha256": "b3c7afa9a8350d05f2bea61dc30fc402d61cbe35a11f688fe08b913ca613b773",
+        "pic": {
+          "0": {
+            "irr": 1,
+            "imr": 32,
+            "isr": 1,
+            "irq_base": 32
+          },
+          "1": {
+            "irr": 0,
+            "imr": 255,
+            "isr": 0,
+            "irq_base": 40
+          }
+        }
+      }
+    }
+  ],
+  "reproduce": "python3 tools/record_timer_irq.py"
+}

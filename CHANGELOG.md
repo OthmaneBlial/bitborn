@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add a literal protected-mode timer IRQ experiment with actual frame logs.
+  PIC/PIT setup, a guarded three-entry log and IRETD pass native QEMU checks.
+  A count bit changes 3→2; a wrong EOI port bit leaves one IRQ in service with
+  another request pending. Publish snapshots, PIC/register output and mixed-mode
+  disassembly with hashes; browser device/protected-mode execution stays unsupported.
+
 - Execute both unprefixed word-register ADD directions in the shared model.
   Independent arithmetic checks cover all 128 selectors/directions and 160,896
   boundary/seeded cases; six literal QEMU probes compare results and defined flags.

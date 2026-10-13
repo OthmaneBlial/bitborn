@@ -1,0 +1,29 @@
+ioapic0: ver=0x20 id=0x00 sel=0x00
+  pin 0  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 1  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 2  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 3  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 4  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 5  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 6  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 7  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 8  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 9  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 10 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 11 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 12 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 13 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 14 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 15 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 16 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 17 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 18 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 19 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 20 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 21 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 22 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  pin 23 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+  IRR      (none)
+  Remote IRR (none)
+pic1: irr=00 imr=ff isr=00 hprio=0 irq_base=28 rr_sel=0 elcr=0c fnm=0
+pic0: irr=01 imr=20 isr=01 hprio=0 irq_base=20 rr_sel=0 elcr=00 fnm=0

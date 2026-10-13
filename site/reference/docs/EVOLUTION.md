@@ -6,6 +6,30 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 
 ## Current execution record
 
+Native timer IRQ (2026-10-13): 568 literal bytes remap PIC/PIT IRQ0, install one
+32-bit interrupt gate and record CPU-generated frames. Three separate QEMU boots
+show counts 3/2 for a one-bit limit change, and one entry with ISR0 set plus a
+later pending request for a one-bit EOI port failure. Native checks cover saved
+EIP/CS, saved IF=1 and the handler PUSHFD image's IF=0, preserved arithmetic/DF,
+untouched IRETD frames, balanced stack, log guards/unused slots and unchanged
+instructions/source/images. Mixed-mode disassembly and actual QMP/PIC snapshots
+are hashed; asynchronous flags are not forced to repeat across boots.
+Counts become 59 reviewed targets, 94 derived artifacts, eleven BIOS images and
+18 gallery entries. Paging, general handlers, APIC and physical hardware remain
+open. The CPU lab cannot import the full 568-byte stage; a separate prefix check
+stops at LGDT after seven setup instructions, before mode/device work.
+The full native suite passes 99 tests with one expected macOS native-Linux skip;
+site/model/doc checks pass. Chrome routes and targeted Firefox 157/WebKit 27.2
+checks verify exact source/image/provenance bytes and 1440/320px timer layout.
+One initial Chrome run timed out on the unchanged learning-page load under high
+host load; the fresh-browser repeat passed without changing timeouts or source.
+
+Previous register-ADD publication `15252da` passed CI `38356560057` and deployment
+`38357183331`; mirror `b13d77d` changes only 16 `bitborn/` paths. Public module,
+gallery, guides, README/ROADMAP, progress and the 57-frame CPU GIF match; both
+live allocator links pass 135/137 steps, register/log/guard display, timeline
+restoration and 320px checks.
+
 Register ADD (2026-10-13): both unprefixed word-register directions execute
 through the shared decoder and existing arithmetic flags. All 128 selector
 combinations, 160,896 independent cases and six native result/defined-flags
@@ -669,7 +693,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 54 | 3 | Tiny text-mode game with deterministic input and genuine QEMU recording | H | M | Shell keyboard helpers | High | Open |
 | 55 | 3 | Bounded native allocator with memory-map, ownership and overflow evidence | H | M | Reviewed BIOS target | High | Complete: fixed real-mode arena, two native five-request logs, one-bit ownership control, zero/exact-fit/exhaustion/wrap checks and guarded immutable code/disk proof; free, isolation and paging remain open |
 | 56 | 3 | Protected-mode exception handlers with controlled fault injection | H | M | IDT target | High | Partial: native #UD and selector #GP/error-code fixtures; general dispatch open |
-| 57 | 3 | Timer IRQ experiment with explicit PIC setup and deterministic QEMU assertions | H | M | 56 | High | Open |
+| 57 | 3 | Timer IRQ experiment with explicit PIC setup and deterministic QEMU assertions | H | M | 56 | High | Complete: explicit PIC/PIT setup, 3/2 native frame logs, guarded untouched IRETD frames, wrong-EOI pending/ISR proof and source/image integrity; timing, general handlers and physical hardware remain open |
 | 58 | 3 | Paging experiment with inspected page tables and deliberate page-fault evidence | H | L | 55,56 | High | Open |
 | 59 | 0 | QEMU runner resource/error-path checks and bounded process cleanup | H | H | Existing Guest harness | Medium | Complete: resource unwind, QMP bounds/deadlines and actual child kill/reap; disk quotas remain outside scope |
 | 60 | 2 | Accurate release/community draft showing actual new capabilities; no automatic posting | M | H | Verified release | Low | Complete: release published; community draft remains unposted |
