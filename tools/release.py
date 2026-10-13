@@ -13,12 +13,34 @@ else:
     from bitborn import ROOT, verify, artifact_paths, targets, digest
 
 IMAGES = ('boot.img', 'monitor.img', 'disk-read.img', 'keyboard.img', 'vga.img',
-          'shell.img', 'protected-mode.img', 'self-modifying.img', 'vga-bitmap.img')
+          'shell.img', 'protected-mode.img', 'self-modifying.img', 'vga-bitmap.img',
+          'bounded-allocator.img', 'timer-irq.img', 'paging.img', 'exception-dispatch.img', 'bit-hunt.img')
 EVIDENCE = ('shell-demo.png', 'protected-mode-demo.png', 'system-recording.json',
             'self-modifying-program.png', 'self-modifying-control.png', 'self-modifying-demo.gif', 'self-modifying-recording.json',
             'vga-bitmap-program.png', 'vga-bitmap-control.png', 'vga-bitmap-demo.gif', 'vga-bitmap-recording.json',
             'elf-demo.gif', 'bit-diff-demo.gif', 'encoding-demo.gif', 'boot-builder-demo.gif', 'cpu-lab-demo.gif', 'challenges-demo.gif',
-            'browser-demo-recording.json')
+            'browser-demo-recording.json',
+            'bounded-allocator-control-disassembly.txt', 'bounded-allocator-control-registers.txt',
+            'bounded-allocator-program-disassembly.txt', 'bounded-allocator-program-registers.txt',
+            'bounded-allocator-recording.json',
+            'timer-irq-control-disassembly.txt', 'timer-irq-control-pic.txt', 'timer-irq-control-registers.txt',
+            'timer-irq-no-eoi-disassembly.txt', 'timer-irq-no-eoi-pic.txt', 'timer-irq-no-eoi-registers.txt',
+            'timer-irq-program-disassembly.txt', 'timer-irq-program-pic.txt', 'timer-irq-program-registers.txt',
+            'timer-irq-recording.json',
+            'paging-program-directory.bin', 'paging-program-disassembly.txt', 'paging-program-registers.txt', 'paging-program-table.bin',
+            'paging-recording.json',
+            'paging-wp-off-directory.bin', 'paging-wp-off-disassembly.txt', 'paging-wp-off-registers.txt', 'paging-wp-off-table.bin',
+            'paging-writable-directory.bin', 'paging-writable-disassembly.txt', 'paging-writable-registers.txt', 'paging-writable-table.bin',
+            'exception-dispatch-divisor-one-disassembly.txt', 'exception-dispatch-divisor-one-log.bin',
+            'exception-dispatch-divisor-one-ram.bin', 'exception-dispatch-divisor-one-registers.txt', 'exception-dispatch-divisor-one-stack.bin',
+            'exception-dispatch-program-disassembly.txt', 'exception-dispatch-program-log.bin',
+            'exception-dispatch-program-ram.bin', 'exception-dispatch-program-registers.txt', 'exception-dispatch-program-stack.bin',
+            'exception-dispatch-recording.json',
+            'exception-dispatch-retry-divide-disassembly.txt', 'exception-dispatch-retry-divide-log.bin',
+            'exception-dispatch-retry-divide-ram.bin', 'exception-dispatch-retry-divide-registers.txt', 'exception-dispatch-retry-divide-stack.bin',
+            'exception-dispatch-stop-divide-disassembly.txt', 'exception-dispatch-stop-divide-log.bin',
+            'exception-dispatch-stop-divide-ram.bin', 'exception-dispatch-stop-divide-registers.txt', 'exception-dispatch-stop-divide-stack.bin',
+            'bit-hunt-demo.gif', 'bit-hunt-no-star.png', 'bit-hunt-program.png', 'bit-hunt-recording.json')
 
 
 def archive(entries):
@@ -73,14 +95,18 @@ def prepare():
     files = {path.as_posix(): (ROOT / 'build' / path).read_bytes() for path in artifact_paths()}
     files["README.txt"] = (f"bitborn v{version} — Software born from raw bits.\n"
         "BIOS: qemu-system-i386 -drive file=boot.img,format=raw,if=floppy -boot a -serial stdio\n"
-        "All nine .img attachments boot the same way, including self-modifying.img and vga-bitmap.img.\n"
+        f"All {len(IMAGES)} .img attachments boot the same way; use the complete images, including multi-sector experiments.\n"
         "Type in the QEMU display for keyboard and monitor input.\n"
         "Linux x86-64: exit-code/exit-code-small/arithmetic/compare-values exit42; loop-count exits5; print-text exits0.\n"
         "Raw .bin files are payloads, not standalone boot images or ELF executables.\n"
         "Challenge start.bin files intentionally contain broken puzzles; curated solution.img files are QEMU-tested.\n"
         "Shell launches its returning disk app from sectors4-5; use the complete shell.img.\n"
         "The protected-mode image exercises one software interrupt; separate source fixtures test specific faults.\n"
-        "No general fault dispatch, paging or hardware IRQ support is claimed.\n"
+        "Bounded allocator: a guarded 16-byte arena and one-bit rejection control.\n"
+        "Timer IRQ: legacy IRQ0/PIC/PIT, three native cases; not concurrent task scheduling.\n"
+        "Paging: legacy identity map, supervisor write fault repair, read/write and WP controls; not user isolation.\n"
+        "Exception dispatch: DE/BP/UD/GP normalized frames and authored recovery sites; not arbitrary fault recovery.\n"
+        "Bit Hunt: native WASD maze, R restart, Q quit; one operand bit disables star collection.\n"
         "Self-modifying code changes one future operand; VGA bitmap changes one DAC bit. Their controls and captures are in source.\n"
         "Browser GIFs show bounded model/inspection controls, not native CPU execution. Native GIFs show separate actual boots.\n"
         "Rebuild from source: make test; make site-test. No target assembler/compiler.\n"

@@ -2,6 +2,10 @@
   "updated": "2026-10-13",
   "milestones": [
     {
+      "milestone": "v0.5.0 distribution",
+      "progress": "\ud83d\udea7 Packaging 14 primary BIOS images, 114 derived artifacts and 71 explicit evidence files; source/tag CI, archive reproduction and anonymous public download verification remain pending"
+    },
+    {
       "milestone": "Release staging preserves its recorded revision",
       "progress": "\u2705 Different version/source commits rejected before writes; same-revision repacking retained, isolated regressions pass and 31 frozen v0.4.0 files remain unchanged"
     },

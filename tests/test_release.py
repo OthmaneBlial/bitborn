@@ -11,9 +11,12 @@ from tools.bitborn import artifact_paths, digest
 
 class ReleaseTests(unittest.TestCase):
     def test_current_native_images_and_capture_evidence_are_explicit(self):
-        self.assertEqual(len(IMAGES), 9)
+        self.assertEqual(len(IMAGES), 14)
         self.assertIn('self-modifying.img', IMAGES)
         self.assertIn('vga-bitmap.img', IMAGES)
+        self.assertTrue({'bounded-allocator.img', 'timer-irq.img', 'paging.img',
+                         'exception-dispatch.img', 'bit-hunt.img'} <= set(IMAGES))
+        self.assertEqual(len(EVIDENCE), 71)
         self.assertEqual(len(EVIDENCE), len(set(EVIDENCE)))
         for name in EVIDENCE:
             self.assertTrue((Path(__file__).resolve().parents[1] / 'assets' / name).is_file(), name)
@@ -27,6 +30,22 @@ class ReleaseTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'unexpected release staging'):
                 check_staging(destination, '0.4.0', 'a' * 40)
             self.assertEqual(stale.read_bytes(), b'older archive must not enter new checksums')
+
+    def test_native_capture_file_references_are_in_release_evidence(self):
+        root = Path(__file__).resolve().parents[1]
+        for prefix in ('bounded-allocator', 'timer-irq', 'paging', 'exception-dispatch', 'bit-hunt'):
+            pending = [json.loads((root / 'assets' / f'{prefix}-recording.json').read_text())]
+            referenced = set()
+            while pending:
+                value = pending.pop()
+                if isinstance(value, dict):
+                    pending.extend(value.values())
+                elif isinstance(value, list):
+                    pending.extend(value)
+                elif isinstance(value, str) and value.startswith('assets/'):
+                    referenced.add(value.removeprefix('assets/'))
+            self.assertTrue(referenced, prefix)
+            self.assertTrue(referenced <= set(EVIDENCE), f'{prefix}: missing {referenced - set(EVIDENCE)}')
     def test_staging_rejects_unreviewed_files_and_aliases_without_overwriting(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

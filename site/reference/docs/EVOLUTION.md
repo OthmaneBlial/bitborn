@@ -6,6 +6,18 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 
 ## Current execution record
 
+v0.5 preparation (2026-10-13): the existing release attachment list stopped at
+nine primary BIOS images despite five newer native experiments. The next version
+explicitly packages all fourteen primary images and seventy-one evidence files,
+including actual registers, PIC state, paging structures, exception logs/stacks
+and game captures. Native capture records are checked for missing packaged file
+references. Notes retain precise proof boundaries. Public v0.4.0 is unchanged;
+source/tag CI, clean-archive reproduction and anonymous download checks remain
+required before declaring v0.5.0 published.
+Local preparation checks pass 113 Python tests (one expected macOS native-Linux
+skip), the complete site/model suite and unchanged capture-source hashes. These
+do not substitute for the upcoming exact-archive and Linux/source/tag gates.
+
 Release staging audit (2026-10-13): recognized filenames alone previously allowed
 the release packager to overwrite a completed staging directory after source
 changed without a version bump. Staging now checks the recorded version and source
@@ -866,6 +878,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 67 | 0 | Validate optional bitinspect annotation metadata and preserve structured errors before rendering | H | H | Existing host inspection | Medium | Complete: bounded JSON, typed non-overlapping ranges, literal-bit matches, terminal-safe labels and structured late-failure diagnostics; canonical targets remain valid |
 | 68 | 0 | Align executable quickstart dependencies across README, beginner guide and eight introductions | H | H | Native capture test | Low | Complete: NASM/FFmpeg install commands, localized host-tool roles, English source tracking and eight-page browser/link checks; native-speaker review remains separate |
 | 69 | 0 | Preserve recorded release staging when source advances without a version bump | H | H | Release provenance | Low | Complete: reject different revision/version before writes; isolated preservation regressions and all 31 frozen v0.4.0 staging files verified unchanged |
+| 70 | 1 | Publish the five newer native experiments as a verified v0.5 distribution | H | H | 68,69 and native proofs | Medium | In progress: explicit 14-image/71-evidence packaging, capture-reference regression and scoped notes; clean archive, main/tag CI, release downloads and live documentation gates remain |
 
 Large tasks are divided into useful verified milestones. Native experiments only
 become capabilities after literal source review and real QEMU checks; hardware

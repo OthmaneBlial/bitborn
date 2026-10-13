@@ -65,7 +65,9 @@ macOS skips their native test and Ubuntu CI executes all six.
 
 Updated **2026-10-13**. **[v0.4.0 is public](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.4.0)**,
 with verified downloads, source and checksums. The boot tools, interactive labs,
-challenges and one-bit native experiments are working. New [optimization puzzles](docs/tutorials/optimization.md)
+challenges and one-bit native experiments are working. The
+[v0.5.0 distribution](docs/release-v0.5.0.md) is being prepared; publication checks remain pending.
+New [optimization puzzles](docs/tutorials/optimization.md)
 measure **14 → 12** and **11 → 10** payload bytes, with distinct valid solutions.
 [Keyboard checks](docs/cpu-lab/keyboard.md) cover timeline navigation, imports and
 error focus. Native research now includes a guarded allocator, timer interrupt

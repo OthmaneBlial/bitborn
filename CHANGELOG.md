@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.5.0 — packaging in progress; publication pending
+
 - Refuse release-staging overwrites when recorded version/source provenance differs
   from the current checkout. Preserve deterministic repacking of the same revision;
   check both isolated fixtures and all 31 untouched local v0.4.0 staging files.
