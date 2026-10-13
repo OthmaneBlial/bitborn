@@ -254,6 +254,10 @@ The v0.2 milestone is published and verified. The following research remains ope
   in 16/32/64 inspection. Check all 12,288 encodings and six independent
   disassembly goldens; browser complement/sign edits preserve runtime state.
   Execution stays 16-bit; see [field guide](docs/instruction-encoding/short-branches.md).
+- [x] Add shared roving keyboard focus to the homepage/playground instruction
+  editors: one Tab stop, bit/byte arrows, row/global Home/End and native toggle
+  keys. Test focus retention, invalid encodings and fixture shortening. Broader
+  assistive-technology review remains open; see [keyboard guide](docs/instruction-encoding/keyboard.md).
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

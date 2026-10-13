@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {checkBitKeyboard} from './bit_keyboard_browser_checks.mjs';
 
 export async function checkEncoding(page) {
   const initial=await page.locator('#play-registers').textContent();
@@ -97,4 +98,5 @@ export async function checkEncoding(page) {
     assert.equal(await page.locator('#play-registers').textContent(),beforeBranches,'inspection of branch bits does not read/change runtime flags or registers');
   }
   await page.locator('#decode-mode').selectOption('16');await page.locator('#instruction-select').selectOption('mov');
+  await checkBitKeyboard(page);
 }

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Make instruction-bit editors a single Tab stop with bit/byte arrows, row/global
+  Home/End and native Enter/Space toggles. Retain focus on re-rendered invalid
+  encodings, preserve selector focus when shortening fixtures, and connect visible
+  keyboard help to the accessible group. Browser navigation does not execute code.
+
 - Inspect all unprefixed short Jcc fields in 16/32/64 contexts with shared
   condition predicates, selector/inversion roles and signed rel8 bit labels.
   Add canonical complementary fixtures, 12,288 encoding cases and six independent

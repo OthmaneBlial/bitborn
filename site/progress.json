@@ -170,6 +170,10 @@
       "progress": "\u2705 Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged"
     },
     {
+      "milestone": "Keyboard instruction-bit editing",
+      "progress": "\u2705 One Tab stop, arrows, row/global Home/End, Enter/Space and stable edit focus; fixture shortening preserves selector focus and navigation never executes bytes"
+    },
+    {
       "milestone": "CPU Lab program downloads and imports",
       "progress": "\u2705 Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks"
     },

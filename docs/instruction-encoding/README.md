@@ -13,6 +13,8 @@ The [carry/borrow lesson](../carry-borrow.md) adds immediate byte/word ADC/SBB
 and a literal multiword example; MOV preserves CF between arithmetic steps.
 The [short-Jcc field guide](short-branches.md) explains condition-group/inversion
 and rel8 sign bits across all three inspection contexts, without reading flags.
+The [keyboard guide](keyboard.md) explains the shared one-stop bit matrix,
+arrows, row/global navigation and edit-focus behavior.
 
 ```text
 10111000 00101010 00000000 00000000 00000000

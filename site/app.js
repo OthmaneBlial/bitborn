@@ -76,8 +76,10 @@ if ($('bit-editor')) {
   const templates = {mov:[0xB8,0x2A,0x00],add:[0x05,0x07,0x00],cmp:[0x3D,0x2A,0x00],inc:[0x40],xor:[0x31,0xC0],nop:[0x90]};
   for(const [name,example] of Object.entries(encodingExamples))templates[name]=example.bytes;
   for(const [value,title] of [['shortBranch','Short JL / condition and rel8'],['shortBranchInverse','Short JGE / inverse condition']]) {const option=document.createElement('option');option.value=value;option.textContent=title;$('instruction-select').append(option);}
-  let bytes = [...templates.mov], cpu = createState();
+  let bytes = [...templates.mov], cpu = createState(), activeBit='0-7';
   function renderEditor(focusBit) {
+    if(focusBit)activeBit=focusBit;
+    if(Number(activeBit.split('-')[0])>=bytes.length)activeBit='0-7';
     let instruction, problem;
     const mode=Number($('decode-mode').value);
     try { instruction = inspectEncoding(bytes,mode); } catch (error) { problem = error.message; }
@@ -89,6 +91,19 @@ if ($('bit-editor')) {
         const set = Boolean(value & (1 << bit));
         const button = element('button', set ? '1' : '0', `bit${set ? ' on' : ''}`);
         button.type = 'button'; button.dataset.bit = `${byteIndex}-${bit}`;
+        button.tabIndex=button.dataset.bit===activeBit?0:-1;
+        button.addEventListener('focus',()=>{
+          activeBit=button.dataset.bit;
+          for(const cell of $('bit-editor').querySelectorAll('[data-bit]'))cell.tabIndex=cell.dataset.bit===activeBit?0:-1;
+        });
+        button.addEventListener('keydown',event=>{
+          const index=byteIndex*8+7-bit,first=byteIndex*8,last=bytes.length*8-1,wholeInstruction=event.ctrlKey||event.metaKey;
+          const next={ArrowLeft:index-1,ArrowRight:index+1,ArrowUp:byteIndex?index-8:index,ArrowDown:byteIndex<bytes.length-1?index+8:index,Home:wholeInstruction?0:first,End:wholeInstruction?last:first+7}[event.key];
+          if(next!==undefined) {
+            event.preventDefault();const target=Math.max(0,Math.min(last,next));
+            $('bit-editor').querySelector(`[data-bit="${Math.floor(target/8)}-${7-target%8}"]`).focus();
+          }
+        });
         button.setAttribute('aria-pressed', String(set));
         const role=instruction?.bitFields[byteIndex]?.[bit];
         button.setAttribute('aria-label', `Byte ${byteIndex}, bit ${bit}, value ${Number(set)}. Toggle bit.${role ? ` ${role}.` : ''}`);

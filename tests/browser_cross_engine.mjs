@@ -7,6 +7,7 @@ import {fileURLToPath,pathToFileURL} from 'node:url';
 import {parseBits} from '../site/binary.mjs';
 import {checkIntroductions} from './introduction_browser_checks.mjs';
 import {checkEncoding} from './encoding_browser_checks.mjs';
+import {checkBitKeyboard} from './bit_keyboard_browser_checks.mjs';
 import {checkProgramDownloads} from './program_download_checks.mjs';
 import {checkHexDrafts} from './hex_browser_checks.mjs';
 import {checkProgramLinks} from './program_link_browser_checks.mjs';
@@ -178,6 +179,7 @@ try {
       await page.screenshot({path:resolve(root,`build/cross-engine/${engine}-cpu-mobile.png`),fullPage:true});
       await checkIntroductions(page,base);
       await open('playground/');await checkEncoding(page);
+      await open('');await checkBitKeyboard(page);
       await open('cpu-lab/');await checkProgramDownloads(page);
       await checkHexDrafts(page);
       await checkRegisterMOV(page);

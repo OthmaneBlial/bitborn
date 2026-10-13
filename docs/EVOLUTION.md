@@ -237,6 +237,20 @@ golden corpus to 34; relative targets and JNL/JGE aliases are handled explicitly
 Browser complement/sign edits preserve runtime state and disable wider simulation.
 Full local Python/site/model checks pass; recording source/GIF hashes are refreshed.
 Next: roving keyboard focus and row navigation in the instruction bit editor.
+Short-Jcc commit `84c8986` passed CI `38325985772` and deployment `38326306281`;
+its Pages mirror is `71e646b`. Public inspector, field guide and literal fixture
+match exact committed bytes. The encoding recording contains 21 actual frames.
+The homepage/playground bit matrices now use one active Tab stop with arrows,
+row/global Home/End, Ctrl/Cmd variants and native Enter/Space toggles. Focus
+survives re-rendered invalid encodings; shortened fixtures reset the coordinate
+without stealing selector focus. A labeled group describes the visible keyboard
+help. Chromium, Firefox and WebKit verify both editor pages, boundaries, Tab
+exit/return, no byte changes during navigation and no runtime execution.
+The first simultaneous site-test run ended with signal 9 under observed memory
+compression while browser jobs were active; a sequential rerun verifies the
+completed module/link checks. Live assistive-technology sessions and broader
+error-focus review remain open. Next: program-source error focus and actionable
+locations in the CPU Lab.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -324,6 +338,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 60 | 2 | Accurate release/community draft showing actual new capabilities; no automatic posting | M | H | Verified release | Low | Complete: release published; community draft remains unposted |
 | 61 | 0 | Cancel delayed file imports/errors after a newer source choice or editor draft | H | H | CPU Lab import | Medium | Complete: race reproduced and checked in three browsers |
 | 62 | 1 | Execute unprefixed 16-bit ModR/M memory MOV using one shared address decoder and native/journal/boundary proof | H | M | 18,01,02 | High | Complete: 2,304 cases and identical model/native 71-byte exercise |
+| 63 | 0 | Roving keyboard focus for instruction-bit editors, field-aware labels and stable edits | H | H | 05,07 | Low | Complete: shared root/playground one-stop navigation and invalid/shortened fixture focus checks; full AT review remains open |
 
 Large tasks are divided into useful verified milestones. Native experiments only
 become capabilities after literal source review and real QEMU checks; hardware
