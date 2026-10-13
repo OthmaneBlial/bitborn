@@ -1,8 +1,89 @@
 # Roadmap and evidence
 
 Last updated: **2026-10-13**. Every published implementation milestone updates
-this file and the README progress table. Checkmarks mean implemented and tested;
+this file and the README summary. Checkmarks mean implemented and tested;
 an idea below is not an advertised feature.
+
+## Milestone ledger
+
+Updated **2026-10-13** after each verified milestone. This detailed ledger powers
+website progress; the [README](README.md) keeps a short summary.
+
+| Milestone | Progress |
+| --- | --- |
+| 512-byte handwritten boot program and four byte tools | ✅ QEMU-tested, public |
+| Linux exit, arithmetic, text, loops and comparisons | ✅ Native execution passed in Linux CI |
+| BIOS keyboard and direct VGA memory writes | ✅ QEMU-tested |
+| Multi-sector loader and interactive monitor | ✅ QEMU-tested: help, clear, about, reboot, peek |
+| Ten example guides and complete byte tables | ✅ Documented, with actual execution checks |
+| Real boot screenshot/GIF and architecture tutorial | ✅ Captured from QEMU and reproducible |
+| Interactive `.io` website and mobile browser checks | ✅ Live; HTTPS assets and Chrome interactions verified |
+| Public v0.1.0 images, source and checksums | ✅ Published; downloaded artifacts and checksums verified |
+| [v0.1.1 host-tool patch](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.1.1) | ✅ Published; comment/failed-write checks and downloaded artifacts verified |
+| Shared CPU model: flags, calls, stack and segmented memory | ✅ Locally verified; modern PUSH SP semantics checked in real QEMU |
+| Full editable 512-byte boot-sector builder | ✅ Chrome-tested; exact downloaded image/source boot the one-bit edit in QEMU |
+| Visual CPU lab: registers, flags, stack, memory and breakpoints | ✅ Six literal teaching programs; controls and memory exercise verified in Chrome, Firefox and WebKit |
+| 20 challenges across four levels | ✅ All solutions pass model and QEMU goals; seeds fail; local progress and sharing tested |
+| Eight dedicated `.io` routes and a size-comparison lab | ✅ Public; expanded Linux CI and live builder checks passed |
+| Original 12-byte exit versus 8-byte alternative | ✅ Both return 42 in Linux CI; 132→128-byte ELF sizes, no speed claim |
+| New browser GIFs, showcase and contributor issue forms | ✅ Genuine captured states with provenance; contributor files checked |
+| Native shell and separately authored disk app | ✅ Nine commands, real RAM/register snapshots, checked disk load and repeated return in QEMU |
+| 32-bit protected mode and software interrupt | ✅ GDT, flat memory, IDT gate and IRETD verified in QEMU; native captures recorded |
+| Packaging and boundary correctness | ✅ Source aliases/collisions/corrupt derived files rejected; 16-bit IP wrap tested |
+| CPU Lab memory-change journal | ✅ Full-memory oracle and Chrome checks pass; whole-RAM copying/scanning removed from each step |
+| Binary Time Machine | ✅ Exact recorded-state Back/Forward, forks and halt restoration pass model and three-browser checks |
+| Recorded execution timeline | ✅ Select any recorded state; keyboard range controls and net RAM changes pass Chrome/Firefox/WebKit checks |
+| Browser/CLI literal source parity | ✅ Seeded cases check identical bytes/error lines, Unicode line boundaries and initial UTF-8 BOM handling |
+| Arithmetic flag properties | ✅ Independent ripple-carry oracle, seeded 16-bit arithmetic and exhaustive 8-bit TEST masks; IF/DF and INC/DEC carry preserved |
+| Contributor policies and source map | ✅ Conduct contact and private GitHub vulnerability reporting available; focused setup/check commands documented |
+| Introductions in eight languages | ✅ Shared literal example/quickstart and English-source freshness checks; detailed guides remain in English |
+| Localized `.io` introductions | ✅ Source-generated pages, language links/SEO metadata, mobile and keyboard checks; Arabic prose and LTR code verified in three browsers |
+| Reproducible model benchmark | ✅ Fixed reviewed workload, source/environment hashes and measured distributions; no native x86 speed claim |
+| Atomic packed-file output | ✅ Injected sync/rename failures preserve previous files and clean staging; source aliases and non-file outputs rejected |
+| Mode-aware instruction inspection | ✅ Explicit 16/32/64 context, 66/REX fields and exact imm64; independent disassembly goldens and three-browser checks; simulation remains 16-bit |
+| Register-to-register MOV microscope | ✅ Direction/width and ModR/M selectors, 8/16/32/64 operands, REX high-byte rules; 9,728 combinations and 18 independent disassembly goldens; wider forms remain inspection-only |
+| [Modeled register copies](docs/architecture/register-mov.md) | ✅ Unprefixed 8-/16-bit forms, aliased byte preservation and history; 2,048 independent oracle cases plus seven native QEMU copy/flag checks |
+| [16-bit memory-address microscope](docs/instruction-encoding/memory-addressing.md) | ✅ ModR/M fields, default DS/SS, signed displacements and absolute offsets; 5,888 cases and a native load/store/FLAGS probe; inspection reads no RAM |
+| Memory MOV execution and shared exercise | ✅ 2,304 independent load/store cases, exact journals, boundaries and rewind; one canonical 71-byte exercise matches native registers/RAM/defined flags in QEMU |
+| [Mode-aware bit diff](docs/bit-diff.md) | ✅ Exact offsets/bit flips, added/removed bytes and unchanged bytes with changed field roles; stops classification at scope errors; 500 seeded oracle comparisons; read-only |
+| [Structured source diagnostics](docs/source-diagnostics.md) | ✅ Stable codes and one-based line/token locations agree across Python/JS; optional CLI JSON errors preserve readable defaults and failed-write safety |
+| [Native harness failure paths](docs/qemu-harness.md) | ✅ Startup cleanup, absolute QMP deadlines and bounded termination/kill waits; real stderr-flood and termination-resistant child checks |
+| [Signed and unsigned comparisons](docs/signed-comparisons.md) | ✅ All 16 short Jcc conditions, 131,072 flag/displacement cases and 3,384 operand-order comparisons; exact 95-byte overflow exercise agrees with QEMU and rewinds/replays |
+| [Carry and borrow arithmetic](docs/carry-borrow.md) | ✅ Byte/word ADC and SBB, 270,736 ripple-oracle cases and AH/IF/DF preservation; exact 81-byte multiword exercise plus eight native FLAGS samples |
+| [Canonical CPU teaching sources](docs/cpu-lab/README.md) | ✅ All six presets come from `.bits` files; editor/reference identity, original bytes, bounded build inputs and loaded-preset source links verified |
+| [Native one-bit self-modification](examples/self-modifying/README.md) | ✅ One writer bit changes one future operand bit and A→a; both literal controls match model/QEMU registers, code RAM, serial and VGA; actual native capture and immutable source/image checks |
+| [Native one-bit palette surgery](examples/vga-bitmap/README.md) | ✅ 142 authored bytes draw an 8×8 bitmap; one DAC bit changes all sixteen green pixels while all 64,000 framebuffer indices stay identical; actual screen/GIF proof and explicit browser graphics rejection |
+| [Explicit pre-BIOS boot stacks](examples/self-modifying/README.md) | ✅ Seven reviewed boot/control headers establish SS:SP with interrupts masked during setup; self-modifying sources now use 82 bytes and retain native/model one-bit proof at offsets 52/61 |
+| [CPU indicator readability](docs/indicator-readability.md) | ✅ Tablet bit rows fit their register cells; bit/flag labels stay at least 9px; 11,072 computed samples per browser across four widths/eight states pass contrast, geometry and non-color change-cue checks |
+| [Execution scope and proof](docs/execution-scope.md) | ✅ Contributor guide separates 16/32/64 inspection, bounded 16-bit execution, BIOS/Linux targets and the checks needed for each claim |
+| [One-bit debugging lesson](docs/tutorials/repair-direction.md) | ✅ Follow the wrong store addresses, flip CLD→STD, then check the failing seed and repaired literal bytes in both the model and QEMU; genuine browser repair recording |
+| [Execution keyboard controls](docs/cpu-lab/keyboard.md) | ✅ Visible shortcut switch preserves state and native buttons; editable/composing/repeated keys are ignored; manual steps report location and automatic ticks keep the live status quiet |
+| [Literal address references](docs/address-references.md) | ✅ bitinspect checks explicitly declared absolute/far/relative fields, including six original boot references; exhaustive word/displacement/alias checks, bounded reads and no byte rewriting |
+| [Experiment reference maps](docs/address-references.md#native-experiments-and-an-independently-loaded-fragment) | ✅ Shared maps check both self-modifying and VGA controls; a 7E00-loaded CALL/RET map accepts the solution and rejects its broken seed |
+| [Safe inspection annotations](docs/inspection-annotations.md) | ✅ Typed ranges, non-overlap and literal bits are checked before rows print; bounded JSON, structured errors and escaped terminal controls preserve readable Unicode |
+| [Linux syscall instruction fields](docs/instruction-encoding/linux-syscalls.md) | ✅ Seven exact native payload slices, sign-extended 64-bit PUSH and low-register PUSH/POP fields; ABI explanations and independent goldens; browser execution stays disabled |
+| [One byte, one word, one branch](docs/tutorials/byte-order.md) | ✅ Interactive learning path connects bit weights, little-endian immediates and signed branch targets from six handwritten bytes; all word/displacement values and three browser engines checked; [actual browser recording](assets/byte-order-demo.gif); inspection only |
+| [Guided stack and call lesson](docs/tutorials/stack-and-calls.md) | ✅ Inspect saved values and return addresses through nine verified checkpoints; full RAM/state rewind and replay, retained POP bytes, native challenge load-address differences, browser memory checks and [actual CALL rewind footage](assets/cpu-lab-demo.gif) |
+| [Carry, overflow and undefined flags](docs/tutorials/flags.md) | ✅ Guided flag checkpoints, signed/unsigned boundary comparison, low-byte parity and AF=? replay; two reviewed QEMU programs check all six defined ADD flags against expected masks and the model |
+| [Short branch field microscope](docs/instruction-encoding/short-branches.md) | ✅ Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged |
+| [Keyboard instruction-bit editing](docs/instruction-encoding/keyboard.md) | ✅ One Tab stop, arrows, row/global Home/End, Enter/Space and stable edit focus; fixture shortening preserves selector focus and navigation never executes bytes |
+| [Actionable source errors](docs/source-diagnostics.md) | ✅ Exact UTF-16 token/excess-byte ranges, 704 location cases and focused binary/hex selection; invalid drafts preserve loaded state/history and corrections clear stale errors |
+| [Bit comparison error recovery](docs/bit-diff.md) | ✅ Both invalid sides are identified; failed notation conversion focuses/selects the first offending token while keeping drafts, notation and the last valid comparison |
+| [Clean-checkout reproduction](docs/reproduction.md) | ✅ Fresh remote checkout passes install, 77 Python tests and all site/model checks; all 88 artifact hashes match across two builds with a clean Git tree; macOS native-Linux skip is explicit |
+| [Print-friendly lessons](docs/printing.md) | ✅ Manual, learning path and eight introductions use white paper, readable unchanged code, RTL/LTR direction and exact source attribution; print checks and actual PDF QA captures |
+| CPU Lab program downloads and imports | ✅ Exact loaded .bits/.bin bytes, 512-byte boundary, self-modification distinction and delayed-import protection pass three-browser checks |
+| Share loaded CPU Lab programs | ✅ Versioned URL fragments preserve 1–512 loaded bytes and open paused; 1,000 seeded round trips, malformed-link preservation, history navigation and clipboard fallback verified in three browsers |
+| Binary and hexadecimal drafts | ✅ Literal byte views, explicit hex loading and comment preservation; all byte values and 1,000 seeded round trips pass; CLI .bits remains binary |
+| ELF anatomy explorer | ✅ Six checksummed files, exact entry/segment mapping, bounded local inspection and 2,000 seeded mutations; three-browser keyboard/mobile checks; no imported code execution |
+| Reviewed build preflight | ✅ Manifest types/options, regular source files, source/output aliases and every payload/package checked before writes; malformed later targets preserve previous artifacts |
+| [Native divide-fault research](docs/architecture/divide-fault.md) | ✅ 70 literal bytes: real-mode #DE frame, divisor repair and same-instruction retry checked in QEMU; unrepaired divisor faults repeatedly |
+| [Protected-mode fault research](docs/architecture/protected-fault.md) | ✅ 200 literal bytes: actual UD2/#UD gate, saved EIP adjustment, IRETD and CPU-managed descriptor accessed bits checked in QEMU; one controlled fault only |
+| [Native selector error-code research](docs/architecture/selector-fault.md) | ✅ 256 literal bytes: #GP selector code, extra frame doubleword, preserved DS and correct IRETD stack cleanup checked in QEMU; one invalid load only |
+| [v0.3.0 release and provenance](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.3.0) | ✅ Exact-commit CI passed; all 14 public files re-downloaded anonymously, bytes/checksums and source/artifact provenance verified |
+| [v0.4.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.4.0) | ✅ Main/tag CI passed; independent source archive passes 92 tests and three-browser checks; all 31 public files, 30 checksums and 90 artifact hashes verified |
+| [v0.2.0 release](https://github.com/OthmaneBlial/bitborn/releases/tag/v0.2.0) | ✅ Public; all 13 files re-downloaded anonymously, exact bytes and checksums verified |
+| Paging, exception/hardware interrupt handling and physical hardware | Future research; no working claim |
+
 
 ## Complete
 

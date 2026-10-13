@@ -74,5 +74,15 @@ for(const language of languages) {
   assert.ok(readFileSync(resolve(root,'site/sitemap.xml'),'utf8').includes(`/intro/${language.tag}/`));
 }
 assert.match(progress.updated,/^\d{4}-\d{2}-\d{2}$/);assert.ok(progress.milestones.length > 0);
+const roadmap=readFileSync(resolve(root,'ROADMAP.md'),'utf8');
+const ledger=roadmap.split('## Milestone ledger\n')[1].split('\n## ')[0];
+const milestones=ledger.split('\n').filter(line=>line.startsWith('| ')&&!line.startsWith('| Milestone ')&&!line.startsWith('| ---')).map(line=>{
+  const [,milestone,progress]=line.split('|');
+  return {milestone:milestone.trim().replace(/\[([^\]]+)\]\([^)]+\)/g,'$1'),progress:progress.trim()};
+});
+assert.deepEqual(progress.milestones,milestones,'website retains the complete canonical roadmap ledger');
+const readme=readFileSync(resolve(root,'README.md'),'utf8');
+assert.ok(!readme.includes('| Milestone | Progress |'),'README keeps only the summary and roadmap link');
+assert.match(readme,/Read the full roadmap.*\]\(ROADMAP\.md\)/);
 assert.ok(progress.milestones.every(item => typeof item.milestone === 'string' && typeof item.progress === 'string'));
 console.log(`route checks passed: ${routes.length} portable routes, unique metadata, local source/tutorial/download links, sixteen real example sizes, generated repository progress data`);

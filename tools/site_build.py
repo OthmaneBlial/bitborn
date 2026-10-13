@@ -31,8 +31,8 @@ def preset_sources(root=ROOT):
 def prepare():
     print(verify())
     program_sources = preset_sources()
-    readme = (ROOT / 'README.md').read_text()
-    table = readme.split('## Roadmap — visible progress\n', 1)[1].split('\n## ', 1)[0]
+    roadmap = (ROOT / 'ROADMAP.md').read_text()
+    table = roadmap.split('## Milestone ledger\n', 1)[1].split('\n## ', 1)[0]
     milestones = []
     for line in table.splitlines():
         if line.startswith('| ') and not line.startswith(('| Milestone ', '| ---')):

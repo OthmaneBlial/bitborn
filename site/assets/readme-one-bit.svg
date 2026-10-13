@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 330" role="img" aria-labelledby="title desc">
+  <title id="title">One bit. A different destination.</title>
+  <desc id="desc">In 16-bit context, B8 2A 00 means MOV AX,42. Flipping opcode bit zero changes B8 to B9, meaning MOV CX,42. The immediate bytes remain 2A 00. This is an illustrated encoding comparison, not execution footage.</desc>
+  <rect width="960" height="330" rx="24" fill="#0b1014"/>
+  <g font-family="ui-monospace, SFMono-Regular, Consolas, monospace" text-anchor="middle">
+    <text x="480" y="52" font-size="38" font-weight="700" fill="#f0f5f2">ONE BIT. A DIFFERENT DESTINATION.</text>
+    <rect x="36" y="82" width="352" height="190" rx="18" fill="#17241c" stroke="#caff41" stroke-width="2"/>
+    <rect x="572" y="82" width="352" height="190" rx="18" fill="#14232b" stroke="#74dfff" stroke-width="2"/>
+    <text x="212" y="135" font-size="38" font-weight="700" fill="#caff41">B8 2A 00</text>
+    <text x="748" y="135" font-size="38" font-weight="700" fill="#74dfff">B9 2A 00</text>
+    <text x="212" y="181" font-size="32" fill="#caff41">1011100<tspan fill="#ffbc87" font-weight="700">0</tspan></text>
+    <text x="748" y="181" font-size="32" fill="#74dfff">1011100<tspan fill="#ffbc87" font-weight="700">1</tspan></text>
+    <text x="212" y="239" font-size="38" fill="#f0f5f2">MOV AX,42</text>
+    <text x="748" y="239" font-size="38" fill="#f0f5f2">MOV CX,42</text>
+    <path d="M416 174h124m-16-15 17 15-17 15" fill="none" stroke="#ffbc87" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="480" y="216" font-size="22" fill="#ffbc87">flip bit 0</text>
+    <text x="480" y="309" font-size="20" fill="#9eafb2">16-BIT CONTEXT / STATIC ILLUSTRATION / SAME VALUE: 42</text>
+  </g>
+</svg>

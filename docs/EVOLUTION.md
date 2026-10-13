@@ -6,6 +6,11 @@ executable instructions remain literal `.bits`; host tooling never assembles the
 
 ## Current execution record
 
+README priority (2026-10-13): keep a short progress summary and roadmap link,
+with playful static SVGs and emoji navigation. The detailed milestone ledger
+now lives in ROADMAP.md and drives website progress; route checks enforce that
+the complete ledger survives README edits. Executable source bytes are unchanged.
+
 Baseline: clean `main` at `8c0ae14`; 37 Python tests (one macOS native-Linux skip),
 55 reviewed targets and 86 public build artifacts. Native instruction bytes
 remain unchanged throughout these host/browser milestones.

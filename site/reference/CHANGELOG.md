@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Shorten the README to a progress summary and roadmap link, with emoji
+  navigation and two accessible SVG illustrations. Keep the complete milestone
+  ledger in ROADMAP.md and generate website progress from that single source.
+
 - Add a flags walkthrough using existing canonical sources. Compare unsigned
   carry and signed overflow, preserve INC carry and CMP's destination, explain
   low-byte parity, and inspect AF=? after XOR with recorded rewind/replay.

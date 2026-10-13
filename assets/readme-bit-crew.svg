@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 310" role="img" aria-labelledby="title desc">
+  <title id="title">Tiny bits. Real boots.</title>
+  <desc id="desc">Two friendly illustrated binary characters, zero and one, send a byte toward a tiny booting computer. A static illustration of the bitborn adventure.</desc>
+  <rect width="960" height="310" rx="24" fill="#0b1014"/>
+  <g fill="none" stroke="#213038" stroke-width="2"><path d="M0 250h960M720 0v310"/><circle cx="876" cy="96" r="74"/><path d="m45 105 11-11 11 11-11 11zM695 240l12 12-12 12-12-12z"/></g>
+  <g font-family="ui-monospace, SFMono-Regular, Consolas, monospace">
+    <text x="40" y="56" fill="#f0f5f2" font-size="42" font-weight="700">TINY BITS. REAL BOOTS.</text>
+    <text x="42" y="88" fill="#9eafb2" font-size="20">a binary adventure, one flip at a time</text>
+    <g transform="translate(65 132) rotate(-6 70 65)">
+      <path d="M31 120 20 145M97 120l14 25M0 53l-22-12M127 53l22-12" fill="none" stroke="#caff41" stroke-width="6" stroke-linecap="round"/>
+      <rect width="128" height="126" rx="28" fill="#17241c" stroke="#caff41" stroke-width="3"/>
+      <text x="64" y="99" text-anchor="middle" fill="#caff41" font-size="100" font-weight="700">0</text>
+      <circle cx="48" cy="47" r="4" fill="#f0f5f2"/><circle cx="78" cy="47" r="4" fill="#f0f5f2"/>
+      <path d="M51 66q13 12 25 0" fill="none" stroke="#f0f5f2" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <text x="227" y="214" fill="#f0f5f2" font-size="52">+</text>
+    <g transform="translate(290 132) rotate(6 60 65)">
+      <path d="M30 120 18 145M96 120l14 25M0 53l-21-12M125 53l22-12" fill="none" stroke="#74dfff" stroke-width="6" stroke-linecap="round"/>
+      <rect width="128" height="126" rx="28" fill="#14232b" stroke="#74dfff" stroke-width="3"/>
+      <text x="64" y="99" text-anchor="middle" fill="#74dfff" font-size="100" font-weight="700">1</text>
+      <circle cx="45" cy="47" r="4" fill="#f0f5f2"/><circle cx="80" cy="47" r="4" fill="#f0f5f2"/>
+      <path d="M50 67q14 11 27-2" fill="none" stroke="#f0f5f2" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <path d="M458 197h84m-14-13 16 13-16 13" fill="none" stroke="#f0f5f2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="578" y="151" width="140" height="98" rx="16" fill="#17241c" stroke="#caff41" stroke-width="2"/>
+    <text x="648" y="211" text-anchor="middle" fill="#caff41" font-size="46" font-weight="700">.bits</text>
+    <path d="M744 197h26m-11-10 12 10-12 10" fill="none" stroke="#f0f5f2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="796" y="140" width="134" height="109" rx="12" fill="#152129" stroke="#74dfff" stroke-width="3"/>
+    <rect x="807" y="152" width="112" height="71" rx="5" fill="#0b1014"/>
+    <text x="863" y="198" text-anchor="middle" fill="#caff41" font-size="32" font-weight="700">BOOT!</text>
+    <path d="M845 250v15h38v-15m-52 16h66" fill="none" stroke="#74dfff" stroke-width="4" stroke-linecap="round"/>
+  </g>
+</svg>

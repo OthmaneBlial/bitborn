@@ -13,7 +13,7 @@ try {
     const detail = document.createElement('p');detail.className = `milestone-progress${milestone.progress.startsWith('✅') ? ' complete' : ''}`;detail.textContent = milestone.progress;
     item.append(number,title,detail);list.append(item);
   });
-  status.textContent = `${progress.milestones.length} milestones from the repository README progress table. Read ROADMAP.md for evidence and remaining work.`;
+  status.textContent = `${progress.milestones.length} milestones from ROADMAP.md. The README keeps a short summary; this page shows the detailed evidence and remaining work.`;
 } catch (error) {
   status.textContent = `Progress is unavailable: ${error.message} Read the linked ROADMAP.md for the source record.`;status.classList.add('error');
 }
