@@ -1,0 +1,11 @@
+{
+  "loadAddress": 31744,
+  "references": [
+    {"name": "normalize CS", "kind": "far16", "offset": 2, "targetOffset": 6},
+    {"name": "message pointer", "kind": "abs16", "offset": 53, "segment": 0, "targetOffset": 91},
+    {"name": "message terminator to halt", "kind": "rel8", "offset": 59, "segment": 0, "originOffset": 60, "targetOffset": 87},
+    {"name": "UART ready poll", "kind": "rel8", "offset": 79, "segment": 0, "originOffset": 80, "targetOffset": 75},
+    {"name": "next character", "kind": "rel8", "offset": 86, "segment": 0, "originOffset": 87, "targetOffset": 55},
+    {"name": "return to HLT", "kind": "rel8", "offset": 90, "segment": 0, "originOffset": 91, "targetOffset": 88}
+  ]
+}

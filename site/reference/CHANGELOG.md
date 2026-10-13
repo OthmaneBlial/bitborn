@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Add `bitinspect --references JSON` for declared abs16/far16/rel8/rel16 fields.
+  Check six original boot addresses without resolving labels or rewriting bytes;
+  validate bounded regular inputs, strict metadata, IP/A20 math and diagnostics
+  before printing byte rows. Exhaustive synthetic fields stay outside execution.
+
 - Add a visible CPU execution-shortcut switch, contenteditable/composition/
   consumed-event guards and atomic manual-step status with the next CS:IP.
   Automatic Run ticks update the machine without flooding the live status;

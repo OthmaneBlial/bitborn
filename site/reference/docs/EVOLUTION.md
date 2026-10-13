@@ -412,6 +412,22 @@ states; all 64 source hashes, six GIF hashes and 98 actual PNG frame hashes
 match. The CPU recording has 47 frames. Tablet/mobile checks and actual frame
 review retain readable controls; canonical instruction sources remain unchanged.
 Next: explicit literal pointer/reference inspection without generating target bytes.
+Keyboard controls `1df3b0f` passed CI `38339849829` and deployment `38340339750`.
+Mirror `be01a17` changes only fifteen `bitborn/` paths. Public CPU page/module/CSS,
+capture record, keyboard guide, README and progress match the exact commit.
+The host address-reference inspector now checks explicitly declared abs16/far16/
+rel8/rel16 fields before printing byte rows. A manually written JSON map covers
+six original boot code/data references without editing any instruction bytes. Numeric
+segment/origin assumptions are explicit; labels are descriptive and no operand
+is generated or rewritten. Independent full-domain checks cover 196,864 synthetic
+word/displacement/far-alias values, plus IP/A20 boundaries and one-bit failures.
+Strict metadata, bounded descriptor-based reads, FIFO rejection, resource cleanup,
+late-failure empty stdout, structured diagnostics and unchanged inputs are checked.
+The full 85-test Python/native suite passes, with the expected macOS native-Linux
+skip. Existing capture provenance reports no changed dependencies; executable
+sources and derived target bytes remain unchanged.
+Next: validate the legacy optional annotation JSON before rendering inspection,
+then add reference maps for independently loaded experiments and clean CLI proof.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -452,7 +468,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 13 | 0 | Replace failed file writes atomically so existing packed outputs survive I/O errors | H | M | Existing CLI | Medium | Complete |
 | 14 | 0 | Validate manifest types, output aliases and packaging options before writing | H | H | Existing manifest | Medium | Complete: all-source/package preflight; no multi-file I/O transaction |
 | 15 | 0 | Structured source diagnostics with stable error codes and source-line locations | H | M | 03 | Medium | Complete: shared codes/line/token positions, optional CLI JSON and failed-write proof |
-| 16 | 1 | Address-reference inspector that checks literal pointers without resolving labels into code | H | M | Annotations | Medium | Open |
+| 16 | 1 | Address-reference inspector that checks literal pointers without resolving labels into code | H | M | Annotations | Medium | Complete: explicit abs16/far16/rel8/rel16 maps, six boot fields, exhaustive numeric checks and read-only bounded diagnostics; metadata assumptions are not instruction decoding |
 | 17 | 1 | Register-to-register MOV encodings with independent ModR/M fixtures | H | M | 05 | Medium | Complete: scoped inspection, 9,728 combinations and 18 disassembly goldens |
 | 18 | 1 | Curated indirect memory operands with explicit segment-selection explanations | H | M | 17 | High | Complete: 16-bit addressing inspection; default DS/SS verified natively; no memory execution |
 | 19 | 1 | Signed conditional branches and overflow examples with native QEMU proof | H | M | 04 | Medium | Complete: all short conditions, full rel8/flag oracle and identical 95-byte native/model exercise |
@@ -503,6 +519,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 64 | 0 | Exact source error ranges, relevant editor focus and preserved invalid-load state | H | H | 15,42 | Low | Complete: UTF-16 token spans, normalized imports, binary/hex focus and corrected-error cleanup; live AT review open |
 | 65 | 0 | Identify both invalid comparison sides and focus failed notation conversion without losing drafts/results | H | H | 15,64 | Low | Complete: independent invalid markers, full token/excess selection and partial correction in three browsers; live AT review open |
 | 66 | 0 | Audit native boot fixtures for explicit stack initialization before their first BIOS call | H | H | Native boot fixtures | Medium | Complete: seven reviewed boot/control setup guards, prior-source regression, corrected 82-byte fixture, native/model and three-browser proof, refreshed captures; hardware and full BIOS emulation remain separate |
+| 67 | 0 | Validate optional bitinspect annotation metadata and preserve structured errors before rendering | H | H | Existing host inspection | Medium | Open: malformed legacy annotation entries can currently raise uncaught type/key errors |
 
 Large tasks are divided into useful verified milestones. Native experiments only
 become capabilities after literal source review and real QEMU checks; hardware

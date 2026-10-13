@@ -109,6 +109,7 @@ for exact evidence and remaining gates.
 | [Execution scope and proof](docs/execution-scope.md) | ✅ Contributor guide separates 16/32/64 inspection, bounded 16-bit execution, BIOS/Linux targets and the checks needed for each claim |
 | [One-bit debugging lesson](docs/tutorials/repair-direction.md) | ✅ Follow the wrong store addresses, flip CLD→STD, then check the failing seed and repaired literal bytes in both the model and QEMU; genuine browser repair recording |
 | [Execution keyboard controls](docs/cpu-lab/keyboard.md) | ✅ Visible shortcut switch preserves state and native buttons; editable/composing/repeated keys are ignored; manual steps report location and automatic ticks keep the live status quiet |
+| [Literal address references](docs/address-references.md) | ✅ bitinspect checks explicitly declared absolute/far/relative fields, including six original boot references; exhaustive word/displacement/alias checks, bounded reads and no byte rewriting |
 | [Short branch field microscope](docs/instruction-encoding/short-branches.md) | ✅ Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged |
 | [Keyboard instruction-bit editing](docs/instruction-encoding/keyboard.md) | ✅ One Tab stop, arrows, row/global Home/End, Enter/Space and stable edit focus; fixture shortening preserves selector focus and navigation never executes bytes |
 | [Actionable source errors](docs/source-diagnostics.md) | ✅ Exact UTF-16 token/excess-byte ranges, 704 location cases and focused binary/hex selection; invalid drafts preserve loaded state/history and corrections clear stale errors |
@@ -146,6 +147,7 @@ those bytes at physical `7C00`. The x86 CPU decodes and executes them.
 ```sh
 ./tools/bitpack boot/boot.bits boot.img
 ./tools/bitinspect boot.img --annotations boot/annotations.json
+./tools/bitinspect boot.img --references boot/references.json
 ./tools/bitverify boot.img --size 512 --bios
 ./tools/bitdiff build/boot.img boot.img
 ```
@@ -153,7 +155,7 @@ those bytes at physical `7C00`. The x86 CPU decodes and executes them.
 | Tool | What it does |
 | --- | --- |
 | `bitpack` | Strictly packs binary byte tokens; source-line/token diagnostics and optional `--json-errors` |
-| `bitinspect` | Offsets, binary, hex and known annotated instruction boundaries |
+| `bitinspect` | Offsets, binary, hex, known annotated boundaries and optional declared address-reference checks |
 | `bitverify` | Sizes, BIOS signature, reviewed hashes, annotations, source audit and reproduction |
 | `bitdiff` | Marks each changed bit, including added or removed bytes |
 

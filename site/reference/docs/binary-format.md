@@ -102,3 +102,9 @@ An output symlink is retained and its resolved target is replaced; other hard-li
 entries retain their old inode/data. Existing basic read/write/execute mode bits
 are preserved; new outputs start private (`0600` on POSIX). This is file-replacement
 atomicity, not a guarantee of directory metadata durability after power loss.
+
+`bitinspect --references JSON` optionally checks declared numeric operand fields
+against target offsets in the same image. The [reference guide](address-references.md)
+defines explicit segment/origin assumptions, bounded regular inputs and failure
+diagnostics. This validates existing bytes; it does not change source notation,
+resolve labels or generate replacement operands.

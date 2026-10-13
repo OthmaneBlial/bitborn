@@ -9,6 +9,11 @@ import sys
 import tempfile
 from pathlib import Path
 
+if __package__:
+    from .address_references import inspect_references, read_reference_input, read_reference_map
+else:
+    from address_references import inspect_references, read_reference_input, read_reference_map
+
 ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -250,12 +255,15 @@ def main(command=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("args", nargs="*")
     parser.add_argument("--annotations", type=Path)
+    parser.add_argument("--references", type=Path, help="validate declared 16-bit address fields before printing inspection")
     parser.add_argument("--size", type=int)
     parser.add_argument("--sha256")
     parser.add_argument("--bios", action="store_true")
     parser.add_argument("--json-errors", action="store_true", help="emit operational errors as JSON on stderr; usage errors remain argparse text")
     parsed = parser.parse_args()
     args = parsed.args
+    if parsed.references is not None and command != "bitinspect":
+        parser.error("--references is only valid with bitinspect")
     try:
         if command == "bitpack" and len(args) == 2:
             data, _ = read_bits(args[0])
@@ -266,7 +274,11 @@ def main(command=None):
             print(f"{len(data)} bytes → {args[1]} · sha256 {digest(data)}")
         elif command == "bitinspect" and len(args) == 1:
             annotations = json.loads(parsed.annotations.read_text()) if parsed.annotations else []
-            print(inspect(Path(args[0]).read_bytes(), annotations))
+            data = read_reference_input(args[0], 1 << 20) if parsed.references else Path(args[0]).read_bytes()
+            references = inspect_references(data, read_reference_map(parsed.references)) if parsed.references else None
+            print(inspect(data, annotations))
+            if references is not None:
+                print(references)
         elif command == "bitdiff" and len(args) == 2:
             print(bitdiff(Path(args[0]).read_bytes(), Path(args[1]).read_bytes()))
         elif command == "bitverify" and not args:
@@ -281,7 +293,7 @@ def main(command=None):
                 raise ValueError("SHA-256 mismatch")
             print(f"verified {len(data)} bytes · sha256 {digest(data)}")
         else:
-            parser.error(f"usage: {command} " + {"bitpack": "SOURCE OUTPUT", "bitinspect": "BINARY [--annotations JSON]", "bitdiff": "BEFORE AFTER", "bitverify": "[BINARY --size N --bios --sha256 HASH]"}[command])
+            parser.error(f"usage: {command} " + {"bitpack": "SOURCE OUTPUT", "bitinspect": "BINARY [--annotations JSON] [--references JSON]", "bitdiff": "BEFORE AFTER", "bitverify": "[BINARY --size N --bios --sha256 HASH]"}[command])
     except (ValueError, OSError, json.JSONDecodeError) as error:
         if parsed.json_errors:
             diagnostic = {'command': command, 'code': getattr(error, 'code', 'IO_ERROR' if isinstance(error, OSError) else 'TOOL_ERROR'),

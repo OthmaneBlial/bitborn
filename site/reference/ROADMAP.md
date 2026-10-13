@@ -297,6 +297,9 @@ The v0.2 milestone is published and verified. The following research remains ope
   shortcut switch and editable/composition guards. Preserve native buttons and
   loaded state; report manual-step locations without live-status timer spam.
   Live assistive-technology review remains a separate gate.
+- [x] Add [literal address-reference checking](docs/address-references.md) to
+  bitinspect: explicit segment/origin assumptions, six original boot fields,
+  exhaustive word/displacement/alias tests, bounded read-only inputs and no fixups.
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

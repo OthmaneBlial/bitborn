@@ -190,6 +190,10 @@
       "progress": "\u2705 Visible shortcut switch preserves state and native buttons; editable/composing/repeated keys are ignored; manual steps report location and automatic ticks keep the live status quiet"
     },
     {
+      "milestone": "Literal address references",
+      "progress": "\u2705 bitinspect checks explicitly declared absolute/far/relative fields, including six original boot references; exhaustive word/displacement/alias checks, bounded reads and no byte rewriting"
+    },
+    {
       "milestone": "Short branch field microscope",
       "progress": "\u2705 Condition group/inversion and signed rel8 roles in 16/32/64 inspection; 12,288 cases and six new independent goldens; runtime state stays unchanged"
     },
