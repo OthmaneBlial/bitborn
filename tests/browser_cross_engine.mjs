@@ -17,6 +17,7 @@ import {checkSignedBranches} from './signed_branches_browser_checks.mjs';
 import {checkCarry} from './carry_browser_checks.mjs';
 import {checkPresetSources} from './preset_sources_browser_checks.mjs';
 import {checkSelfModifying} from './self_modifying_browser_checks.mjs';
+import {checkSourceErrors} from './source_error_browser_checks.mjs';
 import {checkELF} from './elf_browser_checks.mjs';
 import {checkBitDiff} from './bit_diff_browser_checks.mjs';
 
@@ -181,6 +182,7 @@ try {
       await open('playground/');await checkEncoding(page);
       await open('');await checkBitKeyboard(page);
       await open('cpu-lab/');await checkProgramDownloads(page);
+      await checkSourceErrors(page);
       await checkHexDrafts(page);
       await checkRegisterMOV(page);
       await checkMemoryMOV(page);

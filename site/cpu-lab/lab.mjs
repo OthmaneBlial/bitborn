@@ -240,8 +240,17 @@ function reset() {
   setStatus('Deterministic initial state loaded: CS:IP 0000:7C00, SS:SP 0000:7C00. Ready to step.'); render();
 }
 
-function loadSource(source) {
+function sourceError(editor,error,focus=false) {
+  editor.setAttribute('aria-invalid','true');
+  if(focus) {
+    editor.focus();
+    if(Number.isInteger(error.start)&&Number.isInteger(error.end)&&error.start>=0&&error.end<=editor.value.length)editor.setSelectionRange(error.start,error.end);
+  }
+}
+
+function loadSource() {
   sourceRevision++;
+  const source=$('binary-editor').value;
   try {
     const parsed = parseBits(source,512);
     const preset=presets.find(item=>{const expected=parseBits(item.source);return expected.length===parsed.length&&expected.every((value,index)=>value===parsed[index]);});
@@ -251,19 +260,23 @@ function loadSource(source) {
     bytes = parsed; breakpoints.clear(); memoryStart = 0x7C00; $('memory-address').value = '07C00';
     const shared=new URL(window.location.href);shared.search='';shared.hash=programFragment(bytes);
     $('program-link').value=shared.href;$('open-program-link').href=shared.href;$('share-status').textContent='';
-    reset(); syncHex(); $('editor-status').classList.remove('error'); $('editor-status').textContent = `${bytes.length} literal bytes loaded. State reset; breakpoints cleared.`;
+    reset(); syncHex(); $('binary-editor').removeAttribute('aria-invalid');$('editor-status').classList.remove('error'); $('editor-status').textContent = `${bytes.length} literal bytes loaded. State reset; breakpoints cleared.`;
     return true;
   } catch (error) {
-    $('editor-status').classList.add('error'); $('editor-status').textContent = `${error.message} Current program and state kept.`; return false;
+    $('editor-status').classList.add('error'); $('editor-status').textContent = `${error.message} Current program and state kept.`;sourceError($('binary-editor'),error,true);return false;
   }
 }
 
 function syncHex() {
   try {
     $('hex-editor').value=formatHex(parseBits($('binary-editor').value,512));
+    $('binary-editor').removeAttribute('aria-invalid');$('hex-editor').removeAttribute('aria-invalid');
+    $('editor-status').classList.remove('error');$('editor-status').textContent='Binary draft is valid. Load it to replace the program and reset state.';
     $('hex-status').classList.remove('error');$('hex-status').textContent='Hex matches the current binary draft. Load a draft to replace the loaded program.';
   } catch(error) {
     $('hex-status').classList.add('error');$('hex-status').textContent=`Binary draft invalid: ${error.message} Hex field and loaded program are unchanged.`;
+    sourceError($('binary-editor'),error);
+    $('editor-status').classList.add('error');$('editor-status').textContent=`${error.message} Current program and state kept.`;
   }
 }
 
@@ -274,7 +287,7 @@ function inspectMemory(address) {
 for (const preset of presets) {const option=document.createElement('option'); option.value=preset.id; option.textContent=preset.title; $('preset').append(option);}
 $('preset').addEventListener('change', () => {
   const preset = presets.find(item => item.id === $('preset').value);
-  $('binary-editor').value = preset.source; $('lesson').textContent = preset.lesson; loadSource(preset.source);
+  $('binary-editor').value = preset.source; $('lesson').textContent = preset.lesson; loadSource();
 });
 $('step').addEventListener('click',performStep); $('run').addEventListener('click',run); $('pause').addEventListener('click',() => pause(`Paused at ${location(state)}. Last state change is shown below.`)); $('reset').addEventListener('click',reset);
 $('back').addEventListener('click',()=>travel('rewind'));$('forward').addEventListener('click',()=>travel('replay'));
@@ -290,16 +303,17 @@ $('hex-editor').addEventListener('input',()=>{
   sourceRevision++;
   try {
     const draft=parseHex($('hex-editor').value,512);
+    $('hex-editor').removeAttribute('aria-invalid');
     $('hex-status').classList.remove('error');$('hex-status').textContent=`${draft.length} hex bytes in this draft. Load hex to replace binary source/comments and reset.`;
-  } catch(error) {$('hex-status').classList.add('error');$('hex-status').textContent=`${error.message} Loaded program and binary source are unchanged.`;}
+  } catch(error) {$('hex-status').classList.add('error');$('hex-status').textContent=`${error.message} Loaded program and binary source are unchanged.`;sourceError($('hex-editor'),error);}
 });
 $('load-hex').addEventListener('click',()=>{
   sourceRevision++;
   try {
     const source=formatBits(parseHex($('hex-editor').value,512));
     $('binary-editor').value=source;
-    if(loadSource(source)){$('lesson').textContent='Loaded literal hexadecimal bytes; binary source is the same byte sequence.';$('preset').selectedIndex=-1;}
-  } catch(error) {$('hex-status').classList.add('error');$('hex-status').textContent=`${error.message} Loaded program and binary source are unchanged.`;}
+    if(loadSource()){$('lesson').textContent='Loaded literal hexadecimal bytes; binary source is the same byte sequence.';$('preset').selectedIndex=-1;}
+  } catch(error) {$('hex-status').classList.add('error');$('hex-status').textContent=`${error.message} Loaded program and binary source are unchanged.`;sourceError($('hex-editor'),error,true);}
 });
 $('speed').addEventListener('input',() => {
   $('speed-label').textContent = `${$('speed').value} steps/s`;
@@ -315,7 +329,7 @@ $('inspect-ds').addEventListener('click',() => inspectMemory(physicalAddress(sta
 $('inspect-es').addEventListener('click',() => inspectMemory(physicalAddress(state.ES,state.DI)));
 $('inspect-stack').addEventListener('click',() => inspectMemory(physicalAddress(state.SS,state.SP)));
 $('load-program').addEventListener('click',() => {
-  if (loadSource($('binary-editor').value)) {$('lesson').textContent='Custom literal binary program. The listing explains supported encodings; unsupported bytes stop execution.'; $('preset').selectedIndex=-1;}
+  if (loadSource()) {$('lesson').textContent='Custom literal binary program. The listing explains supported encodings; unsupported bytes stop execution.'; $('preset').selectedIndex=-1;}
 });
 $('import-program').addEventListener('change',async event => {
   const file=event.target.files[0]; if (!file) return;
@@ -333,7 +347,7 @@ $('import-program').addEventListener('change',async event => {
       catch {throw new Error('Source files must contain valid UTF-8 text.');}
     }
     $('binary-editor').value=source;
-    if (loadSource(source)) {$('lesson').textContent='Imported literal binary program. Only the bounded supported instruction subset runs here.'; $('preset').selectedIndex=-1;}
+    if (loadSource()) {$('lesson').textContent='Imported literal binary program. Only the bounded supported instruction subset runs here.'; $('preset').selectedIndex=-1;}
   } catch (error) {
     if(request!==sourceRevision)return;
     $('editor-status').classList.add('error'); $('editor-status').textContent=`${error.message} Current program and state kept.`;
@@ -347,12 +361,12 @@ document.addEventListener('keydown',event => {
   else if (event.key.toLowerCase() === 'b') {event.preventDefault();travel('rewind');}
   else if (event.key.toLowerCase() === 'f') {event.preventDefault();travel('replay');}
 });
-$('preset').value=presets[0].id; $('binary-editor').value=presets[0].source; $('lesson').textContent=presets[0].lesson; loadSource(presets[0].source);
+$('preset').value=presets[0].id; $('binary-editor').value=presets[0].source; $('lesson').textContent=presets[0].lesson; loadSource();
 function loadProgramFragment() {
   try {
     const shared=parseProgramFragment(window.location.hash);if(shared===null)return;
     $('binary-editor').value=formatBits(shared);
-    if(loadSource($('binary-editor').value)){$('preset').selectedIndex=-1;$('lesson').textContent='Shared literal program loaded and paused. Step or Run uses only the bounded 16-bit model.';}
+    if(loadSource()){$('preset').selectedIndex=-1;$('lesson').textContent='Shared literal program loaded and paused. Step or Run uses only the bounded 16-bit model.';}
   }catch(error){sourceRevision++;$('editor-status').classList.add('error');$('editor-status').textContent=`${error.message} Current program and state kept.`;}
 }
 window.addEventListener('hashchange',loadProgramFragment);loadProgramFragment();

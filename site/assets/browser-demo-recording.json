@@ -8,7 +8,7 @@
   "presentationFps": 1,
   "alterations": "960px resize and GIF palette encoding only; each frame is an actual captured browser state. Step pacing is for explanation, not a benchmark.",
   "sourceSha256": {
-    "tools/record_browser.mjs": "ed223f1761fce4b80d8ec603ad65c56e9e63ecfb6da76007f8ff2c3b80eeb9a3",
+    "tools/record_browser.mjs": "02de26d340a76d1e47a9c251dbe2bd6d93d2327cc2bd0993dab66a623019af51",
     "boot/boot.bits": "230bbafbfa02abd62dc964efbad02db0431f0efa263216bba02146cd164262b8",
     "site/elf.mjs": "552aabb816be8add70c470c951f0110697d491d0a0e926c3bd9e6001e623832b",
     "site/elf/index.html": "767e441bc2b8d9e29a626d264b2d437bce24c296196a5b37c33d09cf6f58f29b",
@@ -41,16 +41,16 @@
     "docs/instruction-encoding/fixtures/mov32-next.bits": "246005943e5c9914c9b4f820829fa6dc851b173ffb6a59d702593c46d95b421a",
     "site/address16.mjs": "dd980d19e332cb5a30af20f60a0efb23bbfe527f784bc9699593d0607b0ef263",
     "site/simulator.mjs": "c17d610691857a488b7183b6b51e2f1163f845fea65f52a9b90436e9e7ded358",
-    "site/binary.mjs": "e38a13d3f5233e416f07b8c779bc91f0252f235f8c7271800150bf3a11603e90",
+    "site/binary.mjs": "bb95784e041ee340d9143ef3b8047de4a774eb407a059bf6a14a641798460952",
     "site/history.mjs": "45cbd1d494fe7b1f0867c1dc1978ebf2b1a0fce3599f1a704bff75dbe399e321",
     "site/program-link.mjs": "df9a7ad9924dcd19b137407e62557c664b833b5e13a191e9b86b3ca964fe0b40",
     "site/boot-builder/index.html": "12d26a44418d8f21eb2897de9e25084f079f80969fa7126a4b1810515247f742",
     "site/boot-builder/builder.css": "2a5c2803c671e4fb33f55a200c16fc7d597127bf019a3c2b7b2f381417e51a4c",
     "site/boot-builder/model.mjs": "92a78eb396054298a2c170cd2a2fb770e7201b0478b6678321c000a46f3108f3",
     "site/boot-builder/app.mjs": "13f9234f36f0b6c166dd3ab9f16750ba680c8e3e7045d6c9bbc7e5a275fd1cb4",
-    "site/cpu-lab/index.html": "fce290ba74ba7e29da5081a9b7f4051f4d4f0a9e97a6084fee01863bfade74db",
+    "site/cpu-lab/index.html": "eccf5e2e8acd3b1d41e1c9a6107a4177def607958480e273d6b6fdfa2acc68c0",
     "site/cpu-lab/lab.css": "75b4a3e46b60b395e6ed0cedf688d0a12cdd3e959934a9f40bce1273af771d68",
-    "site/cpu-lab/lab.mjs": "426ce9f52c5f7616b9b744e75fa5d00788cb7b19c5a0edd815e7e35c7aeb55ba",
+    "site/cpu-lab/lab.mjs": "0d15aaebaf9a62b8b0254eb804b215acc1a5d33d1c5350678f4447d8e0fd7e12",
     "site/cpu-lab/presets.mjs": "9e04050a83206973122bd1f7feea2c58898a3521ff320efe4f5cfe979c71694b",
     "site/cpu-lab/memory-program.mjs": "0a06a2771fe53d825af83743952063d7ece7b18f5fc54426223cc694024375e9",
     "docs/instruction-encoding/fixtures/memory-mov-program.bits": "8a9fcb196926d81656931a6e982a2d37cf8dc73ac8c9497fc9ca62f8abf3f614",
@@ -192,10 +192,10 @@
     },
     {
       "file": "assets/cpu-lab-demo.gif",
-      "sha256": "6d2441f3a0d6707b6fb155c769e79802235bae06df9ad73571a600f8bb8802cb",
-      "capturedFrames": 42,
-      "encodedFrames": 42,
-      "durationSeconds": 42,
+      "sha256": "8a32271740f5986b7471e95f553c6d30291fd9c788f33958624ab218b631d174",
+      "capturedFrames": 45,
+      "encodedFrames": 45,
+      "durationSeconds": 45,
       "actions": [
         "Loaded the literal stack/CALL/RET preset.",
         "Actual browser Step control 1; registers, flags and stack are model state.",
@@ -238,7 +238,10 @@
         "Before the self-write, the future MOV operand at07C3B contains literal41, uppercase A. This is model RAM.",
         "The modeled byte store changes exactly bit5 of the future operand:41 becomes61, lowercase a.",
         "After JMP, live instruction fetch reads61 and loads AL with lowercase a rather than the unchanged source-file operand41.",
-        "The39-step model emits a and writes61 0F to VGA RAM. Separate native QEMU boots verify the same program; this browser GIF is simulation."
+        "The39-step model emits a and writes61 0F to VGA RAM. Separate native QEMU boots verify the same program; this browser GIF is simulation.",
+        "A failed binary load focuses and selects the exact invalid token; the loaded self-modifying program and its output remain intact.",
+        "A failed hexadecimal load selects GG in the relevant editor and preserves the loaded execution history.",
+        "Correcting the binary draft clears stale error indicators; the new program replaces the loaded state only when Load is pressed."
       ],
       "sourceFrameSha256": [
         "b3263079145cff60da711e705474390e16b6041e00be024924af40f41595221f",
@@ -255,10 +258,10 @@
         "2efb5ff6eaec7f08bf8c1134b1f5a85495f80e51e84baa11222a6cd3cc56b28b",
         "c2d400aff5c3ac14fca255582a77bcf192612c583f711ca5154aedb531542816",
         "82d092ca2e2c61cf9dcab2f26d5eada4bcb7cac3ff01edc48847b66ccf4af18b",
-        "9a08f7a3d6f99c6f2093b8a04f3616f3cc5c618a7f557888abd1034948c840c9",
-        "05bc61d22963708c38971ad76b5ae624a29fdee5b4b1f22af4e84b88eb01fa25",
+        "58c224f2685dbb3b226aa87d2010ff63023ad6709b7a429c517859dce3e1bce1",
+        "98e831a33d23ac7979a10a9a8ea1353c87671ad7bdb8461f84df6b143ac26d9a",
         "11246b405b744a5ead64bc99eb8d8aaaef1bb88795ba4269a800591410e81ada",
-        "08e8aec34ae5952ede0d2074f5ba6a115ddffb7b3a053f49f91b996e5dba19a1",
+        "d559f06442d481b5d20713bac559fcc90e5dab09b364eb02315f613ecb1b4750",
         "0bdbffd65ade2c80e9a60c04f019f0e3e9f2b67dd4ef8af9f43a5e96faada4b8",
         "7f82f7944631eca8aa5e65c2caa8610650c2cb567860b80394755ce3fecbee7f",
         "1b31443176ac58f0b086a0b5ad45f9930100de41153fda7d8e26152b1937c81d",
@@ -282,7 +285,10 @@
         "82caebd55f8a631b5d11c718d5b1041cf4e7740222d1070e7cfee7dca1ab2e91",
         "1e4b4be6675e80dc46c4d82aec3135323d38d969cfe6ede3c37da278ecdda193",
         "42c9fb6039fec7a5abb206a9f7f28d5d34d26f8fb22c8291449e8c7d2b403c8b",
-        "a1bb558f27794a3db2f56f2379636cce32886fdcc4492c4b276d0f2a6f7d14f3"
+        "a1bb558f27794a3db2f56f2379636cce32886fdcc4492c4b276d0f2a6f7d14f3",
+        "65ca588f80f6061af5e11b826da0438d5d76997bd2268e530695c83ff0ce88e9",
+        "c5508d2d7d4adcd5eada6bcc871917e1dbe02d593985da810a4a95c6e506c216",
+        "2c65458909e792dd19fbbdc743313e8db962143b65362231f22ae97bc6fc72e4"
       ]
     },
     {

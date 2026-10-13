@@ -54,6 +54,22 @@ JavaScript `parseBits(source, maxBytes)` and `parseHex(source, maxBytes)` raise
 `tokenIndex`. Existing `error.message` UI handlers continue to work. Both
 parsers default to 512 bytes and retain their text/byte limits.
 
+For `INVALID_TOKEN` and `BYTE_LIMIT`, JavaScript also exposes `start` and `end`:
+zero-based UTF-16 code-unit positions in the original source string, with an
+exclusive end. The range covers the full token even when the readable message
+truncates its snippet. Initial BOMs, CRLF separators and supplementary characters
+are included in these offsets. Non-token errors use `null` for both positions.
+Python/CLI locations remain one-based line/token positions; their schema is
+unchanged and does not imply UTF-16 offsets.
+
+The CPU Lab marks invalid binary/hex drafts with `aria-invalid`. A failed explicit
+load focuses the relevant editor and selects the invalid/excess token. Inline
+validation keeps the current caret. Corrected drafts clear stale error state;
+loaded bytes, history and share links remain intact until a successful load.
+Imports validate the textarea's normalized text so selection agrees with the
+displayed newline positions. File-size/UTF-8 failures before an editable draft
+remain file-level errors, without inventing a token range.
+
 The 658-case seeded Python/JavaScript corpus compares accepted binary bytes
 and rejected-source codes/locations. Separate tests cover hexadecimal input,
 browser limits, CLI JSON and preservation of existing output on failure:
@@ -61,4 +77,10 @@ browser limits, CLI JSON and preservation of existing output on failure:
 ```sh
 python3 -m unittest tests.test_parser_properties tests.test_tools
 node tests/test_hex.mjs
+node tests/test_source_locations.mjs
 ```
+
+704 additional range cases cover binary/hex input, line/space/BOM combinations,
+repeated tokens/comments, emoji and byte-limit errors. Actual browser tests check
+focus, selection, corrected-error cleanup and preserved loaded state. Live
+screen-reader verification remains a separate task.

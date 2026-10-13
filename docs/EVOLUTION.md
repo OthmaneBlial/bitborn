@@ -251,6 +251,22 @@ compression while browser jobs were active; a sequential rerun verifies the
 completed module/link checks. Live assistive-technology sessions and broader
 error-focus review remain open. Next: program-source error focus and actionable
 locations in the CPU Lab.
+Keyboard commit `1aa5539` passed CI `38327216070` and deployment `38327569900`;
+its isolated Pages mirror is `0c8e006`. The public homepage progress and roadmap
+match the committed source.
+Source diagnostics now include full-token UTF-16 ranges for invalid tokens and
+the first excess byte, retaining existing grammar, messages and CLI locations.
+The CPU Lab focuses/selects failed binary/hex loads, keeps inline input focus,
+validates imported textarea-normalized newlines and clears corrected errors.
+704 range cases cover both notations, every host line boundary, Unicode spacing,
+BOMs and supplementary characters. Chromium, Firefox and WebKit verify selection,
+invalid markers and preservation of registers, history and share links.
+The 77-test Python suite passes with one expected macOS native-Linux skip;
+all site/module checks pass. Six browser recordings were recaptured with source
+and frame hashes; the CPU recording has 45 actual frames, including three error
+and correction states. Live assistive-technology review remains open.
+Next: identify the invalid side of a bit comparison and focus it when notation
+conversion fails, while preserving the last valid comparison.
 Earlier protected-fault checkpoint: 55 Python tests, one expected native-Linux
 skip on macOS, plus all site/module checks. Commit `85ccc5d` passed CI
 `38306047118` and deployment `38306395884`; public progress, README and its guide
@@ -339,6 +355,7 @@ is deeper research. Dependencies name earlier idea numbers or existing component
 | 61 | 0 | Cancel delayed file imports/errors after a newer source choice or editor draft | H | H | CPU Lab import | Medium | Complete: race reproduced and checked in three browsers |
 | 62 | 1 | Execute unprefixed 16-bit ModR/M memory MOV using one shared address decoder and native/journal/boundary proof | H | M | 18,01,02 | High | Complete: 2,304 cases and identical model/native 71-byte exercise |
 | 63 | 0 | Roving keyboard focus for instruction-bit editors, field-aware labels and stable edits | H | H | 05,07 | Low | Complete: shared root/playground one-stop navigation and invalid/shortened fixture focus checks; full AT review remains open |
+| 64 | 0 | Exact source error ranges, relevant editor focus and preserved invalid-load state | H | H | 15,42 | Low | Complete: UTF-16 token spans, normalized imports, binary/hex focus and corrected-error cleanup; live AT review open |
 
 Large tasks are divided into useful verified milestones. Native experiments only
 become capabilities after literal source review and real QEMU checks; hardware

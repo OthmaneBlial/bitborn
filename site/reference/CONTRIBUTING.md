@@ -48,6 +48,7 @@ macOS cannot natively run the Linux ELF examples; CI runs their native checks.
 | [Native self-modification](examples/self-modifying/README.md) | `examples/self-modifying/`, `tools/record_self_modifying.py` | `node tests/test_self_modifying.mjs` and `python3 -m unittest tests.test_self_modifying_native` |
 | [Short Jcc fields](docs/instruction-encoding/short-branches.md) | `site/simulator.mjs`, `site/encoding.mjs`, `docs/instruction-encoding/fixtures/short-branch*.bits` | `node tests/test_branch_encoding.mjs` and `node tests/test_encoding.mjs` |
 | [Instruction-bit keyboard navigation](docs/instruction-encoding/keyboard.md) | `site/app.js`, `tests/bit_keyboard_browser_checks.mjs` | `node tests/browser_site.mjs` and `npm run test:cross-browser` |
+| [Source error ranges/focus](docs/source-diagnostics.md) | `site/binary.mjs`, `site/cpu-lab/lab.mjs`, `tests/source_error_browser_checks.mjs` | `node tests/test_source_locations.mjs` and `node tests/browser_cpu_lab.mjs` |
 | Builder and CPU Lab | `site/boot-builder/`, `site/cpu-lab/` | `node tests/browser_builder.mjs` or `node tests/browser_cpu_lab.mjs` |
 | Challenges | `challenges/`, `site/challenges/challenges.mjs` | `node tests/test_challenges.mjs` and `python3 -m unittest tests.test_challenges` |
 | Docs, routes and progress | `README.md`, `ROADMAP.md`, `docs/`, `tools/site_build.py` | `make site-test` |

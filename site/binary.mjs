@@ -8,12 +8,14 @@ const checkBytes = bytes => {
 };
 
 export class SourceDiagnosticError extends Error {
-  constructor(message, code, line = null, tokenIndex = null) {
+  constructor(message, code, line = null, tokenIndex = null, start = null, end = null) {
     super(message);
     this.name = 'SourceDiagnosticError';
     this.code = code;
     this.line = line;
     this.tokenIndex = tokenIndex;
+    this.start = start;
+    this.end = end;
   }
 }
 
@@ -22,12 +24,17 @@ function parseBytes(source, maxBytes, hexadecimal) {
   if (typeof source !== 'string' || source.length > 65536) throw new SourceDiagnosticError(`${name} source must be text under 64 KiB.`, typeof source !== 'string' ? 'SOURCE_TYPE' : 'SOURCE_TOO_LONG');
   if (!Number.isInteger(maxBytes) || maxBytes < 1 || maxBytes > 4096) throw new SourceDiagnosticError('Invalid byte limit.', 'INVALID_LIMIT');
   const bytes = [];
+  let position=source.startsWith('\uFEFF')?1:0;
   for (const [index, line] of source.replace(/^\uFEFF/, '').split(sourceLines).entries()) {
-    for (const [tokenIndex, token] of line.split('#', 1)[0].split(sourceSpaces).filter(Boolean).entries()) {
-      if (!(hexadecimal?/^[0-9a-f]{2}$/i:/^[01]{8}$/).test(token)) throw new SourceDiagnosticError(`Line ${index + 1}: expected ${hexadecimal?'a two-digit hexadecimal token':'an eight-bit binary token'}, received ${token.slice(0, 32)}.`, 'INVALID_TOKEN', index + 1, tokenIndex + 1);
+    const body=line.split('#',1)[0];let cursor=0;
+    for (const [tokenIndex, token] of body.split(sourceSpaces).filter(Boolean).entries()) {
+      const offset=body.indexOf(token,cursor),start=position+offset,end=start+token.length;cursor=offset+token.length;
+      if (!(hexadecimal?/^[0-9a-f]{2}$/i:/^[01]{8}$/).test(token)) throw new SourceDiagnosticError(`Line ${index + 1}: expected ${hexadecimal?'a two-digit hexadecimal token':'an eight-bit binary token'}, received ${token.slice(0, 32)}.`, 'INVALID_TOKEN', index + 1, tokenIndex + 1,start,end);
       bytes.push(Number.parseInt(token, hexadecimal?16:2));
-      if (bytes.length > maxBytes) throw new SourceDiagnosticError(`The ${maxBytes}-byte limit was exceeded.`, 'BYTE_LIMIT', index + 1, tokenIndex + 1);
+      if (bytes.length > maxBytes) throw new SourceDiagnosticError(`The ${maxBytes}-byte limit was exceeded.`, 'BYTE_LIMIT', index + 1, tokenIndex + 1,start,end);
     }
+    position+=line.length;
+    if(position<source.length)position+=source[position]==='\r'&&source[position+1]==='\n'?2:1;
   }
   if (!bytes.length) throw new SourceDiagnosticError(`The ${name.toLowerCase()} source contains no bytes.`, 'EMPTY_SOURCE');
   return Uint8Array.from(bytes);

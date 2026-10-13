@@ -72,11 +72,11 @@
     <div class="editor-layout">
       <section class="panel editor-panel" aria-labelledby="editor-title">
         <div class="panel-title"><h2 id="editor-title">Literal binary program</h2><span>NO ASSEMBLER</span></div>
-        <label class="sr-only" for="binary-editor">Program source as binary digits</label><textarea id="binary-editor" maxlength="65536" spellcheck="false" autocomplete="off" aria-describedby="editor-help"></textarea>
+        <label class="sr-only" for="binary-editor">Program source as binary digits</label><textarea id="binary-editor" maxlength="65536" spellcheck="false" autocomplete="off" aria-describedby="editor-help editor-status" aria-errormessage="editor-status"></textarea>
         <div class="editor-actions"><button id="load-program" class="lab-button primary" type="button">Load binary & reset</button><label class="lab-button import-label" for="import-program">Import .bits / .bin<input type="file" id="import-program" accept=".bits,.txt,.bin,text/plain,application/octet-stream"></label></div>
         <p id="editor-help" class="panel-note">Up to 512 bytes. Source uses eight literal 0s or 1s per byte; whitespace and # comments are allowed. .bin files import raw bytes. Loading resets state and clears breakpoints; invalid input keeps the current program.</p>
         <p id="editor-status" role="status"></p>
-        <label class="hex-label" for="hex-editor">Equivalent hexadecimal bytes</label><textarea id="hex-editor" maxlength="65536" spellcheck="false" autocomplete="off" aria-describedby="hex-help"></textarea>
+        <label class="hex-label" for="hex-editor">Equivalent hexadecimal bytes</label><textarea id="hex-editor" maxlength="65536" spellcheck="false" autocomplete="off" aria-describedby="hex-help hex-status" aria-errormessage="hex-status"></textarea>
         <div class="editor-actions"><button id="load-hex" class="lab-button" type="button">Load hex & reset</button></div>
         <p id="hex-help" class="panel-note">Two ASCII hex digits per byte, e.g. B8 2A 00. Valid binary drafts update this hex view without loading. Load hex replaces the binary draft, omits its comments and resets the model. No instruction is generated from a name.</p><p id="hex-status" class="panel-note" role="status"></p>
         <div class="editor-actions"><button id="export-source" class="lab-button" type="button">Export loaded .bits</button><button id="export-raw" class="lab-button" type="button">Export loaded .bin</button></div>

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Add exact UTF-16 token ranges to browser source diagnostics without changing
+  grammar or readable messages. Focus/select the invalid or excess token on CPU
+  Lab load failures, preserve inline caret and loaded state, normalize imported
+  textarea newlines before validation, and clear stale corrected-error state.
+
 - Make instruction-bit editors a single Tab stop with bit/byte arrows, row/global
   Home/End and native Enter/Space toggles. Retain focus on re-rendered invalid
   encodings, preserve selector focus when shortening fixtures, and connect visible

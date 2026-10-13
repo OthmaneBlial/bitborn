@@ -258,6 +258,10 @@ The v0.2 milestone is published and verified. The following research remains ope
   editors: one Tab stop, bit/byte arrows, row/global Home/End and native toggle
   keys. Test focus retention, invalid encodings and fixture shortening. Broader
   assistive-technology review remains open; see [keyboard guide](docs/instruction-encoding/keyboard.md).
+- [x] Add exact token ranges and CPU Lab editor focus for invalid binary/hex
+  loads, including excess bytes and imported newline normalization. Keep inline
+  validation non-disruptive, preserve loaded state/history and clear corrected
+  errors. 704 range cases complement parser parity; see [diagnostics](docs/source-diagnostics.md).
 - [x] Add introductory documentation in English, Simplified Chinese, Spanish,
   French, Japanese, Portuguese, German and Arabic. Source-revision hashes, identical
   literal code/quickstart blocks and local links are checked. Native-speaker review

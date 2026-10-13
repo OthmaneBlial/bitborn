@@ -22,6 +22,7 @@ site-test: site
 	node tests/test_memory_encoding.mjs
 	node tests/test_elf.mjs
 	node tests/test_hex.mjs
+	node tests/test_source_locations.mjs
 	node tests/test_flags_properties.mjs
 	node tests/test_memory_changes.mjs
 	node tests/test_history.mjs
